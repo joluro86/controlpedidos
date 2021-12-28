@@ -1,0 +1,106 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+
+.header {
+  border-bottom: solid 1px;
+  display: flex;
+  font-family: Arial, "Arial Unicode MS", sans-serif;
+  justify-content: center;
+  font-weight: bold;
+  color:#7d736c;
+  box-shadow: 1px -3px 14px rgb(0 0 0 / 40%);
+  width: 100%;
+  height: 40px;
+  z-index: 1100;
+  padding-bottom: 0px;
+}
+
+.table tbody .tr{
+  font-size: 0.8em !important;
+}
+
+.card .dt-buttons {
+  float: left;
+  width: 250px;
+  margin-top: 10px;
+  padding-bottom: 0px;
+}
+.dataTables_length{
+  width: 200px;
+  margin-top: 5px;
+  float:left;
+}
+
+.body .header .reiniciarBd :hover{
+  color: white !important;
+}
+.dataTables_filter {
+  width: 30%;
+  float: right;
+  margin-bottom: 10px;
+}
+.card .dt-buttons .dt-button {
+  background-color: rgb(87, 248, 173);
+  border-radius: 3px;
+  padding: 2px !important;
+  font-size: 0.7em;
+  border: solid 1px gray;
+}
+
+.card .dt-buttons :hover{
+  background-color:#fcb67f;
+}
+
+.header .nav a {
+  color: rgb(59, 53, 53);
+}
+
+.header-menu {
+  margin-top: 2px;
+}
+
+.header-menu .nav .nav-item a {
+  border-radius: 5px;
+  margin: 1px;
+}
+
+.header .nav :hover {
+  background-color: #7d736c;
+  color: white;
+}
+
+.header-menu .nav .nav-item a:hover {
+  border-radius: 5px;
+  background-color: #fcb67f;
+  color: black;
+  transition: color 0.15s ease-in-out;
+}
+
+.table .tr:hover {
+  background-color: rgb(244, 244, 245);
+  transition: background-color 0.3s ease;
+}
+.div-oculto {
+  display: none;
+}
+
+.card-body .table .dt-buttons button {
+  background-color: red;
+}
+
+
+.form_login{
+  width:500px;
+  margin: auto;
+  margin-top: 20px;
+  background-color: rgb(70, 144, 228);
+  padding:20px;
+  border-radius: 5px;
+}
+
+.form_login .form-group{
+  margin: 20px;
+}

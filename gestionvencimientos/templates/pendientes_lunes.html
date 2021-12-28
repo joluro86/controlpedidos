@@ -1,0 +1,136 @@
+{% extends 'index.html' %} {% load static %} {% block head %} {% endblock head %} 
+{% block content %}
+<div style="display: flex; justify-content: center" class="header-menu">
+  <ul class="nav text-light">
+    <li class="nav-item">
+      <a class="nav-link" id="id_url_1" href="{% url 'pendientes' 1 %}"
+        >Lunes</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="id_url_2" href="{% url 'pendientes' 2 %}"
+        >Martes</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="id_url_3" href="{% url 'pendientes' 3 %}"
+        >Miercoles</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="id_url_4" href="{% url 'pendientes' 4 %}"
+        >Jueves</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="id_url_5" href="{% url 'pendientes' 5 %}"
+        >Viernes</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'pendientes_next_week' 10 %}"
+        ><i class="fas fa-arrow-circle-right"></i> Sig. semana</a
+      >
+    </li>
+  </ul>
+  <div class="div-oculto" id="div_id-oculto">
+    <input type="hidden" id="id-oculto" value="{{ id_dia }}" />
+  </div>
+</div>
+
+<div class="table-id card mt-1" style="width: 90%; margin: auto">
+  <div class="card-body">
+    <table
+      class="table table-sm table-hover"
+      class="display nowrap"
+      id="table_id"
+    >
+      <thead class="p-0">
+        <tr class="text-center m-0 p-0" style="background-color: #8ee7fa">
+          <th scope="col" class="p-0">Pedido</th>
+          <th scope="col" class="p-0">Hora</th>
+          <th scope="col" class="p-0">Encargado</th>
+          <th scope="col" class="p-0">Instalación</th>
+          <th scope="col" class="p-0">Actividad</th>
+          <th scope="col" class="p-0">Cerrar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in aneses %}
+
+        <tr class="text-center p-0 tr">
+          <th class="pt-1">{{ a.Pedido }}</th>
+          <td class="m-0 pb-0">{{ a.fecha_vencimiento }}</td>
+          <td class="m-0 pb-0">{{ a.encargado }}</td>
+          <td class="m-0 pb-0">{{ a.Instalación }}</td>
+          <td class="m-0 pb-0">{{ a.Actividad }}</td>
+          <td class="m-0 pb-0">
+            <a
+              href="#"
+              onclick="cerrar_pedido({{ a.id }})"
+              class="m-0 p-0 btn btn-sm text-info"
+              id="btn_cerrar_pedido"
+              ><i class="fas fa-check-circle p-0"></i
+            ></a>
+          </td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock content %} {% block js %}
+
+<script src="{% static 'js/js_pendientes.js' %}"></script>
+
+<script>
+  $(document).ready(function () {
+    $("#table_id").DataTable({
+      order: [[1, "asc"]],
+
+      dom: "Bfrtilp",
+
+      lengthMenu: [
+            [ 15, 30, 50, -1 ],
+            [ '15', '30', '50', 'Todos' ]
+        ],
+        
+      buttons: [
+      {
+        text: 'Week',
+        action: function ( e, dt, node, config ) {
+          window.location.href ="/week/"+1
+        }
+    },
+        {
+          extend: "copyHtml5",
+          exportOptions: {
+            columns: [ 0, 1, 2, 3, 4 ]
+          },
+        },
+        {
+          extend: "csvHtml5",
+          exportOptions: {
+            columns: [ 0, 1, 2, 3, 4 ]
+          },
+        },
+        {
+          extend: "pdfHtml5",
+          exportOptions: {
+            columns: [ 0, 1, 2, 3, 4 ]
+          },
+        },
+        "print",   
+        {
+          extend: "excelHtml5",
+          exportOptions: {
+            columns: [ 0, 1, 2, 3, 4 ]
+          },
+        },    
+      ],
+    });
+  });
+</script>
+
+{% endblock js %}

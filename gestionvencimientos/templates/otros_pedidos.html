@@ -1,0 +1,89 @@
+{% extends 'index.html' %} {% load static %} {% block content %}
+<div class="table-id card mt-4" style="width: 90%; margin: auto">
+  <div class="card-body">
+    <table class="table" id="table_id" style="width: 100%; margin: auto">
+      <thead>
+        <tr
+          class="text-center"
+          style="background-color: #8ee7fa;"
+        >
+          <th scope="col">Pedido</th>
+          <th scope="col">Actividad</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Encargado</th>
+          <th>Hora venci</th>          
+          <th scope="col">Instalación</th>          
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in aneses %}
+
+        <tr class="text-center tr">
+          <th scope="row">{{ a.Pedido }}</th>
+          <td>{{ a.Actividad }}</td>
+          <td>{{ a.Estado }}</td>
+          <td>{{ a.encargado }}</td>
+          <td>{{ a.fecha_vencimiento }}</td>
+          <td>{{ a.Instalación }}</td>
+         
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock content %} {% block js %}
+
+<script src="{% static 'js/js_pendientes.js' %}"></script>
+
+<script>
+  $(document).ready(function () {
+    $("#table_id").DataTable({
+      order: [[1, "asc"]],
+
+      dom: "Bfrtilp",
+
+      lengthMenu: [
+            [ 15, 30, 50, -1 ],
+            [ '15', '30', '50', 'Todos' ]
+        ],
+        
+      buttons: [
+      {
+        text: 'Week',
+        action: function ( e, dt, node, config ) {
+          window.location.href ="/week/"+1
+        }
+    },
+        {
+          extend: "copyHtml5",
+          exportOptions: {
+            columns: [ 0, 1, 2, 3, 4 ]
+          },
+        },
+        {
+          extend: "csvHtml5",
+          exportOptions: {
+            columns: [ 0, 1, 2, 3, 4 ]
+          },
+        },
+        {
+          extend: "pdfHtml5",
+          exportOptions: {
+            columns: [ 0, 1, 2, 3, 4 ]
+          },
+        },
+        "print",   
+        {
+          extend: "excelHtml5",
+          exportOptions: {
+            columns: [ 0, 1, 2, 3, 4 ]
+          },
+        },    
+      ],
+    });
+  });
+</script>
+
+{% endblock js %}

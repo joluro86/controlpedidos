@@ -81,6 +81,7 @@
             <li><a class="dropdown-item" href="#" onclick="cierre_masivo()">Cierre masivo</a></li>
             <li><a class="dropdown-item" href="#" onclick="gestion_bd()">Gestionar BBDD</a></li>
             <li><a class="dropdown-item" href="#" onclick="reiniciar_bd()">Reiniciar BBDD</a></li>
+            <li><a class="dropdown-item" href="{% url 'direccion' %}">Dirección</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
@@ -89,8 +90,8 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <li><a class="dropdown-item" href="{% url 'acrev' %}" >ACREV</a></li>
-            <li><a class="dropdown-item" href="#">LEGA</a></li>
             <li><a class="dropdown-item" href="{% url 'amrtr' %}">AMRTR</a></li>
+            <li><a class="dropdown-item" href="{% url 'lega' %}">LEGA</a></li>
           </ul>
         </li>
         {% endif %}

@@ -420,3 +420,15 @@ def amrtr(request):
     aeneses = Ans.objects.filter(Actividad = "AMRTR").filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495"))
     
     return render(request, "amrtr.html", {"aneses": aeneses} )
+
+def lega(request):
+    
+    aeneses = Ans.objects.filter(Q(Actividad="ALEGA") | Q(Actividad="ALEGN") | Q(Actividad="ALECA") |Q(Actividad="ACAMN") ).filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495"))
+    
+    return render(request, "lega.html", {"aneses": aeneses} )
+
+def direccionamiento(request):
+    
+    aeneses = Ans.objects.filter(Q(Actividad="ACREV")).filter(Tipo_Dirección = "Urbano").filter(Concepto = "PPRG")
+    
+    return render(request, "direccionamiento.html", {"aneses": aeneses} )

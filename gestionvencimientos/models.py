@@ -93,3 +93,10 @@ class Vencido(models.Model):
     class Meta:
         verbose_name = "Vencido"
         verbose_name_plural = "Vencidos"
+
+class Municipio(models.Model):
+    nombre = models.CharField(max_length=100, null=True)
+
+    class Meta:
+        verbose_name = "Municipio"
+        verbose_name_plural = "Municipios"

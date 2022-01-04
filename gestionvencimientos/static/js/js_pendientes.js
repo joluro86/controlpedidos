@@ -189,37 +189,4 @@ function reiniciar_bd() {
     });
 }
 
-function programar() {
-  url = "/#/";
-  swal
-    .fire({
-      title: "Elija la actividad y municipio",
-      html: `<div class="form-group mt-2" style="text-align:center">
-              </div><select name="select" class="form-select" style="width:250px; margin:auto" >
-                <option value="value1">LEGALIZACIÓN</option>
-                <option value="value2">AMRTR</option>
-                <option value="value3">ACREV</option>
-              </select><br>
-              <select name="select" class="form-select" style="width:250px; margin:auto">
-                <option value="1">Apartadó</option>
-                <option value="2">Turbo</option>
-                <option value="3">Necoclí</option>
-              </select>
-            </div>`,
-      confirmButtonText: "Buscar",
-      focusConfirm: false,
-      preConfirm: () => {
-        const fecha = Swal.getPopup().querySelector("#fecha_cierre").value;
-        const hora = Swal.getPopup().querySelector("#hora_cierre").value;
-        if (!fecha || !hora) {
-          Swal.showValidationMessage(`Por favor elija los items de busqueda`);
-        }
-        return { fecha: fecha, hora: hora };
-      },
-    })
-    .then(function (result) {
-      if (result.value) {
-        window.location.href = url;
-      }
-    });
-}
+

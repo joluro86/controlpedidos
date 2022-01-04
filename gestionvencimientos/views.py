@@ -7,11 +7,12 @@ from django.db.models import Q
 from django.contrib.auth.models import User, auth
 from controlpedidos import settings
 
-from gestionvencimientos.models import Actividad, Ans, Encargado, Vencido
+from gestionvencimientos.models import Actividad, Ans, Encargado, Municipio, Vencido
+
+
 @login_required
 def index(request):
     return render(request,  "index.html")
-
 
 def calculo_dia_actutal():
 
@@ -34,8 +35,9 @@ def calculo_dia_actutal():
 
 
 def calculo_dia_semana_2():
-
+    
     fecha_actual = datetime.now()
+    lunes = datetime.now()
 
     if fecha_actual.weekday() == 0:
         lunes = datetime.now()
@@ -54,13 +56,12 @@ def calculo_dia_semana_2():
 
     return lunes
 
-@login_required
-def menu_pendientes(request):
+
+def menu_pendientes(self):
     id_dia = calculo_dia_actutal()+1;
     
     return redirect('pendientes', id_dia)
 
-@login_required
 def limpiar_base(request):
     lista_ans = []
     aneses = Ans.objects.all()
@@ -115,11 +116,10 @@ def calculo_pendientes(request, id_dia):
 
         return render(request, "pendientes_lunes.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=4)).strftime('%Y-%m-%d')})
 
+
 def busqueda_vencidos(request):
     aneses = Ans.objects.filter(Estado="PENDI")
-    cont=0
     list_ans = []
-    cont = 0
     for ans in aneses:
         if ans.Estado == "PENDI" and ans.Concepto == "PENDI":
             continue
@@ -130,12 +130,12 @@ def busqueda_vencidos(request):
             if fecha_vence_ans < datetime.today():
                 if ans.estado_cierre == 0:
                     list_ans.append(ans)
-                    cont+=1
-                    print(cont) 
+                    
         except:
             print("An exception occurred in fecha vencimiento 2")        
 
     return render(request, "vencidos-todos.html" , {"aneses": list_ans})
+
 
 def busqueda_pendientes(fecha_vence_buscar):
     aneses = Ans.objects.filter(Estado="PENDI")
@@ -151,17 +151,13 @@ def busqueda_pendientes(fecha_vence_buscar):
             fecha_vence_ans = datetime.strptime(ans.fecha_vencimiento, "%Y-%m-%d %H:%M:%S")
             if fecha_vence_ans.strftime('%Y-%m-%d') == fecha_vence_buscar:
                 if ans.estado_cierre == 0:
-                    list_ans.append(ans)
-            if fecha_vence_ans < datetime.today():
-                if ans.estado_cierre == 0:
-                    cont+=1
-                    print(cont) 
+                    list_ans.append(ans) 
         except:
             print("An exception occurred in fecha vencimiento 2")        
 
     return list_ans
 
-@login_required
+
 def eliminar_bd(request):
     Ans.objects.all().delete()
 
@@ -191,7 +187,7 @@ def es_festivo_o_fin_de_semana(fecha):
     if fecha.weekday() == 5 or fecha.weekday() == 6:
         return True
 
-@login_required
+
 def gestion_bd(request):
     
     lista_ans = []
@@ -225,11 +221,6 @@ def gestion_bd(request):
             if ans.Fecha_Inicio_ANS == "":
                 ans.Fecha_Inicio_ANS = ans.Fecha_Concepto
                 ans.save()
-            
-            if datetime. strptime(ans.Fecha_Concepto, '%Y/%m/%d %H:%M:%S') < datetime. strptime(ans.Fecha_Inicio_ANS, '%Y/%m/%d %H:%M:%S'):
-                print("concepto:")
-                print(ans.Pedido)
-                print(ans.Fecha_Concepto)
 
             actividad = Actividad.objects.get(nombre=ans.Actividad)
             if ans.Tipo_Dirección == "Urbano":
@@ -249,7 +240,7 @@ def gestion_bd(request):
 
     return redirect('home')
 
-@login_required
+
 def cerrar_pedido(request, id_pedido, fecha_cierre, hora_cierre):
    
     fecha_hora_cierre = fecha_cierre+" "+hora_cierre+":00";
@@ -278,7 +269,6 @@ def cerrar_pedido(request, id_pedido, fecha_cierre, hora_cierre):
     return redirect('menu_pendientes')
 
 
-@login_required
 def calculo_next_week(request, id_dia):
     
     lunes = calculo_dia_semana_2()
@@ -318,13 +308,13 @@ def calculo_next_week(request, id_dia):
 
         return render(request, "pendientes_next_week.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=11)).strftime('%Y-%m-%d')})
 
-@login_required
+
 def vencidos(request):
     aeneses = Vencido.objects.all()
     
     return render(request, "vencidos.html", {"aneses":aeneses})
 
-@login_required   
+
 def pedidos_week(request, id_week):
     
     lunes = calculo_dia_semana_2()
@@ -368,7 +358,7 @@ def pedidos_week(request, id_week):
     
     return render(request, "pedidos_week.html", {"aneses":lista_pedidos, "lunes":lunes, "viernes":viernes})
 
-@login_required   
+
 def otros_pedidos(request, cliente, apla, pendi):
     
     if cliente == 1 and apla == 0 and pendi == 0:
@@ -401,7 +391,7 @@ def otros_pedidos(request, cliente, apla, pendi):
     
     return HttpResponse("Error en la consulta de otros pedidos")
 
-@login_required
+
 def cierre_masivo(request, fecha_cierre, hora_cierre):
     
     fecha = fecha_cierre+ " " + hora_cierre + ":00"
@@ -419,6 +409,14 @@ def cierre_masivo(request, fecha_cierre, hora_cierre):
     
     return redirect('menu_pendientes')
 
-def logout(request):
-    auth.logout(request)
-    return redirect(settings.LOGOUT_REDIRECT_URL)
+def acrev(request):
+    
+    aeneses = Ans.objects.filter(Actividad = "ACREV").filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495"))
+    
+    return render(request, "acrev.html", {"aneses": aeneses} )
+
+def amrtr(request):
+    
+    aeneses = Ans.objects.filter(Actividad = "AMRTR").filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495"))
+    
+    return render(request, "amrtr.html", {"aneses": aeneses} )

@@ -45,18 +45,17 @@
   
     <div class="header" id="sub-header">
       <ul class="nav">
+        {% if request.user.is_authenticated %}
         <li class="nav-item" id="inicio">
           <a class="nav-link" href="{% url 'home' %}">Inicio</a>
         </li>
         <li class="nav-item" id="pendi_index">
-          <a class="nav-link" id="pendi_a" href="{% url 'menu_pendientes' %}"
-            >Pendientes</a
-          >
+          <a class="nav-link" id="pendi_a" href="{% url 'menu_pendientes' %}">Pendientes</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'vencidos' %}">Vencidos</a>
         </li>
-        {% if request.user.is_authenticated %}
+       
         <li class="nav-item">
           <a class="nav-link" href="#" onclick="otros_pedidos()">Otros</a>
         </li>
@@ -84,18 +83,31 @@
             <li><a class="dropdown-item" href="#" onclick="reiniciar_bd()">Reiniciar BBDD</a></li>
           </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" onclick="programar()">Programar</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+            Programar
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="{% url 'acrev' %}" >ACREV</a></li>
+            <li><a class="dropdown-item" href="#">LEGA</a></li>
+            <li><a class="dropdown-item" href="{% url 'amrtr' %}">AMRTR</a></li>
+          </ul>
         </li>
         {% endif %}
-        {% if request.user.is_authenticated %}
+        {% if request.user.is_authenticated %}        
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'vencidos_todos'}">Vencidos todos</a>
+        </li>
+        
         <li class="nav-item">
           <a class="nav-link" href="{% url 'logout' %}?next=/inicio/">Cerrar sesión</a>
         </li>
-        {% endif %}
+        {% else %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'vencidos_todos' %}">Vencidos todos</a>
+          <h3>App para la gestion de pedidos HV Apartadó</h3>
         </li>
+        {% endif %}
+
       </ul>
     </div>
 

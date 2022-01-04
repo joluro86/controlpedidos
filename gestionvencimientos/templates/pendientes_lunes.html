@@ -52,6 +52,7 @@
           <th scope="col" class="p-0">Encargado</th>
           <th scope="col" class="p-0">Instalación</th>
           <th scope="col" class="p-0">Actividad</th>
+          <th scope="col" class="p-0">Municipio</th>
           <th scope="col" class="p-0">Cerrar</th>
         </tr>
       </thead>
@@ -64,6 +65,7 @@
           <td class="m-0 pb-0">{{ a.encargado }}</td>
           <td class="m-0 pb-0">{{ a.Instalación }}</td>
           <td class="m-0 pb-0">{{ a.Actividad }}</td>
+          <td class="m-0 pb-0">{{ a.Municipio }}</td>
           <td class="m-0 pb-0">
             <a
               href="#"
@@ -106,26 +108,26 @@
         {
           extend: "copyHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4 ]
+            columns: [ 0, 1, 2, 3, 4,5 ]
           },
         },
         {
           extend: "csvHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4 ]
+            columns: [ 0, 1, 2, 3, 4,5 ]
           },
         },
         {
           extend: "pdfHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4 ]
+            columns: [ 0, 1, 2, 3, 4,5 ]
           },
         },
         "print",   
         {
           extend: "excelHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4 ]
+            columns: [ 0, 1, 2, 3, 4,5 ]
           },
         },    
       ],

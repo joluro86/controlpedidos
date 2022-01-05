@@ -60,37 +60,34 @@
       id="table_id"
     >
       <thead class="p-0">
-        <tr class="text-center p-0" style="background-color: #8ee7fa">
-          <th scope="col">Pedido</th>
-          <th>Hora</th>
-          <th scope="col">Encargado</th>
-          <th scope="col">Instalación</th>
-          <th scope="col">Actividad</th>
-          <th>Cerrar</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for a in aneses %}
+        <tr
+        class="text-center"
+        style="background-color: #8ee7fa;"
+      >
+        <th scope="col">Pedido</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th scope="col">Instalación</th>
+        <th scope="col">Area trabajo</th>
+        <th scope="col">Actividad</th>
+        <th>Encargado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in aneses %}
 
-        <tr class="text-center tr">
-          <th class="pt-1">{{ a.Pedido }}</th>
-          <td class="m-0 pb-0">{{ a.fecha_vencimiento }}</td>
-          <td class="m-0 pb-0">{{ a.encargado }}</td>
-          <td class="m-0 pb-0">{{ a.Instalación }}</td>
-          <td class="m-0 pb-0">{{ a.Actividad }}</td>
-          <td class="m-0 pb-0">
-            <a
-              href="#"
-              onclick="cerrar_pedido({{ a.id }})"
-              class="m-0 p-0 btn btn-sm text-info"
-              id="btn_cerrar_pedido"
-              ><i class="fas fa-check-circle"></i
-            ></a>
-          </td>
-        </tr>
+      <tr class="text-center tr">
+        <th scope="row">{{ a.Pedido }}</th>
+        <td>{{ a.fecha_vence }}</td>
+        <td>{{ a.hora_vencimiento }}</td>
+        <td>{{ a.Instalación }}</td>
+        <td>{{ a.Area_Trabajo }}</td>
+        <td>{{ a.Actividad }}</td>  
+        <td>{{ a.encargado }}</td>
+      </tr>
 
-        {% endfor %}
-      </tbody>
+      {% endfor %}
+    </tbody>
     </table>
   </div>
 </div>
@@ -118,26 +115,26 @@
         {
           extend: "copyHtml5",
           exportOptions: {
-            columns: [0, 1, 2, 3, 4],
+            columns: [0, 1, 2, 3, 4, 5, 6],
           },
         },
         {
           extend: "csvHtml5",
           exportOptions: {
-            columns: [0, 1, 2, 3, 4],
+            columns: [0, 1, 2, 3, 4, 5, 6],
           },
         },
         {
           extend: "pdfHtml5",
           exportOptions: {
-            columns: [0, 1, 2, 3, 4],
+            columns: [0, 1, 2, 3, 4, 5, 6],
           },
         },
         "print",
         {
           extend: "excelHtml5",
           exportOptions: {
-            columns: [0, 1, 2, 3, 4],
+            columns: [0, 1, 2, 3, 4, 5, 6],
           },
         },
       ],

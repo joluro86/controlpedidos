@@ -48,6 +48,7 @@
       <thead class="p-0">
         <tr class="text-center m-0 p-0" style="background-color: #8ee7fa">
           <th scope="col" class="p-0">Pedido</th>
+          <th scope="col" class="p-0">Fecha</th>
           <th scope="col" class="p-0">Hora</th>
           <th scope="col" class="p-0">Encargado</th>
           <th scope="col" class="p-0">Instalación</th>
@@ -61,7 +62,8 @@
 
         <tr class="text-center p-0 tr">
           <th class="pt-1">{{ a.Pedido }}</th>
-          <td class="m-0 pb-0">{{ a.fecha_vencimiento }}</td>
+          <td class="m-0 pb-0">{{ a.fecha_vence }}</td>
+          <td class="m-0 pb-0">{{ a.hora_vencimiento }}</td>
           <td class="m-0 pb-0">{{ a.encargado }}</td>
           <td class="m-0 pb-0">{{ a.Instalación }}</td>
           <td class="m-0 pb-0">{{ a.Actividad }}</td>
@@ -89,7 +91,7 @@
 <script>
   $(document).ready(function () {
     $("#table_id").DataTable({
-      order: [[1, "asc"]],
+      order: [[2, "asc"]],
 
       dom: "Bfrtilp",
 
@@ -108,26 +110,26 @@
         {
           extend: "copyHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4,5 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6 ]
           },
         },
         {
           extend: "csvHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4,5 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6 ]
           },
         },
         {
           extend: "pdfHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4,5 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6 ]
           },
         },
         "print",   
         {
           extend: "excelHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4,5 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6 ]
           },
         },    
       ],

@@ -14,7 +14,7 @@ class Ans(models.Model):
     Fecha_Ingreso_Sol = models.CharField(max_length=500, null=True)
     Fecha_Concepto = models.CharField(max_length=500, null=True)
     Fecha_Inicio_ANS = models.CharField(max_length=500, null=True)
-    Días_ANS = models.DecimalField(decimal_places=5, max_digits=100, null=True)
+    Días_ANS = models.DecimalField(decimal_places=2, max_digits=100, null=True)
     Estado = models.CharField(max_length=500, null=True)
     Concepto = models.CharField(max_length=500, null=True)
     Nombre_concepto = models.CharField(max_length=500, null=True)
@@ -46,8 +46,9 @@ class Ans(models.Model):
     Pedido_CRM = models.CharField(max_length=5000, null=True)
     dias_vencimiento = models.IntegerField(
         verbose_name="Dias de vencimiento", default=0)
-    fecha_vencimiento = models.CharField(
-        max_length=30, verbose_name="Fecha vencimiento", null=True, default="Sin registro")
+    fecha_vencimiento = models.CharField(max_length=30, verbose_name="Fecha vencimiento", null=True, default="Sin registro")
+    fecha_vence = models.CharField(max_length=30, verbose_name="Fecha vencimiento", null=True, default="Sin registro")
+    hora_vencimiento = models.CharField(max_length=30, verbose_name="Hora vencimiento", null=True, default="Sin registro")
     encargado = models.CharField(max_length=100, null=True)
     estado_cierre = models.IntegerField(default=0, null=True, blank=True)
     fecha_cierre = models.CharField(max_length=100, null=True)

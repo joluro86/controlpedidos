@@ -9,7 +9,9 @@
           style="background-color: #8ee7fa;"
         >
           <th scope="col">Pedido</th>
-          <th>Hora venci</th>
+          <th scope="col">Concepto</th>
+          <th>Fecha</th>
+          <th>Hora</th>
           <th scope="col">Dias ANS</th>
           <th scope="col">Cliente ID</th>
           <th scope="col">Nombre Cliente</th>
@@ -18,16 +20,18 @@
           <th scope="col">Area trabajo</th>
           <th scope="col">Coordenada x</th>
           <th scope="col">Coordenada y</th>
-          <th scope="col">Concepto</th>
           <th scope="col">Observación</th>
+          <th>Fecha V.</th>
         </tr>
       </thead>
       <tbody>
         {% for a in aneses %}
 
         <tr class="text-center tr">
-          <th scope="row">{{ a.Pedido }}</th>
-          <td>{{ a.fecha_vencimiento }}</td>
+          <th scope="row">{{ a.Pedido }}</th> 
+          <td>{{ a.Concepto }}</td>
+          <td>{{ a.fecha_vence }}</td>
+          <td>{{ a.hora_vencimiento }}</td>
           <td>{{ a.Días_ANS }}</td>
           <td>{{ a.ClienteID }}</td>
           <td>{{ a.Nombre_Cliente }}</td>
@@ -35,9 +39,9 @@
           <td>{{ a.Instalación }}</td>
           <td>{{ a.Area_Trabajo }}</td>
           <td>{{ a.Coordenadax }}</td>
-          <td>{{ a.Coordenaday }}</td>
-          <td>{{ a.Concepto }}</td>  
+          <td>{{ a.Coordenaday }}</td> 
           <td><textarea name="" class="p-1" id="" cols="20" rows="5">{{ a.Observación_Solicitud }}</textarea></td>
+          <td>{{ a.fecha_vencimiento }}</td>
         </tr>
 
         {% endfor %}
@@ -52,7 +56,7 @@
 <script>
   $(document).ready(function () {
     $("#table_id").DataTable({
-      order: [[1, "desc"]],
+      order: [[13, "desc"]],
 
       dom: "Bfrtilp",
 
@@ -65,26 +69,26 @@
         {
           extend: "copyHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
           },
         },
         {
           extend: "csvHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
           },
         },
         {
           extend: "pdfHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
           },
         },
         "print",   
         {
           extend: "excelHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
           },
         },    
       ],

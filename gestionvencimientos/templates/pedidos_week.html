@@ -9,17 +9,12 @@
           style="background-color: #8ee7fa;"
         >
           <th scope="col">Pedido</th>
-          <th>Hora venci</th>
-          <th scope="col">Dias ANS</th>
-          <th scope="col">Cliente ID</th>
-          <th scope="col">Nombre Cliente</th>
-          <th scope="col">Celular</th>
+          <th>Fecha</th>
+          <th>Hora</th>
           <th scope="col">Instalación</th>
           <th scope="col">Area trabajo</th>
-          <th scope="col">Coordenada x</th>
-          <th scope="col">Coordenada y</th>
           <th scope="col">Actividad</th>
-          <th scope="col">Observación</th>
+          <th>Encargado</th>
         </tr>
       </thead>
       <tbody>
@@ -27,17 +22,12 @@
 
         <tr class="text-center tr">
           <th scope="row">{{ a.Pedido }}</th>
-          <td>{{ a.fecha_vencimiento }}</td>
-          <td>{{ a.Días_ANS }}</td>
-          <td>{{ a.ClienteID }}</td>
-          <td>{{ a.Nombre_Cliente }}</td>
-          <td>{{ a.Celular_Contacto }}</td>
+          <td>{{ a.fecha_vence }}</td>
+          <td>{{ a.hora_vencimiento }}</td>
           <td>{{ a.Instalación }}</td>
           <td>{{ a.Area_Trabajo }}</td>
-          <td>{{ a.Coordenadax }}</td>
-          <td>{{ a.Coordenaday }}</td>
           <td>{{ a.Actividad }}</td>  
-          <td><textarea name="" id="" class="p-1" cols="20" rows="5">{{ a.Observación_Solicitud }}</textarea></td>
+          <td>{{ a.encargado }}</td>
         </tr>
 
         {% endfor %}
@@ -65,26 +55,26 @@
         {
           extend: "copyHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6 ]
           },
         },
         {
           extend: "csvHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6 ]
           },
         },
         {
           extend: "pdfHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6 ]
           },
         },
         "print",   
         {
           extend: "excelHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6 ]
           },
         },    
       ],

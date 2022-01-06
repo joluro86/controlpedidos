@@ -126,13 +126,13 @@ def busqueda_vencidos(request):
         if ans.Estado == "PENDI" and ans.Concepto == "592":
             continue
         try:
-            fecha_vence_ans = datetime.strptime(ans.fecha_vencimiento, "%Y-%m-%d")
+            fecha_vence_ans = datetime.strptime(ans.fecha_vencimiento, "%Y-%m-%d %H:%M:%S")
             if fecha_vence_ans < datetime.today():
                 if ans.estado_cierre == 0:
                     list_ans.append(ans)
                     
         except:
-            print("An exception occurred in fecha vencimiento 2")        
+            print("An exception occurred in busqueda vencidos")        
 
     return render(request, "vencidos-todos.html" , {"aneses": list_ans})
 
@@ -448,3 +448,4 @@ def jorge_wolf(request):
     ans = Ans.objects.filter(Observación_Solicitud__contains='JWOLFV')
     
     return HttpResponse(len(ans))
+

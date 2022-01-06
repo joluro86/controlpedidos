@@ -73,8 +73,15 @@
         "print",   
         {
           extend: "excelHtml5",
+          title: null,
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6 ],
+            format: {
+              body: function(data, row, column, node) {
+                  data = $('<p>' + data + '</p>').text();
+                  return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+          }
           },
         },    
       ],

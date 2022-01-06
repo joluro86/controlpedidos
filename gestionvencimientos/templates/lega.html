@@ -54,8 +54,8 @@
 <script>
   $(document).ready(function () {
     $("#table_id").DataTable({
-      order: [[12, "asc"]],
 
+      order: [[12, "desc"]],
       dom: "Bfrtilp",
 
       lengthMenu: [
@@ -67,26 +67,33 @@
         {
           extend: "copyHtml5",
           exportOptions: {
-            columns: [ 0,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] 
+            columns: [ 0,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] 
           },
         },
         {
           extend: "csvHtml5",
           exportOptions: {
-            columns: [ 0,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] 
+            columns: [ 0,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] 
           },
         },
         {
           extend: "pdfHtml5",
           exportOptions: {
-            columns: [ 0,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] 
+            columns: [ 0,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] 
           },
         },
         "print",   
         {
           extend: "excelHtml5",
+          title: null,
           exportOptions: {
-            columns: [ 0,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] 
+            columns: [ 0,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] ,
+            format: {
+              body: function(data, row, column, node) {
+                  data = $('<p>' + data + '</p>').text();
+                  return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+          }
           },
         },    
       ],

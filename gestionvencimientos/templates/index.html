@@ -17,7 +17,11 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
     <script src="{% static 'js/jquery.js' %}"></script>
     <link
       rel="stylesheet"
@@ -42,7 +46,6 @@
   </head>
 
   <body class="body">
-  
     <div class="header" id="sub-header">
       <ul class="nav">
         {% if request.user.is_authenticated %}
@@ -50,79 +53,159 @@
           <a class="nav-link" href="{% url 'home' %}">Inicio</a>
         </li>
         <li class="nav-item" id="pendi_index">
-          <a class="nav-link" id="pendi_a" href="{% url 'menu_pendientes' %}">Pendientes</a>
+          <a class="nav-link" id="pendi_a" href="{% url 'menu_pendientes' %}"
+            >Pendientes</a
+          >
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'vencidos' %}">Vencidos</a>
-        </li>
-       
         <li class="nav-item">
           <a class="nav-link" href="#" onclick="otros_pedidos()">Otros</a>
         </li>
-        {% endif %}
-        {% if request.user.is_staff %}
+        {% endif %} {% if request.user.is_staff %}
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdownMenuLink"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="true"
+          >
             Administrar
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="/admin/gestionvencimientos/ans/import/" target="blank">Importar CSV</a></li>
-            <li><a class="dropdown-item" href="/admin/gestionvencimientos/ans/export/?" target="blank">Programador</a></li>
-            <li><a class="dropdown-item" href="/admin/gestionvencimientos/actividad/" target="blank">Actividades</a></li>
-            <li><a class="dropdown-item" href="/admin/gestionvencimientos/encargado/" target="blank">Encargados</a></li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="/admin/gestionvencimientos/ans/import/"
+                target="blank"
+                >Importar CSV</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="/admin/gestionvencimientos/ans/export/?"
+                target="blank"
+                >Programador</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="/admin/gestionvencimientos/actividad/"
+                target="blank"
+                >Actividades</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="/admin/gestionvencimientos/encargado/"
+                target="blank"
+                >Encargados</a
+              >
+            </li>
           </ul>
         </li>
 
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdownMenuLink"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="true"
+          >
             Ejecutar
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="#" onclick="cierre_masivo()">Cierre masivo</a></li>
-            <li><a class="dropdown-item" href="#" onclick="gestion_bd()">Gestionar BBDD</a></li>
-            <li><a class="dropdown-item" href="#" onclick="reiniciar_bd()">Reiniciar BBDD</a></li>
-            <li><a class="dropdown-item" href="{% url 'direccion' %}">Dirección</a></li>
+            <li>
+              <a class="dropdown-item" href="#" onclick="cierre_masivo()"
+                >Cierre masivo</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" href="#" onclick="gestion_bd()"
+                >Gestionar BBDD</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" href="#" onclick="reiniciar_bd()"
+                >Reiniciar BBDD</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'direccion' %}"
+                >Dirección</a
+              >
+            </li>
+            <li><a class="dropdown-item" href="{% url 'jorge' %}">WOLF</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdownMenuLink"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="true"
+          >
             Programar
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="{% url 'acrev' %}" >ACREV</a></li>
+            <li><a class="dropdown-item" href="{% url 'acrev' %}">ACREV</a></li>
             <li><a class="dropdown-item" href="{% url 'amrtr' %}">AMRTR</a></li>
             <li><a class="dropdown-item" href="{% url 'lega' %}">LEGA</a></li>
           </ul>
         </li>
-        {% endif %}
-        {% if request.user.is_authenticated %}        
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'vencidos_todos'}">Vencidos todos</a>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdownMenuLink"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="true"
+          >
+            Vencidos
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'vencidos' %}">Contrato</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'vencidos_todos' %}"
+                >Todos</a
+              >
+            </li>
+          </ul>
         </li>
-        
+        {% endif %} {% if request.user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'logout' %}?next=/inicio/">Cerrar sesión</a>
+          <a class="nav-link" href="{% url 'logout' %}?next=/inicio/"
+            >Cerrar sesión</a
+          >
         </li>
         {% else %}
         <li class="nav-item">
           <h3>App para la gestion de pedidos HV Apartadó</h3>
         </li>
         {% endif %}
-
       </ul>
     </div>
 
     {% block content %}
 
-    <p class="text-center mt-4 text-primary fw-bold fs-2">Bienvenido {{ user.username }} a la app para la gestión de ANS pendientes.</p>
+    <p class="text-center mt-4 text-primary fw-bold fs-2">
+      Bienvenido {{ user.username }} a la app para la gestión de ANS pendientes.
+    </p>
 
-    {% endblock content %} 
-   
-    {% block js %}
+    {% endblock content %} {% block js %}
 
     <script src="{% static 'js/js_pendientes.js' %}"></script>
 
     {% endblock js %}
-
   </body>
 </html>

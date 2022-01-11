@@ -1,7 +1,7 @@
 {% extends 'index.html' %} {% load static %} {% block content %}
 <div class="table-id card mt-4" style="width: 100%; margin: auto">
   <div class="card-body">
-    <h6 class="m-0 text-center">Pedidos LEGALIZACIONES</h6>
+    <h6 class="m-0 text-center">Pedidos ACREV</h6>
     <table class="table" id="table_id" style="width: 100%; margin: auto">
       <thead>
         <tr
@@ -9,6 +9,7 @@
           style="background-color: #8ee7fa;"
         >
           <th scope="col">Pedido</th>
+          <th >Actividad</th>
           <th>Hora venci</th>
           <th scope="col">Dias ANS</th>
           <th scope="col">Cliente ID</th>
@@ -16,8 +17,6 @@
           <th scope="col">Celular</th>
           <th scope="col">Instalación</th>
           <th scope="col">Area trabajo</th>
-          <th scope="col">Coordenada x</th>
-          <th scope="col">Coordenada y</th>
           <th scope="col">Concepto</th>
           <th scope="col">Observación</th>
         </tr>
@@ -27,17 +26,16 @@
 
         <tr class="text-center tr">
           <th scope="row">{{ a.Pedido }}</th>
+          <th>{{ a.Actividad }}</th>
           <td>{{ a.fecha_vencimiento }}</td>
           <td>{{ a.Días_ANS }}</td>
           <td>{{ a.ClienteID }}</td>
           <td>{{ a.Nombre_Cliente }}</td>
           <td>{{ a.Celular_Contacto }}</td>
-          <td>{{ a.Instalación }}</td>
           <td>{{ a.Area_Trabajo }}</td>
-          <td>{{ a.Coordenadax }}</td>
-          <td>{{ a.Coordenaday }}</td>
+          <td>{{ a.Instalación }}</td>
           <td>{{ a.Concepto }}</td>  
-          <td><textarea name="" id="" class="p-1" cols="20" rows="5">{{ a.Observación_Solicitud }}</textarea></td>
+          <td><textarea name="" class="p-1" id="" cols="20" rows="5">{{ a.Observación_Solicitud }}</textarea></td>
         </tr>
 
         {% endfor %}
@@ -84,7 +82,7 @@
         {
           extend: "excelHtml5",
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
           },
         },    
       ],
@@ -93,4 +91,9 @@
 </script>
 
 {% endblock js %}
+
+
+
+
+
 

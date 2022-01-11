@@ -432,3 +432,8 @@ def direccionamiento(request):
     aeneses = Ans.objects.filter(Q(Actividad="ACREV")).filter(Tipo_Dirección = "Urbano").filter(Concepto = "PPRG")
     
     return render(request, "direccionamiento.html", {"aneses": aeneses} )
+
+def programador(request):
+    aeneses = Ans.objects.all()
+    
+    return render(request, "programador.html", {"aneses": aeneses} )

@@ -1,0 +1,198 @@
+{% extends 'index.html' %} {% load static %} {% block head %} {% endblock head %} 
+{% block content %}
+<div style="display: flex; justify-content: center" class="header-menu">
+  <ul class="nav text-light">
+    <li class="nav-item">
+      <a class="nav-link" id="id_url_1" href="{% url 'pendientes' 1 %}"
+        >Lunes</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="id_url_2" href="{% url 'pendientes' 2 %}"
+        >Martes</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="id_url_3" href="{% url 'pendientes' 3 %}"
+        >Miercoles</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="id_url_4" href="{% url 'pendientes' 4 %}"
+        >Jueves</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="id_url_5" href="{% url 'pendientes' 5 %}"
+        >Viernes</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'pendientes_next_week' 10 %}"
+        ><i class="fas fa-arrow-circle-right"></i> Sig. semana</a
+      >
+    </li>
+  </ul>
+  <div class="div-oculto" id="div_id-oculto">
+    <input type="hidden" id="id-oculto" value="{{ id_dia }}" />
+  </div>
+</div>
+
+<div class="table-id card mt-1">
+  <div class="card-body">
+    <table
+      class="table table-sm table-hover"
+      class="display nowrap"
+      id="table_id"
+    >
+      <thead class="p-0">
+        <tr class="text-center m-0 p-0" style="background-color: #8ee7fa">
+          <th scope="col" class="p-0">Pedido</th>
+          <th scope="col" class="p-0">Subped</th>
+          <th scope="col" class="p-0">Soli</th>
+          <th scope="col" class="p-0">Producto_id</th>
+          <th scope="col" class="p-0">Tipo_Trabajo</th>
+          <th scope="col" class="p-0">Tipo_Elemento_ID</th>
+          <th scope="col" class="p-0">Fecha_Recibo</th>
+          <th scope="col" class="p-0">Fecha_Ingreso_Sol</th>
+          <th scope="col" class="p-0">Fecha_Concepto</th>
+          <th scope="col" class="p-0">Fecha_Inicio_ANS</th>
+          <th scope="col" class="p-0">Días_ANS</th>
+          <th scope="col" class="p-0">Estado</th>
+          <th scope="col" class="p-0">Concepto</th>
+          <th scope="col" class="p-0">Nombre_concepto</th>
+          <th scope="col" class="p-0">ClienteID</th>
+          <th scope="col" class="p-0">Nombre_Cliente</th>
+          <th scope="col" class="p-0">Telefono</th>
+          <th scope="col" class="p-0">Correo</th>
+          <th scope="col" class="p-0">Direccion_Correspondencia</th>
+          <th scope="col" class="p-0">Municipio_Correspondencia</th>
+          <th scope="col" class="p-0">Telefono_Contacto</th>
+          <th scope="col" class="p-0">Celular_Contacto</th>
+          <th scope="col" class="p-0">Direccion</th>
+          <th scope="col" class="p-0">Municipio</th>
+          <th scope="col" class="p-0">Instalación</th>
+          <th scope="col" class="p-0">Area_Operativa</th>
+          <th scope="col" class="p-0">Subzona</th>
+          <th scope="col" class="p-0">Area_Trabajo</th>
+          <th scope="col" class="p-0">Ruta</th>
+          <th scope="col" class="p-0">Coordenadax</th>
+          <th scope="col" class="p-0">Coordenaday</th>
+          <th scope="col" class="p-0">Actividad</th>
+          <th scope="col" class="p-0">Equipo</th>
+          <th scope="col" class="p-0">Nombre</th>
+          <th scope="col" class="p-0">Fecha_Programación</th>
+          <th scope="col" class="p-0">Num_Proyecto</th>
+          <th scope="col" class="p-0">Tipo_Dirección</th>
+          <th scope="col" class="p-0">Observación</th>
+          <th scope="col" class="p-0">Observación_Solicitud</th>
+          <th scope="col" class="p-0">Pedido_CRM</th>
+          <th scope="col" class="p-0"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in aneses %}
+
+        <tr class="text-center p-0 tr">
+          <th class="pt-1">{{ a.Pedido }}</th>
+          <td class="m-0 pb-0">{{ a.Subped }}</td>
+          <td class="m-0 pb-0">{{ a.Soli }}</td>
+          <td class="m-0 pb-0">{{ a.Producto_id }}</td>
+          <td class="m-0 pb-0">{{ a.Tipo_Trabajo }}</td>
+          <td class="m-0 pb-0">{{ a.Tipo_Elemento_ID }}</td>
+          <td class="pt-1">{{ a.Fecha_Recibo }}</td>
+          <td class="m-0 pb-0">{{ a.Fecha_Ingreso_Sol }}</td>
+          <td class="m-0 pb-0">{{ a.Fecha_Concepto }}</td>
+          <td class="m-0 pb-0">{{ a.Fecha_Inicio_ANS }}</td>
+          <td class="m-0 pb-0">{{ a.Días_ANS }}</td>
+          <td class="m-0 pb-0">{{ a.Estado }}</td>
+          <td class="pt-1">{{ a.Concepto }}</td>
+          <td class="pt-1"><textarea name="" id="" cols="10" rows="5">{{ a.Nombre_concepto }}</textarea></td>          <td class="m-0 pb-0">{{ a.ClienteID }}</td>
+          <td class="m-0 pb-0">{{ a.ClienteID }}</td>
+          <td class="m-0 pb-0">{{ a.Nombre_Cliente }}</td>
+          <td class="m-0 pb-0">{{ a.Telefono }}</td>
+          <td class="m-0 pb-0">{{ a.Correo }}</td>
+          <td class="m-0 pb-0">{{ a.Direccion_Correspondencia }}</td>
+          <td class="pt-1">{{ a.Municipio_Correspondencia }}</td>
+          <td class="m-0 pb-0">{{ a.Telefono_Contacto }}</td>
+          <td class="m-0 pb-0">{{ a.Celular_Contacto }}</td>
+          <td class="m-0 pb-0">{{ a.Direccion }}</td>
+          <td class="m-0 pb-0">{{ a.Municipio }}</td>
+          <td class="m-0 pb-0">{{ a.Instalación }}</td>
+          <td class="m-0 pb-0">{{ a.Area_Operativa }}</td>
+          <td class="m-0 pb-0">{{ a.Subzona }}</td>
+          <th class="pt-1">{{ a.Area_Trabajo }}</th>
+          <td class="m-0 pb-0">{{ a.Ruta }}</td>
+          <td class="m-0 pb-0">{{ a.Coordenadax }}</td>
+          <td class="m-0 pb-0">{{ a.Coordenaday }}</td>
+          <td class="m-0 pb-0">{{ a.Actividad }}</td>
+          <td class="m-0 pb-0">{{ a.Equipo }}</td>
+          <td class="m-0 pb-0">{{ a.Nombre }}</td>
+          <td class="m-0 pb-0">{{ a.Fecha_Programación }}</td>
+          <td class="m-0 pb-0">{{ a.Num_Proyecto }}</td>
+          <td class="pt-1">{{ a.Tipo_Dirección }}</td>
+          <td class="pt-1"><textarea name="" id="" cols="10" rows="5">{{ a.Observación }}</textarea></td>
+          <td class="m-0 pb-0"><textarea name="" id="" cols="10" rows="5">{{ a.Observación_Solicitud }}</textarea></td>
+          <td class="m-0 pb-0">{{ a.Pedido_CRM }}</td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock content %} {% block js %}
+
+<script src="{% static 'js/js_pendientes.js' %}"></script>
+
+<script>
+  $(document).ready(function () {
+    $("#table_id").DataTable({
+      order: [[1, "asc"]],
+
+      dom: "Bfrtilp",
+
+      lengthMenu: [
+            [ 15, 30, 50, -1 ],
+            [ '15', '30', '50', 'Todos' ]
+        ],
+        
+      buttons: [
+      {
+        text: 'Week',
+        action: function ( e, dt, node, config ) {
+          window.location.href ="/week/"+1
+        }
+    },
+        {
+          extend: "copyHtml5",
+          exportOptions: {
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 ]
+          },
+        },
+        {
+          extend: "csvHtml5",
+          exportOptions: {
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 ]
+          },
+        },
+        {
+          extend: "pdfHtml5",
+          exportOptions: {
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 ]
+          },
+        },
+        "print",   
+        {
+          extend: "excelHtml5",
+          title:'',
+          exportOptions: {
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 ]
+          },
+        },    
+      ],
+    });
+  });
+</script>
+
+{% endblock js %}

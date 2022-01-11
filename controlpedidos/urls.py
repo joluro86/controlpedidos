@@ -5,7 +5,7 @@ from django.urls.conf import include
 from django.contrib.auth import login
 
 
-from gestionvencimientos.views import amrtr, busqueda_vencidos, acrev, calculo_next_week, direccionamiento, lega, otros_pedidos, calculo_pendientes, cierre_masivo,  cerrar_pedido, eliminar_bd, fechas, gestion_bd, index, limpiar_base, menu_pendientes, pedidos_week, vencidos
+from gestionvencimientos.views import amrtr, busqueda_vencidos, acrev, calculo_next_week, direccionamiento, lega, otros_pedidos, calculo_pendientes, cierre_masivo,  cerrar_pedido, eliminar_bd, fechas, gestion_bd, index, limpiar_base, menu_pendientes, pedidos_week, programador, vencidos
 
 urlpatterns = [
     path('admin/', admin.site.urls, name="administrador"),
@@ -35,5 +35,7 @@ urlpatterns = [
          lega, name="lega"),
     path('direccionamiento/',
          direccionamiento, name="direccion"),
+    path('programador/',
+         programador, name="programador"),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

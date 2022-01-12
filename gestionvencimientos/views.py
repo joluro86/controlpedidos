@@ -130,9 +130,9 @@ def busqueda_vencidos(request):
             if fecha_vence_ans < datetime.today():
                 if ans.estado_cierre == 0:
                     list_ans.append(ans)
-                    
-        except:
-            print("An exception occurred in fecha vencimiento 2")        
+        except Exception as e: 
+            print("An exception occurred in fecha vencimiento 2") 
+            print(repr(e))                              
 
     return render(request, "vencidos-todos.html" , {"aneses": list_ans})
 
@@ -152,8 +152,9 @@ def busqueda_pendientes(fecha_vence_buscar):
             if fecha_vence_ans.strftime('%Y-%m-%d') == fecha_vence_buscar:
                 if ans.estado_cierre == 0:
                     list_ans.append(ans) 
-        except:
-            print("An exception occurred in fecha vencimiento 2")        
+        except Exception as e: 
+            print("An exception occurred in busqueda pendientes") 
+            print(repr(e))        
 
     return list_ans
 
@@ -235,8 +236,9 @@ def gestion_bd(request):
 
             ans.save()
 
-        except:
-            print("An exception occurred")
+        except Exception as e: 
+            print("An exception occurred in gestion bd") 
+            print(repr(e))   
 
     return redirect('home')
 

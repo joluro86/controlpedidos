@@ -125,6 +125,8 @@ def busqueda_vencidos(request):
             continue
         if ans.Estado == "PENDI" and ans.Concepto == "592":
             continue
+        if ans.Tipo_Elemento_ID == "ENEGED":
+            continue
         try:
             fecha_vence_ans = datetime.strptime(ans.fecha_vencimiento, "%Y-%m-%d %H:%M:%S")
             if fecha_vence_ans < datetime.today():
@@ -229,8 +231,12 @@ def gestion_bd(request):
             if ans.Tipo_Dirección == "Rural":
                 ans.dias_vencimiento = int(actividad.dias_rural)
 
-            ans.fecha_vencimiento = fechas(
-                ans.Fecha_Inicio_ANS, ans.dias_vencimiento)
+            fecha = fechas(ans.Fecha_Inicio_ANS, ans.dias_vencimiento)
+            ans.fecha_vencimiento = fecha
+            
+            ans.fecha_vence_sin_hora = fecha.date().strftime("%d-%m-%Y")
+    
+            ans.hora_vencimiento= fecha.time()
 
             ans.encargado = str(actividad.encargado)
 
@@ -313,7 +319,7 @@ def calculo_next_week(request, id_dia):
 
 def vencidos(request):
     aeneses = Vencido.objects.all()
-    
+        
     return render(request, "vencidos.html", {"aneses":aeneses})
 
 
@@ -350,14 +356,10 @@ def pedidos_week(request, id_week):
         lunes = (lunes+timedelta(days=7)).strftime('%d-%m-%Y')
     else:
         viernes = (lunes+timedelta(days=dia+4)).strftime('%d-%m-%Y')
-        lunes = lunes.strftime('%d-%m-%Y')
-        
+        lunes = lunes.strftime('%d-%m-%Y') 
     
     lista_pedidos = list_ans_miercoles
-   
-    
-    
-    
+
     return render(request, "pedidos_week.html", {"aneses":lista_pedidos, "lunes":lunes, "viernes":viernes})
 
 

@@ -8,7 +8,8 @@
           style="background-color: #8ee7fa;"
         >
           <th scope="col">Pedido</th>
-          <th>Hora venci</th>
+          <th>Fecha vence</th>
+          <th>Hora</th>
           <th scope="col">Encargado</th>
           <th scope="col">Actividad</th>
           <th scope="col">Observación</th>
@@ -19,7 +20,8 @@
 
         <tr class="text-center tr">
           <th scope="row">{{ a.Pedido }}</th>
-          <td>{{ a.fecha_vencimiento }}</td>
+          <td>{{ a.fecha_vence_sin_hora }}</td>
+          <td>{{ a.hora_vencimiento }}</td>
           <td>{{ a.encargado }}</td>
           <td>{{ a.Actividad }}</td>
           <td> <textarea name="" id="" cols="100" rows="3">{{ a.Observación_Solicitud }}</textarea></td>

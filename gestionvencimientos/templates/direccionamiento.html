@@ -4,20 +4,15 @@
     <h6 class="m-0 text-center">Pedidos a Direccionar</h6>
     <table class="table" id="table_id" style="width: 100%; margin: auto">
       <thead>
-        <tr
-          class="text-center"
-          style="background-color: #8ee7fa;"
-        >
+        <tr class="text-center" style="background-color: #8ee7fa; font-size:0.9em">
           <th scope="col">Pedido</th>
-          <th>Hora venci</th>
-          <th scope="col">Dias ANS</th>
-          <th scope="col">Cliente ID</th>
-          <th scope="col">Nombre Cliente</th>
+          <th>Fecha Vence</th>
+          <th scope="col">Dias</th>
+          <th scope="col">Cliente</th>
+          <th scope="col">Nombre</th>
           <th scope="col">Celular</th>
           <th scope="col">Instalación</th>
           <th scope="col">Area trabajo</th>
-          <th scope="col">Coordenada x</th>
-          <th scope="col">Coordenada y</th>
           <th scope="col">Concepto</th>
         </tr>
       </thead>
@@ -26,15 +21,13 @@
 
         <tr class="text-center tr">
           <th scope="row">{{ a.Pedido }}</th>
-          <td>{{ a.fecha_vencimiento }}</td>
+          <td>{{ a.fecha_vence_sin_hora }}</td>
           <td>{{ a.Días_ANS }}</td>
           <td>{{ a.ClienteID }}</td>
           <td>{{ a.Nombre_Cliente }}</td>
           <td>{{ a.Celular_Contacto }}</td>
           <td>{{ a.Instalación }}</td>
           <td>{{ a.Area_Trabajo }}</td>
-          <td>{{ a.Coordenadax }}</td>
-          <td>{{ a.Coordenaday }}</td>
           <td>{{ a.Concepto }}</td>  
         </tr>
 

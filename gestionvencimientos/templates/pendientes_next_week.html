@@ -62,6 +62,7 @@
       <thead class="p-0">
         <tr class="text-center p-0" style="background-color: #8ee7fa">
           <th scope="col">Pedido</th>
+          <th>Fecha</th>
           <th>Hora</th>
           <th scope="col">Encargado</th>
           <th scope="col">Instalación</th>
@@ -74,7 +75,8 @@
 
         <tr class="text-center tr">
           <th class="pt-1">{{ a.Pedido }}</th>
-          <td class="m-0 pb-0">{{ a.fecha_vencimiento }}</td>
+          <td class="m-0 pb-0">{{ a.fecha_vence_sin_hora }}</td>
+          <td class="m-0 pb-0">{{ a.hora_vencimiento }}</td>
           <td class="m-0 pb-0">{{ a.encargado }}</td>
           <td class="m-0 pb-0">{{ a.Instalación }}</td>
           <td class="m-0 pb-0">{{ a.Actividad }}</td>

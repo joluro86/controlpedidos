@@ -4,21 +4,19 @@
     <h6 class="m-0 text-center">Pedidos Legalización</h6>
     <table class="table" id="table_id" style="width: 100%; margin: auto">
       <thead>
-        <tr
-          class="text-center"
-          style="background-color: #8ee7fa;"
-        >
+        <tr class="text-center"style="background-color: #8ee7fa; font-size: 0.8em;">
           <th scope="col">Pedido</th>
-          <th >Actividad</th>
-          <th>Hora venci</th>
-          <th scope="col">Dias ANS</th>
-          <th scope="col">Cliente ID</th>
-          <th scope="col">Nombre Cliente</th>
-          <th scope="col">Celular</th>
-          <th scope="col">Instalación</th>
-          <th scope="col">Area trabajo</th>
-          <th scope="col">Concepto</th>
-          <th scope="col">Observación</th>
+          <th>Actividad</th>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Dias</th>
+          <th>Cliente</th>
+          <th>Nombre</th>
+          <th>Celular</th>
+          <th>Instalación</th>
+          <th>Area</th>
+          <th>Concepto</th>
+          <th>Observación</th>
         </tr>
       </thead>
       <tbody>
@@ -26,14 +24,15 @@
 
         <tr class="text-center tr">
           <th scope="row">{{ a.Pedido }}</th>
-          <th>{{ a.Actividad }}</th>
-          <td>{{ a.fecha_vencimiento }}</td>
+          <td>{{ a.Actividad }}</td>
+          <td>{{ a.fecha_vence_sin_hora }}</td>
+          <td>{{ a.hora_vencimiento }}</td>
           <td>{{ a.Días_ANS }}</td>
           <td>{{ a.ClienteID }}</td>
-          <td>{{ a.Nombre_Cliente }}</td>
+          <td style="font-size: 0.9em;">{{ a.Nombre_Cliente }}</td>
           <td>{{ a.Celular_Contacto }}</td>
-          <td>{{ a.Area_Trabajo }}</td>
           <td>{{ a.Instalación }}</td>
+          <td>{{ a.Area_Trabajo }}</td>
           <td>{{ a.Concepto }}</td>  
           <td><textarea name="" class="p-1" id="" cols="20" rows="5">{{ a.Observación_Solicitud }}</textarea></td>
         </tr>
@@ -64,21 +63,21 @@
           extend: "copyHtml5",
           title:'',
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
           },
         },
         {
           extend: "csvHtml5",
           title:'',
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
           },
         },
         {
           extend: "pdfHtml5",
           title:'',
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
           },
         },
         "print",   
@@ -86,7 +85,7 @@
           extend: "excelHtml5",
           title:'',
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ],
             format: {
               body: function(data, row, column, node) {
                   data = $('<p>' + data + '</p>').text();

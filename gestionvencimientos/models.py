@@ -44,13 +44,13 @@ class Ans(models.Model):
     Observación = models.CharField(max_length=5000, null=True)
     Observación_Solicitud = models.CharField(max_length=5000, null=True)
     Pedido_CRM = models.CharField(max_length=5000, null=True)
-    dias_vencimiento = models.IntegerField(
-        verbose_name="Dias de vencimiento", default=0)
-    fecha_vencimiento = models.CharField(
-        max_length=30, verbose_name="Fecha vencimiento", null=True, default="Sin registro")
+    dias_vencimiento = models.IntegerField(verbose_name="Dias de vencimiento", default=0)
+    fecha_vencimiento = models.CharField(max_length=30, verbose_name="Fecha vencimiento", null=True)
     encargado = models.CharField(max_length=100, null=True)
     estado_cierre = models.IntegerField(default=0, null=True, blank=True)
     fecha_cierre = models.CharField(max_length=100, null=True)
+    fecha_vence_sin_hora= models.CharField(max_length=50, null=True, blank=True)
+    hora_vencimiento = models.CharField(max_length=50, null=True, blank=True)
 
     class Meta:
         ordering = ["fecha_vencimiento"]

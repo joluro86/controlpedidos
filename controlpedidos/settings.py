@@ -131,6 +131,10 @@ USE_L10N = True
 
 USE_TZ = True
 
+proxy_connect_timeout= 300
+
+proxy_read_timeout = 300
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/

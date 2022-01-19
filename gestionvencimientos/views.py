@@ -169,7 +169,7 @@ def eliminar_bd(request):
 
 def fechas(fecha_inic, dias):
 
-    fecha_vencimiento = datetime. strptime(fecha_inic, '%Y/%m/%d %H:%M:%S')
+    fecha_vencimiento = datetime. strptime(fecha_inic, '%Y-%m-%d %H:%M:%S')
     cont = 0
 
     while cont < dias:

@@ -1,1 +1,1 @@
-web: gunicorn controlpedidos.wsgi --timeout 45 --log-level debug
+web: gunicorn controlpedidos.wsgi --log-file -

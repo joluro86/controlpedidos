@@ -30,6 +30,12 @@ def calculo_dia_actutal():
 
     if fecha_actual.weekday() == 4:
         dia = 4
+    
+    if fecha_actual.weekday() == 5:
+        dia = 5
+    
+    if fecha_actual.weekday() == 6:
+        dia = 6
 
     return dia
 
@@ -53,6 +59,12 @@ def calculo_dia_semana_2():
 
     if fecha_actual.weekday() == 4:
         lunes = datetime.now()-timedelta(days=4)
+    
+    if fecha_actual.weekday() == 5:
+        lunes = datetime.now()+timedelta(days=2)
+    
+    if fecha_actual.weekday() == 6:
+        lunes = datetime.now()+timedelta(days=1)
 
     return lunes
 
@@ -115,6 +127,13 @@ def calculo_pendientes(request, id_dia):
             (lunes+timedelta(days=4)).strftime('%Y-%m-%d'))
 
         return render(request, "pendientes_lunes.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=4)).strftime('%Y-%m-%d')})
+    
+    if id_dia == 6 or id_dia == 7:
+    
+        list_ans = busqueda_pendientes(
+            (lunes).strftime('%Y-%m-%d'))
+
+        return render(request, "pendientes_lunes.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes).strftime('%Y-%m-%d')})
 
 
 def busqueda_vencidos(request):

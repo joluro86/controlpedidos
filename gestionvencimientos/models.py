@@ -4,9 +4,9 @@ from django.db import models
 # Create your models here.
 
 class Ans(models.Model):
-    Pedido = models.TextField(max_length=100, default=0)
-    Subped = models.CharField(max_length=100, default=0)
-    Soli = models.CharField(max_length=200, null=True, default=0)
+    Pedido = models.TextField(max_length=100, default=0, null=True)
+    Subped = models.CharField(max_length=100, default=0, null=True)
+    Soli = models.CharField(max_length=200, null=True, default=0, null=True)
     Producto_id = models.CharField(max_length=200, null=True, default=0)
     Tipo_Trabajo = models.CharField(max_length=200, null=True, default=0)
     Tipo_Elemento_ID = models.CharField(max_length=200, null=True, default=0)
@@ -44,7 +44,7 @@ class Ans(models.Model):
     Observación = models.CharField(max_length=5000, null=True)
     Observación_Solicitud = models.CharField(max_length=5000, null=True)
     Pedido_CRM = models.CharField(max_length=5000, null=True, default=0)
-    dias_vencimiento = models.IntegerField(verbose_name="Dias de vencimiento")
+    dias_vencimiento = models.IntegerField(verbose_name="Dias de vencimiento", null=True)
     fecha_vencimiento = models.CharField(max_length=30, verbose_name="Fecha vencimiento", null=True)
     encargado = models.CharField(max_length=100, null=True)
     estado_cierre = models.IntegerField(default=0, null=True, blank=True)

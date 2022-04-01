@@ -434,7 +434,7 @@ def cierre_masivo(request, fecha_cierre, hora_cierre):
 
 def acrev(request):
     
-    aeneses = Ans.objects.filter(Actividad = "ACREV").filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495"))
+    aeneses = Ans.objects.filter(Actividad = "ACREV").filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495")| Q(Concepto="430"))
     
     return render(request, "acrev.html", {"aneses": aeneses} )
 

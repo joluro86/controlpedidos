@@ -47,7 +47,7 @@ class Ans(models.Model):
     dias_vencimiento = models.IntegerField(verbose_name="Dias de vencimiento", default=0)
     fecha_vencimiento = models.CharField(max_length=30, verbose_name="Fecha vencimiento", null=True, default=0)
     encargado = models.CharField(max_length=100, null=True, default=0)
-    estado_cierre = models.IntegerField(default=0, null=True, blank=True, default=0)
+    estado_cierre = models.IntegerField(default=0, null=True, blank=True)
     fecha_cierre = models.CharField(max_length=100, null=True, default=0)
     fecha_vence_sin_hora= models.CharField(max_length=50, null=True, blank=True, default=0)
     hora_vencimiento = models.CharField(max_length=50, null=True, blank=True, default=0)

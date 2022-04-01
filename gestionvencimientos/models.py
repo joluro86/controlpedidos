@@ -44,7 +44,7 @@ class Ans(models.Model):
     Observación = models.CharField(max_length=5000, null=True)
     Observación_Solicitud = models.CharField(max_length=5000, null=True)
     Pedido_CRM = models.CharField(max_length=5000, null=True, default=0)
-    dias_vencimiento = models.IntegerField(verbose_name="Dias de vencimiento", null=True)
+    dias_vencimiento = models.IntegerField(verbose_name="Dias de vencimiento", default=0, null=True, blank=True)
     fecha_vencimiento = models.CharField(max_length=30, verbose_name="Fecha vencimiento", null=True)
     encargado = models.CharField(max_length=100, null=True)
     estado_cierre = models.IntegerField(default=0, null=True, blank=True)

@@ -10,6 +10,10 @@ class AnsResource(resources.ModelResource):
     class Meta:
         model = Ans
 
+class ActividadResource(resources.ModelResource):
+    class Meta:
+        model = Actividad
+
 class AnsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('Pedido', 'Actividad', 'Fecha_Inicio_ANS', 'dias_vencimiento' , 'Area_Trabajo', 'fecha_vencimiento')
     resource_class = AnsResource

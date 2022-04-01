@@ -6,7 +6,7 @@ from django.db import models
 class Ans(models.Model):
     Pedido = models.TextField(max_length=100, default=0, null=True)
     Subped = models.CharField(max_length=100, default=0, null=True)
-    Soli = models.CharField(max_length=200, null=True, default=0, null=True)
+    Soli = models.CharField(max_length=200, null=True, default=0)
     Producto_id = models.CharField(max_length=200, null=True, default=0)
     Tipo_Trabajo = models.CharField(max_length=200, null=True, default=0)
     Tipo_Elemento_ID = models.CharField(max_length=200, null=True, default=0)

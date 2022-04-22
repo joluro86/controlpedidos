@@ -3,8 +3,8 @@
 <div style="display: flex; justify-content: center" class="header-menu">
   <ul class="nav text-light">
     <li class="nav-item">
-      <a class="nav-link" id="id_url" href="{% url 'menu_pendientes' %}"
-        >Semana anterior <i class="fas fa-arrow-circle-left"></i
+      <a class="nav-link" id="id_url" href="{% url 'menu_pendientes' %}" style="color:#05DF90; font-weight:bold" onmouseover='this.style.color="black"'; onmouseout='this.style.color="#05DF90";'
+        >Anterior <i class="fas fa-arrow-circle-left"></i
       ></a>
     </li>
     <li class="nav-item">
@@ -62,12 +62,10 @@
       <thead class="p-0">
         <tr class="text-center p-0" style="background-color: #8ee7fa">
           <th scope="col">Pedido</th>
-          <th scope="col">Actividad</th>
-          <th>Fecha</th>
           <th>Hora</th>
           <th scope="col">Encargado</th>
           <th scope="col">Instalación</th>
-          <th scope="col">Municipio</th>
+          <th scope="col">Actividad</th>
           <th>Cerrar</th>
         </tr>
       </thead>
@@ -76,12 +74,10 @@
 
         <tr class="text-center tr">
           <th class="pt-1">{{ a.Pedido }}</th>
-          <td class="m-0 pb-0">{{ a.Actividad }}</td>
-          <td class="m-0 pb-0">{{ a.fecha_vence_sin_hora }}</td>
-          <td class="m-0 pb-0">{{ a.hora_vencimiento }}</td>
+          <td class="m-0 pb-0">{{ a.fecha_vencimiento }}</td>
           <td class="m-0 pb-0">{{ a.encargado }}</td>
           <td class="m-0 pb-0">{{ a.Instalación }}</td>
-          <td class="m-0 pb-0">{{ a.Area_Trabajo }}</td>
+          <td class="m-0 pb-0">{{ a.Actividad }}</td>
           <td class="m-0 pb-0">
             <a
               href="#"
@@ -123,21 +119,21 @@
           extend: "copyHtml5",
           title:'',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4, 5, 6, 7],
+            columns: [0, 1, 2, 3, 4],
           },
         },
         {
           extend: "csvHtml5",
           title:'',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4, 5, 6, 7],
+            columns: [0, 1, 2, 3, 4],
           },
         },
         {
           extend: "pdfHtml5",
           title:'',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4, 5, 6, 7],
+            columns: [0, 1, 2, 3, 4],
           },
         },
         "print",
@@ -145,7 +141,7 @@
           extend: "excelHtml5",
           title:'',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4, 5, 6, 7],
+            columns: [0, 1, 2, 3, 4],
           },
         },
       ],

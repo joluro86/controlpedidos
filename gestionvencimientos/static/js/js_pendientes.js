@@ -12,7 +12,7 @@ function cerrar_pedido(id) {
     })
     .then(function (result) {
       if (result.value) {
-        fecha_cierre(url);
+        window.location.href = url 
       }
     });
 }

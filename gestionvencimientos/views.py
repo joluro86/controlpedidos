@@ -268,27 +268,9 @@ def gestion_bd(request):
     return redirect('home')
 
 
-def cerrar_pedido(request, id_pedido, fecha_cierre, hora_cierre):
+def cerrar_pedido(request, id_pedido):
    
-    fecha_hora_cierre = fecha_cierre+" "+hora_cierre+":00";
-    fecha_hora_cierre_final =datetime.strptime(fecha_hora_cierre, "%Y-%m-%d %H:%M:%S")
-    
     ans_cerrar = Ans.objects.get(id=id_pedido)
-    
-    if datetime.strptime(ans_cerrar.fecha_vencimiento, "%Y-%m-%d %H:%M:%S")<fecha_hora_cierre_final:
-        try:    
-            ans_vencida = Vencido(
-            Pedido = ans_cerrar.Pedido,
-            Instalación = ans_cerrar.Instalación,
-            Actividad = ans_cerrar.Actividad,
-            Observación = "Aun nada",
-            fecha_vencimiento = ans_cerrar.fecha_vencimiento,
-            encargado = ans_cerrar.encargado,
-            fecha_cierre = fecha_hora_cierre_final            
-            )
-            ans_vencida.save()
-        except:
-            print("bien hecho")
 
     ans_cerrar.estado_cierre = 1
     ans_cerrar.save()

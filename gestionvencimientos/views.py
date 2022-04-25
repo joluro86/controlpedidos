@@ -459,28 +459,28 @@ def calculo_last_week(request, id_dia):
     if id_dia == 20:
 
         list_ans = busqueda_pendientes(
-            (lunes-timedelta(days=8)).strftime('%Y-%m-%d'))
+            (lunes-timedelta(days=6)).strftime('%Y-%m-%d'))
 
         return render(request, "pendientes_last_week.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=8)).strftime('%Y-%m-%d')})
 
     if id_dia == 30:
 
         list_ans = busqueda_pendientes(
-            (lunes-timedelta(days=9)).strftime('%Y-%m-%d'))
+            (lunes-timedelta(days=5)).strftime('%Y-%m-%d'))
 
         return render(request, "pendientes_last_week.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=9)).strftime('%Y-%m-%d')})
 
     if id_dia == 40:
 
         list_ans = busqueda_pendientes(
-            (lunes-timedelta(days=10)).strftime('%Y-%m-%d'))
+            (lunes-timedelta(days=4)).strftime('%Y-%m-%d'))
 
         return render(request, "pendientes_last_week.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=10)).strftime('%Y-%m-%d')})
 
     if id_dia == 50:
 
         list_ans = busqueda_pendientes(
-            (lunes-timedelta(days=11)).strftime('%Y-%m-%d'))
+            (lunes-timedelta(days=3)).strftime('%Y-%m-%d'))
 
         return render(request, "pendientes_last_week.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=11)).strftime('%Y-%m-%d')})
 

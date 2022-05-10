@@ -262,7 +262,7 @@ def gestion_bd(request):
             print("error gestion bd")
             print(e)  
 
-    return redirect('home')
+    return redirect('menu_pendientes')
 
 
 def cerrar_pedido(request, id_pedido):

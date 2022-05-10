@@ -81,8 +81,6 @@ def limpiar_base(request):
     for ans in aneses:
         if ans.Subzona != "Uraba":
             ans.delete()
-        elif ans.Area_Operativa == "NOR-ENE" and ans.Actividad == "ACREV":
-            ans.delete()
 
         elif ans.Actividad != "ACREV" and ans.Actividad != "AEJDO" and ans.Actividad != "ARTER" and ans.Actividad != "DIPRE" and ans.Actividad != "INPRE" and ans.Actividad != "REEQU" and ans.Actividad != "APLIN" and ans.Actividad != "ALEGA" and ans.Actividad != "ALEGN" and ans.Actividad != "ALECA" and ans.Actividad != "ACAMN" and ans.Actividad != "AMRTR":
             ans.delete()
@@ -160,9 +158,7 @@ def busqueda_vencidos(request):
 
 def busqueda_pendientes(fecha_vence_buscar):
     aneses = Ans.objects.filter(Estado="PENDI")
-    cont=0
     list_ans = []
-    cont = 0
     for ans in aneses:
         if ans.Estado == "PENDI" and ans.Concepto == "PENDI":
             continue
@@ -176,7 +172,6 @@ def busqueda_pendientes(fecha_vence_buscar):
         except Exception as e: 
             print("An exception occurred in busqueda pendientes") 
             print(repr(e))        
-
     return list_ans
 
 
@@ -210,19 +205,17 @@ def es_festivo_o_fin_de_semana(fecha):
         return True
 
 
-def gestion_bd(request):
-    
+def gestion_bd(request): 
+     
     lista_ans = []
     Ans.objects.filter(Estado ="ANULA").delete()
-    BORRAR = Ans.objects.filter(Estado = "PENDI").filter(Concepto = "PENDI").delete()
+    Ans.objects.filter(Estado = "PENDI").filter(Concepto = "PENDI").delete()
     
     anses = Ans.objects.all()
-        
+    
     for ans in anses:
-        if ans.Area_Operativa == "NOR-ENE" and ans.Actividad == "ACREV":
-            ans.delete()
-
-        elif ans.Actividad != "ACREV" and ans.Actividad != "AEJDO" and ans.Actividad != "ARTER" and ans.Actividad != "DIPRE" and ans.Actividad != "INPRE" and ans.Actividad != "REEQU" and ans.Actividad != "APLIN" and ans.Actividad != "ALEGA" and ans.Actividad != "ALEGN" and ans.Actividad != "ALECA" and ans.Actividad != "ACAMN" and ans.Actividad != "AMRTR":
+        
+        if ans.Actividad != "AEJDO" and ans.Actividad != "ARTER" and ans.Actividad != "DIPRE" and ans.Actividad != "ACREV" and ans.Actividad != "INPRE" and ans.Actividad != "REEQU" and ans.Actividad != "APLIN" and ans.Actividad != "ALEGA" and ans.Actividad != "ALEGN" and ans.Actividad != "ALECA" and ans.Actividad != "ACAMN" and ans.Actividad != "AMRTR":
             ans.delete()
             
         if ans.Concepto != "406" and ans.Concepto != "414" and ans.Concepto != "430" and ans.Concepto != "495" and ans.Concepto != "PENDI" and ans.Concepto != "FSE" and ans.Concepto != "PPRG" and ans.Concepto != "PROG":
@@ -254,6 +247,10 @@ def gestion_bd(request):
             ans.fecha_vencimiento = fecha
             
             ans.fecha_vence_sin_hora = fecha.date().strftime("%d-%m-%Y")
+            
+            # inicio calculo vence epm
+            
+            # fin calculo vence epm
     
             ans.hora_vencimiento= fecha.time()
 
@@ -262,10 +259,9 @@ def gestion_bd(request):
             ans.save()
 
         except Exception as e: 
-            print("An exception occurred in gestion bd") 
-            print(repr(e))   
+           e  
 
-    return redirect('home')
+    return redirect('menu_pendientes')
 
 
 def cerrar_pedido(request, id_pedido):
@@ -422,13 +418,13 @@ def acrev(request):
 
 def amrtr(request):
     
-    aeneses = Ans.objects.filter(Actividad = "AMRTR").filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495"))
+    aeneses = Ans.objects.filter(Actividad = "AMRTR").filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495")| Q(Concepto="430"))
     
     return render(request, "amrtr.html", {"aneses": aeneses} )
 
 def lega(request):
     
-    aeneses = Ans.objects.filter(Q(Actividad="ALEGA") | Q(Actividad="ALEGN") | Q(Actividad="ALECA") |Q(Actividad="ACAMN") ).filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495"))
+    aeneses = Ans.objects.filter(Q(Actividad="ALEGA") | Q(Actividad="ALEGN") | Q(Actividad="ALECA") |Q(Actividad="ACAMN") ).filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495")| Q(Concepto="430"))
     
     return render(request, "lega.html", {"aneses": aeneses} )
 
@@ -451,36 +447,26 @@ def calculo_last_week(request, id_dia):
     encargados = Encargado.objects.all()
     if id_dia == 10:
 
-        list_ans =  list_ans = busqueda_pendientes(
-            (lunes-timedelta(days=7)).strftime('%Y-%m-%d'))
-
+        list_ans =  list_ans = busqueda_pendientes((lunes-timedelta(days=7)).strftime('%Y-%m-%d'))
         return render(request, "pendientes_last_week.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=7)).strftime('%Y-%m-%d')})
 
     if id_dia == 20:
 
-        list_ans = busqueda_pendientes(
-            (lunes-timedelta(days=6)).strftime('%Y-%m-%d'))
-
+        list_ans = busqueda_pendientes((lunes-timedelta(days=6)).strftime('%Y-%m-%d'))
         return render(request, "pendientes_last_week.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=8)).strftime('%Y-%m-%d')})
 
     if id_dia == 30:
 
-        list_ans = busqueda_pendientes(
-            (lunes-timedelta(days=5)).strftime('%Y-%m-%d'))
-
+        list_ans = busqueda_pendientes((lunes-timedelta(days=5)).strftime('%Y-%m-%d'))
         return render(request, "pendientes_last_week.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=9)).strftime('%Y-%m-%d')})
 
     if id_dia == 40:
 
-        list_ans = busqueda_pendientes(
-            (lunes-timedelta(days=4)).strftime('%Y-%m-%d'))
-
+        list_ans = busqueda_pendientes((lunes-timedelta(days=4)).strftime('%Y-%m-%d'))
         return render(request, "pendientes_last_week.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=10)).strftime('%Y-%m-%d')})
 
     if id_dia == 50:
 
-        list_ans = busqueda_pendientes(
-            (lunes-timedelta(days=3)).strftime('%Y-%m-%d'))
-
+        list_ans = busqueda_pendientes((lunes-timedelta(days=3)).strftime('%Y-%m-%d'))
         return render(request, "pendientes_last_week.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=11)).strftime('%Y-%m-%d')})
 

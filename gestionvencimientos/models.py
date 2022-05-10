@@ -51,6 +51,7 @@ class Ans(models.Model):
     fecha_cierre = models.CharField(max_length=100, null=True)
     fecha_vence_sin_hora= models.CharField(max_length=50, null=True, blank=True)
     hora_vencimiento = models.CharField(max_length=50, null=True, blank=True)
+    fecha_vence_epm= models.CharField(max_length=50, null=True, blank=True)
 
     class Meta:
         ordering = ["fecha_vencimiento"]

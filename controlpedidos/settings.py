@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-k0+2!v5wixm*ze)e(k6y3+aa4pj@p^r0f9wx2(7y(dr&&w(e^o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.herokuapp.com']
 
 
 # Application definition
@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'controlpedidos.urls'
@@ -75,7 +76,7 @@ WSGI_APPLICATION = 'controlpedidos.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
+"""
 DATABASES = {
      'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -85,6 +86,16 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432',
     }
+}
+"""
+
+import dj_database_url
+from decouple import config
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default= config('DATABASE_URL')
+    )
 }
 
 
@@ -120,12 +131,27 @@ USE_L10N = True
 
 USE_TZ = True
 
+proxy_connect_timeout= 300
+
+proxy_read_timeout = 300
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'gestionvencimientos/static'),)
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STATIC_TMP = os.path.join(BASE_DIR, 'static')
+os.makedirs(STATIC_TMP, exist_ok=True)
+
+os.makedirs(STATIC_ROOT, exist_ok=True)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

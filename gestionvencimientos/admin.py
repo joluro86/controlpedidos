@@ -1,6 +1,6 @@
 from django.contrib import admin
 import import_export
-from gestionvencimientos.models import Actividad, Ans, Encargado, Municipio, Vencido
+from gestionvencimientos.models import Actividad, Actividad_epm, Ans, Encargado, Municipio, Vencido
 from import_export.admin import ImportExportModelAdmin 
 from import_export import resources
 
@@ -15,7 +15,7 @@ class ActividadResource(resources.ModelResource):
         model = Actividad
 
 class AnsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('Pedido', 'Actividad', 'Fecha_Inicio_ANS', 'dias_vencimiento' , 'Area_Trabajo', 'fecha_vencimiento')
+    list_display = ('Pedido', 'Actividad', 'Fecha_Inicio_ANS', 'dias_vencimiento_epm' ,'fecha_vence_epm','dias_vencimiento' , 'Area_Trabajo', 'fecha_vencimiento' )
     resource_class = AnsResource
     list_filter = ('Estado',)
     search_fields = ['Pedido', 'Actividad', 'Area_Trabajo']
@@ -29,6 +29,11 @@ class ActividadAdmin(admin.ModelAdmin):
     list_display = ('nombre','encargado','dias_urbano', 'dias_rural')
     class Meta:
         model = Actividad
+        
+class Actividad_epm_Admin(admin.ModelAdmin):
+    list_display = ('nombre','dias_urbano', 'dias_rural')
+    class Meta:
+        model = Actividad_epm
         
 class VencidoAdmin(admin.ModelAdmin):
     list_display = ('Pedido','Actividad','fecha_cierre')
@@ -45,3 +50,4 @@ admin.site.register(Encargado, EncargadoAdmin)
 admin.site.register(Actividad, ActividadAdmin)
 admin.site.register(Vencido, VencidoAdmin)
 admin.site.register(Municipio, MunicipioAdmin)
+admin.site.register(Actividad_epm, Actividad_epm_Admin )

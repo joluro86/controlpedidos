@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 
-class Ans(models.Model):
+class Ans(models.Model):    
     Pedido = models.TextField(max_length=100, default=0, null=True)
     Subped = models.CharField(max_length=100, default=0, null=True)
     Soli = models.CharField(max_length=200, null=True, default=0)
@@ -45,18 +45,22 @@ class Ans(models.Model):
     Observación_Solicitud = models.CharField(max_length=5000, null=True)
     Pedido_CRM = models.CharField(max_length=5000, null=True, default=0)
     dias_vencimiento = models.IntegerField(verbose_name="Dias de vencimiento", default=0, null=True, blank=True)
+    dias_vencimiento_epm = models.IntegerField(verbose_name="Dias de vencimiento epm", default=0, null=True, blank=True)
     fecha_vencimiento = models.CharField(max_length=30, verbose_name="Fecha vencimiento", null=True)
     encargado = models.CharField(max_length=100, null=True)
     estado_cierre = models.IntegerField(default=0, null=True, blank=True)
     fecha_cierre = models.CharField(max_length=100, null=True)
     fecha_vence_sin_hora= models.CharField(max_length=50, null=True, blank=True)
     hora_vencimiento = models.CharField(max_length=50, null=True, blank=True)
-    fecha_vence_epm= models.CharField(max_length=50, null=True, blank=True)
+    fecha_vence_epm= models.CharField(max_length=50, default=0)
 
     class Meta:
         ordering = ["fecha_vencimiento"]
         verbose_name = "Programador"
         verbose_name_plural = "Programador"
+        
+    def __str__(self):
+        return str(self.Pedido)
 
 
 class Encargado(models.Model):
@@ -80,6 +84,15 @@ class Actividad(models.Model):
     class Meta:
         verbose_name = "Actividad"
         verbose_name_plural = "Actividades"
+        
+class Actividad_epm(models.Model):
+    nombre = models.CharField(max_length=50, null=True)
+    dias_urbano = models.CharField(max_length=50, null=True)
+    dias_rural = models.CharField(max_length=50, null=True)
+
+    class Meta:
+        verbose_name = "Actividad epm"
+        verbose_name_plural = "Actividades epm"
 
 
 class Vencido(models.Model):

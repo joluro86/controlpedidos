@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User, auth
 from controlpedidos import settings
 
-from gestionvencimientos.models import Actividad, Ans, Encargado, Municipio, Vencido
+from gestionvencimientos.models import Actividad, Actividad_epm, Ans, Encargado, Municipio, Vencido
 
 
 @login_required
@@ -238,14 +238,21 @@ def gestion_bd(request):
                 ans.save()
 
             actividad = Actividad.objects.get(nombre=ans.Actividad)
+            actividad_epm = Actividad_epm.objects.get(nombre=ans.Actividad)
+            
             if ans.Tipo_Dirección == "Urbano":
                 ans.dias_vencimiento = int(actividad.dias_urbano)
+                ans.dias_vencimiento_epm = int(actividad_epm.dias_urbano)
             if ans.Tipo_Dirección == "Rural":
                 ans.dias_vencimiento = int(actividad.dias_rural)
+                ans.dias_vencimiento_epm = int(actividad_epm.dias_rural)
 
             fecha = fechas(ans.Fecha_Inicio_ANS, ans.dias_vencimiento)
             ans.fecha_vencimiento = fecha
             
+            fecha_epm = fechas(ans.Fecha_Inicio_ANS, ans.dias_vencimiento_epm)
+            ans.fecha_vence_epm = fecha_epm
+            print("fecha epm: " + str(fecha_epm) )
             ans.fecha_vence_sin_hora = fecha.date().strftime("%d-%m-%Y")
             
             # inicio calculo vence epm
@@ -319,6 +326,11 @@ def vencidos(request):
     aeneses = Vencido.objects.all()
         
     return render(request, "vencidos.html", {"aneses":aeneses})
+
+def vencimientos_epm(request):
+    aeneses = Ans.objects.all()
+        
+    return render(request, "pendientes_epm.html", {"aneses":aeneses})
 
 
 def pedidos_week(request, id_week):

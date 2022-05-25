@@ -58,11 +58,12 @@
       <thead class="p-0">
         <tr class="text-center p-0" style="background-color: #8ee7fa">
           <th scope="col">Pedido</th>
-          <th>Fecha vence</th>
+          <th>Fecha contrato</th>
+          <th>Fecha epm</th>
           <th scope="col">Encargado</th>
           <th scope="col">Instalación</th>
           <th scope="col">Actividad</th>
-          <th>Cerrar</th>
+          <th scope="col">Municipio</th>
         </tr>
       </thead>
       <tbody>
@@ -71,20 +72,14 @@
         <tr class="text-center tr">
           <th class="pt-1">{{ a.Pedido }}</th>
           
-          <td class="m-0 pb-0">{{ a.fecha_vence_epm }}</td>          
+          <td class="m-0 pb-0">{{ a.fecha_vencimiento }}</td>  
+          <td class="m-0 pb-0">{{ a.fecha_vence_epm }}</td>        
           
           <td class="m-0 pb-0">{{ a.encargado }}</td>
           <td class="m-0 pb-0">{{ a.Instalación }}</td>
           <td class="m-0 pb-0">{{ a.Actividad }}</td>
-          <td class="m-0 pb-0">
-            <a
-              href="#"
-              onclick="cerrar_pedido({{ a.id }})"
-              class="m-0 p-0 btn btn-sm text-info"
-              id="btn_cerrar_pedido"
-              ><i class="fas fa-check-circle"></i
-            ></a>
-          </td>
+          <td class="m-0 pb-0">{{ a.Area_Trabajo }}</td>
+
         </tr>
         {% endif %}
         {% endfor %}

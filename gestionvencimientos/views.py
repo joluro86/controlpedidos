@@ -68,7 +68,6 @@ def calculo_dia_semana_2():
 
     return lunes
 
-
 def menu_pendientes(self):
     id_dia = calculo_dia_actutal()+1;
     
@@ -76,7 +75,7 @@ def menu_pendientes(self):
 
 def limpiar_base(request):
     lista_ans = []
-    aneses = Ans.objects.all()
+    aneses = Ans.objects.all().only('Subzona', 'Actividad')
 
     for ans in aneses:
         if ans.Subzona != "Uraba":

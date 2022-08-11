@@ -66,7 +66,7 @@
 
         <tr class="text-center p-0 tr">
           <th class="pt-1">{{ a.Pedido }}</th>
-          <td class="m-0 pb-0">{{ a.fecha_vencimiento }}</td>
+          <td class="m-0 pb-0"><p id="fecha">{{ a.fecha_vencimiento }}</p></td>
           <td class="m-0 pb-0">{{ a.encargado }}</td>
           <td class="m-0 pb-0">{{ a.Instalación }}</td>
           <td class="m-0 pb-0">{{ a.Actividad }}</td>
@@ -92,12 +92,20 @@
 <script src="{% static 'js/js_pendientes.js' %}"></script>
 
 <script>
+
+  fecha = document.getElementById('fecha')
+  window.onload = function () {
+      console.log(fecha);
+    }
+
+</script>
+
+<script>
   $(document).ready(function () {
     $("#table_id").DataTable({
       order: [[1, "asc"]],
 
       dom: "Bfrtilp",
-
       lengthMenu: [
             [ 15, 30, 50, -1 ],
             [ '15', '30', '50', 'Todos' ]
@@ -111,21 +119,7 @@
         }
     },
         {
-          extend: "copyHtml5",
-          title:'',
-          exportOptions: {
-            columns: [ 0, 1, 2, 3, 4,5 ]
-          },
-        },
-        {
           extend: "csvHtml5",
-          title:'',
-          exportOptions: {
-            columns: [ 0, 1, 2, 3, 4,5 ]
-          },
-        },
-        {
-          extend: "pdfHtml5",
           title:'',
           exportOptions: {
             columns: [ 0, 1, 2, 3, 4,5 ]

@@ -1,4 +1,4 @@
-{% extends 'index.html' %} {% load static %} {% block content %}
+{% extends 'index.html' %} {% load static %}{% load humanize %} {% block content %}
 <div class="table-id card mt-4" style="width: 100%; margin: auto">
   <div class="card-body">
     <h6 class="m-0 text-center">Pedidos ACREV</h6>
@@ -7,7 +7,6 @@
         <tr class="text-center"style="background-color: #8ee7fa; font-size: 0.8em;">
           <th scope="col">Pedido</th>
           <th>Fecha</th>
-          <th>Hora</th>
           <th scope="col">Dias</th>
           <th scope="col">ClienteID</th>
           <th scope="col">Nombre</th>
@@ -25,9 +24,8 @@
 
         <tr class="text-center tr">
           <th scope="row">{{ a.Pedido }}</th>
-          <td>{{ a.fecha_vence_sin_hora }}</td>
-          <td>{{ a.hora_vencimiento }}</td>
-          <td>{{ a.Días_ANS }}</td>
+          <td>{{ a.fecha_vencimiento}}</td>
+          <td>{{ a.Días_ANS|intcomma  }}</td>
           <td>{{ a.ClienteID }}</td>
           <td>{{ a.Nombre_Cliente }}</td>
           <td>{{ a.Celular_Contacto }}</td>
@@ -60,34 +58,12 @@
             [ '15', '30', '50', 'Todos' ]
         ],
         
-      buttons: [
-        {
-          extend: "copyHtml5",
-          title:'',
-          exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
-          },
-        },
-        {
-          extend: "csvHtml5",
-          title:'',
-          exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
-          },
-        },
-        {
-          extend: "pdfHtml5",
-          title:'',
-          exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
-          },
-        },
-        "print",   
+      buttons: [   
         {
           extend: "excelHtml5",
-          title:'',
+          title:'ACREV',
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ],
             format: {
               body: function(data, row, column, node) {
                   data = $('<p>' + data + '</p>').text();

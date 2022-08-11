@@ -69,7 +69,7 @@ def calculo_dia_semana_2():
     return lunes
 
 def menu_pendientes(self):
-    id_dia = calculo_dia_actutal()+1;
+    id_dia = calculo_dia_actutal()+1
     
     return redirect('pendientes', id_dia)
 
@@ -170,9 +170,39 @@ def busqueda_pendientes(fecha_vence_buscar):
                     list_ans.append(ans) 
         except Exception as e: 
             print("An exception occurred in busqueda pendientes") 
-            print(repr(e))        
+            print(repr(e)) 
+
+    list_ans = cambiar_formato_fecha(list_ans) 
+    
     return list_ans
 
+def cambiar_formato_fecha(fecha_a_cambiar):
+    for l in fecha_a_cambiar:
+        if l.fecha_vencimiento==None or l.fecha_vencimiento=='0' :
+            pass
+        else:
+            fecha = l.fecha_vencimiento.replace('-','/')
+            fecha_vencimiento   = datetime.strptime(fecha, "%Y/%m/%d %H:%M:%S")
+            l.fecha_vencimiento = fecha_vencimiento.strftime("%d/%m/%Y %H:%M:%S")
+    
+    return fecha_a_cambiar
+
+def cambiar_formato_fecha_epm(fecha_a_cambiar):
+    for l in fecha_a_cambiar:
+        if l.fecha_vencimiento==None or l.fecha_vencimiento=='0' :
+            pass
+        else:
+            fecha = l.fecha_vencimiento.replace('-','/')
+            fecha_vencimiento   = datetime.strptime(fecha, "%Y/%m/%d %H:%M:%S")
+            l.fecha_vencimiento = fecha_vencimiento.strftime("%d/%m/%Y %H:%M:%S")
+
+            fecha2 = l.fecha_vence_epm.replace('-','/')
+            fecha_vencimiento_epm   = datetime.strptime(fecha2, "%Y/%m/%d %H:%M:%S")
+            l.fecha_vence_epm = fecha_vencimiento_epm.strftime("%d/%m/%Y %H:%M:%S")
+
+            l.fecha_vence_sin_hora = fecha_vencimiento_epm.strftime("%d/%m/%Y")
+    
+    return fecha_a_cambiar
 
 def eliminar_bd(request):
     Ans.objects.all().delete()
@@ -328,7 +358,7 @@ def vencidos(request):
 
 def vencimientos_epm(request):
     aeneses = Ans.objects.all()
-        
+    aeneses = cambiar_formato_fecha_epm(aeneses)    
     return render(request, "pendientes_epm.html", {"aneses":aeneses})
 
 
@@ -425,19 +455,19 @@ def cierre_masivo(request, fecha_cierre, hora_cierre):
 def acrev(request):
     
     aeneses = Ans.objects.filter(Actividad = "ACREV").filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495")| Q(Concepto="430"))
-    
+    aeneses = cambiar_formato_fecha(aeneses)
     return render(request, "acrev.html", {"aneses": aeneses} )
 
 def amrtr(request):
     
     aeneses = Ans.objects.filter(Actividad = "AMRTR").filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495")| Q(Concepto="430"))
-    
+    aeneses = cambiar_formato_fecha(aeneses)
     return render(request, "amrtr.html", {"aneses": aeneses} )
 
 def lega(request):
     
     aeneses = Ans.objects.filter(Q(Actividad="ALEGA") | Q(Actividad="ALEGN") | Q(Actividad="ALECA") |Q(Actividad="ACAMN") ).filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495")| Q(Concepto="430"))
-    
+    aeneses = cambiar_formato_fecha(aeneses)
     return render(request, "lega.html", {"aneses": aeneses} )
 
 def direccionamiento(request):

@@ -1,4 +1,4 @@
-{% extends 'index.html' %} {% load static %} {% block content %}
+{% extends 'index.html' %} {% load static %} {% load humanize %} {% block content %}
 <div class="table-id card mt-4" style="width: 100%; margin: auto">
   <div class="card-body">
     <h6 class="m-0 text-center">Pedidos Legalización</h6>
@@ -8,7 +8,6 @@
           <th scope="col">Pedido</th>
           <th>Actividad</th>
           <th>Fecha</th>
-          <th>Hora</th>
           <th>Dias</th>
           <th>Cliente</th>
           <th>Nombre</th>
@@ -25,9 +24,8 @@
         <tr class="text-center tr">
           <th scope="row">{{ a.Pedido }}</th>
           <td>{{ a.Actividad }}</td>
-          <td>{{ a.fecha_vence_sin_hora }}</td>
-          <td>{{ a.hora_vencimiento }}</td>
-          <td>{{ a.Días_ANS }}</td>
+          <td>{{ a.fecha_vencimiento }}</td>
+          <td>{{ a.Días_ANS|intcomma }}</td>
           <td>{{ a.ClienteID }}</td>
           <td style="font-size: 0.9em;">{{ a.Nombre_Cliente }}</td>
           <td>{{ a.Celular_Contacto }}</td>
@@ -57,35 +55,12 @@
             [ 15, 30, 50, -1 ],
             [ '15', '30', '50', 'Todos' ]
         ],
-        
-      buttons: [
-        {
-          extend: "copyHtml5",
-          title:'',
-          exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
-          },
-        },
-        {
-          extend: "csvHtml5",
-          title:'',
-          exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
-          },
-        },
-        {
-          extend: "pdfHtml5",
-          title:'',
-          exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
-          },
-        },
-        "print",   
+        buttons: [   
         {
           extend: "excelHtml5",
           title:'',
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ],
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
             format: {
               body: function(data, row, column, node) {
                   data = $('<p>' + data + '</p>').text();
@@ -93,7 +68,8 @@
               }
           }
           },
-        },    
+        }, 
+           
       ],
     });
   });

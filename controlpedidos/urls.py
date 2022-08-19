@@ -31,7 +31,7 @@ urlpatterns = [
     path('legalizaciones/', lega, name="lega"),
     path('direccionamiento/', direccionamiento, name="direccion"),
     path('programador/', programador, name="programador"),
-    path('vencimientos-epm/', vencimientos_epm, name="epm"),
+    path('epm/<str:inicio>/<str:final>/', vencimientos_epm, name="epm"),
     path('accounts/', include('django.contrib.auth.urls')),
 ] +static(settings.STATIC_URL, document_root= settings.STATIC_ROOT)
 

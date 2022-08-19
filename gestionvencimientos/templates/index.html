@@ -80,7 +80,7 @@
             <li><a class="dropdown-item" href="#" onclick="gestion_bd()">Gestionar BBDD</a></li>
             <li><a class="dropdown-item" href="#" onclick="reiniciar_bd()">Reiniciar BBDD</a></li>
             <li><a class="dropdown-item" href="{% url 'direccion' %}">Dirección</a></li>
-            <li><a class="dropdown-item" href="{% url 'epm' %}">Vence epm</a></li>
+            <li><a class="dropdown-item" href="#" onclick="fechas_busqueda_epm()">Vence epm</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
@@ -108,11 +108,7 @@
               <a class="nav-link" href="{% url 'vencidos_todos' %}">Todos</a>
             </li>
           </ul>
-        </li>
-
-             
-       
-        
+        </li>           
         <li class="nav-item">
           <a class="nav-link" href="{% url 'logout' %}?next=/inicio/">Cerrar sesión</a>
         </li>
@@ -134,6 +130,7 @@
     {% block js %}
 
     <script src="{% static 'js/js_pendientes.js' %}"></script>
+    <script src="{% static 'js/logica_epm.js' %}"></script>
 
     {% endblock js %}
 

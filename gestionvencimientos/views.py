@@ -356,8 +356,16 @@ def vencidos(request):
         
     return render(request, "vencidos.html", {"aneses":aeneses})
 
-def vencimientos_epm(request):
-    aeneses = Ans.objects.all()
+def vencimientos_epm(request, inicio, final):
+    fecha_inicio = inicio+" "+"00:00:00"
+    fecha_final = final+" "+"23:59:59"
+    print(fecha_inicio)
+    print(fecha_final)
+    aeneses=[]
+    ans = Ans.objects.all()
+    for a in ans:
+        if a.fecha_vence_epm>fecha_inicio and a.fecha_vence_epm<fecha_final:
+            aeneses.append(a)
     aeneses = cambiar_formato_fecha_epm(aeneses)    
     return render(request, "pendientes_epm.html", {"aneses":aeneses})
 

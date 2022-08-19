@@ -189,4 +189,36 @@ function reiniciar_bd() {
     });
 }
 
+function fechas_busqueda_epm() {
+  swal
+    .fire({
+      title: "Fechas a buscar",
+      type: "warning",
+      html: '<div style="width:350px;margin:auto;"><label>Inicio</label><br><input id="inicio" type="date" class="form-control"><label>Final</label><br><input id="final" type="date" class="form-control"></div>',
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Buscar",
+      focusConfirm: false,
+      preConfirm: () => {
+        const inicio = Swal.getPopup().querySelector("#inicio").value;
+        const final = Swal.getPopup().querySelector("#final").value;
+        if (!inicio || !final) {
+          Swal.showValidationMessage(`Por favor seleccione fechas a buscar`);
+        }
+        return { inicio: inicio, final: final };
+      },
+    })
+    .then(function (result) {
+      if (result.value) {
+        inicio=result.value.inicio
+        final=result.value.final
+        window.location.href = "/epm/"+inicio+"/"+final+"/";
+        
+        alert(i) 
+      }
+    });
+}
+
 

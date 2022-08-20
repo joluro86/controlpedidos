@@ -489,7 +489,6 @@ def programador(request):
     
     return render(request, "programador.html", {"aneses": aeneses} )
 
-# Codigo nuevo 
 
 def calculo_last_week(request, id_dia):
     

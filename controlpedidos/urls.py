@@ -11,7 +11,7 @@ from gestionvencimientos.views import amrtr, busqueda_vencidos, acrev, calculo_l
 
 urlpatterns = [
     path('admin/', admin.site.urls, name="administrador"),
-    path('inicio/', index, name="home"),
+    path('', index, name="home"),
     path('pendientes/<int:id_dia>', calculo_pendientes, name="pendientes"),
     path('proxsemana/<int:id_dia>', calculo_next_week, name="pendientes_next_week"),
     path('antsemana/<int:id_dia>', calculo_last_week, name="pendientes_last_week"),

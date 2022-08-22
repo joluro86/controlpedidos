@@ -1,5 +1,5 @@
 from django.contrib import admin
-from gestionvencimientos.models import Actividad, Actividad_epm, Ans, Encargado
+from gestionvencimientos.models import Acta, Actividad, Actividad_epm, Ans, Encargado, Novedad_acta
 from import_export.admin import ImportExportModelAdmin 
 from import_export import resources
 
@@ -9,7 +9,15 @@ from import_export import resources
 class EncargadoResource(resources.ModelResource):
     class Meta:
         model = Encargado
-        
+
+class ActaResource(resources.ModelResource):
+    class Meta:
+        model = Acta
+
+class NovedadActaResource(resources.ModelResource):
+    class Meta:
+        model = Novedad_acta
+
 class ActividadResource(resources.ModelResource):
     class Meta:
         model = Actividad
@@ -46,7 +54,19 @@ class Actividad_epm_Admin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('nombre','dias_urbano', 'dias_rural')
     class Meta:
         model = Actividad_epm
-    
+
+class Novedades_Admin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('pedido','actividad', 'novedad')
+    class Meta:
+        model = Novedad_acta
+
+class Acta_Admin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('pedido','actividad')
+    class Meta:
+        model = Acta
+
+admin.site.register(Acta, Acta_Admin) 
+admin.site.register(Novedad_acta, Novedades_Admin)
 admin.site.register(Ans, AnsAdmin)
 admin.site.register(Encargado, EncargadoAdmin)
 admin.site.register(Actividad, ActividadAdmin)

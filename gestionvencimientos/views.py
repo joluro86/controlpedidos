@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from datetime import date, datetime, timedelta
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
@@ -7,7 +8,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User, auth
 from controlpedidos import settings
 
-from gestionvencimientos.models import Actividad, Actividad_epm, Ans, Encargado, Municipio, Vencido
+from gestionvencimientos.models import Acta, Actividad, Actividad_epm, Ans, Encargado, Municipio, Novedad_acta, Vencido
 
 
 @login_required
@@ -489,7 +490,6 @@ def programador(request):
     
     return render(request, "programador.html", {"aneses": aeneses} )
 
-
 def calculo_last_week(request, id_dia):
     
     lunes = calculo_dia_semana_2()
@@ -519,3 +519,70 @@ def calculo_last_week(request, id_dia):
         list_ans = busqueda_pendientes((lunes-timedelta(days=3)).strftime('%Y-%m-%d'))
         return render(request, "pendientes_last_week.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=11)).strftime('%Y-%m-%d')})
 
+def novedades_acta(request):
+    novedades=calculo_novedades_acta(request)
+    #Novedad_acta.objects.all().delete()
+    return render(request, "analisis.html", {'novedades':novedades})
+
+def calculo_novedades_acta(request):
+    pedidos= Acta.objects.all()
+    cont=1
+    for pedido in pedidos:
+        
+        if pedido.item_cont=='0':
+            pedido.item_cont= pedido.suminis
+            pedido.save()
+        
+        pagina=pedido.pagina
+
+        if (pagina[6:9]!='100' and pedido.urbrur=='U') or (pagina[6:9]!='200' and pedido.urbrur=='R'):
+            try:
+                busquedad_tipo_pagina= Novedad_acta.objects.filter(pedido=pedido.pedido).filter(novedad='Tipo página').count()
+                if busquedad_tipo_pagina==0:
+                    novedad = Novedad_acta()
+                    novedad.pedido = pedido.pedido
+                    novedad.actividad = pedido.actividad
+                    novedad.pagina = pedido.pagina
+                    novedad.item = pedido.item_cont
+                    novedad.novedad = "Tipo página" 
+                    novedad.save()
+            except:
+                pass
+
+        digito_novedad= False
+        
+        if pedido.actividad=='AEJDO':
+            if pedido.item_cont=='A 01':
+                
+                    try:
+                        busquedad_a04= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='A 04').count()
+                        print("a04: ")
+                        print(busquedad_a04)
+                        if busquedad_a04==0:
+                            novedad = Novedad_acta()
+                            novedad.pedido = pedido.pedido
+                            novedad.actividad = pedido.actividad
+                            novedad.pagina = pedido.pagina
+                            novedad.item = pedido.item_cont
+                            novedad.novedad = "A 01=1, A 04=0"  
+                            novedad.save()
+        
+                    except:
+                        print('no a04')
+                    
+                    try:
+                        busquedad_A23= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='A 23').count()
+                        if busquedad_A23==0:
+                            novedad = Novedad_acta()
+                            novedad.pedido = pedido.pedido
+                            novedad.actividad = pedido.actividad
+                            novedad.pagina = pedido.pagina
+                            novedad.item = pedido.item_cont
+                            novedad.novedad = "A 01=1, A 23=0" 
+                            novedad.save()
+
+                    except:                        
+                        print('no a01')                  
+    novedades = Novedad_acta.objects.all()
+
+    return novedades

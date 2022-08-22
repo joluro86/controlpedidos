@@ -221,4 +221,23 @@ function fechas_busqueda_epm() {
     });
 }
 
+function descartar(id) {
+  url = "/descartar/";
+  swal
+    .fire({
+      title: "¿Esta seguro de descartar la base de datos?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Si, descartar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        window.location.href = url+id+"/";
+      }
+    });
+}
+
 

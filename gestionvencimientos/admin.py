@@ -61,7 +61,7 @@ class Novedades_Admin(ImportExportModelAdmin, admin.ModelAdmin):
         model = Novedad_acta
 
 class Acta_Admin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('pedido','actividad')
+    list_display = ('pedido','actividad', 'item_cont')
     class Meta:
         model = Acta
 

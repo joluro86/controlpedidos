@@ -1,7 +1,7 @@
 {% extends 'index.html' %} {% load static %} {% block head %} {% endblock head %} 
 {% block content %}
 
-<span>Novedades Acta</span>
+<h5 style="color: blue; text-align: center; margin: 20px;">Novedades Acta</h5>
 
 <div class="table-id card mt-1" style="width: 90%; margin: auto">
   <div class="card-body">
@@ -72,7 +72,7 @@
           extend: "excelHtml5",
           title:'',
           exportOptions: {
-            columns: [ 0, 1, 2, ]
+            columns: [ 0, 1, 2,3, 4, 5 ]
           },
         },    
       ],

@@ -519,9 +519,10 @@ def calculo_last_week(request, id_dia):
         list_ans = busqueda_pendientes((lunes-timedelta(days=3)).strftime('%Y-%m-%d'))
         return render(request, "pendientes_last_week.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=11)).strftime('%Y-%m-%d')})
 
+
+
 def novedades_acta(request):
     novedades=calculo_novedades_acta(request)
-    #Novedad_acta.objects.all().delete()
     return render(request, "analisis.html", {'novedades':novedades})
 
 def calculo_novedades_acta(request):
@@ -532,6 +533,16 @@ def calculo_novedades_acta(request):
         if pedido.item_cont=='0':
             pedido.item_cont= pedido.suminis
             pedido.save()
+
+        try:
+            codigo = pedido.item_cont
+            codigo_ultima_letra=codigo[-1]
+            if codigo_ultima_letra=='A' or codigo_ultima_letra=='P':
+               pedido.item_cont= str(codigo[:-1])
+               pedido.save()
+                
+        except:
+            pass
         
         pagina=pedido.pagina
 
@@ -539,50 +550,266 @@ def calculo_novedades_acta(request):
             try:
                 busquedad_tipo_pagina= Novedad_acta.objects.filter(pedido=pedido.pedido).filter(novedad='Tipo página').count()
                 if busquedad_tipo_pagina==0:
-                    novedad = Novedad_acta()
-                    novedad.pedido = pedido.pedido
-                    novedad.actividad = pedido.actividad
-                    novedad.pagina = pedido.pagina
-                    novedad.item = pedido.item_cont
-                    novedad.novedad = "Tipo página" 
-                    novedad.save()
+                    novedad = "Tipo página"  
+                    crear_novedad(pedido, novedad)
+
             except:
                 pass
-
-        digito_novedad= False
         
         if pedido.actividad=='AEJDO':
             if pedido.item_cont=='A 01':
-                
+
                     try:
                         busquedad_a04= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='A 04').count()
-                        print("a04: ")
-                        print(busquedad_a04)
+
                         if busquedad_a04==0:
-                            novedad = Novedad_acta()
-                            novedad.pedido = pedido.pedido
-                            novedad.actividad = pedido.actividad
-                            novedad.pagina = pedido.pagina
-                            novedad.item = pedido.item_cont
-                            novedad.novedad = "A 01=1, A 04=0"  
-                            novedad.save()
-        
+                            novedad = "A 01=1, A 04=0"  
+                            crear_novedad(pedido, novedad)        
                     except:
-                        print('no a04')
+                        pass
                     
                     try:
                         busquedad_A23= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='A 23').count()
                         if busquedad_A23==0:
-                            novedad = Novedad_acta()
-                            novedad.pedido = pedido.pedido
-                            novedad.actividad = pedido.actividad
-                            novedad.pagina = pedido.pagina
-                            novedad.item = pedido.item_cont
-                            novedad.novedad = "A 01=1, A 23=0" 
-                            novedad.save()
-
+                            novedad = "A 01=1, A 23=0" 
+                            crear_novedad(pedido, novedad)
                     except:                        
-                        print('no a01')                  
+                        pass 
+
+                    nov = "A 01=1,"
+                    busqueda_item(pedido, '200410', '200411', nov)
+                    busqueda_item(pedido, '211829', 0, nov)
+                    busqueda_item(pedido, '200092', '200093', nov) 
+                    busqueda_item(pedido, '200316', 0, nov)
+                    busqueda_item(pedido, '211357', 0, nov)
+                    busqueda_item(pedido, '213333', 0, nov)
+                    #busqueda_item(pedido, '215887', 0, nov) 
+                    busqueda_item(pedido, '219404', 0, nov) 
+                    calculo_incompatible_A01(pedido, nov)
+
+        if pedido.actividad=='DSPRE':
+            if pedido.tipre=='ENEPRE':
+                calculo_enepre(pedido)
+
+            if pedido.tipre=='ENESUB':
+                calculo_enepre(pedido)
+        
+        if pedido.item_cont=='A 02':
+            nov = "A 02=1,"
+            busqueda_item(pedido, '211829', 0, nov) 
+
+        if pedido.item_cont=='A 04':
+            nov = "A 04=1,"
+            busqueda_item(pedido, '210949', '210947', nov)
+
+        if pedido.item_cont=='A 06':
+            nov = "A 06=1,"
+            busqueda_item(pedido, '200410', '200411', nov)  
+                    
+        if pedido.item_cont=='A 23':
+            nov = "A 23=1,"
+            busqueda_item(pedido, '211673', 0, nov) 
+
+        if pedido.item_cont=='A 24':
+            nov = "A 24=1,"
+            busqueda_item(pedido, '211357', 0, nov) 
+
+        if pedido.item_cont=='A 25':
+            nov = "A 25=1,"
+            busqueda_item(pedido, '213333', 0, nov) 
+        
+        if pedido.item_cont=='A 34':
+            nov = "A 34=1,"
+            busqueda_item(pedido, '211686', 0, nov)
+
+        if pedido.item_cont=='A 39':
+            nov = "A 39=1,"
+            busqueda_item(pedido, '200410', '200411', nov)
+        
+        if pedido.item_cont=='A 42':
+            nov = "A 42=1,"
+            busqueda_item(pedido, '200410', '200411', nov)
+
     novedades = Novedad_acta.objects.all()
 
     return novedades
+
+def busqueda_item(pedido, item, item2, novedad):
+    if item=='210949':
+        try:
+            busquedad_210949= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont=item).count()
+            busquedad_210948= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='210948').count()
+            busquedad_210947= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='210947').count()
+
+            if busquedad_210949==0 and busquedad_210948==0 and busquedad_210947==0:
+                novedad = novedad+" "+str(item)+"=0, 210947=0, 210948=0 " 
+                crear_novedad(pedido, novedad)
+        except:
+            pass
+    elif pedido.item_cont=='A 42':
+        print("ingrese a A42")
+        try:
+            busquedad_200410= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont=item).count()
+            busquedad_200411= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='200411').count()
+            busquedad_200316= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='200316').count()
+
+            if busquedad_200410==0 and busquedad_200411==0 and busquedad_200316==0:
+                novedad = novedad+" "+str(item)+"=0, 200411=0, 200316=0 " 
+                crear_novedad(pedido, novedad)
+        except:
+            pass
+
+    elif item2 != 0:
+        
+        try:
+            busquedad_1= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont=item).count()
+            busquedad_2= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont=item2).count()
+
+            if busquedad_1==0 and busquedad_2==0:
+                novedad = novedad+" "+str(item)+"=0, " +str(item2)+"=0, " 
+                crear_novedad(pedido, novedad)
+        except:
+            pass
+    
+    else:
+        try:
+            busquedad= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont=item).count()
+            if busquedad==0:
+                novedad = novedad+" "+str(item)+"=0" 
+                crear_novedad(pedido, novedad)
+        except:
+            pass
+
+def calculo_incompatible_A01(pedido, novedad):
+    try:
+        pedidos =  Acta.objects.filter(pedido=pedido.pedido)
+        cont=1
+        for p in pedidos:
+            letra = p.item_cont[0]
+            if letra=='A':
+                if p.item_cont!='A 01' and p.item_cont!='A 04' and p.item_cont!='A 23':
+                    nov= 'A 01=1, '+ p.item_cont + ">0. Incompatibles."
+                    crear_novedad(p, nov)
+                
+    except:
+        pass
+
+def calculo_incompatible_A27(pedido, novedad):
+    try:
+        pedidos =  Acta.objects.filter(pedido=pedido.pedido)
+        cont=1
+        for p in pedidos:
+            letra = p.item_cont[0]
+            if letra=='A':
+                if p.item_cont=='A 02' or p.item_cont=='A 44' or p.item_cont=='A 03':
+                    nov= 'A 27=1, '+ p.item_cont + ">0. Incompatibles."
+                    crear_novedad(p, nov)                
+    except:
+        pass
+
+def calculo_incompatible_A44(pedido, novedad):
+    try:
+        pedidos =  Acta.objects.filter(pedido=pedido.pedido)
+        cont=1
+        for p in pedidos:
+            letra = p.item_cont[0]
+            if letra=='A':
+                if p.item_cont=='A 27' or p.item_cont=='A 03':
+                    nov= 'A 44=1, '+ p.item_cont + ">0. Incompatibles."
+                    crear_novedad(p, nov)                
+    except:
+        pass
+
+def calculo_incompatible_A03(pedido, novedad):
+    try:
+        pedidos =  Acta.objects.filter(pedido=pedido.pedido)
+        cont=1
+        for p in pedidos:
+            letra = p.item_cont[0]
+            if letra=='A':
+                if p.item_cont=='A 27' or p.item_cont=='A 44':
+                    nov= 'A 03=1, '+ p.item_cont + ">0. Incompatibles."
+                    crear_novedad(p, nov)                
+    except:
+        pass
+        
+def crear_novedad(pedido, nov):
+    novedad = Novedad_acta()
+    novedad.pedido = pedido.pedido
+    novedad.actividad = pedido.actividad
+    novedad.pagina = pedido.pagina
+    novedad.item = pedido.item_cont
+    novedad.novedad = nov
+    novedad.save()
+
+def limpiar_novedades(request):
+    Novedad_acta.objects.all().delete()
+    return redirect('home')
+
+def limpiar_acta(request):
+    Acta.objects.all().delete()
+    return redirect('home')
+
+def calculo_enepre(pedido):
+    if pedido.item_cont=='A 03':
+        try:
+            novedad="A 03=1, "
+            busqueda_item(pedido, 'A 28', 0, novedad)
+            busqueda_item(pedido, 'A 29', 0, novedad)
+            busqueda_item(pedido, '219404', 0, novedad) 
+            busqueda_item(pedido, '220683',  0, novedad)  
+            calculo_incompatible_A03(pedido, novedad)      
+        except:
+            pass
+    
+    if pedido.item_cont=='A 27':
+        try:
+            novedad="A 27=1, "
+            busqueda_item(pedido, 'A 41', 0, novedad)
+            busqueda_item(pedido, '219404', 0, novedad)    
+            busqueda_item(pedido, 'A 10', 'A 11', novedad) 
+            calculo_incompatible_A27(pedido, novedad)  
+        except:
+            pass
+    
+    if pedido.item_cont=='A 44':
+        try:
+            novedad="A 44=1, "
+            busqueda_item(pedido, 'A 39', 0, novedad)    
+            busqueda_item(pedido, 'A 40', 'A 41', novedad)  
+            busqueda_item(pedido, '219404', 0, novedad) 
+            calculo_incompatible_A44(pedido, novedad)
+
+            pedidos =  Acta.objects.filter(pedido=pedido.pedido)
+
+            encontre_A40=0
+            encontre_A10=0
+            encontre_A11=0
+            encontre_riel=0
+
+            for p in pedidos:
+                if p.item_cont=='A 40':
+                    encontre_A40=1
+                if p.item_cont=='A 10':
+                    encontre_A10=1
+                if p.item_cont=='A 11':
+                    encontre_A11=1
+                if p.item_cont=='220683':
+                    encontre_riel=1
+            
+            if encontre_A40==0 and encontre_A10==0 and encontre_A11==0:
+                novedad= novedad+"A 10=0, A 11=0"
+                crear_novedad(pedido, novedad)
+            if encontre_A40==1:
+                if encontre_A10==1 or encontre_A11==1:
+                    novedad= novedad+"A 40 incompatible con A 10 y A 11"
+                    crear_novedad(pedido, novedad)   
+                if encontre_riel==1:
+                    nov= "A 40 excluye riel."
+                    crear_novedad(pedido, nov)                      
+
+        except:
+            pass
+
+        
+

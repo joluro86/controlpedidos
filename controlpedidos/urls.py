@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 
 
 
-from gestionvencimientos.views import amrtr, busqueda_vencidos, acrev, calculo_last_week, calculo_next_week, direccionamiento, lega, novedades_acta, otros_pedidos, calculo_pendientes, cierre_masivo,  cerrar_pedido, eliminar_bd, fechas, gestion_bd, index, limpiar_base, menu_pendientes, pedidos_week, programador, vencidos, vencimientos_epm
+from gestionvencimientos.views import amrtr, busqueda_vencidos, acrev, calculo_last_week, calculo_next_week, direccionamiento, lega, limpiar_acta, limpiar_novedades, novedades_acta, otros_pedidos, calculo_pendientes, cierre_masivo,  cerrar_pedido, eliminar_bd, fechas, gestion_bd, index, limpiar_base, menu_pendientes, pedidos_week, programador, vencidos, vencimientos_epm
 
 urlpatterns = [
     path('admin/', admin.site.urls, name="administrador"),
@@ -18,6 +18,8 @@ urlpatterns = [
     path('pendientes/', menu_pendientes, name="menu_pendientes"),
     path('limpiar/', limpiar_base, name="limpiar"),
     path('eliminar/', eliminar_bd, name="eliminar"),
+    path('limpiar_novedades/', limpiar_novedades, name="limpiarnov"),
+    path('limpiar_acta/', limpiar_acta, name="limpiaracta"),
     path('fechas/', fechas, name="fechas"),
     path('vencidos/', vencidos, name="vencidos"),
     path('vencidos_todos/', busqueda_vencidos, name="vencidos_todos"),

@@ -282,7 +282,6 @@ def gestion_bd(request):
             
             fecha_epm = fechas(ans.Fecha_Inicio_ANS, ans.dias_vencimiento_epm)
             ans.fecha_vence_epm = fecha_epm
-            print("fecha epm: " + str(fecha_epm) )
             ans.fecha_vence_sin_hora = fecha.date().strftime("%d-%m-%Y")
             
             # inicio calculo vence epm
@@ -360,8 +359,6 @@ def vencidos(request):
 def vencimientos_epm(request, inicio, final):
     fecha_inicio = inicio+" "+"00:00:00"
     fecha_final = final+" "+"23:59:59"
-    print(fecha_inicio)
-    print(fecha_final)
     aeneses=[]
     ans = Ans.objects.all()
     for a in ans:
@@ -596,31 +593,60 @@ def calculo_novedades_acta(request):
         
         if pedido.item_cont=='A 02':
             nov = "A 02=1,"
-            busqueda_item(pedido, '211829', 0, nov) 
+            busqueda_item(pedido, '211829', 0, nov)
+
+        if pedido.item_cont=='211829':
+            insumo= "211829"
+            busqueda_insumo(pedido, insumo)
+         
 
         if pedido.item_cont=='A 04':
             nov = "A 04=1,"
-            busqueda_item(pedido, '210949', '210947', nov)
+            busqueda_item(pedido, '210948', '210949', nov)
+        
+        if pedido.item_cont=='210947' or pedido.item_cont=='210948' or pedido.item_cont=='210949':
+            insumo = str(pedido.item_cont)
+            busqueda_insumo(pedido, insumo)
 
         if pedido.item_cont=='A 06':
             nov = "A 06=1,"
             busqueda_item(pedido, '200410', '200411', nov)  
+        
+        if pedido.item_cont=='200410' or pedido.item_cont=='200411':
+            insumo = str(pedido.item_cont)
+            busqueda_insumo(pedido, insumo)
                     
         if pedido.item_cont=='A 23':
             nov = "A 23=1,"
-            busqueda_item(pedido, '211673', 0, nov) 
+            busqueda_item(pedido, '211673', '210947', nov) 
+        
+        if pedido.item_cont=='211673':
+            insumo = str(pedido.item_cont)
+            busqueda_insumo(pedido, insumo)
 
         if pedido.item_cont=='A 24':
             nov = "A 24=1,"
             busqueda_item(pedido, '211357', 0, nov) 
 
+        if pedido.item_cont=='211357':
+            insumo = str(pedido.item_cont)
+            busqueda_insumo(pedido, insumo)
+
         if pedido.item_cont=='A 25':
             nov = "A 25=1,"
             busqueda_item(pedido, '213333', 0, nov) 
+
+        if pedido.item_cont=='213333':
+            insumo = str(pedido.item_cont)
+            busqueda_insumo(pedido, insumo)
         
         if pedido.item_cont=='A 34':
             nov = "A 34=1,"
             busqueda_item(pedido, '211686', 0, nov)
+        
+        if pedido.item_cont=='211686':
+            insumo = str(pedido.item_cont)
+            busqueda_insumo_por_item(pedido, insumo, 'A 34')
 
         if pedido.item_cont=='A 39':
             nov = "A 39=1,"
@@ -630,24 +656,167 @@ def calculo_novedades_acta(request):
             nov = "A 42=1,"
             busqueda_item(pedido, '200410', '200411', nov)
 
+        if pedido.item_cont=='200092' or pedido.item_cont=='200093' or pedido.item_cont=='200098':
+            insumo = str(pedido.item_cont)
+            busqueda_insumo(pedido, insumo)
+
     novedades = Novedad_acta.objects.all()
 
     return novedades
 
+def busqueda_insumo_por_item(pedido, insumo, item):
+    try:
+        pedidos = Acta.objects.filter(pedido=pedido)
+
+        encontreinsumo=0
+        for p in pedidos:
+            letra = p.item_cont[0]
+            if letra=='A':
+                    
+                if p.item_cont==item:
+                    encontreinsumo=1
+
+        if encontreinsumo==0:
+            nov= insumo + ', insumo sin actividad'
+            crear_novedad(pedido, nov)
+
+                                 
+    except:
+        pass
+
+
+
+def busqueda_insumo(pedido, insumo):
+    try:
+        pedidos = Acta.objects.filter(pedido=pedido)
+
+        if insumo=='200092' or insumo=='200093' or insumo=='200098':
+            encontreinsumo=0
+            for p in pedidos:
+                letra = p.item_cont[0]
+                if letra=='A':
+                    
+                    if p.item_cont=='A 03' or p.item_cont=='A 44' or p.item_cont=='A 01' or p.item_cont=='A 27':
+                        encontreinsumo=1
+
+            if encontreinsumo==0:
+                        nov= insumo + ', insumo sin actividad'
+                        crear_novedad(pedido, nov)
+
+        if insumo=='211357':
+            encontreinsumo=0
+            for p in pedidos:
+                letra = p.item_cont[0]
+                if letra=='A':
+                    
+                    if p.item_cont=='A 24' or p.item_cont=='A 01' :
+                        encontreinsumo=1
+
+            if encontreinsumo==0:
+                        nov= insumo + ', insumo sin actividad'
+                        crear_novedad(pedido, nov)
+        
+        if insumo=='213333':
+            encontreinsumo=0
+            for p in pedidos:
+                letra = p.item_cont[0]
+                if letra=='A':
+                    
+                    if p.item_cont=='A 25' or p.item_cont=='A 01' :
+                        encontreinsumo=1
+
+            if encontreinsumo==0:
+                        nov= insumo + ', insumo sin actividad'
+                        crear_novedad(pedido, nov)
+
+        if insumo=='211673':
+            encontreinsumo=0
+            for p in pedidos:
+                letra = p.item_cont[0]
+                if letra=='A':
+                    
+                    if p.item_cont=='A 23':
+                        encontreinsumo=1
+
+            if encontreinsumo==0:
+                        nov= insumo + ', insumo sin actividad'
+                        crear_novedad(pedido, nov)
+
+        if insumo=='200410' or insumo=='200411':
+            encontreinsumo=0
+            for p in pedidos:
+                letra = p.item_cont[0]
+                if letra=='A':
+                    
+                    if p.item_cont=='A 06' or p.item_cont=='A 01' or p.item_cont=='A 39' or p.item_cont=='A 41' or p.item_cont=='A 42':
+                        encontreinsumo=1
+
+            if encontreinsumo==0:
+                        nov= insumo + ', insumo sin actividad'
+                        crear_novedad(pedido, nov)
+        
+        if insumo=='211829':
+            encontreinsumo=0
+            for p in pedidos:
+                letra = p.item_cont[0]
+                if letra=='A':
+                    
+                    if p.item_cont=='A 02' or p.item_cont=='A 27' or p.item_cont=='A 01':
+                        encontreinsumo=1
+
+            if encontreinsumo==0:
+                        nov= insumo + ', insumo sin actividad'
+                        crear_novedad(pedido, nov)
+
+        if insumo=='210947':
+
+            encontreinsumo=0
+
+            for p in pedidos:
+                letra = p.item_cont[0]
+
+                if letra=='A':
+                    if p.item_cont=='A 23':
+                        encontreinsumo=1
+            
+            if encontreinsumo==0:
+                        nov= insumo + ', insumo sin actividad'
+                        crear_novedad(pedido, nov)
+
+        if insumo=='210948' or insumo=='210949':
+
+            encontreinsumo=0
+
+            for p in pedidos:
+                letra = p.item_cont[0]
+                if letra=='C':
+                    encontreinsumo=1
+                if letra=='A':
+
+                    if p.item_cont=='A 04' or p.item_cont=='A 01' or p.actividad=='ALEGA' or p.actividad=='ALECA' or p.actividad=='ALEGN' or p.actividad=='ACAMN':
+                        encontreinsumo=1
+
+            if encontreinsumo==0:
+                        nov= insumo + ', insumo sin actividad'
+                        crear_novedad(pedido, nov)
+                                 
+    except:
+        pass
+
+
 def busqueda_item(pedido, item, item2, novedad):
-    if item=='210949':
+
+    if item=='210948':
         try:
             busquedad_210949= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont=item).count()
-            busquedad_210948= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='210948').count()
-            busquedad_210947= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='210947').count()
+            busquedad_210948= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='210949').count()
 
-            if busquedad_210949==0 and busquedad_210948==0 and busquedad_210947==0:
-                novedad = novedad+" "+str(item)+"=0, 210947=0, 210948=0 " 
+            if busquedad_210949==0 and busquedad_210948==0:
+                novedad = novedad+" "+str(item)+"=0, 210949=0" 
                 crear_novedad(pedido, novedad)
         except:
             pass
     elif pedido.item_cont=='A 42':
-        print("ingrese a A42")
         try:
             busquedad_200410= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont=item).count()
             busquedad_200411= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='200411').count()
@@ -805,7 +974,7 @@ def calculo_enepre(pedido):
                     novedad= novedad+"A 40 incompatible con A 10 y A 11"
                     crear_novedad(pedido, novedad)   
                 if encontre_riel==1:
-                    nov= "A 40 excluye riel."
+                    nov= "A 40 excluye riel (220683)."
                     crear_novedad(pedido, nov)                      
 
         except:

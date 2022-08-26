@@ -253,3 +253,63 @@ class faltanteperseo(models.Model):
 
     def __str__(self):
         return str(self.pedido)
+
+
+class Ingreso(models.Model):
+    encargado = models.CharField(verbose_name='Oficial', max_length=500)
+    codigo = models.CharField(verbose_name='Código', max_length=100)
+    cantidad = models.CharField(verbose_name='Cantidad', max_length=100)
+    
+    class Meta:
+        verbose_name = 'Ingreso'
+        verbose_name_plural = 'Ingresos'
+
+    def __str__(self):
+        return str(self.nombre)
+
+class Despacho(models.Model):
+    codigo = models.CharField(verbose_name='Código', max_length=100)
+    codigo_despacho = models.CharField(verbose_name='Código despacho', max_length=100)
+    fecha = models.CharField(verbose_name='Fecha', max_length=500)
+    encargado = models.CharField(verbose_name='Encargado', max_length=500, default='0')
+    cantidad = models.CharField(verbose_name='Cantidad', max_length=100, default='0')
+    
+    class Meta:
+        verbose_name = 'Despacho'
+        verbose_name_plural = 'Despachos'
+
+    def __str__(self):
+        return str(self.codigo)
+
+class Liquidacion_acta_epm(models.Model):
+    pedido = models.CharField(verbose_name='Pedido', max_length=10)
+    actividad = models.CharField(verbose_name='Actividad', max_length=500)
+    item_cont = models.CharField(verbose_name='item_cont', max_length=100)
+    cantidad = models.CharField(verbose_name='Cantidad', max_length=100)
+    encargado = models.CharField(verbose_name='Encargado', max_length=100, default='0')
+    conc_pedido_codigo = models.CharField(verbose_name='concatenacion', max_length=100, default='0')
+    
+    class Meta:
+        verbose_name = 'Liquidación Acta Epm'
+        verbose_name_plural = 'Liquidación Acta Epm'
+
+    def __str__(self):
+        return str(self.pedido)
+
+class Material_utilizado_perseo(models.Model):
+    pedido = models.CharField(verbose_name='Pedido', max_length=10)
+    actividad = models.CharField(verbose_name='Actividad', max_length=500, default='0')
+    instalador = models.CharField(verbose_name='Instalador', max_length=500)
+    fecha = models.CharField(verbose_name='Fecha', max_length=100)
+    codigo = models.CharField(verbose_name='Código', max_length=100)
+    cantidad = models.CharField(verbose_name='Cantidad', max_length=100, default='0')
+    conc_pedido_codigo = models.CharField(verbose_name='concatenacion', max_length=100, default='0')
+    
+    class Meta:
+        verbose_name = 'Material Utilizado Perseo'
+        verbose_name_plural = 'Material Utilizado Perseo'
+
+    def __str__(self):
+        return str(self.pedido)
+
+

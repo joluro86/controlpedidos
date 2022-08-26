@@ -56,6 +56,9 @@
         <li class="nav-item" id="pendi_index">
           <a class="nav-link" id="pendi_a" href="{% url 'novedades_acta' %}">Novedades</a>
         </li>
+        <li class="nav-item" id="pendi_index">
+          <a class="nav-link" id="pendi_a" href="{% url 'gestionar_acta_perseo_inventario' %}">bd inventario</a>
+        </li>
        
         {% endif %}
         {% if request.user.is_staff %}
@@ -105,6 +108,7 @@
             <li><a class="dropdown-item" href="{% url 'limpiarnov' %}" >Reiniciar Novedades</a></li>
             <li><a class="dropdown-item" href="{% url 'limpiaracta' %}">Reiniciar Acta Materiales</a></li>
             <li><a class="dropdown-item" href="{% url 'gestionbdmat' %}">Gestionar BD Materiales</a></li>
+            <li><a class="dropdown-item" href="{% url 'faltantesenperseo' %}">Calculo Materiales Perseo</a></li>
             <li><a class="dropdown-item" href="#" >Gestión Fenix</a></li>           
           </ul>
         </li>

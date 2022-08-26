@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth.models import User, auth
 from controlpedidos import settings
-from gestionvencimientos.models import Acta, Actividad, Actividad_epm, Ans, Encargado, Guia, Municipio, Novedad_acta, NumeroActa, Vencido, faltanteperseo, matfenix, matperseo
+from gestionvencimientos.models import Acta, Actividad, Actividad_epm, Ans, Encargado, Guia, Liquidacion_acta_epm, Material_utilizado_perseo, Municipio, Novedad_acta, NumeroActa, Vencido, faltanteperseo, matfenix, matperseo
 
 @login_required
 def index(request):
@@ -898,6 +898,7 @@ def crear_novedad(pedido, nov):
 
 def limpiar_novedades(request):
     Novedad_acta.objects.all().delete()
+    Material_utilizado_perseo.objects.all().delete()
     return redirect('novedades_acta')
 
 def limpiar_acta(request):
@@ -1102,5 +1103,35 @@ def calculo_numero_acta():
         except:
             print("error en el acta")
 
-        
+
+
+## CODIGO INVENTARIO BODEGA
+
+def gestionar_acta_perseo_inventario(request):
+
+    try: 
+        # tabla 1 acta_epm
+        pedidos_perseo= Material_utilizado_perseo.objects.all()
+        pedidos_epm=  Liquidacion_acta_epm.objects.all()
+        cont=1
+        for p in pedidos_perseo:
+            p.conc_pedido_codigo =  str(p.pedido)+"-"+str(p.codigo)
+            p.save()
+            print(cont)
+            cont+=1
+
+        for p in pedidos_epm:
+            print(p.pedido) 
+            p.conc_pedido_codigo =  str(p.pedido)+"-"+str(p.item_cont)
+            p.save()
+
+            pedido_a_modificar = Material_utilizado_perseo.objects.get(pedido = p)
+            p.encargado = pedido_a_modificar.instalador
+            p.save()  
+             
+
+    except:
+        pass
+    
+    return render(request,  "index.html")
 

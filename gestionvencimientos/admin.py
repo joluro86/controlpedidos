@@ -6,6 +6,42 @@ from import_export import resources
 
 # Register your models here.
 
+class IngresoResource(resources.ModelResource):
+    class Meta:
+        model = Ingreso
+
+class IngresoAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('encargado','codigo','cantidad')
+    class Meta:
+        model = Ingreso
+
+class DespachoResource(resources.ModelResource):
+    class Meta:
+        model = Despacho
+
+class DespachoAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('codigo','fecha', 'encargado','cantidad')
+    class Meta:
+        model = Despacho
+
+class Liquidacion_acta_epmResource(resources.ModelResource):
+    class Meta:
+        model = Liquidacion_acta_epm
+
+class Liquidacion_acta_epm_Admin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('pedido','actividad', 'item_cont','cantidad')
+    class Meta:
+        model = Liquidacion_acta_epm
+
+class Material_utilizado_perseoResource(resources.ModelResource):
+    class Meta:
+        model = Material_utilizado_perseo
+
+class Material_utilizado_perseo_Admin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('pedido','instalador', 'fecha','codigo','cantidad')
+    class Meta:
+        model = Material_utilizado_perseo
+
 class EncargadoResource(resources.ModelResource):
     class Meta:
         model = Encargado
@@ -102,7 +138,12 @@ class FenixResource(resources.ModelResource):
         model = matfenix   
 
 
-admin.site.register(Acta, Acta_Admin) 
+admin.site.register(Acta, Acta_Admin)
+admin.site.register(Ingreso, IngresoAdmin)
+admin.site.register(Despacho, DespachoAdmin)
+admin.site.register(Material_utilizado_perseo, Material_utilizado_perseo_Admin)
+admin.site.register(Liquidacion_acta_epm, Liquidacion_acta_epm_Admin)
+
 admin.site.register(Novedad_acta, Novedades_Admin)
 admin.site.register(Ans, AnsAdmin)
 admin.site.register(Encargado, EncargadoAdmin)

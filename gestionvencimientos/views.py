@@ -1031,7 +1031,7 @@ def gestionar_bd_mat(request):
 
     return render(request, "index.html")
 
-def calculo_faltantes_fenix(request):
+def calculo_faltantes_perseo(request):
     faltantes=[]
     pedidos_perseo = matperseo.objects.all()
     for pedido_perseo in pedidos_perseo:

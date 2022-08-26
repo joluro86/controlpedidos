@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 
 
 
-from gestionvencimientos.views import amrtr, busqueda_vencidos, acrev, calculo_faltantes_fenix, calculo_last_week, calculo_next_week, calculo_novedades_acta, direccionamiento, gestionar_bd_mat, lega, limpiar_acta, limpiar_novedades, novedades_acta, otros_pedidos, calculo_pendientes, cierre_masivo,  cerrar_pedido, eliminar_bd, fechas, gestion_bd, index, limpiar_base, menu_pendientes, pedidos_week, programador, reiniciar, vencidos, vencimientos_epm
+from gestionvencimientos.views import amrtr, busqueda_vencidos, acrev, calculo_faltantes_perseo, calculo_last_week, calculo_next_week, calculo_novedades_acta, direccionamiento, gestionar_bd_mat, lega, limpiar_acta, limpiar_novedades, novedades_acta, otros_pedidos, calculo_pendientes, cierre_masivo,  cerrar_pedido, eliminar_bd, fechas, gestion_bd, index, limpiar_base, menu_pendientes, pedidos_week, programador, reiniciar, vencidos, vencimientos_epm
 
 urlpatterns = [
     path('admin/', admin.site.urls, name="administrador"),
@@ -42,7 +42,7 @@ urlpatterns = [
 
     path('gestionbd/', gestionar_bd_mat, name="gestionbdmat"),
     path('reiniciar/', reiniciar, name="reiniciar"),
-    path('faltantes_fenix/', calculo_faltantes_fenix, name="faltantesenperseo"),
+    path('faltantes_fenix/', calculo_faltantes_perseo, name="faltantesenperseo"),
     
 ] +static(settings.STATIC_URL, document_root= settings.STATIC_ROOT)
 

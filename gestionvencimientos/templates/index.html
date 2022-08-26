@@ -53,21 +53,44 @@
         <li class="nav-item" id="pendi_index">
           <a class="nav-link" id="pendi_a" href="{% url 'menu_pendientes' %}">Pendientes</a>
         </li>
-       
-        <li class="nav-item">
-          <a class="nav-link" href="#" onclick="otros_pedidos()">Otros</a>
+        <li class="nav-item" id="pendi_index">
+          <a class="nav-link" id="pendi_a" href="{% url 'novedades_acta' %}">Novedades</a>
         </li>
+       
         {% endif %}
         {% if request.user.is_staff %}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
-            Administrar
+            Importar
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="/admin/gestionvencimientos/ans/import/" target="blank">Importar CSV</a></li>
+            <li><a class="dropdown-item" href="/admin/gestionvencimientos/ans/import/" target="blank">Extracción</a></li>
+            <li><a class="dropdown-item" href="/admin/gestionvencimientos/acta/import/" target="blank">Acta revisión</a></li>
+            <li><a class="dropdown-item" href="/admin/gestionvencimientos/matperseo/import/" target="blank">Perseo</a></li>
+            <li><a class="dropdown-item" href="/admin/gestionvencimientos/matfenix/import/" target="blank">Fenix</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+            Pedidos
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="#" onclick="fechas_busqueda_epm()">Vence epm</a></li>
             <li><a class="dropdown-item" href="{% url 'programador' %}">Programador</a></li>
-            <li><a class="dropdown-item" href="/admin/gestionvencimientos/actividad/" target="blank">Actividades</a></li>
+            
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+            Admin
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="/admin/gestionvencimientos/actividad/" target="blank">Actividades contrato</a></li>
+            <li><a class="dropdown-item" href="/admin/gestionvencimientos/actividad_epm/" target="blank">Actividades epm</a></li>
             <li><a class="dropdown-item" href="/admin/gestionvencimientos/encargado/" target="blank">Encargados</a></li>
+            <li><a class="dropdown-item" href="/admin/gestionvencimientos/numeroacta/" target="blank">Número Acta</a></li>
           </ul>
         </li>
 
@@ -76,12 +99,13 @@
             Ejecutar
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="#" onclick="cierre_masivo()">Cierre masivo</a></li>
-            <li><a class="dropdown-item" href="#" onclick="gestion_bd()">Gestionar BBDD</a></li>
-            <li><a class="dropdown-item" href="#" onclick="reiniciar_bd()">Reiniciar BBDD</a></li>
-            <li><a class="dropdown-item" href="{% url 'direccion' %}">Dirección</a></li>
-            <li><a class="dropdown-item" href="#" onclick="fechas_busqueda_epm()">Vence epm</a></li>
-            <li><a class="dropdown-item" href="{% url 'novedades_acta' %}" >Novedades Acta</a></li>
+            <li><a class="dropdown-item" href="#" onclick="gestion_bd()">Gestionar BD extracción</a></li>
+            <li><a class="dropdown-item" href="#" onclick="reiniciar_bd()">Reiniciar BD extracción</a></li>
+            <li><a class="dropdown-item" href="{% url 'calculo_novedades' %}" >Calculo Novedades Acta</a></li>            
+            <li><a class="dropdown-item" href="{% url 'limpiarnov' %}" >Reiniciar Novedades</a></li>
+            <li><a class="dropdown-item" href="{% url 'limpiaracta' %}">Reiniciar Acta Materiales</a></li>
+            <li><a class="dropdown-item" href="{% url 'gestionbdmat' %}">Gestionar BD Materiales</a></li>
+            <li><a class="dropdown-item" href="#" >Gestión Fenix</a></li>           
           </ul>
         </li>
         <li class="nav-item dropdown">
@@ -96,26 +120,6 @@
         </li>
         {% endif %}
         {% if request.user.is_authenticated %}   
-
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
-            Vencidos
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'vencidos' %}">Contrato</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'vencidos_todos' %}">Todos</a>
-            </li>
-          </ul>
-        </li> 
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'limpiarnov' %}">Limpiar nov</a>
-        </li> 
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'limpiaracta' %}">Limpiar acta</a>
-        </li>          
         <li class="nav-item">
           <a class="nav-link" href="{% url 'logout' %}?next=/">Cerrar sesión</a>
         </li>

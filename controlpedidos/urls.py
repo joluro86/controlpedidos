@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 
 
 
-from gestionvencimientos.views import amrtr, busqueda_vencidos, acrev, calculo_last_week, calculo_next_week, direccionamiento, lega, limpiar_acta, limpiar_novedades, novedades_acta, otros_pedidos, calculo_pendientes, cierre_masivo,  cerrar_pedido, eliminar_bd, fechas, gestion_bd, index, limpiar_base, menu_pendientes, pedidos_week, programador, vencidos, vencimientos_epm
+from gestionvencimientos.views import amrtr, busqueda_vencidos, acrev, calculo_faltantes_fenix, calculo_last_week, calculo_next_week, calculo_novedades_acta, direccionamiento, gestionar_bd_mat, lega, limpiar_acta, limpiar_novedades, novedades_acta, otros_pedidos, calculo_pendientes, cierre_masivo,  cerrar_pedido, eliminar_bd, fechas, gestion_bd, index, limpiar_base, menu_pendientes, pedidos_week, programador, reiniciar, vencidos, vencimientos_epm
 
 urlpatterns = [
     path('admin/', admin.site.urls, name="administrador"),
@@ -33,9 +33,17 @@ urlpatterns = [
     path('legalizaciones/', lega, name="lega"),
     path('direccionamiento/', direccionamiento, name="direccion"),
     path('programador/', programador, name="programador"),
+    path('calculo_novedades/', calculo_novedades_acta, name="calculo_novedades"),
     path('novedades-acta/', novedades_acta, name="novedades_acta"),
     path('epm/<str:inicio>/<str:final>/', vencimientos_epm, name="epm"),
     path('accounts/', include('django.contrib.auth.urls')),
+
+    # aqui
+
+    path('gestionbd/', gestionar_bd_mat, name="gestionbdmat"),
+    path('reiniciar/', reiniciar, name="reiniciar"),
+    path('faltantes_fenix/', calculo_faltantes_fenix, name="faltantesenperseo"),
+    
 ] +static(settings.STATIC_URL, document_root= settings.STATIC_ROOT)
 
 

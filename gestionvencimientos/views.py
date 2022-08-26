@@ -7,9 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth.models import User, auth
 from controlpedidos import settings
-
-from gestionvencimientos.models import Acta, Actividad, Actividad_epm, Ans, Encargado, Municipio, Novedad_acta, Vencido
-
+from gestionvencimientos.models import Acta, Actividad, Actividad_epm, Ans, Encargado, Guia, Municipio, Novedad_acta, NumeroActa, Vencido, faltanteperseo, matfenix, matperseo
 
 @login_required
 def index(request):
@@ -39,7 +37,6 @@ def calculo_dia_actutal():
         dia = 6
 
     return dia
-
 
 def calculo_dia_semana_2():
     
@@ -87,7 +84,6 @@ def limpiar_base(request):
 
     return redirect("gestionbd")
 
-
 def calculo_pendientes(request, id_dia):
 
     lunes = calculo_dia_semana_2()
@@ -133,7 +129,6 @@ def calculo_pendientes(request, id_dia):
 
         return render(request, "pendientes_lunes.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes).strftime('%Y-%m-%d')})
 
-
 def busqueda_vencidos(request):
     aneses = Ans.objects.filter(Estado="PENDI")
     list_ans = []
@@ -154,7 +149,6 @@ def busqueda_vencidos(request):
             print(repr(e))                              
 
     return render(request, "vencidos-todos.html" , {"aneses": list_ans})
-
 
 def busqueda_pendientes(fecha_vence_buscar):
     aneses = Ans.objects.filter(Estado="PENDI")
@@ -210,7 +204,6 @@ def eliminar_bd(request):
 
     return redirect('home')
 
-
 def fechas(fecha_inic, dias):
 
     fecha_vencimiento = datetime. strptime(fecha_inic, '%Y-%m-%d %H:%M:%S')
@@ -227,13 +220,11 @@ def fechas(fecha_inic, dias):
 
     return fecha_vencimiento
 
-
 def es_festivo_o_fin_de_semana(fecha):
     if holidays_co.is_holiday_date(fecha):
         return True
     if fecha.weekday() == 5 or fecha.weekday() == 6:
         return True
-
 
 def gestion_bd(request): 
      
@@ -300,7 +291,6 @@ def gestion_bd(request):
 
     return redirect('menu_pendientes')
 
-
 def cerrar_pedido(request, id_pedido):
    
     ans_cerrar = Ans.objects.get(id=id_pedido)
@@ -309,7 +299,6 @@ def cerrar_pedido(request, id_pedido):
     ans_cerrar.save()
 
     return redirect('menu_pendientes')
-
 
 def calculo_next_week(request, id_dia):
     
@@ -350,7 +339,6 @@ def calculo_next_week(request, id_dia):
 
         return render(request, "pendientes_next_week.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=11)).strftime('%Y-%m-%d')})
 
-
 def vencidos(request):
     aeneses = Vencido.objects.all()
         
@@ -366,7 +354,6 @@ def vencimientos_epm(request, inicio, final):
             aeneses.append(a)
     aeneses = cambiar_formato_fecha_epm(aeneses)    
     return render(request, "pendientes_epm.html", {"aneses":aeneses})
-
 
 def pedidos_week(request, id_week):
     
@@ -407,7 +394,6 @@ def pedidos_week(request, id_week):
 
     return render(request, "pedidos_week.html", {"aneses":lista_pedidos, "lunes":lunes, "viernes":viernes})
 
-
 def otros_pedidos(request, cliente, apla, pendi):
     
     if cliente == 1 and apla == 0 and pendi == 0:
@@ -439,7 +425,6 @@ def otros_pedidos(request, cliente, apla, pendi):
         return render(request, "otros_pedidos.html", {"aneses": vencidos})
     
     return HttpResponse("Error en la consulta de otros pedidos")
-
 
 def cierre_masivo(request, fecha_cierre, hora_cierre):
     
@@ -516,14 +501,17 @@ def calculo_last_week(request, id_dia):
         list_ans = busqueda_pendientes((lunes-timedelta(days=3)).strftime('%Y-%m-%d'))
         return render(request, "pendientes_last_week.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=11)).strftime('%Y-%m-%d')})
 
-
-
 def novedades_acta(request):
-    novedades=calculo_novedades_acta(request)
+    novedades={}
+    try:
+        novedades=Novedad_acta.objects.all()
+    except:
+        pass
     return render(request, "analisis.html", {'novedades':novedades})
 
 def calculo_novedades_acta(request):
     pedidos= Acta.objects.all()
+    print("tamañao: " + str(len(pedidos)))
     cont=1
     for pedido in pedidos:
         
@@ -662,7 +650,7 @@ def calculo_novedades_acta(request):
 
     novedades = Novedad_acta.objects.all()
 
-    return novedades
+    return render(request, "analisis.html", {'novedades':novedades})
 
 def busqueda_insumo_por_item(pedido, insumo, item):
     try:
@@ -683,8 +671,6 @@ def busqueda_insumo_por_item(pedido, insumo, item):
                                  
     except:
         pass
-
-
 
 def busqueda_insumo(pedido, insumo):
     try:
@@ -803,7 +789,6 @@ def busqueda_insumo(pedido, insumo):
     except:
         pass
 
-
 def busqueda_item(pedido, item, item2, novedad):
 
     if item=='210948':
@@ -913,7 +898,7 @@ def crear_novedad(pedido, nov):
 
 def limpiar_novedades(request):
     Novedad_acta.objects.all().delete()
-    return redirect('home')
+    return redirect('novedades_acta')
 
 def limpiar_acta(request):
     Acta.objects.all().delete()
@@ -979,6 +964,143 @@ def calculo_enepre(pedido):
 
         except:
             pass
+
+
+## aqui
+
+def reiniciar(request):
+    matfenix.objects.all().delete()
+    matperseo.objects.all().delete()
+    faltanteperseo.objects.all().delete()
+    return redirect('novedades_acta')
+
+def pedidos_fenix(request):
+    perseo = matperseo.objects.all()
+    fenix = matfenix.objects.all()
+    pedidos_fenix=[]
+    no=[]
+    cont=0
+    cont2=0
+    for p in fenix:
+        try:
+            ped_f=matperseo.objects.get(pedido=p.pedido)
+            if ped_f.pedido in pedidos_fenix:
+                pass
+            else:
+                pedidos_fenix.append(ped_f.pedido)
+                cont+=1
+        except:
+            if p.pedido in no:
+                pass
+            else:
+                no.append(p.pedido)
+                cont2+=1
+    print("pedidos que no estan en perseo: " + str(len(no)))
+
+    return HttpResponse("termino") #(request, 'index.html')
+
+def concatenar(pedidos, indicador):
+    con=1
+    for p in pedidos:
+        if indicador==1:
+            try:
+                nombre_cambio_codigo = Guia.objects.get(nombre_perseo=p.codigo)
+                p.codigo = nombre_cambio_codigo.nombre_fenix
+                p.save()
+
+            except:
+                pass
+        my_str=p.codigo
+
+        try:
+            final_str=my_str[-1]
+            if final_str=='A':
+                p.codigo= str(my_str[:-1])
+        except:
+            pass       
+        
+        p.concatenacion = str(p.pedido + "-" + p.codigo)
+        p.save()
+
+def gestionar_bd_mat(request):
+    pedidos_perseo = matperseo.objects.all()
+    pedidos_fenix = matfenix.objects.all()
+
+    concatenar(pedidos_fenix, 0)
+    concatenar(pedidos_perseo, 1)
+
+    return render(request, "index.html")
+
+def calculo_faltantes_fenix(request):
+    faltantes=[]
+    pedidos_perseo = matperseo.objects.all()
+    for pedido_perseo in pedidos_perseo:
+        
+        try:
+            pedido_fenix = matfenix.objects.get(concatenacion=pedido_perseo.concatenacion)
+
+            try:
+                existe_faltante = faltanteperseo.objects.get(concatenacion = pedido_fenix.concatenacion)
+                existe_faltante.cantidad= existe_faltante.cantidad + pedido_perseo.cantidad
+                existe_faltante.diferencia = existe_faltante.cantidad - pedido_fenix.cantidad
+                existe_faltante.save()
+
+            except:
+                if pedido_perseo.cantidad != pedido_fenix.cantidad:
+                    faltante= faltanteperseo()
+                    faltante.concatenacion = pedido_perseo.concatenacion
+                    faltante.pedido = pedido_perseo.pedido
+                    faltante.actividad = pedido_perseo.actividad
+                    faltante.fecha = pedido_perseo.fecha
+                    faltante.codigo = pedido_perseo.codigo
+                    faltante.cantidad = pedido_perseo.cantidad
+                    faltante.observacion = "Cantidad no coincide"
+                    faltante.acta = pedido_perseo.acta
+                    faltante.cantidad_fenix = pedido_fenix.cantidad
+                    faltante.diferencia = pedido_perseo.cantidad - pedido_fenix.cantidad
+                    faltante.save()        
+        except:
+            falt= faltanteperseo()
+            falt.concatenacion = pedido_perseo.concatenacion
+            falt.pedido = pedido_perseo.pedido
+            falt.actividad = pedido_perseo.actividad
+            falt.fecha = pedido_perseo.fecha
+            falt.codigo = pedido_perseo.codigo
+            falt.cantidad = pedido_perseo.cantidad
+            falt.observacion = "No digitado en fenix"
+            falt.acta = pedido_perseo.acta
+            falt.diferencia = -9999
+            falt.save()
+
+        ped= faltanteperseo.objects.filter(diferencia=0)
+        ped.delete()
+
+    calculo_numero_acta()
+
+
+    return render(request, "index.html")
+
+def calculo_numero_acta():
+    acta= NumeroActa.objects.first()
+    pedidos_perseo = matperseo.objects.all()
+    con=1
+ 
+    for pedido_perseo in pedidos_perseo:
+        try:
+            if str(pedido_perseo.acta) != str(acta.numero):
+                faltante= faltanteperseo()
+                faltante.concatenacion = pedido_perseo.concatenacion
+                faltante.pedido = pedido_perseo.pedido
+                faltante.actividad = pedido_perseo.actividad
+                faltante.fecha = pedido_perseo.fecha
+                faltante.codigo = pedido_perseo.codigo
+                faltante.cantidad = pedido_perseo.cantidad
+                faltante.observacion = "Acta incorrecta"
+                faltante.acta = pedido_perseo.acta
+                faltante.diferencia = -9999
+                faltante.save()                        
+        except:
+            print("error en el acta")
 
         
 

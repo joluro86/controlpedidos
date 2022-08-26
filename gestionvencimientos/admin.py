@@ -1,5 +1,5 @@
 from django.contrib import admin
-from gestionvencimientos.models import Acta, Actividad, Actividad_epm, Ans, Encargado, Novedad_acta
+from gestionvencimientos.models import *
 from import_export.admin import ImportExportModelAdmin 
 from import_export import resources
 
@@ -64,6 +64,43 @@ class Acta_Admin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('pedido','actividad', 'item_cont')
     class Meta:
         model = Acta
+
+# aqui
+
+class GuiaAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('nombre_perseo', 'nombre_fenix')
+admin.site.register(Guia, GuiaAdmin)
+
+class NumeroActaAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    pass
+admin.site.register(NumeroActa, NumeroActaAdmin)
+
+class MatfenixAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('concatenacion', 'pedido', 'actividad', 'fecha', 'codigo', 'cantidad')
+admin.site.register(matfenix, MatfenixAdmin)     
+
+class MatPerseoAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('concatenacion', 'pedido', 'actividad', 'fecha', 'codigo', 'cantidad', 'acta')
+admin.site.register(matperseo, MatPerseoAdmin)
+
+class FaltantePerseoAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('concatenacion', 'pedido', 'actividad', 'fecha', 'codigo', 'cantidad', 'acta','cantidad_fenix','diferencia')
+admin.site.register(faltanteperseo, FaltantePerseoAdmin)
+
+
+
+class FaltantePerseoResource(resources.ModelResource):
+    class Meta:
+        model = faltanteperseo
+
+class PerseoResource(resources.ModelResource):
+    class Meta:
+        model = matperseo
+
+class FenixResource(resources.ModelResource):
+    class Meta:
+        model = matfenix   
+
 
 admin.site.register(Acta, Acta_Admin) 
 admin.site.register(Novedad_acta, Novedades_Admin)

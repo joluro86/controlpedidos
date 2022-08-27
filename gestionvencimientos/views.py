@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth.models import User, auth
 from controlpedidos import settings
-from gestionvencimientos.models import Acta, Actividad, Actividad_epm, Ans, Encargado, Guia, Liquidacion_acta_epm, Material_utilizado_perseo, Municipio, Novedad_acta, NumeroActa, Vencido, faltanteperseo, matfenix, matperseo
+from gestionvencimientos.models import Acta, Actividad, Actividad_epm, Ans, Encargado, Guia, Inicio, Liquidacion_acta_epm, Material_utilizado_perseo, Municipio, Novedad_acta, NumeroActa, Oficial, Vencido, faltanteperseo, matfenix, matperseo
 
 @login_required
 def index(request):
@@ -1109,29 +1109,92 @@ def calculo_numero_acta():
 
 def gestionar_acta_perseo_inventario(request):
 
-    try: 
-        # tabla 1 acta_epm
         pedidos_perseo= Material_utilizado_perseo.objects.all()
         pedidos_epm=  Liquidacion_acta_epm.objects.all()
-        cont=1
+
         for p in pedidos_perseo:
+            try:
+
+                codigo = p.codigo
+                codigo_ultima_letra=codigo[-1]
+                if codigo_ultima_letra=='A' or codigo_ultima_letra=='P':
+                    p.codigo= str(codigo[:-1])  
+                    p.save() 
+            except:
+                pass
             p.conc_pedido_codigo =  str(p.pedido)+"-"+str(p.codigo)
             p.save()
-            print(cont)
-            cont+=1
-
+        cont=1
         for p in pedidos_epm:
-            print(p.pedido) 
-            p.conc_pedido_codigo =  str(p.pedido)+"-"+str(p.item_cont)
+            print("voy en epm: "+str(cont))
+            cont+=1
+            try:
+                nombre_cambio_codigo = Guia.objects.get(nombre_fenix=p.item_cont)
+                p.item_cont= nombre_cambio_codigo.nombre_perseo
+                p.save()
+               
+            except:
+                pass
+            try:
+                codigo = p.item_cont
+                codigo_ultima_letra=codigo[-1]
+                if codigo_ultima_letra=='A' or codigo_ultima_letra=='P':
+                    p.item_cont= str(codigo[:-1])
+                    p.save()
+            except:
+                pass
+            p.conc_pedido_codigo =  str(p.pedido)+"-"+str(p.item_cont)          
             p.save()
 
-            pedido_a_modificar = Material_utilizado_perseo.objects.get(pedido = p)
-            p.encargado = pedido_a_modificar.instalador
-            p.save()  
-             
+            pedido_a_modificar = Material_utilizado_perseo.objects.filter(pedido = p)
 
+            for ped in pedido_a_modificar:
+                p.encargado= ped.instalador
+                p.save()
+                break 
+
+        return render(request,  "index.html")
+
+def calculo_inventario_por_oficial(request):
+
+    try:
+        
+        for oficial in Oficial.objects.all()[:1]:
+            inicio = 0
+            despachado = 0
+            epm = 0
+
+            cantidad_inicial_inicio = Inicio.objects.filter(encargado= oficial)
+           
+            for cant_inicio in cantidad_inicial_inicio:
+                codigo = cant_inicio.codigo
+                inicio = cant_inicio.cantidad
+
+                try:
+
+                    cantidad_epm = Liquidacion_acta_epm.objects.filter(encargado= oficial)
+
+                    for cant_epm in cantidad_epm:
+                        print("codigo, " + str(codigo)+", item_cont, " + str(cant_epm.item_cont))
+                        
+                        if codigo== cant_epm.item_cont:
+                            epm=cant_epm.cantidad
+                            print(cant_inicio)
+                            print("epm: " + str(epm))
+                            
+
+                except:
+                    print("error 2")
+    
     except:
         pass
+        
     
+
     return render(request,  "index.html")
+
+
+
+  
+
 

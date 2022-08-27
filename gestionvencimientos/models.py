@@ -255,17 +255,27 @@ class faltanteperseo(models.Model):
         return str(self.pedido)
 
 
-class Ingreso(models.Model):
+class Oficial(models.Model):
+    nombre = models.CharField(verbose_name='Oficial', max_length=500)
+    
+    class Meta:
+        verbose_name = 'Oficial'
+        verbose_name_plural = 'Oficiales'
+
+    def __str__(self):
+        return str(self.nombre)
+
+class Inicio(models.Model):
     encargado = models.CharField(verbose_name='Oficial', max_length=500)
     codigo = models.CharField(verbose_name='Código', max_length=100)
     cantidad = models.CharField(verbose_name='Cantidad', max_length=100)
     
     class Meta:
-        verbose_name = 'Ingreso'
-        verbose_name_plural = 'Ingresos'
+        verbose_name = 'Inicio'
+        verbose_name_plural = 'Inicio'
 
     def __str__(self):
-        return str(self.nombre)
+        return str(self.encargado) + " tiene de " + str(self.codigo)+ " " + str(self.cantidad)
 
 class Despacho(models.Model):
     codigo = models.CharField(verbose_name='Código', max_length=100)
@@ -310,6 +320,6 @@ class Material_utilizado_perseo(models.Model):
         verbose_name_plural = 'Material Utilizado Perseo'
 
     def __str__(self):
-        return str(self.pedido)
+        return str(self.pedido) + str(self.instalador)
 
 

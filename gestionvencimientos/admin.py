@@ -8,12 +8,21 @@ from import_export import resources
 
 class IngresoResource(resources.ModelResource):
     class Meta:
-        model = Ingreso
+        model = Inicio
 
 class IngresoAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('encargado','codigo','cantidad')
     class Meta:
-        model = Ingreso
+        model = Inicio
+
+class OficialResource(resources.ModelResource):
+    class Meta:
+        model = Oficial
+
+class OficialAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('nombre',)
+    class Meta:
+        model = Oficial
 
 class DespachoResource(resources.ModelResource):
     class Meta:
@@ -139,7 +148,8 @@ class FenixResource(resources.ModelResource):
 
 
 admin.site.register(Acta, Acta_Admin)
-admin.site.register(Ingreso, IngresoAdmin)
+admin.site.register(Oficial, OficialAdmin)
+admin.site.register(Inicio, IngresoAdmin)
 admin.site.register(Despacho, DespachoAdmin)
 admin.site.register(Material_utilizado_perseo, Material_utilizado_perseo_Admin)
 admin.site.register(Liquidacion_acta_epm, Liquidacion_acta_epm_Admin)

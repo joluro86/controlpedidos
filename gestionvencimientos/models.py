@@ -1,3 +1,4 @@
+from tkinter import CASCADE
 from django.db import models
 
 
@@ -322,4 +323,28 @@ class Material_utilizado_perseo(models.Model):
     def __str__(self):
         return str(self.pedido) + str(self.instalador)
 
+class Material_A_Buscar(models.Model):
+    nombre = models.CharField(verbose_name='Oficial', max_length=500, default='--')
+    
+    class Meta:
+        verbose_name = 'Material a buscar'
+        verbose_name_plural = 'Material a buscar'
+
+    def __str__(self):
+        return str(self.nombre)
+
+class Stock(models.Model):
+    encargado = models.CharField(verbose_name='Oficial', default='0', max_length=300)
+    codigo = models.CharField(verbose_name='Código', default='0', max_length=100)
+    inicio = models.CharField(verbose_name='Inicio', default='0', max_length=100)
+    despachado = models.CharField(verbose_name='Despachado', default='0', max_length=100)
+    epm = models.CharField(verbose_name='Epm', default='0', max_length=100)
+    diferencia = models.CharField(verbose_name='Diferencia', default='0', max_length=100)
+
+    class Meta:
+        verbose_name = 'Stock'
+        verbose_name_plural = 'Stock'
+
+    def __str__(self):
+        return str(self.codigo)+": "+str(self.diferencia)
 

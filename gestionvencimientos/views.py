@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth.models import User, auth
 from controlpedidos import settings
-from gestionvencimientos.models import Acta, Actividad, Actividad_epm, Ans, Encargado, Guia, Inicio, Liquidacion_acta_epm, Material_utilizado_perseo, Municipio, Novedad_acta, NumeroActa, Oficial, Vencido, faltanteperseo, matfenix, matperseo
+from gestionvencimientos.models import Acta, Actividad, Actividad_epm, Ans, Despacho, Encargado, Guia, Inicio, Liquidacion_acta_epm, Material_A_Buscar, Material_utilizado_perseo, Municipio, Novedad_acta, NumeroActa, Oficial, Stock, Vencido, faltanteperseo, matfenix, matperseo
 
 @login_required
 def index(request):
@@ -1110,7 +1110,7 @@ def calculo_numero_acta():
 def gestionar_acta_perseo_inventario(request):
 
         pedidos_perseo= Material_utilizado_perseo.objects.all()
-        pedidos_epm=  Liquidacion_acta_epm.objects.all()
+        pedidos_epm=  Liquidacion_acta_epm.objects.all()     
 
         for p in pedidos_perseo:
             try:
@@ -1126,15 +1126,7 @@ def gestionar_acta_perseo_inventario(request):
             p.save()
         cont=1
         for p in pedidos_epm:
-            print("voy en epm: "+str(cont))
-            cont+=1
-            try:
-                nombre_cambio_codigo = Guia.objects.get(nombre_fenix=p.item_cont)
-                p.item_cont= nombre_cambio_codigo.nombre_perseo
-                p.save()
-               
-            except:
-                pass
+
             try:
                 codigo = p.item_cont
                 codigo_ultima_letra=codigo[-1]
@@ -1143,6 +1135,16 @@ def gestionar_acta_perseo_inventario(request):
                     p.save()
             except:
                 pass
+
+            try:
+                nombre_cambio_codigo = Guia.objects.filter(nombre_fenix=p.item_cont)
+                for n in nombre_cambio_codigo:
+                    p.item_cont=n.nombre_perseo
+                    p.save()
+               
+            except:
+                pass
+            
             p.conc_pedido_codigo =  str(p.pedido)+"-"+str(p.item_cont)          
             p.save()
 
@@ -1151,47 +1153,51 @@ def gestionar_acta_perseo_inventario(request):
             for ped in pedido_a_modificar:
                 p.encargado= ped.instalador
                 p.save()
-                break 
+                break
+
+        calculo_inventario_por_oficial(request)
 
         return render(request,  "index.html")
 
 def calculo_inventario_por_oficial(request):
 
-    try:
-        
-        for oficial in Oficial.objects.all()[:1]:
-            inicio = 0
-            despachado = 0
-            epm = 0
+      
+        for oficial in Oficial.objects.all():
+            for material_a_buscar in Material_A_Buscar.objects.all():
 
-            cantidad_inicial_inicio = Inicio.objects.filter(encargado= oficial)
-           
-            for cant_inicio in cantidad_inicial_inicio:
-                codigo = cant_inicio.codigo
-                inicio = cant_inicio.cantidad
+                inicio = 0
+                despachado = 0
+                epm = 0
+                diferencia=0
 
-                try:
+                cantidad_inicial_inicio = Inicio.objects.filter(encargado= oficial).filter(codigo=material_a_buscar)            
+                for cant_inicio in cantidad_inicial_inicio:
+                    inicio+=float(cant_inicio.cantidad)
+                    #print(str(oficial.nombre)+ " - "+ str(cant_inicio.codigo)+" - c: " + cant_inicio.cantidad)
+                
+                cantidad_despacho = Despacho.objects.filter(encargado= oficial).filter(codigo=material_a_buscar)            
+                for cant_des in cantidad_despacho:
+                    despachado+= float(cant_des.cantidad)
+                    #print(str(oficial.nombre)+ " - "+ str(cant_des.codigo)+" - " + str(cant_des.cantidad)+" - " + str(despachado))
+                    
+                cantidad_usado_en_campo = Liquidacion_acta_epm.objects.filter(encargado= oficial).filter(item_cont=material_a_buscar)            
+                for cant_epm in cantidad_usado_en_campo:
+                    epm+= float(cant_epm.cantidad)
+                    #print(str(oficial.nombre)+ " - "+ str(cant_epm.item_cont)+" - " + str(cant_epm.cantidad)+" - " + str(epm))
+                
+                diferencia = int(inicio)+int(despachado)-int(epm)
+                print(str(material_a_buscar.nombre)+str("-")+"inicio:" + str(inicio)+str("-")+"despachado:" + str(despachado)+str("-")+"epm:" + str(epm)+str("-")+"diferencia: -" + str(diferencia))
+                
+                stock = Stock()
+                stock.encargado = oficial.nombre
+                stock.codigo = material_a_buscar.nombre
+                stock.inicio = inicio
+                stock.despachado = despachado
+                stock.epm = epm 
+                stock.diferencia = diferencia
+                stock.save()
 
-                    cantidad_epm = Liquidacion_acta_epm.objects.filter(encargado= oficial)
-
-                    for cant_epm in cantidad_epm:
-                        print("codigo, " + str(codigo)+", item_cont, " + str(cant_epm.item_cont))
-                        
-                        if codigo== cant_epm.item_cont:
-                            epm=cant_epm.cantidad
-                            print(cant_inicio)
-                            print("epm: " + str(epm))
-                            
-
-                except:
-                    print("error 2")
-    
-    except:
-        pass
-        
-    
-
-    return render(request,  "index.html")
+        return render(request,  "index.html")
 
 
 

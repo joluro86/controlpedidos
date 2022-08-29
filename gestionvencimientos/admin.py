@@ -5,6 +5,25 @@ from import_export import resources
 
 
 # Register your models here.
+class StockBuscarResource(resources.ModelResource):
+    class Meta:
+        model = Stock
+
+class Stock_Admin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('encargado','codigo', 'inicio', 'despachado', 'epm', 'diferencia')
+    class Meta:
+        model = Stock
+
+
+class Material_A_BuscarResource(resources.ModelResource):
+    class Meta:
+        model = Material_A_Buscar
+
+class Material_A_Buscar_Admin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('nombre',)
+    class Meta:
+        model = Material_A_Buscar
+
 
 class IngresoResource(resources.ModelResource):
     class Meta:
@@ -144,9 +163,11 @@ class PerseoResource(resources.ModelResource):
 
 class FenixResource(resources.ModelResource):
     class Meta:
-        model = matfenix   
+        model = matfenix 
 
 
+admin.site.register(Stock, Stock_Admin)
+admin.site.register(Material_A_Buscar, Material_A_Buscar_Admin)
 admin.site.register(Acta, Acta_Admin)
 admin.site.register(Oficial, OficialAdmin)
 admin.site.register(Inicio, IngresoAdmin)

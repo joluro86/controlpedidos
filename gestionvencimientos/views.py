@@ -1198,9 +1198,3 @@ def calculo_inventario_por_oficial(request):
                 stock.save()
 
         return render(request,  "index.html")
-
-
-
-  
-
-

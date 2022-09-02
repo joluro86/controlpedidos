@@ -6,7 +6,7 @@ import holidays_co
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth.models import User, auth
-from controlpedidos import settings
+import pandas as pd
 from gestionvencimientos.models import Acta, Actividad, Actividad_epm, Ans, Despacho, Encargado, Guia, Inicio, Liquidacion_acta_epm, Material_A_Buscar, Material_utilizado_perseo, Municipio, Novedad_acta, NumeroActa, Oficial, Stock, Vencido, faltanteperseo, matfenix, matperseo
 
 @login_required
@@ -450,10 +450,19 @@ def acrev(request):
     return render(request, "acrev.html", {"aneses": aeneses} )
 
 def amrtr(request):
+    """
+    amrtr = pd.DataFrame({'AMRTR': Ans.objects.filter(Actividad='AMRTR')})
+
+    with pd.ExcelWriter("C:\JOLURO\AMRTR.xlsx") as writer:
+        amrtr.to_excel(writer, sheet_name="Fruits", index=False)
+
+    """
     
     aeneses = Ans.objects.filter(Actividad = "AMRTR").filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495")| Q(Concepto="430"))
     aeneses = cambiar_formato_fecha(aeneses)
+
     return render(request, "amrtr.html", {"aneses": aeneses} )
+   
 
 def lega(request):
     
@@ -1035,31 +1044,10 @@ def gestionar_bd_mat(request):
 def calculo_faltantes_perseo(request):
     faltantes=[]
     pedidos_perseo = matperseo.objects.all()
-    for pedido_perseo in pedidos_perseo:
-        
+    for pedido_perseo in pedidos_perseo:      
         try:
             pedido_fenix = matfenix.objects.get(concatenacion=pedido_perseo.concatenacion)
 
-            try:
-                existe_faltante = faltanteperseo.objects.get(concatenacion = pedido_fenix.concatenacion)
-                existe_faltante.cantidad= existe_faltante.cantidad + pedido_perseo.cantidad
-                existe_faltante.diferencia = existe_faltante.cantidad - pedido_fenix.cantidad
-                existe_faltante.save()
-
-            except:
-                if pedido_perseo.cantidad != pedido_fenix.cantidad:
-                    faltante= faltanteperseo()
-                    faltante.concatenacion = pedido_perseo.concatenacion
-                    faltante.pedido = pedido_perseo.pedido
-                    faltante.actividad = pedido_perseo.actividad
-                    faltante.fecha = pedido_perseo.fecha
-                    faltante.codigo = pedido_perseo.codigo
-                    faltante.cantidad = pedido_perseo.cantidad
-                    faltante.observacion = "Cantidad no coincide"
-                    faltante.acta = pedido_perseo.acta
-                    faltante.cantidad_fenix = pedido_fenix.cantidad
-                    faltante.diferencia = pedido_perseo.cantidad - pedido_fenix.cantidad
-                    faltante.save()        
         except:
             falt= faltanteperseo()
             falt.concatenacion = pedido_perseo.concatenacion
@@ -1073,12 +1061,32 @@ def calculo_faltantes_perseo(request):
             falt.diferencia = -9999
             falt.save()
 
+        try:
+            existe_faltante = faltanteperseo.objects.get(concatenacion = pedido_fenix.concatenacion)
+            existe_faltante.cantidad= existe_faltante.cantidad + pedido_perseo.cantidad
+            existe_faltante.diferencia = existe_faltante.cantidad - pedido_fenix.cantidad
+            existe_faltante.save()
+        except:
+            if pedido_perseo.cantidad != pedido_fenix.cantidad:
+                faltante= faltanteperseo()
+                faltante.concatenacion = pedido_perseo.concatenacion
+                faltante.pedido = pedido_perseo.pedido
+                faltante.actividad = pedido_perseo.actividad
+                faltante.fecha = pedido_perseo.fecha
+                faltante.codigo = pedido_perseo.codigo
+                faltante.cantidad = pedido_perseo.cantidad
+                faltante.observacion = "Cantidad no coincide"
+                faltante.acta = pedido_perseo.acta
+                faltante.cantidad_fenix = pedido_fenix.cantidad
+                faltante.diferencia = pedido_perseo.cantidad - pedido_fenix.cantidad
+                faltante.save()        
+        
+
         ped= faltanteperseo.objects.filter(diferencia=0)
         ped.delete()
 
     calculo_numero_acta()
-
-
+    
     return render(request, "index.html")
 
 def calculo_numero_acta():

@@ -587,10 +587,14 @@ def calculo_novedades_acta(request):
 
             if pedido.tipre=='ENESUB':
                 calculo_enepre(pedido)
+
         
         if pedido.item_cont=='A 02':
             nov = "A 02=1,"
             busqueda_item(pedido, '211829', 0, nov)
+        if pedido.item_cont=='A 10' or pedido.item_cont=='A 11':
+            busqueda_item(pedido, '200410', 0, pedido.item_cont)
+            busqueda_item(pedido, '211829', 0, pedido.item_cont)
 
         if pedido.item_cont=='211829':
             insumo= "211829"
@@ -648,6 +652,20 @@ def calculo_novedades_acta(request):
         if pedido.item_cont=='A 39':
             nov = "A 39=1,"
             busqueda_item(pedido, '200410', '200411', nov)
+            busquedad_200410= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='200410')
+            busquedad_200411= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='200411')
+
+            for b in busquedad_200410:
+                if len(busquedad_200410)>0:
+                    if float(b.cantidad)<8:
+                        crear_novedad(pedido, 'Cantidad de cable 200410 ó 200411 menor a 8')
+                        
+
+            for b in busquedad_200411:
+                if len(busquedad_200411)>0:
+                    if float(b.cantidad)<8:
+                        crear_novedad(pedido, 'Cantidad de cable 200410 ó 200411 menor a 8')
+
         
         if pedido.item_cont=='A 42':
             nov = "A 42=1,"
@@ -821,6 +839,23 @@ def busqueda_item(pedido, item, item2, novedad):
                 crear_novedad(pedido, novedad)
         except:
             pass
+
+    elif (pedido.item_cont=='A 10' or pedido.item_cont=='A 11') and item=='200410':
+        try:
+            busquedad_200410= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont=item).count()
+            busquedad_200411= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='200411').count()
+
+            busquedad_a03= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='A 03').count()
+            busquedad_a28= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='A 28').count()
+            busquedad_a29= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='A 29').count()
+
+            if busquedad_a03!=0 and busquedad_a28!=0 and busquedad_a29!=0:
+
+                if busquedad_200410==0 and busquedad_200411==0:
+                    novedad = novedad+" "+str(item)+"=0, 200410=0, 200411=0 " 
+                    crear_novedad(pedido, novedad)
+        except:
+            pass    
 
     elif item2 != 0:
         
@@ -1206,3 +1241,100 @@ def calculo_inventario_por_oficial(request):
                 stock.save()
 
         return render(request,  "index.html")
+
+def traer_matriz(request):
+    #matriz = llenar_matriz()
+    #print(matriz)
+    algoritmo_estudiantes()
+
+    return render(request,  "index.html")
+
+
+def crear_matriz():
+    print('Ingrese el numero de filas y columnas:')
+    numero = int(input())
+    m=1
+    n= (-2/3)**m
+
+    matriz = []
+    
+    for r in range(numero):
+        fila=[]
+        for c in range(numero):
+            fila.append(n)
+            m+=1
+            n= (-2/3)**(m)
+            
+        matriz.append(fila)
+
+    return matriz
+
+def algoritmo_estudiantes():
+
+    estudiantes=[]
+
+    def crear_estudiante():
+        print('Ingrese nombre:')
+        nombre = input()
+
+        print('Ingrese edad:')
+        edad = int(input())
+
+        print('Ingrese nota:')
+        nota = float(input())
+
+        estudiante = {
+            'nombre': nombre,
+            'edad': edad,
+            'nota': nota
+        }
+
+        estudiantes.append(estudiante)
+
+    def buscar_estudiante():
+        print('Ingrese nombre a buscar:')
+        nombre = input()
+        for e in estudiantes:
+            if e['nombre']==nombre:
+                print('Calificacion de ' + str(e['nombre']) + " = " + str(e['nota']))
+
+    def imprimir_estudiantes():
+        for e in estudiantes:
+            print(str(e['nombre']))
+    
+    def estudiante_mayor():
+        mayor=0
+        for e in estudiantes:            
+            if mayor < int(e['edad']):
+                mayor = int(e['edad'])
+                est= e
+
+        print("El estudiante mayor es: " + str(est['nombre']) + " con " + str(est['edad']) + " años.")
+
+
+
+    while True:
+        print('¿Que desea hacer?')
+        print('1. Ingresar un nuevo estudiante')
+        print('2. Buscar estudiante')
+        print('3. Imprimir nombre estudiantes')
+        print('4. Imprimir nombre de estudiante mayor')
+        print('5. Hallar media y desviación estandard de las calificaciones')
+        print('0. para salir')
+
+        opcion=int(input())
+
+        if opcion==1:
+            crear_estudiante()
+        if opcion==2:
+            buscar_estudiante()
+        if opcion==3:
+            imprimir_estudiantes()
+        if opcion==4:
+            estudiante_mayor()
+            
+        if opcion==0:
+            break
+        
+    
+    

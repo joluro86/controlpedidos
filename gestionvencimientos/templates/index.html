@@ -46,21 +46,17 @@
   
     <div class="header" id="sub-header">
       <ul class="nav">
+
+        <li class="nav-item" id="jeni">
+          <a class="nav-link" href="{% url 'jeni' %}">Jennifer</a>
+        </li> 
+        
         {% if request.user.is_authenticated %}
         <li class="nav-item" id="inicio">
           <a class="nav-link" href="{% url 'home' %}">Inicio</a>
-        </li>
-        <li class="nav-item" id="pendi_index">
-          <a class="nav-link" id="pendi_a" href="{% url 'menu_pendientes' %}">Pendientes</a>
-        </li>
-        <li class="nav-item" id="pendi_index">
-          <a class="nav-link" id="pendi_a" href="{% url 'novedades_acta' %}">Novedades</a>
-        </li>
-        <li class="nav-item" id="pendi_index">
-          <a class="nav-link" id="pendi_a" href="{% url 'gestionar_acta_perseo_inventario' %}">Inventario bd</a>
-        </li>
-        <li class="nav-item" id="pendi_index">
-          <a class="nav-link" id="pendi_a" href="{% url 'calculo_inventario_por_oficial' %}">Calculo inv oficial</a>
+        </li>        
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'calculo_inventario_por_oficial' %}">Calculo inv oficial</a>
         </li>
        
         {% endif %}
@@ -70,21 +66,8 @@
             Importar
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="/admin/gestionvencimientos/ans/import/" target="blank">Extracción</a></li>
-            <li><a class="dropdown-item" href="/admin/gestionvencimientos/acta/import/" target="blank">Acta revisión</a></li>
             <li><a class="dropdown-item" href="/admin/gestionvencimientos/matperseo/import/" target="blank">Perseo</a></li>
             <li><a class="dropdown-item" href="/admin/gestionvencimientos/matfenix/import/" target="blank">Fenix</a></li>
-          </ul>
-        </li>
-
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
-            Pedidos
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="#" onclick="fechas_busqueda_epm()">Vence epm</a></li>
-            <li><a class="dropdown-item" href="{% url 'programador' %}">Programador</a></li>
-            
           </ul>
         </li>
 
@@ -102,19 +85,38 @@
 
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
-            Ejecutar
+            Revisión Acta
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="#" onclick="gestion_bd()">Gestionar BD extracción</a></li>
-            <li><a class="dropdown-item" href="#" onclick="reiniciar_bd()">Reiniciar BD extracción</a></li>
+            <li><a class="dropdown-item" href="/admin/gestionvencimientos/acta/import/" target="blank">Importar Acta revisión</a></li>
             <li><a class="dropdown-item" href="{% url 'calculo_novedades' %}" >Calculo Novedades Acta</a></li>            
             <li><a class="dropdown-item" href="{% url 'limpiarnov' %}" >Reiniciar Novedades</a></li>
             <li><a class="dropdown-item" href="{% url 'limpiaracta' %}">Reiniciar Acta Materiales</a></li>
             <li><a class="dropdown-item" href="{% url 'gestionbdmat' %}">Gestionar BD Materiales</a></li>
             <li><a class="dropdown-item" href="{% url 'faltantesenperseo' %}">Calculo Materiales Perseo</a></li>
-            <li><a class="dropdown-item" href="#" >Gestión Fenix</a></li>           
+            <li class="nav-item" id="pendi_index">
+              <a class="dropdown-item" id="pendi_a" href="{% url 'novedades_acta' %}">Novedades</a>
+            </li>
+            <li class="nav-item" id="pendi_index">
+              <a class="dropdown-item" id="pendi_a" href="{% url 'gestionar_acta_perseo_inventario' %}">Gestión Inventario bd Perseo</a>
+            </li>
           </ul>
         </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+            Gestión Ans
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item"id="pendi_a" href="{% url 'menu_pendientes' %}">Pendientes</a></li>
+            <li><a class="dropdown-item" href="/admin/gestionvencimientos/ans/import/" target="blank">Subir extracción</a></li>
+            <li><a class="dropdown-item" href="#" onclick="gestion_bd()">Gestionar BD extracción</a></li>
+            <li><a class="dropdown-item" href="#" onclick="reiniciar_bd()">Reiniciar BD extracción</a></li>
+            <li><a class="dropdown-item" href="#" onclick="fechas_busqueda_epm()">Vence epm</a></li>
+            <li><a class="dropdown-item" href="{% url 'programador' %}">Programador</a></li>
+          </ul>
+        </li>
+
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
             Programar
@@ -140,16 +142,12 @@
     </div>
 
     {% block content %}
-
     <p class="text-center mt-4 text-primary fw-bold fs-2">Bienvenido {{ user.username }} a la app para la gestión de ANS pendientes.</p>
-
     {% endblock content %} 
    
     {% block js %}
-
     <script src="{% static 'js/js_pendientes.js' %}"></script>
     <script src="{% static 'js/logica_epm.js' %}"></script>
-
     {% endblock js %}
 
   </body>

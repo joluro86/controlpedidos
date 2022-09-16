@@ -1,9 +1,6 @@
 from tkinter import CASCADE
 from django.db import models
 
-
-# Create your models here.
-
 class Ans(models.Model):    
     Pedido = models.TextField(max_length=100, default=0, null=True)
     Subped = models.CharField(max_length=100, default=0, null=True)
@@ -63,7 +60,6 @@ class Ans(models.Model):
     def __str__(self):
         return str(self.Pedido)
 
-
 class Encargado(models.Model):
     nombre = models.CharField(max_length=50, null=True)
 
@@ -73,7 +69,6 @@ class Encargado(models.Model):
 
     def __str__(self):
         return self.nombre
-
 
 class Actividad(models.Model):
     nombre = models.CharField(max_length=50, null=True)
@@ -95,7 +90,6 @@ class Actividad_epm(models.Model):
         verbose_name = "Actividad epm"
         verbose_name_plural = "Actividades epm"
 
-
 class Vencido(models.Model):
     Pedido = models.TextField(max_length=100, default=0)
     Instalación = models.CharField(max_length=5000, null=True)
@@ -116,62 +110,6 @@ class Municipio(models.Model):
         verbose_name = "Municipio"
         verbose_name_plural = "Municipios"
 
-
-
-class Novedad_acta(models.Model):    
-    pedido = models.CharField(max_length=200, default=0)
-    actividad = models.CharField(max_length=200, default=0)
-    pagina = models.CharField(max_length=200, default=0)
-    item = models.CharField(max_length=200, default=0)
-    novedad = models.CharField(max_length=200, default=0)
-    estado = models.CharField(max_length=100, default="Aplica")
-
-
-    class Meta:
-        ordering = ["actividad"]
-        verbose_name = "Novedades Acta"
-        verbose_name_plural = "Novedades Acta"
-        
-    def __str__(self):
-        return str(self.pedido)+ " " + str(self.novedad)
-
-class Acta(models.Model):    
-    pedido=models.CharField(max_length=100, default=0)
-    area_operativa=models.CharField(max_length=100, default=0)
-    subz=models.CharField(max_length=100, default=0)
-    ruta=models.CharField(max_length=100, default=0)
-    municipio=models.CharField(max_length=100, default=0)
-    contrato=models.CharField(max_length=100, default=0)
-    acta=models.CharField(max_length=100, default=0)
-    actividad=models.CharField(max_length=100, default=0)
-    fecha_estado=models.CharField(max_length=100, default=0)
-    pagina=models.CharField(max_length=100, default=0)
-    urbrur=models.CharField(max_length=100, default=0)
-    tipre=models.CharField(max_length=100, default=0)
-    red_interna=models.CharField(max_length=100, default=0)
-    tipo_operacion=models.CharField(max_length=100, default=0)
-    descent=models.CharField(max_length=100, default=0)
-    tipo=models.CharField(max_length=100, default=0)
-    cobro=models.CharField(max_length=100, default=0)
-    suminis=models.CharField(max_length=100, default=0)
-    item_cont=models.CharField(max_length=100, default=0)
-    item_res=models.CharField(max_length=100, default=0)
-    cantidad=models.CharField(max_length=100, default=0)
-    vlr_cliente=models.CharField(max_length=100, default=0)
-    valor_costo=models.CharField(max_length=100, default=0)
-    tipo_item=models.CharField(max_length=100, default=0)
-
-
-    class Meta:
-        ordering = ["actividad"]
-        verbose_name = "Acta"
-        verbose_name_plural = "Acta"
-        
-    def __str__(self):
-        return str(self.pedido)
-
-## aqui
-
 class NumeroActa(models.Model):
     numero= models.IntegerField()
 
@@ -181,8 +119,6 @@ class NumeroActa(models.Model):
 
     def __str__(self):
         return str('Acta # ' + str(self.numero))
-
-
 
 class Guia(models.Model):
     nombre_perseo = models.CharField(verbose_name='Nombre Perseo', max_length=100)
@@ -194,7 +130,6 @@ class Guia(models.Model):
 
     def __str__(self):
         return str(self.nombre_perseo)
-
 
 class matperseo(models.Model):
     concatenacion= models.CharField(verbose_name='Concat', max_length=100, default="0")
@@ -233,7 +168,6 @@ class matfenix(models.Model):
     def __str__(self):
         return str(self.pedido)
 
-
 class faltanteperseo(models.Model):
     concatenacion= models.CharField(verbose_name='Concat', max_length=100, default="0")
     pedido=models.CharField(verbose_name='Pedido', max_length=10)
@@ -255,7 +189,6 @@ class faltanteperseo(models.Model):
     def __str__(self):
         return str(self.pedido)
 
-
 class Oficial(models.Model):
     nombre = models.CharField(verbose_name='Oficial', max_length=500)
     
@@ -272,22 +205,34 @@ class Inicio(models.Model):
     cantidad = models.CharField(verbose_name='Cantidad', max_length=100)
     
     class Meta:
-        verbose_name = 'Inicio'
-        verbose_name_plural = 'Inicio'
+        verbose_name = 'Cantidadi Inicio Oficial'
+        verbose_name_plural = 'Cantidadi Inicio Oficial'
 
     def __str__(self):
         return str(self.encargado) + " tiene de " + str(self.codigo)+ " " + str(self.cantidad)
 
 class Despacho(models.Model):
     codigo = models.CharField(verbose_name='Código', max_length=100)
-    codigo_despacho = models.CharField(verbose_name='Código despacho', max_length=100)
     fecha = models.CharField(verbose_name='Fecha', max_length=500)
     encargado = models.CharField(verbose_name='Encargado', max_length=500, default='0')
     cantidad = models.CharField(verbose_name='Cantidad', max_length=100, default='0')
     
     class Meta:
-        verbose_name = 'Despacho'
-        verbose_name_plural = 'Despachos'
+        verbose_name = 'Despacho oficial'
+        verbose_name_plural = 'Despachos oficiales'
+
+    def __str__(self):
+        return str(self.codigo)
+
+class Reintegro(models.Model):
+    codigo = models.CharField(verbose_name='Código', max_length=100)
+    fecha = models.CharField(verbose_name='Fecha', max_length=500)
+    encargado = models.CharField(verbose_name='Encargado', max_length=500, default='0')
+    cantidad = models.CharField(verbose_name='Cantidad', max_length=100, default='0')
+    
+    class Meta:
+        verbose_name = 'Reintegro oficial'
+        verbose_name_plural = 'Reintegros oficiales'
 
     def __str__(self):
         return str(self.codigo)
@@ -338,6 +283,7 @@ class Stock(models.Model):
     codigo = models.CharField(verbose_name='Código', default='0', max_length=100)
     inicio = models.CharField(verbose_name='Inicio', default='0', max_length=100)
     despachado = models.CharField(verbose_name='Despachado', default='0', max_length=100)
+    reintegrado = models.CharField(verbose_name='Reintegrado', default='0', max_length=100)
     epm = models.CharField(verbose_name='Epm', default='0', max_length=100)
     diferencia = models.CharField(verbose_name='Diferencia', default='0', max_length=100)
 

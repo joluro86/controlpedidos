@@ -1,13 +1,12 @@
 from asyncio.windows_events import NULL
 from datetime import date, datetime, timedelta
+from email.policy import HTTP
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 import holidays_co
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.contrib.auth.models import User, auth
-import pandas as pd
-from gestionvencimientos.models import Acta, Actividad, Actividad_epm, Ans, Despacho, Encargado, Guia, Inicio, Liquidacion_acta_epm, Material_A_Buscar, Material_utilizado_perseo, Municipio, Novedad_acta, NumeroActa, Oficial, Stock, Vencido, faltanteperseo, matfenix, matperseo
+from gestionvencimientos.models import *
 
 @login_required
 def index(request):
@@ -79,7 +78,7 @@ def limpiar_base(request):
         if ans.Subzona != "Uraba":
             ans.delete()
 
-        elif ans.Actividad != "ACREV" and ans.Actividad != "AEJDO" and ans.Actividad != "ARTER" and ans.Actividad != "DIPRE" and ans.Actividad != "INPRE" and ans.Actividad != "REEQU" and ans.Actividad != "APLIN" and ans.Actividad != "ALEGA" and ans.Actividad != "ALEGN" and ans.Actividad != "ALECA" and ans.Actividad != "ACAMN" and ans.Actividad != "AMRTR":
+        elif ans.Actividad != "FSE" and ans.Actividad != "INFSM" and ans.Actividad != "ACREV" and ans.Actividad != "AEJDO" and ans.Actividad != "ARTER" and ans.Actividad != "DIPRE" and ans.Actividad != "INPRE" and ans.Actividad != "REEQU" and ans.Actividad != "APLIN" and ans.Actividad != "ALEGA" and ans.Actividad != "ALEGN" and ans.Actividad != "ALECA" and ans.Actividad != "ACAMN" and ans.Actividad != "AMRTR":
             ans.delete()
 
     return redirect("gestionbd")
@@ -239,7 +238,7 @@ def gestion_bd(request):
         if ans.Actividad != "DSPRE"  and ans.Actividad != "AEJDO" and ans.Actividad != "ACREV" and ans.Actividad != "ARTER" and ans.Actividad != "DIPRE" and ans.Actividad != "ACREV" and ans.Actividad != "INPRE" and ans.Actividad != "REEQU" and ans.Actividad != "APLIN" and ans.Actividad != "ALEGA" and ans.Actividad != "ALEGN" and ans.Actividad != "ALECA" and ans.Actividad != "ACAMN" and ans.Actividad != "AMRTR":
             ans.delete()
             
-        if ans.Concepto != "406" and ans.Concepto != "414" and ans.Concepto != "430" and ans.Concepto != "495" and ans.Concepto != "PENDI" and ans.Concepto != "FSE" and ans.Concepto != "PPRG" and ans.Concepto != "PROG":
+        if ans.Concepto != "INFSM" and ans.Concepto != "498" and ans.Concepto != "406" and ans.Concepto != "414" and ans.Concepto != "430" and ans.Concepto != "495" and ans.Concepto != "PENDI" and ans.Concepto != "FSE" and ans.Concepto != "PPRG" and ans.Concepto != "PROG":
             ans.delete()
 
     aneses = Ans.objects.all()
@@ -449,37 +448,19 @@ def acrev(request):
     aeneses = cambiar_formato_fecha(aeneses)
     return render(request, "acrev.html", {"aneses": aeneses} )
 
-def amrtr(request):
-    """
-    amrtr = pd.DataFrame({'AMRTR': Ans.objects.filter(Actividad='AMRTR')})
-
-    with pd.ExcelWriter("C:\JOLURO\AMRTR.xlsx") as writer:
-        amrtr.to_excel(writer, sheet_name="Fruits", index=False)
-
-    """
+def inconsistencias(request):
     
-    aeneses = Ans.objects.filter(Actividad = "AMRTR").filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495")| Q(Concepto="430"))
-    aeneses = cambiar_formato_fecha(aeneses)
-
-    return render(request, "amrtr.html", {"aneses": aeneses} )
-   
-
-def lega(request):
+    aeneses1 = Ans.objects.filter(Concepto='FSE') 
+    aeneses2 = Ans.objects.filter(Concepto='INFSM')
+    aenese=[]
+    print(len(aeneses2))
+    for a in aeneses1:
+        aenese.append(a)
+    for ae in aeneses2:
+        aenese.append(ae)
     
-    aeneses = Ans.objects.filter(Q(Actividad="ALEGA") | Q(Actividad="ALEGN") | Q(Actividad="ALECA") |Q(Actividad="ACAMN") ).filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495")| Q(Concepto="430"))
-    aeneses = cambiar_formato_fecha(aeneses)
-    return render(request, "lega.html", {"aneses": aeneses} )
-
-def direccionamiento(request):
-    
-    aeneses = Ans.objects.filter(Q(Actividad="ACREV")).filter(Tipo_Dirección = "Urbano").filter(Concepto = "PPRG")
-    
-    return render(request, "direccionamiento.html", {"aneses": aeneses} )
-
-def programador(request):
-    aeneses = Ans.objects.all()
-    
-    return render(request, "programador.html", {"aneses": aeneses} )
+    aeneses = cambiar_formato_fecha(aenese)
+    return render(request, "inconsistencias.html", {"aneses": aeneses} )
 
 def calculo_last_week(request, id_dia):
     
@@ -509,508 +490,6 @@ def calculo_last_week(request, id_dia):
 
         list_ans = busqueda_pendientes((lunes-timedelta(days=3)).strftime('%Y-%m-%d'))
         return render(request, "pendientes_last_week.html", {'id_dia':id_dia,'encargados': encargados,'aneses': list_ans, 'total': len(list_ans), 'fecha': (lunes+timedelta(days=11)).strftime('%Y-%m-%d')})
-
-def novedades_acta(request):
-    novedades={}
-    try:
-        novedades=Novedad_acta.objects.all()
-    except:
-        pass
-    return render(request, "analisis.html", {'novedades':novedades})
-
-def calculo_novedades_acta(request):
-    pedidos= Acta.objects.all()
-    print("tamañao: " + str(len(pedidos)))
-    cont=1
-    for pedido in pedidos:
-        
-        if pedido.item_cont=='0':
-            pedido.item_cont= pedido.suminis
-            pedido.save()
-
-        try:
-            codigo = pedido.item_cont
-            codigo_ultima_letra=codigo[-1]
-            if codigo_ultima_letra=='A' or codigo_ultima_letra=='P':
-               pedido.item_cont= str(codigo[:-1])
-               pedido.save()
-                
-        except:
-            pass
-        
-        pagina=pedido.pagina
-
-        if (pagina[6:9]!='100' and pedido.urbrur=='U') or (pagina[6:9]!='200' and pedido.urbrur=='R'):
-            try:
-                busquedad_tipo_pagina= Novedad_acta.objects.filter(pedido=pedido.pedido).filter(novedad='Tipo página').count()
-                if busquedad_tipo_pagina==0:
-                    novedad = "Tipo página"  
-                    crear_novedad(pedido, novedad)
-
-            except:
-                pass
-        
-        if pedido.actividad=='AEJDO':
-            if pedido.item_cont=='A 01':
-
-                    try:
-                        busquedad_a04= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='A 04').count()
-
-                        if busquedad_a04==0:
-                            novedad = "A 01=1, A 04=0"  
-                            crear_novedad(pedido, novedad)        
-                    except:
-                        pass
-                    
-                    try:
-                        busquedad_A23= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='A 23').count()
-                        if busquedad_A23==0:
-                            novedad = "A 01=1, A 23=0" 
-                            crear_novedad(pedido, novedad)
-                    except:                        
-                        pass 
-
-                    nov = "A 01=1,"
-                    busqueda_item(pedido, '200410', '200411', nov)
-                    busqueda_item(pedido, '211829', 0, nov)
-                    busqueda_item(pedido, '200092', '200093', nov) 
-                    busqueda_item(pedido, '200316', 0, nov)
-                    busqueda_item(pedido, '211357', 0, nov)
-                    busqueda_item(pedido, '213333', 0, nov)
-                    #busqueda_item(pedido, '215887', 0, nov) 
-                    busqueda_item(pedido, '219404', 0, nov) 
-                    calculo_incompatible_A01(pedido, nov)
-
-        if pedido.actividad=='DSPRE':
-            if pedido.tipre=='ENEPRE':
-                calculo_enepre(pedido)
-
-            if pedido.tipre=='ENESUB':
-                calculo_enepre(pedido)
-
-        
-        if pedido.item_cont=='A 02':
-            nov = "A 02=1,"
-            busqueda_item(pedido, '211829', 0, nov)
-        if pedido.item_cont=='A 10' or pedido.item_cont=='A 11':
-            busqueda_item(pedido, '200410', 0, pedido.item_cont)
-            busqueda_item(pedido, '211829', 0, pedido.item_cont)
-
-        if pedido.item_cont=='211829':
-            insumo= "211829"
-            busqueda_insumo(pedido, insumo)
-         
-
-        if pedido.item_cont=='A 04':
-            nov = "A 04=1,"
-            busqueda_item(pedido, '210948', '210949', nov)
-        
-        if pedido.item_cont=='210947' or pedido.item_cont=='210948' or pedido.item_cont=='210949':
-            insumo = str(pedido.item_cont)
-            busqueda_insumo(pedido, insumo)
-
-        if pedido.item_cont=='A 06':
-            nov = "A 06=1,"
-            busqueda_item(pedido, '200410', '200411', nov)  
-        
-        if pedido.item_cont=='200410' or pedido.item_cont=='200411':
-            insumo = str(pedido.item_cont)
-            busqueda_insumo(pedido, insumo)
-                    
-        if pedido.item_cont=='A 23':
-            nov = "A 23=1,"
-            busqueda_item(pedido, '211673', '210947', nov) 
-        
-        if pedido.item_cont=='211673':
-            insumo = str(pedido.item_cont)
-            busqueda_insumo(pedido, insumo)
-
-        if pedido.item_cont=='A 24':
-            nov = "A 24=1,"
-            busqueda_item(pedido, '211357', 0, nov) 
-
-        if pedido.item_cont=='211357':
-            insumo = str(pedido.item_cont)
-            busqueda_insumo(pedido, insumo)
-
-        if pedido.item_cont=='A 25':
-            nov = "A 25=1,"
-            busqueda_item(pedido, '213333', 0, nov) 
-
-        if pedido.item_cont=='213333':
-            insumo = str(pedido.item_cont)
-            busqueda_insumo(pedido, insumo)
-        
-        if pedido.item_cont=='A 34':
-            nov = "A 34=1,"
-            busqueda_item(pedido, '211686', 0, nov)
-        
-        if pedido.item_cont=='211686':
-            insumo = str(pedido.item_cont)
-            busqueda_insumo_por_item(pedido, insumo, 'A 34')
-
-        if pedido.item_cont=='A 39':
-            nov = "A 39=1,"
-            busqueda_item(pedido, '200410', '200411', nov)
-            busquedad_200410= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='200410')
-            busquedad_200411= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='200411')
-
-            for b in busquedad_200410:
-                if len(busquedad_200410)>0:
-                    if float(b.cantidad)<8:
-                        crear_novedad(pedido, 'Cantidad de cable 200410 ó 200411 menor a 8')
-                        
-
-            for b in busquedad_200411:
-                if len(busquedad_200411)>0:
-                    if float(b.cantidad)<8:
-                        crear_novedad(pedido, 'Cantidad de cable 200410 ó 200411 menor a 8')
-
-        
-        if pedido.item_cont=='A 42':
-            nov = "A 42=1,"
-            busqueda_item(pedido, '200410', '200411', nov)
-
-        if pedido.item_cont=='200092' or pedido.item_cont=='200093' or pedido.item_cont=='200098':
-            insumo = str(pedido.item_cont)
-            busqueda_insumo(pedido, insumo)
-
-    novedades = Novedad_acta.objects.all()
-
-    return render(request, "analisis.html", {'novedades':novedades})
-
-def busqueda_insumo_por_item(pedido, insumo, item):
-    try:
-        pedidos = Acta.objects.filter(pedido=pedido)
-
-        encontreinsumo=0
-        for p in pedidos:
-            letra = p.item_cont[0]
-            if letra=='A':
-                    
-                if p.item_cont==item:
-                    encontreinsumo=1
-
-        if encontreinsumo==0:
-            nov= insumo + ', insumo sin actividad'
-            crear_novedad(pedido, nov)
-
-                                 
-    except:
-        pass
-
-def busqueda_insumo(pedido, insumo):
-    try:
-        pedidos = Acta.objects.filter(pedido=pedido)
-
-        if insumo=='200092' or insumo=='200093' or insumo=='200098':
-            encontreinsumo=0
-            for p in pedidos:
-                letra = p.item_cont[0]
-                if letra=='A':
-                    
-                    if p.item_cont=='A 03' or p.item_cont=='A 44' or p.item_cont=='A 01' or p.item_cont=='A 27':
-                        encontreinsumo=1
-
-            if encontreinsumo==0:
-                        nov= insumo + ', insumo sin actividad'
-                        crear_novedad(pedido, nov)
-
-        if insumo=='211357':
-            encontreinsumo=0
-            for p in pedidos:
-                letra = p.item_cont[0]
-                if letra=='A':
-                    
-                    if p.item_cont=='A 24' or p.item_cont=='A 01' :
-                        encontreinsumo=1
-
-            if encontreinsumo==0:
-                        nov= insumo + ', insumo sin actividad'
-                        crear_novedad(pedido, nov)
-        
-        if insumo=='213333':
-            encontreinsumo=0
-            for p in pedidos:
-                letra = p.item_cont[0]
-                if letra=='A':
-                    
-                    if p.item_cont=='A 25' or p.item_cont=='A 01' :
-                        encontreinsumo=1
-
-            if encontreinsumo==0:
-                        nov= insumo + ', insumo sin actividad'
-                        crear_novedad(pedido, nov)
-
-        if insumo=='211673':
-            encontreinsumo=0
-            for p in pedidos:
-                letra = p.item_cont[0]
-                if letra=='A':
-                    
-                    if p.item_cont=='A 23':
-                        encontreinsumo=1
-
-            if encontreinsumo==0:
-                        nov= insumo + ', insumo sin actividad'
-                        crear_novedad(pedido, nov)
-
-        if insumo=='200410' or insumo=='200411':
-            encontreinsumo=0
-            for p in pedidos:
-                letra = p.item_cont[0]
-                if letra=='A':
-                    
-                    if p.item_cont=='A 06' or p.item_cont=='A 01' or p.item_cont=='A 39' or p.item_cont=='A 41' or p.item_cont=='A 42':
-                        encontreinsumo=1
-
-            if encontreinsumo==0:
-                        nov= insumo + ', insumo sin actividad'
-                        crear_novedad(pedido, nov)
-        
-        if insumo=='211829':
-            encontreinsumo=0
-            for p in pedidos:
-                letra = p.item_cont[0]
-                if letra=='A':
-                    
-                    if p.item_cont=='A 02' or p.item_cont=='A 27' or p.item_cont=='A 01':
-                        encontreinsumo=1
-
-            if encontreinsumo==0:
-                        nov= insumo + ', insumo sin actividad'
-                        crear_novedad(pedido, nov)
-
-        if insumo=='210947':
-
-            encontreinsumo=0
-
-            for p in pedidos:
-                letra = p.item_cont[0]
-
-                if letra=='A':
-                    if p.item_cont=='A 23':
-                        encontreinsumo=1
-            
-            if encontreinsumo==0:
-                        nov= insumo + ', insumo sin actividad'
-                        crear_novedad(pedido, nov)
-
-        if insumo=='210948' or insumo=='210949':
-
-            encontreinsumo=0
-
-            for p in pedidos:
-                letra = p.item_cont[0]
-                if letra=='C':
-                    encontreinsumo=1
-                if letra=='A':
-
-                    if p.item_cont=='A 04' or p.item_cont=='A 01' or p.actividad=='ALEGA' or p.actividad=='ALECA' or p.actividad=='ALEGN' or p.actividad=='ACAMN':
-                        encontreinsumo=1
-
-            if encontreinsumo==0:
-                        nov= insumo + ', insumo sin actividad'
-                        crear_novedad(pedido, nov)
-                                 
-    except:
-        pass
-
-def busqueda_item(pedido, item, item2, novedad):
-
-    if item=='210948':
-        try:
-            busquedad_210949= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont=item).count()
-            busquedad_210948= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='210949').count()
-
-            if busquedad_210949==0 and busquedad_210948==0:
-                novedad = novedad+" "+str(item)+"=0, 210949=0" 
-                crear_novedad(pedido, novedad)
-        except:
-            pass
-    elif pedido.item_cont=='A 42':
-        try:
-            busquedad_200410= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont=item).count()
-            busquedad_200411= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='200411').count()
-            busquedad_200316= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='200316').count()
-
-            if busquedad_200410==0 and busquedad_200411==0 and busquedad_200316==0:
-                novedad = novedad+" "+str(item)+"=0, 200411=0, 200316=0 " 
-                crear_novedad(pedido, novedad)
-        except:
-            pass
-
-    elif (pedido.item_cont=='A 10' or pedido.item_cont=='A 11') and item=='200410':
-        try:
-            busquedad_200410= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont=item).count()
-            busquedad_200411= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='200411').count()
-
-            busquedad_a03= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='A 03').count()
-            busquedad_a28= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='A 28').count()
-            busquedad_a29= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='A 29').count()
-
-            if busquedad_a03!=0 and busquedad_a28!=0 and busquedad_a29!=0:
-
-                if busquedad_200410==0 and busquedad_200411==0:
-                    novedad = novedad+" "+str(item)+"=0, 200410=0, 200411=0 " 
-                    crear_novedad(pedido, novedad)
-        except:
-            pass    
-
-    elif item2 != 0:
-        
-        try:
-            busquedad_1= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont=item).count()
-            busquedad_2= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont=item2).count()
-
-            if busquedad_1==0 and busquedad_2==0:
-                novedad = novedad+" "+str(item)+"=0, " +str(item2)+"=0, " 
-                crear_novedad(pedido, novedad)
-        except:
-            pass
-    
-    else:
-        try:
-            busquedad= Acta.objects.filter(pedido=pedido.pedido).filter(item_cont=item).count()
-            if busquedad==0:
-                novedad = novedad+" "+str(item)+"=0" 
-                crear_novedad(pedido, novedad)
-        except:
-            pass
-
-def calculo_incompatible_A01(pedido, novedad):
-    try:
-        pedidos =  Acta.objects.filter(pedido=pedido.pedido)
-        cont=1
-        for p in pedidos:
-            letra = p.item_cont[0]
-            if letra=='A':
-                if p.item_cont!='A 01' and p.item_cont!='A 04' and p.item_cont!='A 23':
-                    nov= 'A 01=1, '+ p.item_cont + ">0. Incompatibles."
-                    crear_novedad(p, nov)
-                
-    except:
-        pass
-
-def calculo_incompatible_A27(pedido, novedad):
-    try:
-        pedidos =  Acta.objects.filter(pedido=pedido.pedido)
-        cont=1
-        for p in pedidos:
-            letra = p.item_cont[0]
-            if letra=='A':
-                if p.item_cont=='A 02' or p.item_cont=='A 44' or p.item_cont=='A 03':
-                    nov= 'A 27=1, '+ p.item_cont + ">0. Incompatibles."
-                    crear_novedad(p, nov)                
-    except:
-        pass
-
-def calculo_incompatible_A44(pedido, novedad):
-    try:
-        pedidos =  Acta.objects.filter(pedido=pedido.pedido)
-        cont=1
-        for p in pedidos:
-            letra = p.item_cont[0]
-            if letra=='A':
-                if p.item_cont=='A 27' or p.item_cont=='A 03':
-                    nov= 'A 44=1, '+ p.item_cont + ">0. Incompatibles."
-                    crear_novedad(p, nov)                
-    except:
-        pass
-
-def calculo_incompatible_A03(pedido, novedad):
-    try:
-        pedidos =  Acta.objects.filter(pedido=pedido.pedido)
-        cont=1
-        for p in pedidos:
-            letra = p.item_cont[0]
-            if letra=='A':
-                if p.item_cont=='A 27' or p.item_cont=='A 44':
-                    nov= 'A 03=1, '+ p.item_cont + ">0. Incompatibles."
-                    crear_novedad(p, nov)                
-    except:
-        pass
-        
-def crear_novedad(pedido, nov):
-    novedad = Novedad_acta()
-    novedad.pedido = pedido.pedido
-    novedad.actividad = pedido.actividad
-    novedad.pagina = pedido.pagina
-    novedad.item = pedido.item_cont
-    novedad.novedad = nov
-    novedad.save()
-
-def limpiar_novedades(request):
-    Novedad_acta.objects.all().delete()
-    Material_utilizado_perseo.objects.all().delete()
-    return redirect('novedades_acta')
-
-def limpiar_acta(request):
-    Acta.objects.all().delete()
-    return redirect('home')
-
-def calculo_enepre(pedido):
-    if pedido.item_cont=='A 03':
-        try:
-            novedad="A 03=1, "
-            busqueda_item(pedido, 'A 28', 0, novedad)
-            busqueda_item(pedido, 'A 29', 0, novedad)
-            busqueda_item(pedido, '219404', 0, novedad) 
-            busqueda_item(pedido, '220683',  0, novedad)  
-            calculo_incompatible_A03(pedido, novedad)      
-        except:
-            pass
-    
-    if pedido.item_cont=='A 27':
-        try:
-            novedad="A 27=1, "
-            busqueda_item(pedido, 'A 41', 0, novedad)
-            busqueda_item(pedido, '219404', 0, novedad)    
-            busqueda_item(pedido, 'A 10', 'A 11', novedad) 
-            calculo_incompatible_A27(pedido, novedad)  
-        except:
-            pass
-    
-    if pedido.item_cont=='A 44':
-        try:
-            novedad="A 44=1, "
-            busqueda_item(pedido, 'A 39', 0, novedad)    
-            busqueda_item(pedido, 'A 40', 'A 41', novedad)  
-            busqueda_item(pedido, '219404', 0, novedad) 
-            calculo_incompatible_A44(pedido, novedad)
-
-            pedidos =  Acta.objects.filter(pedido=pedido.pedido)
-
-            encontre_A40=0
-            encontre_A10=0
-            encontre_A11=0
-            encontre_riel=0
-
-            for p in pedidos:
-                if p.item_cont=='A 40':
-                    encontre_A40=1
-                if p.item_cont=='A 10':
-                    encontre_A10=1
-                if p.item_cont=='A 11':
-                    encontre_A11=1
-                if p.item_cont=='220683':
-                    encontre_riel=1
-            
-            if encontre_A40==0 and encontre_A10==0 and encontre_A11==0:
-                novedad= novedad+"A 10=0, A 11=0"
-                crear_novedad(pedido, novedad)
-            if encontre_A40==1:
-                if encontre_A10==1 or encontre_A11==1:
-                    novedad= novedad+"A 40 incompatible con A 10 y A 11"
-                    crear_novedad(pedido, novedad)   
-                if encontre_riel==1:
-                    nov= "A 40 excluye riel (220683)."
-                    crear_novedad(pedido, nov)                      
-
-        except:
-            pass
-
-
 ## aqui
 
 def reiniciar(request):
@@ -1147,7 +626,6 @@ def calculo_numero_acta():
             print("error en el acta")
 
 
-
 ## CODIGO INVENTARIO BODEGA
 
 def gestionar_acta_perseo_inventario(request):
@@ -1198,13 +676,10 @@ def gestionar_acta_perseo_inventario(request):
                 p.save()
                 break
 
-        calculo_inventario_por_oficial(request)
-
         return render(request,  "index.html")
 
 def calculo_inventario_por_oficial(request):
-
-      
+        cont=0
         for oficial in Oficial.objects.all():
             for material_a_buscar in Material_A_Buscar.objects.all():
 
@@ -1212,129 +687,48 @@ def calculo_inventario_por_oficial(request):
                 despachado = 0
                 epm = 0
                 diferencia=0
+                reintegro=0
 
+                print("encargado: "+ str(oficial)+ " codigo: "+ str(material_a_buscar))
                 cantidad_inicial_inicio = Inicio.objects.filter(encargado= oficial).filter(codigo=material_a_buscar)            
+                
                 for cant_inicio in cantidad_inicial_inicio:
                     inicio+=float(cant_inicio.cantidad)
-                    #print(str(oficial.nombre)+ " - "+ str(cant_inicio.codigo)+" - c: " + cant_inicio.cantidad)
+                    print("inicio: "+str(inicio) + " cont: " + str(cont))
                 
                 cantidad_despacho = Despacho.objects.filter(encargado= oficial).filter(codigo=material_a_buscar)            
                 for cant_des in cantidad_despacho:
                     despachado+= float(cant_des.cantidad)
-                    #print(str(oficial.nombre)+ " - "+ str(cant_des.codigo)+" - " + str(cant_des.cantidad)+" - " + str(despachado))
+                
+                
+                cantidad_reintegro = Reintegro.objects.filter(encargado= oficial).filter(codigo=material_a_buscar)            
+                for cant_rei in cantidad_reintegro:
+                    cont+=1
+                    reintegro+= float(cant_rei.cantidad)
                     
                 cantidad_usado_en_campo = Liquidacion_acta_epm.objects.filter(encargado= oficial).filter(item_cont=material_a_buscar)            
                 for cant_epm in cantidad_usado_en_campo:
                     epm+= float(cant_epm.cantidad)
-                    #print(str(oficial.nombre)+ " - "+ str(cant_epm.item_cont)+" - " + str(cant_epm.cantidad)+" - " + str(epm))
                 
-                diferencia = int(inicio)+int(despachado)-int(epm)
-                print(str(material_a_buscar.nombre)+str("-")+"inicio:" + str(inicio)+str("-")+"despachado:" + str(despachado)+str("-")+"epm:" + str(epm)+str("-")+"diferencia: -" + str(diferencia))
+                diferencia = int(inicio)+int(reintegro)+int(despachado)-int(epm)
                 
                 stock = Stock()
                 stock.encargado = oficial.nombre
                 stock.codigo = material_a_buscar.nombre
                 stock.inicio = inicio
                 stock.despachado = despachado
+                stock.reintegrado = reintegro
                 stock.epm = epm 
                 stock.diferencia = diferencia
                 stock.save()
 
         return render(request,  "index.html")
 
-def traer_matriz(request):
-    #matriz = llenar_matriz()
-    #print(matriz)
-    algoritmo_estudiantes()
-
+def reiniciar_bd_oficiales(request):
+    #Liquidacion_acta_epm.objects.all().delete()
+    #Inicio.objects.all().delete()
+    #Despacho.objects.all().delete()
+    Stock.objects.all().delete()
+    #Despacho.objects.all().delete()
+    #Reintegro.objects.all().delete()
     return render(request,  "index.html")
-
-
-def crear_matriz():
-    print('Ingrese el numero de filas y columnas:')
-    numero = int(input())
-    m=1
-    n= (-2/3)**m
-
-    matriz = []
-    
-    for r in range(numero):
-        fila=[]
-        for c in range(numero):
-            fila.append(n)
-            m+=1
-            n= (-2/3)**(m)
-            
-        matriz.append(fila)
-
-    return matriz
-
-def algoritmo_estudiantes():
-
-    estudiantes=[]
-
-    def crear_estudiante():
-        print('Ingrese nombre:')
-        nombre = input()
-
-        print('Ingrese edad:')
-        edad = int(input())
-
-        print('Ingrese nota:')
-        nota = float(input())
-
-        estudiante = {
-            'nombre': nombre,
-            'edad': edad,
-            'nota': nota
-        }
-
-        estudiantes.append(estudiante)
-
-    def buscar_estudiante():
-        print('Ingrese nombre a buscar:')
-        nombre = input()
-        for e in estudiantes:
-            if e['nombre']==nombre:
-                print('Calificacion de ' + str(e['nombre']) + " = " + str(e['nota']))
-
-    def imprimir_estudiantes():
-        for e in estudiantes:
-            print(str(e['nombre']))
-    
-    def estudiante_mayor():
-        mayor=0
-        for e in estudiantes:            
-            if mayor < int(e['edad']):
-                mayor = int(e['edad'])
-                est= e
-
-        print("El estudiante mayor es: " + str(est['nombre']) + " con " + str(est['edad']) + " años.")
-
-
-
-    while True:
-        print('¿Que desea hacer?')
-        print('1. Ingresar un nuevo estudiante')
-        print('2. Buscar estudiante')
-        print('3. Imprimir nombre estudiantes')
-        print('4. Imprimir nombre de estudiante mayor')
-        print('5. Hallar media y desviación estandard de las calificaciones')
-        print('0. para salir')
-
-        opcion=int(input())
-
-        if opcion==1:
-            crear_estudiante()
-        if opcion==2:
-            buscar_estudiante()
-        if opcion==3:
-            imprimir_estudiantes()
-        if opcion==4:
-            estudiante_mayor()
-            
-        if opcion==0:
-            break
-        
-    
-    

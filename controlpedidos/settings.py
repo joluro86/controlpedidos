@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'gestionvencimientos',
     'import_export',
     'django.contrib.humanize',
+    'Analisis_acta',
+    'Programacion',
 ]
 
 

@@ -14,10 +14,11 @@
         <tr class="text-center m-0 p-0" style="background-color: #8ee7fa">
           <th scope="col" class="p-0">Pedido</th>
           <th scope="col" class="p-0">Actividad</th>
+          <th scope="col" class="p-0">Municipio</th>
           <th scope="col" class="p-0">Items</th>
           <th scope="col" class="p-0">Página</th>
           <th scope="col" class="p-0">Novedad</th>
-          <th scope="col" class="p-0">Descartar</th>
+          <th scope="col" class="p-0">Tipre</th>
         </tr>
       </thead>
       <tbody>
@@ -26,18 +27,12 @@
         <tr class="text-center p-0 tr">
           <th class="pt-1">{{ a.pedido }}</th>
           <td class="m-0 pb-0">{{ a.actividad }}</td>
+          <td class="m-0 pb-0">{{ a.municipio }}</td>
           <td class="m-0 pb-0">{{ a.item }}</td>
           <td class="m-0 pb-0">{{ a.pagina }}</td>
           <td class="m-0 pb-0">{{ a.novedad }}</td>
-          <td class="m-0 pb-0">
-            <a
-              href="#"
-              onclick="descartar({{ a.id }})"
-              class="m-0 p-0 btn btn-sm text-info"
-              id="btn_cerrar_pedido"
-              ><i class="fas fa-check-circle p-0"></i
-            ></a>
-          </td>
+          <td class="m-0 pb-0">{{ a.tipre }}</td>
+          
         </tr>
 
         {% endfor %}
@@ -72,7 +67,7 @@
           extend: "excelHtml5",
           title:'',
           exportOptions: {
-            columns: [ 0, 1, 2,3, 4, 5 ]
+            columns: [ 0, 1, 2,3, 4, 5, 6 ]
           },
         },    
       ],

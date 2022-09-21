@@ -4,10 +4,12 @@ from django.db import models
 class Novedad_acta(models.Model):    
     pedido = models.CharField(max_length=200, default=0)
     actividad = models.CharField(max_length=200, default=0)
+    municipio = models.CharField(max_length=200, default=0)
     pagina = models.CharField(max_length=200, default=0)
     item = models.CharField(max_length=200, default=0)
     novedad = models.CharField(max_length=200, default=0)
     estado = models.CharField(max_length=100, default="Aplica")
+    tipre = models.CharField(max_length=200, default=0)
 
 
     class Meta:

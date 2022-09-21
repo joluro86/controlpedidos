@@ -5,10 +5,10 @@ from django.shortcuts import redirect, render
 from gestionvencimientos.models import Material_utilizado_perseo
 from Analisis_acta.models import *
 
+
 def calculo_novedades_acta(request):
     pedidos= Acta.objects.all()
-    print("tamañao: " + str(len(pedidos)))
-    cont=1
+
     for pedido in pedidos:
         
         if pedido.item_cont=='0':
@@ -66,6 +66,14 @@ def calculo_novedades_acta(request):
                     busqueda_item(pedido, '213333', 0, nov)
                     busqueda_item(pedido, '219404', 0, nov) 
                     calculo_incompatible_A01(pedido, nov)
+        if pedido.tipre=='ENESUB' and (pedido.item_cont=='A 27' or pedido.item_cont=='A 03' or pedido.item_cont=='A 28' or pedido.item_cont=='A 29'):
+                print("error enesub")
+                nov = 'ENESUB con item ' + str(pedido.item_cont)
+                crear_novedad(pedido, nov)
+        if pedido.tipre=='ENEPRE' and pedido.item_cont=='A 44':
+                print("error ENEPRE")
+                nov = 'ENEPRE con item ' + str(pedido.item_cont)
+                crear_novedad(pedido, nov)
 
         if pedido.actividad=='DSPRE':
             if pedido.tipre=='ENEPRE':
@@ -74,6 +82,8 @@ def calculo_novedades_acta(request):
             if pedido.tipre=='ENESUB':
                 calculo_enepre(pedido)
 
+        if pedido.tipre=='ENESUB' and (pedido.item_cont=='A 27' or pedido.item_cont=='A 03' or pedido.item_cont=='A 28' or pedido.item_cont=='A 29'):
+            print("error enesub")
         
         if pedido.item_cont=='A 02':
             nov = "A 02=1,"
@@ -91,7 +101,7 @@ def calculo_novedades_acta(request):
             nov = "A 04=1,"
             busqueda_item(pedido, '210948', '210949', nov)
         
-        if pedido.item_cont=='210947' or pedido.item_cont=='210948' or pedido.item_cont=='210949':
+        if pedido.item_cont=='210948' or pedido.item_cont=='210949':
             insumo = str(pedido.item_cont)
             busqueda_insumo(pedido, insumo)
 
@@ -267,21 +277,6 @@ def busqueda_insumo(pedido, insumo):
                         nov= insumo + ', insumo sin actividad'
                         crear_novedad(pedido, nov)
 
-        if insumo=='210947':
-
-            encontreinsumo=0
-
-            for p in pedidos:
-                letra = p.item_cont[0]
-
-                if letra=='A':
-                    if p.item_cont=='A 23':
-                        encontreinsumo=1
-            
-            if encontreinsumo==0:
-                        nov= insumo + ', insumo sin actividad'
-                        crear_novedad(pedido, nov)
-
         if insumo=='210948' or insumo=='210949':
 
             encontreinsumo=0
@@ -421,6 +416,8 @@ def crear_novedad(pedido, nov):
     novedad = Novedad_acta()
     novedad.pedido = pedido.pedido
     novedad.actividad = pedido.actividad
+    novedad.municipio = pedido.municipio
+    novedad.tipre = pedido.tipre
     novedad.pagina = pedido.pagina
     novedad.item = pedido.item_cont
     novedad.novedad = nov

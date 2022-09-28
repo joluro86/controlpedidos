@@ -2,7 +2,7 @@ from asyncio.windows_events import NULL
 from datetime import datetime
 from email.policy import HTTP
 from django.shortcuts import redirect, render
-from gestionvencimientos.models import Material_utilizado_perseo
+from  material_oficiales.models import Material_utilizado_perseo
 from Analisis_acta.models import *
 
 

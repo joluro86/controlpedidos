@@ -7,6 +7,7 @@ import holidays_co
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from gestionvencimientos.models import *
+from material_oficiales.models import *
 
 @login_required
 def index(request):
@@ -689,12 +690,10 @@ def calculo_inventario_por_oficial(request):
                 diferencia=0
                 reintegro=0
 
-                print("encargado: "+ str(oficial)+ " codigo: "+ str(material_a_buscar))
                 cantidad_inicial_inicio = Inicio.objects.filter(encargado= oficial).filter(codigo=material_a_buscar)            
                 
                 for cant_inicio in cantidad_inicial_inicio:
                     inicio+=float(cant_inicio.cantidad)
-                    print("inicio: "+str(inicio) + " cont: " + str(cont))
                 
                 cantidad_despacho = Despacho.objects.filter(encargado= oficial).filter(codigo=material_a_buscar)            
                 for cant_des in cantidad_despacho:
@@ -710,7 +709,7 @@ def calculo_inventario_por_oficial(request):
                 for cant_epm in cantidad_usado_en_campo:
                     epm+= float(cant_epm.cantidad)
                 
-                diferencia = int(inicio)+int(reintegro)+int(despachado)-int(epm)
+                diferencia = int(inicio)-int(reintegro)+int(despachado)-int(epm)
                 
                 stock = Stock()
                 stock.encargado = oficial.nombre

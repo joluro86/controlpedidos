@@ -9,7 +9,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User, auth
 import pandas as pd
 from gestionvencimientos.views import cambiar_formato_fecha
-from gestionvencimientos.models import Actividad, Actividad_epm, Ans, Despacho, Encargado, Guia, Inicio, Liquidacion_acta_epm, Material_A_Buscar, Material_utilizado_perseo, Municipio, NumeroActa, Oficial, Reintegro, Stock, Vencido, faltanteperseo, matfenix, matperseo
+from gestionvencimientos.models import *
 
 def acrev(request): 
     aeneses = Ans.objects.filter(Actividad = "ACREV").filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495")| Q(Concepto="430"))

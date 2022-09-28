@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'Analisis_acta',
     'Programacion',
+    'material_oficiales',
 ]
 
 

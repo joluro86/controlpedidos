@@ -5,8 +5,6 @@ from django.urls.conf import include
 from django.conf import settings
 from django.conf.urls.static import static
 
-
-
 from gestionvencimientos.views import *
 urlpatterns = [
     path('admin/', admin.site.urls, name="administrador"),
@@ -30,6 +28,7 @@ urlpatterns = [
 
     path('analisis/', include('Analisis_acta.urls')),
     path('programar/', include('Programacion.urls')),
+    path('material_oficiales/', include('material_oficiales.urls')),
 
     # aqui  gestionar_acta_perseo_inventario
 

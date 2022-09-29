@@ -4,7 +4,7 @@
     <h6 class="m-0 text-center">Pedidos Legalización</h6>
     <table class="table" id="table_id" style="width: 100%; margin: auto">
       <thead>
-        <tr class="text-center"style="background-color: #8ee7fa; font-size: 0.8em;">
+        <tr class="text-center" style="background-color: #8ee7fa; font-size: 0.8em;">
           <th scope="col">Pedido</th>
           <th>Actividad</th>
           <th>Fecha</th>
@@ -31,7 +31,7 @@
           <td>{{ a.Celular_Contacto }}</td>
           <td>{{ a.Instalación }}</td>
           <td>{{ a.Area_Trabajo }}</td>
-          <td>{{ a.Concepto }}</td>  
+          <td>{{ a.Concepto }}</td>
           <td><textarea name="" class="p-1" id="" cols="20" rows="5">{{ a.Observación_Solicitud }}</textarea></td>
         </tr>
 
@@ -52,33 +52,39 @@
       dom: "Bfrtilp",
 
       lengthMenu: [
-            [ 15, 30, 50, -1 ],
-            [ '15', '30', '50', 'Todos' ]
-        ],
-        buttons: [   
+        [15, 30, 50, -1],
+        ['15', '30', '50', 'Todos']
+      ],
+      buttons: [
         {
           extend: "excelHtml5",
-          title:'',
+          title: '',
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
+            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             format: {
-              body: function(data, row, column, node) {
-                  data = $('<p>' + data + '</p>').text();
-                  return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              body: function (data, row, column, node) {
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
               }
-          }
+            }
           },
-        }, 
-           
+        },
+        {
+          extend: "copyHtml5",
+          title: '',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            format: {
+              body: function (data, row, column, node) {
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+            }
+          },
+        },
       ],
     });
   });
 </script>
 
 {% endblock js %}
-
-
-
-
-
-

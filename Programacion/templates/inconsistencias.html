@@ -72,7 +72,7 @@
 
         <tr class="text-center p-0 tr">
           <th class="pt-1">{{ a.Pedido }}</th>
-          <td class="m-0 pb-0">{{ a.fecha_vencimiento}}</td>
+          <td class="m-0 pb-0">{{ a.fecha_vence_epm}}</td>
           <td class="m-0 pb-0">{{ a.Días_ANS }}</td>
           <td class="m-0 pb-0">{{ a.Instalación }}</td>
           <td class="m-0 pb-0">{{ a.Actividad }}</td>
@@ -103,16 +103,29 @@
         
       buttons: [
       {
-        text: 'Week',
-        action: function ( e, dt, node, config ) {
-          window.location.href ="/week/"+1
-        }
-    },   
-        {
           extend: "excelHtml5",
-          title:'',
+          title: '',
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4,5 ]
+            columns: [0, 1, 2, 3, 4, 5],
+            format: {
+              body: function (data, row, column, node) {
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+            }
+          },
+        },   
+    {
+          extend: "copyHtml5",
+          title: '',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5],
+            format: {
+              body: function (data, row, column, node) {
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+            }
           },
         },    
       ],

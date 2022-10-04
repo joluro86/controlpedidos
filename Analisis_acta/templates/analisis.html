@@ -1,15 +1,11 @@
-{% extends 'index.html' %} {% load static %} {% block head %} {% endblock head %} 
+{% extends 'index.html' %} {% load static %} {% block head %} {% endblock head %}
 {% block content %}
 
 <h5 style="color: blue; text-align: center; margin: 20px;">Novedades Acta</h5>
 
 <div class="table-id card mt-1" style="width: 90%; margin: auto">
   <div class="card-body">
-    <table
-      class="table table-sm table-hover"
-      class="display nowrap"
-      id="table_id"
-    >
+    <table class="table table-sm table-hover" class="display nowrap" id="table_id">
       <thead class="p-0">
         <tr class="text-center m-0 p-0" style="background-color: #8ee7fa">
           <th scope="col" class="p-0">Pedido</th>
@@ -32,7 +28,7 @@
           <td class="m-0 pb-0">{{ a.pagina }}</td>
           <td class="m-0 pb-0">{{ a.novedad }}</td>
           <td class="m-0 pb-0">{{ a.tipre }}</td>
-          
+
         </tr>
 
         {% endfor %}
@@ -52,24 +48,32 @@
       dom: "Bfrtilp",
 
       lengthMenu: [
-            [ 15, 30, 50, -1 ],
-            [ '15', '30', '50', 'Todos' ]
-        ],
-        
+        [15, 30, 50, -1],
+        ['15', '30', '50', 'Todos']
+      ],
+
       buttons: [
-      {
-        text: 'Week',
-        action: function ( e, dt, node, config ) {
-          window.location.href ="/week/"+1
-        }
-    },   
+
+        {
+          extend: "copyHtml5",
+          title: '',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5, 6],
+            format: {
+              body: function (data, row, column, node) {
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+            }
+          },
+        },
         {
           extend: "excelHtml5",
-          title:'',
+          title: '',
           exportOptions: {
-            columns: [ 0, 1, 2,3, 4, 5, 6 ]
+            columns: [0, 1, 2, 3, 4, 5, 6]
           },
-        },    
+        },
       ],
     });
   });

@@ -170,6 +170,10 @@ def calculo_novedades_acta(request):
         if pedido.item_cont=='200092' or pedido.item_cont=='200093' or pedido.item_cont=='200098':
             insumo = str(pedido.item_cont)
             busqueda_insumo(pedido, insumo)
+        
+        if pedido.cantidad=='0' or pedido.cantidad=="":
+            crear_novedad(pedido, str(pedido.item_cont)+ ". Cantidad igual a cero.")
+
 
     novedades = Novedad_acta.objects.all()
 

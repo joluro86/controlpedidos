@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'Analisis_acta',
     'Programacion',
     'material_oficiales',
+    'medidores',
 ]
 
 

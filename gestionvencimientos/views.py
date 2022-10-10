@@ -1,6 +1,7 @@
 from asyncio.windows_events import NULL
 from datetime import date, datetime, timedelta
 from email.policy import HTTP
+import pandas as pd 
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 import holidays_co
@@ -8,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from gestionvencimientos.models import *
 from material_oficiales.models import *
+from medidores.models import NovedadMedidores, PedidoMedidores
 
 @login_required
 def index(request):
@@ -290,6 +292,17 @@ def gestion_bd(request):
             print(e)  
 
     return redirect('menu_pendientes')
+
+def calculo_cable_medidores(pedido):
+    try: 
+        mat200410 = Ans.objects.filter(item_cont='200410')
+        mat200411 = Ans.objects.filter(item_cont='200411')
+        if len(mat200410)>0:
+            print(mat200410)
+        if len(mat200410)>0:
+            print(mat200410)
+    except:
+        pass
 
 def cerrar_pedido(request, id_pedido):
    
@@ -731,3 +744,87 @@ def reiniciar_bd_oficiales(request):
     #Despacho.objects.all().delete()
     #Reintegro.objects.all().delete()
     return render(request,  "index.html")
+
+# CODIGO MEDIDORES VS CABLEADO USADO
+
+def importar_acta_medidores(request):
+
+    df = pd.read_excel("C:\JOLURO\MEDIDORES\BASE\Acta_medidores.xlsx") 
+    
+    for index, row in df.iterrows(): 
+
+        pedido = PedidoMedidores()
+        try:
+            pedido.pedido = str(row["pedido"])
+        except:
+            pedido.pedido = str(row["Pedido"])
+        
+        try:
+            pedido.municipio = str(row["municipio"])
+        except:
+            pedido.municipio = str(row["Municipio"])
+        try:
+            pedido.actividad = str(row["actividad"])
+        except:
+            pedido.actividad = str(row["Actividad"])
+        
+        try:
+            pedido.pagina = str(row["pagina"])
+        except:
+            pedido.pagina = str(row["Instalación"])
+
+        try:
+            pedido.item_cont = str(row["item_cont"])
+        except:
+            pedido.item_cont = str(row["Cód. Ing."])
+
+        try:
+            pedido.suminis = str(row["suminis"])
+        except:
+            pedido.suminis = str(row["Cód. Ing."])
+        
+        try:
+            pedido.cantidad = str(row["cantidad"])
+        except:
+            pedido.cantidad = str(row["Cantidad"])
+        
+        pedido.save()
+
+    gestion_medidores()
+
+    novedades_medidores = NovedadMedidores.objects.all()
+
+    return render(request, 'inconsistencias_medidores.html', {'novedades_medidores': novedades_medidores})
+
+def gestion_medidores():
+    pedidos = PedidoMedidores.objects.all()
+
+    for ped in pedidos:
+        if ped.suminis=='200092' or ped.suminis=='200098':            
+            medidor = ped.suminis
+            verificar_cable(ped.pedido, '200410', medidor)
+        
+                        
+        
+
+def verificar_cable(pedido, cable, medidor):
+    ped200410 = PedidoMedidores.objects.filter(pedido= pedido).filter(item_cont=cable)
+    ped200411 = PedidoMedidores.objects.filter(pedido= pedido).filter(item_cont='200411')
+    if len(ped200410)>0:
+        for p in ped200410:
+            print(str(p.suminis) + " : " + str(p.cantidad))
+
+    """
+    novedad = "Medidor "+ str(medidor)+ " con cable " + cable
+    nov = NovedadMedidores()
+    nov.pedido = pedido
+    nov.novedad = novedad
+    nov.save()
+    """
+
+def reiniciar_medidores(request):
+    PedidoMedidores.objects.all().delete()
+    NovedadMedidores.objects.all().delete()
+    return render(request,  "index.html")
+
+

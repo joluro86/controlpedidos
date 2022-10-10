@@ -132,13 +132,13 @@ class Guia(models.Model):
         return str(self.nombre_perseo)
 
 class matperseo(models.Model):
-    concatenacion= models.CharField(verbose_name='Concat', max_length=100, default="0")
     pedido=models.CharField(verbose_name='Pedido', max_length=10)
     actividad=models.CharField(verbose_name='Actividad', max_length=500)
     fecha=models.CharField(verbose_name='Fecha', max_length=100)
     codigo=models.CharField(verbose_name='Código', max_length=100)
     cantidad=models.DecimalField(verbose_name='Cantidad', decimal_places=2, default=0, max_digits=6)   
     acta= models.CharField(verbose_name='Acta', max_length=100, default=0) 
+    concatenacion= models.CharField(verbose_name='Concat', max_length=100, default="0")
     enfenix = models.IntegerField(default=0)  
 
     class Meta:
@@ -151,12 +151,12 @@ class matperseo(models.Model):
         return str(self.pedido)
 
 class matfenix(models.Model):
-    concatenacion= models.CharField(verbose_name='Concat', max_length=100, default="0")
     pedido=models.CharField(verbose_name='Pedido', max_length=10)
     actividad=models.CharField(verbose_name='Actividad', max_length=500)
     fecha=models.CharField(verbose_name='Fecha', max_length=100)
     codigo=models.CharField(verbose_name='Código', max_length=100)
     cantidad=models.DecimalField(verbose_name='Cantidad', decimal_places=2, default=0, max_digits=6)    
+    concatenacion= models.CharField(verbose_name='Concat', max_length=100, default="0")
     enperseo = models.IntegerField(default=0) 
 
     class Meta:

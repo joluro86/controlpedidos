@@ -797,30 +797,39 @@ def importar_acta_medidores(request):
     return render(request, 'inconsistencias_medidores.html', {'novedades_medidores': novedades_medidores})
 
 def gestion_medidores():
-    pedidos = PedidoMedidores.objects.all()
+    pedidos = PedidoMedidores.objects.filter(suminis='200092')|PedidoMedidores.objects.filter(suminis='200093')|PedidoMedidores.objects.filter(suminis='200098')
 
     for ped in pedidos:
-        if ped.suminis=='200092' or ped.suminis=='200098':            
-            medidor = ped.suminis
-            verificar_cable(ped.pedido, '200410', medidor)
-        
-                        
-        
+        medidor = ped.suminis
+        if ped.suminis=='200092' or ped.suminis=='200098':          
+            verificar_cable(ped.pedido, '200411', '200410', medidor)
 
-def verificar_cable(pedido, cable, medidor):
-    ped200410 = PedidoMedidores.objects.filter(pedido= pedido).filter(item_cont=cable)
-    ped200411 = PedidoMedidores.objects.filter(pedido= pedido).filter(item_cont='200411')
-    if len(ped200410)>0:
-        for p in ped200410:
-            print(str(p.suminis) + " : " + str(p.cantidad))
+        if ped.suminis=='200093':            
+            verificar_cable(ped, '200410', '200411', medidor)
+                      
+def verificar_cable(pedido, cable1, cable2, medidor):
 
-    """
-    novedad = "Medidor "+ str(medidor)+ " con cable " + cable
+    pedido1 = PedidoMedidores.objects.filter(pedido= pedido).filter(item_cont=cable1)
+    
+    if len(pedido1)>0:
+        for p in pedido1:
+            if float(p.cantidad)>1:
+                novedad= "Medidor: " +str(medidor)+" con cable " + str(p.suminis) + " : " + str(p.cantidad)
+
+                pedido2 = PedidoMedidores.objects.filter(pedido= p).filter(item_cont=cable2)
+
+                if len(pedido2)>0:
+                    for p in pedido2:
+                        if float(p.cantidad)>0:
+                            novedad+= " - "+ str(p.suminis) + " : " + str(p.cantidad)
+
+                crearNovedad(p, novedad)
+        
+def crearNovedad(pedido, novedad):
     nov = NovedadMedidores()
     nov.pedido = pedido
     nov.novedad = novedad
     nov.save()
-    """
 
 def reiniciar_medidores(request):
     PedidoMedidores.objects.all().delete()

@@ -5,7 +5,6 @@ from django.shortcuts import redirect, render
 from material_oficiales.models import Material_utilizado_perseo
 from Analisis_acta.models import *
 
-
 def calculo_novedades_acta(request):
     pedidos = Acta.objects.all()
 
@@ -69,10 +68,12 @@ def calculo_novedades_acta(request):
                 busqueda_item(pedido, '213333', 0, nov)
                 busqueda_item(pedido, '219404', 0, nov)
                 calculo_incompatible_A01(pedido, nov)
+
         if pedido.tipre == 'ENESUB' and (pedido.item_cont == 'A 27' or pedido.item_cont == 'A 03' or pedido.item_cont == 'A 28' or pedido.item_cont == 'A 29'):
             print("error enesub")
             nov = 'ENESUB con item ' + str(pedido.item_cont)
             crear_novedad(pedido, nov)
+
         if pedido.tipre == 'ENEPRE' and pedido.item_cont == 'A 44':
             print("error ENEPRE")
             nov = 'ENEPRE con item ' + str(pedido.item_cont)
@@ -91,6 +92,7 @@ def calculo_novedades_acta(request):
         if pedido.item_cont == 'A 02':
             nov = "A 02=1,"
             busqueda_item(pedido, '211829', 0, nov)
+
         if pedido.item_cont == 'A 10' or pedido.item_cont == 'A 11':
             busqueda_item(pedido, '200410', 0, pedido.item_cont)
             busqueda_item(pedido, '211829', 0, pedido.item_cont)
@@ -185,11 +187,22 @@ def calculo_novedades_acta(request):
 
         if pedido.suminis == '200093':
             verificar_cable_acta(pedido, '200410', '200411', pedido.suminis)
+        
+        if pedido.item_cont == 'A 40' or pedido.item_cont == 'A 41':
+            if pedido.item_cont == 'A 40':
+                calculo_otros_incompatibles(pedido, 'A 41')
+            else:
+                calculo_otros_incompatibles(pedido, 'A 40')
 
+        if pedido.item_cont == 'A 10' or pedido.item_cont == 'A 11':
+            if pedido.item_cont == 'A 10':
+                calculo_otros_incompatibles(pedido, 'A 11')
+            else:
+                calculo_otros_incompatibles(pedido, 'A 10')
+      
     novedades = Novedad_acta.objects.all()
 
     return render(request, "analisis.html", {'novedades': novedades})
-
 
 def busqueda_insumo_por_item(pedido, insumo, item):
     try:
@@ -209,7 +222,6 @@ def busqueda_insumo_por_item(pedido, insumo, item):
 
     except:
         pass
-
 
 def busqueda_insumo(pedido, insumo):
     try:
@@ -313,7 +325,6 @@ def busqueda_insumo(pedido, insumo):
     except:
         pass
 
-
 def busqueda_item(pedido, item, item2, novedad):
 
     if item == '210948':
@@ -389,7 +400,6 @@ def busqueda_item(pedido, item, item2, novedad):
         except:
             pass
 
-
 def calculo_incompatible_A01(pedido, novedad):
     try:
         pedidos = Acta.objects.filter(pedido=pedido.pedido)
@@ -400,10 +410,8 @@ def calculo_incompatible_A01(pedido, novedad):
                 if p.item_cont != 'A 01' and p.item_cont != 'A 04' and p.item_cont != 'A 23':
                     nov = 'A 01=1, ' + p.item_cont + ">0. Incompatibles."
                     crear_novedad(p, nov)
-
     except:
         pass
-
 
 def calculo_incompatible_A27(pedido, novedad):
     try:
@@ -417,7 +425,6 @@ def calculo_incompatible_A27(pedido, novedad):
                     crear_novedad(p, nov)
     except:
         pass
-
 
 def calculo_incompatible_A44(pedido, novedad):
     try:
@@ -445,6 +452,15 @@ def calculo_incompatible_A03(pedido, novedad):
     except:
         pass
 
+def calculo_otros_incompatibles(pedido, item_comparar):
+    try:
+        pedidos = Acta.objects.filter(pedido=pedido.pedido)
+        for p in pedidos:
+            if p.item_cont == item_comparar:
+                nov = str(p.item_cont) + ' incompatible con ' + item_comparar
+                crear_novedad(p, nov)
+    except:
+        pass
 
 def crear_novedad(pedido, nov):
     novedad = Novedad_acta()
@@ -457,17 +473,14 @@ def crear_novedad(pedido, nov):
     novedad.novedad = nov
     novedad.save()
 
-
 def limpiar_novedades(request):
     Novedad_acta.objects.all().delete()
     Material_utilizado_perseo.objects.all().delete()
     return redirect('novedades_acta')
 
-
 def limpiar_acta(request):
     Acta.objects.all().delete()
     return redirect('home')
-
 
 def calculo_enepre(pedido):
     if pedido.item_cont == 'A 03':
@@ -530,7 +543,6 @@ def calculo_enepre(pedido):
         except:
             pass
 
-
 def novedades_acta(request):
     novedades = {}
     try:
@@ -538,7 +550,6 @@ def novedades_acta(request):
     except:
         pass
     return render(request, "analisis.html", {'novedades': novedades})
-
 
 def verificar_cable_acta(pedido, cable1, cable2, medidor):
 

@@ -190,15 +190,15 @@ def calculo_novedades_acta(request):
         
         if pedido.item_cont == 'A 40' or pedido.item_cont == 'A 41':
             if pedido.item_cont == 'A 40':
-                calculo_otros_incompatibles(pedido, 'A 41')
-            else:
-                calculo_otros_incompatibles(pedido, 'A 40')
+                calculo_otros_incompatibles(pedido, 'A 41', pedido.item_cont)
+            if pedido.item_cont == 'A 41':
+                calculo_otros_incompatibles(pedido, 'A 40', pedido.item_cont)
 
         if pedido.item_cont == 'A 10' or pedido.item_cont == 'A 11':
             if pedido.item_cont == 'A 10':
-                calculo_otros_incompatibles(pedido, 'A 11')
-            else:
-                calculo_otros_incompatibles(pedido, 'A 10')
+                calculo_otros_incompatibles(pedido, 'A 11', pedido.item_cont)
+            if pedido.item_cont == 'A 11':
+                calculo_otros_incompatibles(pedido, 'A 10', pedido.item_cont)
       
     novedades = Novedad_acta.objects.all()
 
@@ -452,12 +452,12 @@ def calculo_incompatible_A03(pedido, novedad):
     except:
         pass
 
-def calculo_otros_incompatibles(pedido, item_comparar):
+def calculo_otros_incompatibles(pedido, item_comparar, comparado):
     try:
         pedidos = Acta.objects.filter(pedido=pedido.pedido)
         for p in pedidos:
             if p.item_cont == item_comparar:
-                nov = str(p.item_cont) + ' incompatible con ' + item_comparar
+                nov = str(comparado) + ' incompatible con ' + item_comparar
                 crear_novedad(p, nov)
     except:
         pass

@@ -17,33 +17,45 @@ def calculo_novedades_acta(request):
 
             if pedido.item_cont == 'A 04':
                 if int(pedido.cantidad) > 2:
-                    nov = "Actividad: " + str(pedido.item_cont) + " con cantidad= " + str(pedido.cantidad)
+                    nov = "Actividad: " + \
+                        str(pedido.item_cont) + \
+                        " con cantidad= " + str(pedido.cantidad)
                     crear_novedad(pedido, nov)
             elif int(pedido.cantidad) > 1 and pedido.item_cont != 'A 46':
-                nov = "Actividad: " + str(pedido.item_cont) + " con cantidad= " + str(pedido.cantidad)
+                nov = "Actividad: " + \
+                    str(pedido.item_cont) + \
+                    " con cantidad= " + str(pedido.cantidad)
                 crear_novedad(pedido, nov)
 
         if primera_letra == 'C' or primera_letra == 'D' or primera_letra == 'R':
             if int(pedido.cantidad) > 1:
-                nov = "Actividad: " + str(pedido.item_cont) + " con cantidad= " + str(pedido.cantidad)
+                nov = "Actividad: " + \
+                    str(pedido.item_cont) + \
+                    " con cantidad= " + str(pedido.cantidad)
                 crear_novedad(pedido, nov)
 
         if primera_letra == 'B':
             if pedido.item_cont == 'B 03':
 
                 if int(pedido.cantidad) > 60:
-                    nov = "Actividad: " + str(pedido.item_cont) + " con cantidad= " + str(pedido.cantidad)
+                    nov = "Actividad: " + \
+                        str(pedido.item_cont) + \
+                        " con cantidad= " + str(pedido.cantidad)
                     crear_novedad(pedido, nov)
-                
-                if pedido.item_cont == 'B 04':
-                    if int(pedido.cantidad) > 12:
-                        nov = "Actividad: " + str(pedido.item_cont) + " con cantidad= " + str(pedido.cantidad)
-                        crear_novedad(pedido, nov)
-                
-                if pedido.item_cont == 'B 06' or pedido.item_cont == 'B 07' or pedido.item_cont == 'B 08':
-                    if int(pedido.cantidad) > 4:
-                        nov = "Actividad: " + str(pedido.item_cont) + " con cantidad= " + str(pedido.cantidad)
-                        crear_novedad(pedido, nov)
+
+            if pedido.item_cont == 'B 04':
+                if int(pedido.cantidad) > 12:
+                    nov = "Actividad: " + \
+                        str(pedido.item_cont) + \
+                        " con cantidad= " + str(pedido.cantidad)
+                    crear_novedad(pedido, nov)
+
+            if pedido.item_cont == 'B 06' or pedido.item_cont == 'B 07' or pedido.item_cont == 'B 08':
+                if int(pedido.cantidad) > 4:
+                    nov = "Actividad: " + \
+                        str(pedido.item_cont) + \
+                        " con cantidad= " + str(pedido.cantidad)
+                    crear_novedad(pedido, nov)
 
         if pedido.item_cont == '0':
             pedido.item_cont = pedido.suminis

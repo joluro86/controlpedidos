@@ -148,17 +148,38 @@ def calculo_novedades_acta(request):
             insumo = "211829"
             busqueda_insumo(pedido, insumo)
 
+            if int(pedido.cantidad)>1:
+                crear_novedad(pedido, str(pedido.item_cont) +
+                          ". Cantidad mayor a 1.")
+
         if pedido.item_cont == 'A 04':
             nov = "A 04=1,"
             busqueda_item(pedido, '210948', '210949', nov)
 
         if pedido.item_cont == '210948' or pedido.item_cont == '210949':
+            
+            if int(pedido.cantidad)>2:
+                crear_novedad(pedido, str(pedido.item_cont) +
+                          ". Cantidad mayor a 2.")
+
             insumo = str(pedido.item_cont)
             busqueda_insumo(pedido, insumo)
+        
+        if pedido.item_cont == '210947':
+            if int(pedido.cantidad)>3:
+                crear_novedad(pedido, str(pedido.item_cont) +
+                          ". Cantidad mayor a 3.")
+        
+        if pedido.item_cont == '220683':
+            if int(pedido.cantidad)>1:
+                crear_novedad(pedido, str(pedido.item_cont) +
+                          ". Cantidad mayor a 1.")
+
 
         if pedido.item_cont == 'A 06':
             nov = "A 06=1,"
             busqueda_item(pedido, '200410', '200411', nov)
+            busqueda_item(pedido, 'A 03', 'A 27', nov)
 
         if pedido.item_cont == '200410' or pedido.item_cont == '200411':
             insumo = str(pedido.item_cont)
@@ -167,10 +188,15 @@ def calculo_novedades_acta(request):
         if pedido.item_cont == 'A 23':
             nov = "A 23=1,"
             busqueda_item(pedido, '211673', '210947', nov)
+            
 
         if pedido.item_cont == '211673':
             insumo = str(pedido.item_cont)
             busqueda_insumo(pedido, insumo)
+
+            if int(pedido.cantidad)>1:
+                crear_novedad(pedido, str(pedido.item_cont) +
+                          ". Cantidad mayor a 1.")
 
         if pedido.item_cont == 'A 24':
             nov = "A 24=1,"
@@ -180,6 +206,10 @@ def calculo_novedades_acta(request):
             insumo = str(pedido.item_cont)
             busqueda_insumo(pedido, insumo)
 
+            if int(pedido.cantidad)>1:
+                crear_novedad(pedido, str(pedido.item_cont) +
+                          ". Cantidad mayor a 1.")
+
         if pedido.item_cont == 'A 25':
             nov = "A 25=1,"
             busqueda_item(pedido, '213333', 0, nov)
@@ -187,6 +217,10 @@ def calculo_novedades_acta(request):
         if pedido.item_cont == '213333':
             insumo = str(pedido.item_cont)
             busqueda_insumo(pedido, insumo)
+
+            if int(pedido.cantidad)>1:
+                crear_novedad(pedido, str(pedido.item_cont) +
+                          ". Cantidad mayor a 1.")
 
         if pedido.item_cont == 'A 34':
             nov = "A 34=1,"
@@ -229,19 +263,29 @@ def calculo_novedades_acta(request):
                           ". Cantidad igual a cero.")
 
         if pedido.suminis == '200092' or pedido.suminis == '200098':
-            verificar_cable_acta(pedido.pedido, '200411',
-                                 '200410', pedido.suminis)
+            verificar_cable_acta(pedido.pedido, '200411','200410', pedido.suminis)
+            
+            if int(pedido.cantidad)>1:
+                crear_novedad(pedido, str(pedido.item_cont) +
+                          ". Cantidad mayor a 1.")
 
         if pedido.suminis == '200093':
             verificar_cable_acta(pedido, '200410', '200411', pedido.suminis)
 
-        if pedido.item_cont == 'A 40' or pedido.item_cont == 'A 41':
-            if pedido.item_cont == 'A 40':
+            if int(pedido.cantidad)>1:
+                crear_novedad(pedido, str(pedido.item_cont) +
+                          ". Cantidad mayor a 1.")
+
+        if pedido.item_cont == 'A 40':
                 calculo_otros_incompatibles(pedido, 'A 41', pedido.item_cont)
-            if pedido.item_cont == 'A 41':
+                
+        if pedido.item_cont == 'A 41':
                 calculo_otros_incompatibles(pedido, 'A 40', pedido.item_cont)
 
         if pedido.item_cont == 'A 10' or pedido.item_cont == 'A 11':
+            if int(pedido.cantidad)>1:
+                crear_novedad(pedido, str(pedido.item_cont) +
+                          ". Cantidad mayor a 1.")
             if pedido.item_cont == 'A 10':
                 calculo_otros_incompatibles(pedido, 'A 11', pedido.item_cont)
             if pedido.item_cont == 'A 11':
@@ -376,8 +420,22 @@ def busqueda_insumo(pedido, insumo):
 
 
 def busqueda_item(pedido, item, item2, novedad):
+    
+    if item == 'A 03':
+        try:
+            busquedad_A03 = Acta.objects.filter(pedido=pedido.pedido).filter(item_cont=item).count()
+            busquedad_A27 = Acta.objects.filter(pedido=pedido.pedido).filter(item_cont=item2).count()
 
-    if item == '210948':
+            if busquedad_A03 <= 0:
+                novedad = novedad+" "+str(item)+"=0."
+                crear_novedad(pedido, novedad)
+            if busquedad_A27 > 0:
+                novedad = novedad+" incompatible con "+str(item2)+">0."
+                crear_novedad(pedido, novedad)
+        except:
+            pass
+
+    elif item == '210948':
         try:
             busquedad_210949 = Acta.objects.filter(
                 pedido=pedido.pedido).filter(item_cont=item).count()

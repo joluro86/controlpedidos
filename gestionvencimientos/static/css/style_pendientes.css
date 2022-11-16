@@ -92,15 +92,18 @@
 }
 
 
-.form_login{
-  width:500px;
-  margin: auto;
-  margin-top: 20px;
-  background-color: rgb(70, 144, 228);
-  padding:20px;
-  border-radius: 5px;
+.divider:after,
+.divider:before {
+content: "";
+flex: 1;
+height: 1px;
+background: #eee;
 }
-
-.form_login .form-group{
-  margin: 20px;
+.h-custom {
+height: calc(100% - 73px);
+}
+@media (max-width: 450px) {
+.h-custom {
+height: 100%;
+}
 }

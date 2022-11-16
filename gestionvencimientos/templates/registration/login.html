@@ -7,34 +7,82 @@
 {% endif %}
 
 {% if next %}
-    {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <li class="nav-item">
-    <h3 class="text-center text-secondary mt-4">Inicio de sesión</h3>
-    </li>
-    {% endif %}
+{% if user.is_authenticated %}
+<p>Your account doesn't have access to this page. To proceed,
+  please login with an account that has access.</p>
+{% else %}
+
+
+{% endif %}
 {% endif %}
 
-<div class="form_login">
-<form  method="post" action="{% url 'login' %}">
-{% csrf_token %}
+<!--
+  INICIO NUEVO LOGIN
+-->
+<section class="vh-100">
+  <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-9 col-lg-6 col-xl-5">
+        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" class="img-fluid"
+          alt="Sample image">
+      </div>
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+        <form method="post" action="{% url 'login' %}">
+          {% csrf_token %}
 
-<div class="form-group">
-  <label>Usuario</label>
-  <input class="form-control" type="text" name="username">
-</div>
-<div class="form-group">
-  <label>Contraseña</label>
-  <input class="form-control" type="password" name="password">
-</div>
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <input type="text" id="form3Example3" name="username" class="form-control form-control-lg"
+              placeholder="Enter a valid email address" />
+            <label class="form-label" for="form3Example3" >Usuario</label>
+          </div>
 
-<div class="form-group text-center mt-4">
-  <button type="submit" class="btn btn-primary">Iniciar sesion</button>
-  <input type="hidden" name="next" value="{{ next }}" />
-</div>
-</form>
-</div>
+          <!-- Password input -->
+          <div class="form-outline mb-3">
+            <input type="password" name="password" class="form-control form-control-lg"
+              placeholder="Enter password" />
+            <label class="form-label">Contraseña</label>
+          </div>
+
+          <div class="text-center text-lg-start mt-4 pt-2">
+            <button type="submit" class="btn btn-primary btn-lg"
+              style="padding-left: 2.5rem; padding-right: 2.5rem;">Iniciar sesión</button>
+            <input type="hidden" name="next" value="{{ next }}" />
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+  <div
+    class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
+    <!-- Copyright -->
+    <div class="text-white mb-3 mb-md-0">
+      Copyright © 2022. Todos los derechos reservados. Diseñado por Jorge Luis Rodriguez - Joluro...
+    </div>
+    <!-- Copyright -->
+
+    <!-- Right 
+    <div>
+      <a href="#!" class="text-white me-4">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="#!" class="text-white me-4">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="#!" class="text-white me-4">
+        <i class="fab fa-google"></i>
+      </a>
+      <a href="#!" class="text-white">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </div>
+    -->
+    <!-- Right -->
+  </div>
+</section>
+<!--
+  FIN NUEVO LOGIN
+-->
 
 {% endblock %}

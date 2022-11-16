@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'Programacion',
     'material_oficiales',
     'medidores',
+    'perseovsfenix',
 ]
 
 

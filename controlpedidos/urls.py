@@ -31,6 +31,7 @@ urlpatterns = [
 
     path('analisis/', include('Analisis_acta.urls')),
     path('programar/', include('Programacion.urls')),
+    path('comparativo/', include('perseovsfenix.urls')),
     path('material_oficiales/', include('material_oficiales.urls')),
 
     # aqui  gestionar_acta_perseo_inventario

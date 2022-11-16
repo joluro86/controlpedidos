@@ -50,33 +50,8 @@ class GuiaAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 class NumeroActaAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     pass
 
-class MatfenixAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('concatenacion', 'pedido', 'actividad', 'fecha', 'codigo', 'cantidad')
-
-class MatPerseoAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('concatenacion', 'pedido', 'actividad', 'fecha', 'codigo', 'cantidad', 'acta')
-
-class FaltantePerseoAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('concatenacion', 'pedido', 'actividad', 'fecha', 'codigo', 'cantidad', 'acta','cantidad_fenix','diferencia')
-
-class FaltantePerseoResource(resources.ModelResource):
-    class Meta:
-        model = faltanteperseo
-
-class PerseoResource(resources.ModelResource):
-    class Meta:
-        model = matperseo
-
-class FenixResource(resources.ModelResource):
-    class Meta:
-        model = matfenix 
-
-admin.site.register(Guia, GuiaAdmin)
 admin.site.register(Ans, AnsAdmin)
 admin.site.register(Encargado, EncargadoAdmin)
 admin.site.register(Actividad, ActividadAdmin)
 admin.site.register(Actividad_epm, Actividad_epm_Admin )
-admin.site.register(faltanteperseo, FaltantePerseoAdmin)
-admin.site.register(matperseo, MatPerseoAdmin)
-admin.site.register(NumeroActa, NumeroActaAdmin)
-admin.site.register(matfenix, MatfenixAdmin)     
+    

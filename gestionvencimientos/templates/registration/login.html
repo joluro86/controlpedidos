@@ -5,7 +5,6 @@
 {% if form.errors %}
 <p>Usuario o contraseña no son correctos. Intente nuevamente.</p>
 {% endif %}
-
 <!--
   INICIO NUEVO LOGIN
 -->
@@ -21,17 +20,16 @@
         <form method="post" action="{% url 'login' %}">
           {% csrf_token %}
 
-          <!-- Email input -->
+          <!-- Usuario input -->
           <div class="form-outline mb-4">
             <input type="text" id="form3Example3" name="username" class="form-control form-control-lg"
               placeholder="Enter a valid email address" />
-            <label class="form-label" for="form3Example3" >Usuario</label>
+            <label class="form-label" for="form3Example3">Usuario</label>
           </div>
 
           <!-- Password input -->
           <div class="form-outline mb-3">
-            <input type="password" name="password" class="form-control form-control-lg"
-              placeholder="Enter password" />
+            <input type="password" name="password" class="form-control form-control-lg" placeholder="Enter password" />
             <label class="form-label">Contraseña</label>
           </div>
 

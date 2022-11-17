@@ -1,0 +1,81 @@
+{% extends 'index.html' %} {% load static %} {% block head %} {% endblock head %}
+{% block content %}
+
+<h5 style="color: blue; text-align: center; margin: 20px;">Novedades Perseo - Fenix</h5>
+
+<div class="table-id card mt-1" style="width: 90%; margin: auto">
+  <div class="card-body">
+    <table class="table table-sm table-hover" class="display nowrap" id="table_id">
+      <thead class="p-0">
+        <tr class="text-center m-0 p-0" style="background-color: #8ee7fa">
+          <th scope="col" class="p-0">Pedido</th>
+          <th scope="col" class="p-0">Actividad</th>
+          <th scope="col" class="p-0">Fecha</th>
+          <th scope="col" class="p-0">Código</th>
+          <th scope="col" class="p-0">Cantidad</th>
+          <th scope="col" class="p-0">Acta</th>
+          <th scope="col" class="p-0">Observación</th>
+          <th scope="col" class="p-0">Cantidad Fénix</th>
+          <th scope="col" class="p-0">Diferencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in novedades %}
+
+        <tr class="text-center p-0 tr">
+          <th class="pt-1">{{ a.pedido }}</th>
+          <td class="m-0 pb-0">{{ a.actividad }}</td>
+          <td class="m-0 pb-0">{{ a.fecha }}</td>
+          <td class="m-0 pb-0">{{ a.codigo }}</td>
+          <td class="m-0 pb-0">{{ a.cantidad }}</td>
+          <td class="m-0 pb-0">{{ a.acta }}</td>
+          <td class="m-0 pb-0">{{ a.observacion }}</td>
+          <td class="m-0 pb-0">{{ a.cantidad_fenix }}</td>
+          <td class="m-0 pb-0">{{ a.diferencia }}</td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock content %} {% block js %}
+
+<script src="{% static 'js/js_pendientes.js' %}"></script>
+
+<script>
+  $(document).ready(function () {
+    $("#table_id").DataTable({
+      order: [[1, "asc"]],
+      dom: "Bfrtilp",
+      lengthMenu: [
+        [15, 30, 50, -1],
+        ['15', '30', '50', 'Todos']
+      ],
+      buttons: [
+        {
+          extend: "copyHtml5",
+          title: '',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+            format: {
+              body: function (data, row, column, node) {
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+            }
+          },
+        },
+        {
+          extend: "excelHtml5",
+          title: '',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5, 6]
+          },
+        },
+      ],
+    });
+  });
+</script>
+
+{% endblock js %}

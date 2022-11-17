@@ -37,77 +37,77 @@
 
 <body class="body">
   {% if request.user.is_authenticated %}
-    <div class="header" id="sub-header">
-      <ul class="nav">
-        <li class="nav-item" id="inicio">
-          <a class="nav-link" href="{% url 'home' %}">Inicio</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
-            aria-expanded="true">
-            Importar
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="/admin/gestionvencimientos/matperseo/import/" target="blank">Perseo</a>
-            </li>
-            <li><a class="dropdown-item" href="/admin/gestionvencimientos/matfenix/import/" target="blank">Fenix</a></li>
-          </ul>
-        </li>
+  <div class="header" id="sub-header">
+    <ul class="nav">
+      <li class="nav-item" id="inicio">
+        <a class="nav-link" href="{% url 'home' %}">Inicio</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">
+          Importar
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item" href="/admin/gestionvencimientos/matperseo/import/" target="blank">Perseo</a>
+          </li>
+          <li><a class="dropdown-item" href="/admin/gestionvencimientos/matfenix/import/" target="blank">Fenix</a></li>
+        </ul>
+      </li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
-            aria-expanded="true">
-            Admin
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="/admin/gestionvencimientos/actividad/" target="blank">Actividades
-                contrato</a></li>
-            <li><a class="dropdown-item" href="/admin/gestionvencimientos/actividad_epm/" target="blank">Actividades
-                epm</a></li>
-            <li><a class="dropdown-item" href="/admin/gestionvencimientos/encargado/" target="blank">Encargados</a></li>
-            <li><a class="dropdown-item" href="/admin/gestionvencimientos/numeroacta/" target="blank">Número Acta</a></li>
-          </ul>
-        </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">
+          Admin
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item" href="/admin/gestionvencimientos/actividad/" target="blank">Actividades
+              contrato</a></li>
+          <li><a class="dropdown-item" href="/admin/gestionvencimientos/actividad_epm/" target="blank">Actividades
+              epm</a></li>
+          <li><a class="dropdown-item" href="/admin/gestionvencimientos/encargado/" target="blank">Encargados</a></li>
+          <li><a class="dropdown-item" href="/admin/gestionvencimientos/numeroacta/" target="blank">Número Acta</a></li>
+        </ul>
+      </li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
-            aria-expanded="true">
-            Material Oficiales
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li>
-              <a class="dropdown-item" href="/admin/controlmateriales/matperseo/import/" target="_blank">Subir Perseo</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="/admin/controlmateriales/matfenix/import/" target="_blank">Subir Fenix</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="{% url 'gestionar_acta_perseo_inventario' %}">Gestion BD</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="{% url 'calculo_inventario_por_oficial' %}">Calculo Oficiales</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="/admin" target="_blank">Admin</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="{% url 'reiniciar' %}">Reiniciar</a>
-            </li>
-          </ul>
-        </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">
+          Material Oficiales
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li>
+            <a class="dropdown-item" href="/admin/controlmateriales/matperseo/import/" target="_blank">Subir Perseo</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="/admin/controlmateriales/matfenix/import/" target="_blank">Subir Fenix</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'gestionar_acta_perseo_inventario' %}">Gestion BD</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'calculo_inventario_por_oficial' %}">Calculo Oficiales</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="/admin" target="_blank">Admin</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'reiniciar' %}">Reiniciar</a>
+          </li>
+        </ul>
+      </li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
-            aria-expanded="true">
-            Revisión Acta
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="/admin/Analisis_acta/acta/import/" target="blank">Importar Acta
-                revisión</a></li>
-            <li><a class="dropdown-item" href="{% url 'calculo_novedades' %}">Calculo Novedades Acta</a></li>
-            <li><a class="dropdown-item" href="{% url 'limpiarnov' %}">Reiniciar Novedades</a></li>
-            <li><a class="dropdown-item" href="{% url 'limpiaracta' %}">Reiniciar Acta Analisis</a></li>
-            <!-- 
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">
+          Revisión Acta
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item" href="/admin/Analisis_acta/acta/import/" target="blank">Importar Acta
+              revisión</a></li>
+          <li><a class="dropdown-item" href="{% url 'calculo_novedades' %}">Calculo Novedades Acta</a></li>
+          <li><a class="dropdown-item" href="{% url 'limpiarnov' %}">Reiniciar Novedades</a></li>
+          <li><a class="dropdown-item" href="{% url 'limpiaracta' %}">Reiniciar Acta Analisis</a></li>
+          <!-- 
             <li><a class="dropdown-item" href="{% url 'gestionbdmat' %}">Gestionar BD Materiales</a></li>
             <li><a class="dropdown-item" href="{% url 'faltantesenperseo' %}">Calculo Materiales Perseo</a></li>
             <li class="nav-item" id="pendi_index">
@@ -115,76 +115,70 @@
                 Oficiales</a>
             </li>
             -->
-            <li class="nav-item" id="pendi_index">
-              <a class="dropdown-item" id="pendi_a" href="{% url 'novedades_acta' %}">Novedades</a>
-            </li>
+          <li class="nav-item" id="pendi_index">
+            <a class="dropdown-item" id="pendi_a" href="{% url 'novedades_acta' %}">Novedades</a>
+          </li>
 
-          </ul>
-        </li>
+        </ul>
+      </li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
-            aria-expanded="true">
-            Gestión Ans
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" id="pendi_a" href="{% url 'menu_pendientes' %}">Pendientes</a></li>
-            <li><a class="dropdown-item" href="/admin/gestionvencimientos/ans/import/" target="blank">Subir extracción</a>
-            </li>
-            <li><a class="dropdown-item" href="#" onclick="gestion_bd()">Gestionar BD extracción</a></li>
-            <li><a class="dropdown-item" href="#" onclick="reiniciar_bd()">Reiniciar BD extracción</a></li>
-            <li><a class="dropdown-item" href="#" onclick="fechas_busqueda_epm()">Vence epm</a></li>
-            <li><a class="dropdown-item" href="{% url 'programador' %}">Programador</a></li>
-            <li><a class="dropdown-item" href="{% url 'inconsistencias' %}">Inconsistencias</a></li>
-            <li><a class="dropdown-item" href="{% url 'medidores_cables' %}">Medidores vs Cables</a></li>
-            <li><a class="dropdown-item" href="{% url 'gestion_medidores' %}">Gestión Medidores</a></li>
-            <li><a class="dropdown-item" href="{% url 'reiniciar_medidores' %}">Reiniciar Medidores</a></li>
-          </ul>
-        </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">
+          Gestión Ans
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item" id="pendi_a" href="{% url 'menu_pendientes' %}">Pendientes</a></li>
+          <li><a class="dropdown-item" href="/admin/gestionvencimientos/ans/import/" target="blank">Subir extracción</a>
+          </li>
+          <li><a class="dropdown-item" href="#" onclick="gestion_bd()">Gestionar BD extracción</a></li>
+          <li><a class="dropdown-item" href="#" onclick="reiniciar_bd()">Reiniciar BD extracción</a></li>
+          <li><a class="dropdown-item" href="#" onclick="fechas_busqueda_epm()">Vence epm</a></li>
+          <li><a class="dropdown-item" href="{% url 'programador' %}">Programador</a></li>
+          <li><a class="dropdown-item" href="{% url 'inconsistencias' %}">Inconsistencias</a></li>
+          <li><a class="dropdown-item" href="{% url 'medidores_cables' %}">Medidores vs Cables</a></li>
+          <li><a class="dropdown-item" href="{% url 'gestion_medidores' %}">Gestión Medidores</a></li>
+          <li><a class="dropdown-item" href="{% url 'reiniciar_medidores' %}">Reiniciar Medidores</a></li>
+        </ul>
+      </li>
 
-        <!--
+      <!--
           PERSEO VS FENIX
         -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
-            aria-expanded="true">
-            Perseo Vs Fénix
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" id="pendi_a" href="{% url 'menu_pendientes' %}">Pendientes</a></li>
-            <li><a class="dropdown-item" href="/admin/gestionvencimientos/ans/import/" target="blank">Subir extracción</a>
-            </li>
-            <li><a class="dropdown-item" href="#" onclick="gestion_bd()">Gestionar BD extracción</a></li>
-            <li><a class="dropdown-item" href="#" onclick="reiniciar_bd()">Reiniciar BD extracción</a></li>
-            <li><a class="dropdown-item" href="#" onclick="fechas_busqueda_epm()">Vence epm</a></li>
-            <li><a class="dropdown-item" href="{% url 'programador' %}">Programador</a></li>
-            <li><a class="dropdown-item" href="{% url 'inconsistencias' %}">Inconsistencias</a></li>
-            <li><a class="dropdown-item" href="{% url 'medidores_cables' %}">Medidores vs Cables</a></li>
-            <li><a class="dropdown-item" href="{% url 'gestion_medidores' %}">Gestión Medidores</a></li>
-            <li><a class="dropdown-item" href="{% url 'reiniciar_medidores' %}">Reiniciar Medidores</a></li>
-          </ul>
-        </li>
-        <!--
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">
+          Perseo Vs Fénix
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item" id="pendi_a" href="/admin/perseovsfenix/matperseo/import/" target="_blank">Subir Perseo</a></li>
+          <li><a class="dropdown-item" id="pendi_a" href="/admin/perseovsfenix/matfenix/import/" target="_blank">Subir Fénix</a></li>
+          <li><a class="dropdown-item" id="pendi_a" href="#" onclick="calculo_novedades_perseo_vs_fenix()">Gestionar</a></li>
+          <li><a class="dropdown-item" id="pendi_a" href="#" onclick="reiniciar_bd_perseo_vs_fenix()">Reiniciar</a></li>
+          <li><a class="dropdown-item" id="pendi_a" href="{% url 'novedades_perseo_fenix' %}">Novedades</a></li>
+        </ul>
+      </li>
+      <!--
           FIN PERSEO VS FENIX
         -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
-            aria-expanded="true">
-            Programar
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="{% url 'acrev' %}">ACREV</a></li>
-            <li><a class="dropdown-item" href="{% url 'amrtr' %}">AMRTR</a></li>
-            <li><a class="dropdown-item" href="{% url 'lega' %}">LEGA</a></li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'logout' %}?next=/">Cerrar sesión</a>
-        </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">
+          Programar
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item" href="{% url 'acrev' %}">ACREV</a></li>
+          <li><a class="dropdown-item" href="{% url 'amrtr' %}">AMRTR</a></li>
+          <li><a class="dropdown-item" href="{% url 'lega' %}">LEGA</a></li>
+        </ul>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'logout' %}?next=/">Cerrar sesión</a>
+      </li>
 
 
-      </ul>
-    </div>
+    </ul>
+  </div>
   {% endif %}
 
   {% block content %}

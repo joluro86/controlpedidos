@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from perseovsfenix.models import *
 
-
 def reiniciar_bd_materiales(request):
     matfenix.objects.all().delete()
     matperseo.objects.all().delete()
@@ -139,48 +138,6 @@ def calculo_numero_acta():
         except:
             print("error en el acta")
 
-def calculo_diferencia_fenix_vs_perseo(request):
-    faltantes=[]
-    pedidos_fenix = matfenix.objects.all()
-    for pedido_fenix in pedidos_fenix:
-        
-        try:
-            pedido_per = matperseo.objects.get(concatenacion=pedido_fenix.concatenacion)
-
-            try:
-                existe_faltante = NovedadPerseoVsFenix.objects.get(concatenacion = pedido_per.concatenacion)
-                existe_faltante.cantidad= existe_faltante.cantidad + pedido_fenix.cantidad
-                existe_faltante.diferencia = existe_faltante.cantidad - pedido_per.cantidad
-                existe_faltante.save()
-
-            except:
-                if pedido_fenix.cantidad != pedido_per.cantidad:
-                    faltante= NovedadPerseoVsFenix()
-                    faltante.concatenacion = pedido_fenix.concatenacion
-                    faltante.pedido = pedido_fenix.pedido
-                    faltante.actividad = pedido_fenix.actividad
-                    faltante.fecha = pedido_fenix.fecha
-                    faltante.codigo = pedido_fenix.codigo
-                    faltante.cantidad = pedido_fenix.cantidad
-                    faltante.observacion = "Cantidad no coincide"
-                    faltante.acta = pedido_fenix.acta
-                    faltante.cantidad_fenix = pedido_fenix.cantidad
-                    faltante.diferencia = pedido_fenix.cantidad - pedido_fenix.cantidad
-                    faltante.save()        
-        except:
-            falt= NovedadPerseoVsFenix()
-            falt.concatenacion = pedido_fenix.concatenacion
-            falt.pedido = pedido_fenix.pedido
-            falt.actividad = pedido_fenix.actividad
-            falt.fecha = pedido_fenix.fecha
-            falt.codigo = pedido_fenix.codigo
-            falt.cantidad = pedido_fenix.cantidad
-            falt.observacion = "No digitado en perseo"
-            falt.acta = pedido_fenix.acta
-            falt.diferencia = -9999
-            falt.save()
-
-        ped= NovedadPerseoVsFenix.objects.filter(diferencia=0)
-        ped.delete()
-
-    return render(request, "index.html")
+def novedades_perseo_vs_fenix(request):
+    novedades = NovedadPerseoVsFenix.objects.all()
+    return render(request, 'novedades_perseo_fenix.html', {'novedades':novedades})

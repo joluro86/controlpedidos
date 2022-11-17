@@ -240,4 +240,42 @@ function descartar(id) {
     });
 }
 
+function calculo_novedades_perseo_vs_fenix() {
+  url = "/comparativo/calculo_novedades_perseo_vs_fenix/";
+  swal
+    .fire({
+      title: "¿Esta seguro de realizar esta gestión?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Si, realizar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        window.location.href = url;
+      }
+    });
+}
+
+function reiniciar_bd_perseo_vs_fenix() {
+  url = "/comparativo/reiniciar/";
+  swal
+    .fire({
+      title: "¿Esta seguro de reiniciar las extracciones?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Si, reiniciar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        window.location.href = url;
+      }
+    });
+}
+
 

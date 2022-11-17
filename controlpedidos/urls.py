@@ -40,7 +40,6 @@ urlpatterns = [
     path('reiniciar/', reiniciar, name="reiniciar"),
     path('faltantes_fenix/', calculo_faltantes_perseo, name="faltantesenperseo"),
 
-
     path('inventariobd/', gestionar_acta_perseo_inventario, name="gestionar_acta_perseo_inventario"), 
     path('oficial/', calculo_inventario_por_oficial, name="calculo_inventario_por_oficial"),
     path('oficial_reiniciar/', reiniciar_bd_oficiales, name="reiniciar_bd_oficiales"),

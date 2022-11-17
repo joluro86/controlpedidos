@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from perseovsfenix.models import *
 
@@ -59,18 +59,19 @@ def concatenar(pedidos, indicador):
         p.concatenacion = str(p.pedido + "-" + p.codigo)
         p.save()
 
-def gestionarbd(request):
+def gestionarbd():
     pedidos_perseo = matperseo.objects.all()
     pedidos_fenix = matfenix.objects.all()
 
     concatenar(pedidos_fenix, 0)
     concatenar(pedidos_perseo, 1)
-
-    return render(request, "index.html")
+   
 
 def calculo_novedades_perseo_vs_fenix(request):
+    gestionarbd()
     faltantes=[]
     pedidos_perseo = matperseo.objects.all()
+    print("perseo vs fenix")
     for pedido_perseo in pedidos_perseo:
         
         try:
@@ -114,7 +115,9 @@ def calculo_novedades_perseo_vs_fenix(request):
 
     calculo_numero_acta()
 
-    return render(request, "index.html")
+    novedades = NovedadPerseoVsFenix.objects.all()
+    return render(request, 'novedades_perseo_fenix.html', {'novedades':novedades})
+
 
 def calculo_numero_acta():
     acta= NumeroActa.objects.first()
@@ -137,6 +140,10 @@ def calculo_numero_acta():
                 faltante.save()                        
         except:
             print("error en el acta")
+
+def reiniciar_novedades_perseo_vs_fenix(request):
+    NovedadPerseoVsFenix.objects.all().delete()
+    return render(request, 'novedades_perseo_fenix.html', {'novedades':['']})
 
 def novedades_perseo_vs_fenix(request):
     novedades = NovedadPerseoVsFenix.objects.all()

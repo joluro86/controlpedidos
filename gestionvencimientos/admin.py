@@ -2,6 +2,7 @@ from django.contrib import admin
 from gestionvencimientos.models import *
 from import_export.admin import ImportExportModelAdmin 
 from import_export import resources
+from perseovsfenix.models import Guia
 
 class EncargadoResource(resources.ModelResource):
     class Meta:
@@ -50,6 +51,7 @@ class GuiaAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 class NumeroActaAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     pass
 
+admin.site.register(Guia, GuiaAdmin)
 admin.site.register(Ans, AnsAdmin)
 admin.site.register(Encargado, EncargadoAdmin)
 admin.site.register(Actividad, ActividadAdmin)

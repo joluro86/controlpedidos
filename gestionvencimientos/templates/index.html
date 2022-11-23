@@ -131,17 +131,23 @@
           Perseo Vs Fénix
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <li><a class="dropdown-item" id="pendi_a" href="/admin/perseovsfenix/matperseo/import/" target="_blank">Subir Perseo</a></li>
-          <li><a class="dropdown-item" id="pendi_a" href="/admin/perseovsfenix/matfenix/import/" target="_blank">Subir Fénix</a></li>
-          <li><a class="dropdown-item" id="pendi_a" href="#" onclick="calculo_novedades_perseo_vs_fenix()">Gestionar</a></li>
-          <li><a class="dropdown-item" id="pendi_a" href="#" onclick="reiniciar_bd_perseo_vs_fenix()">Reiniciar actas</a></li>
+          <li><a class="dropdown-item" id="pendi_a" href="/admin/perseovsfenix/matperseo/import/" target="_blank">Subir
+              Perseo</a></li>
+          <li><a class="dropdown-item" id="pendi_a" href="/admin/perseovsfenix/matfenix/import/" target="_blank">Subir
+              Fénix</a></li>
+          <li><a class="dropdown-item" id="pendi_a" href="#" onclick="calculo_novedades_perseo_vs_fenix()">Gestionar</a>
+          </li>
+          <li><a class="dropdown-item" id="pendi_a" href="#" onclick="reiniciar_bd_perseo_vs_fenix()">Reiniciar
+              actas</a></li>
           <li><a class="dropdown-item" id="pendi_a" href="{% url 'novedades_perseo_fenix' %}">Novedades</a></li>
-          <li><a class="dropdown-item" id="pendi_a" href="#" onclick="reiniciar_novedades_bd_perseo_vs_fenix()">Reiniciar novedades</a></li>          
+          <li><a class="dropdown-item" id="pendi_a" href="#"
+              onclick="reiniciar_novedades_bd_perseo_vs_fenix()">Reiniciar novedades</a></li>
         </ul>
       </li>
       <!--
           FIN PERSEO VS FENIX
         -->
+
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
           aria-expanded="true">
@@ -153,6 +159,25 @@
           <li><a class="dropdown-item" href="{% url 'lega' %}">LEGA</a></li>
         </ul>
       </li>
+      <!--
+          INICIO BONIFICACION
+        -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">
+          Bonificaciones
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item" href="#">Subir Perseo</a></li>
+          <li><a class="dropdown-item" href="#">Subir Fénix</a></li>
+          <li><a class="dropdown-item" href="#">Cálculo</a></li>
+          <li><a class="dropdown-item" href="#">Bonificaciones</a></li>
+          <li><a class="dropdown-item" href="#">Reiniciar</a></li>
+        </ul>
+      </li>
+      <!--
+          FIN BONIFICACION
+        -->
       <li class="nav-item">
         <a class="nav-link" href="{% url 'logout' %}?next=/">Cerrar sesión</a>
       </li>

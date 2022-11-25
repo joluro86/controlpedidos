@@ -1,0 +1,71 @@
+{% extends 'index.html' %} {% load static %}{% load humanize %} {% block content %}
+<div class="table-id card mt-4" style="width: 100%; margin: auto">
+  <div class="card-body">
+    <h6 class="m-0 text-center">Bonificaciones</h6>
+    <table class="table" id="table_id" style="width: 100%; margin: auto">
+      <thead>
+        <tr class="text-center"style="background-color: #8ee7fa; font-size: 0.8em;">
+
+          <th scope="col">Oficial</th>
+          <th>Pedido</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Valor Perseo</th>
+          <th scope="col">Valor Fenix</th>
+          <th scope="col">Diferencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in pedidos %}
+
+        <tr class="text-center tr">
+          <th scope="row">{{ p.instalador }}</th>
+          <th scope="row">{{ p.pedido }}</th>
+          <th scope="row">{{ p.fecha }}</th>
+          <th scope="row">{{ p.valor_perseo }}</th>
+          <th scope="row">{{ p.valor_fenix }}</th>
+          <th scope="row">{{ p.diferencia }}</th>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock content %} {% block js %}
+
+<script src="{% static 'js/js_pendientes.js' %}"></script>
+
+<script>
+  $(document).ready(function () {
+    $("#table_id").DataTable({
+      order: [[1, "desc"]],
+
+      dom: "Bfrtilp",
+
+      lengthMenu: [
+            [ 15, 30, 50, -1 ],
+            [ '15', '30', '50', 'Todos' ]
+        ],
+        
+      buttons: [   
+        {
+          extend: "excelHtml5",
+          title:'ACREV',
+          exportOptions: {
+            columns: [ 0, 1, 2, 3, 4, 5 ],
+            format: {
+              body: function(data, row, column, node) {
+                  data = $('<p>' + data + '</p>').text();
+                  return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+          }
+          },
+        }, 
+           
+      ],
+    });
+  });
+</script>
+
+{% endblock js %}
+

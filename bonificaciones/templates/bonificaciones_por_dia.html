@@ -1,23 +1,23 @@
 {% extends 'index.html' %} {% load static %}{% load humanize %} {% block content %}
 <div class="table-id card mt-4" style="width: 100%; margin: auto">
   <div class="card-body">
-    <h6 class="m-0 text-center">Pedidos ACREV</h6>
+    <h6 class="m-0 text-center">Bonificaciones</h6>
     <table class="table" id="table_id" style="width: 100%; margin: auto">
       <thead>
         <tr class="text-center"style="background-color: #8ee7fa; font-size: 0.8em;">
 
           <th scope="col">Oficial</th>
-          <th>Pedido</th>
-          <th scope="col">Fecha</th>
+          <th>Fecha</th>
+          <th scope="col">Bonificación</th>
         </tr>
       </thead>
       <tbody>
-        {% for p in pedidos %}
+        {% for b in bonificaciones %}
 
         <tr class="text-center tr">
-          <th scope="row">{{ p.instalador }}</th>
-          <th scope="row">{{ p.pedido }}</th>
-          <th scope="row">{{ p.fecha }}</th>
+          <th scope="row">{{ b.instalador }}</th>
+          <th scope="row">{{ b.fecha }}</th>
+          <th scope="row">{{ b.bonificacion }}</th>
         </tr>
 
         {% endfor %}
@@ -46,7 +46,7 @@
           extend: "excelHtml5",
           title:'ACREV',
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ],
+            columns: [ 0, 1, 2, 3, 4, 5 ],
             format: {
               body: function(data, row, column, node) {
                   data = $('<p>' + data + '</p>').text();

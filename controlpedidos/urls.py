@@ -33,6 +33,7 @@ urlpatterns = [
     path('programar/', include('Programacion.urls')),
     path('comparativo/', include('perseovsfenix.urls')),
     path('material_oficiales/', include('material_oficiales.urls')),
+    path('ped-bonficiaciones/', include('bonificaciones.urls')),
 
     path('inventariobd/', gestionar_acta_perseo_inventario, name="gestionar_acta_perseo_inventario"), 
     path('oficial/', calculo_inventario_por_oficial, name="calculo_inventario_por_oficial"),

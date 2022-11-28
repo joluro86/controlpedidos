@@ -317,7 +317,7 @@ def busqueda_calibracion(pedido):
 
         encontre_medidor=0
         for p in pedidos:
-            if str(p.suminis) == '200092' or str(p.suminis) == '200093' or str(p.suminis) == '200098':
+            if str(p.suminis) == '200092' or str(p.suminis) == '200092P' or str(p.suminis) == '200098P' or str(p.suminis) == '200093P' or str(p.suminis) == '200093' or str(p.suminis) == '200098':
                 encontre_medidor+=1
                 if int(p.cantidad)>1:
                     nov = str(p.suminis) + str(' con cantidad= ') + str(pedido.cantidad) 

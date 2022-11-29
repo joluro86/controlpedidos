@@ -10,6 +10,7 @@ class PedidoBoniPerseo(models.Model):
     valor=models.CharField(max_length=50, default=0)
     total=models.CharField(max_length=50, default=0)
     acta=models.CharField(max_length=50, default=0)
+    descuento_de_fenix = models.DecimalField(max_digits=8, decimal_places=2, default=0)
 
     class Meta:
         verbose_name = "Perseo"
@@ -24,7 +25,7 @@ class PedidoBoniFenix(models.Model):
     codigo = models.CharField(max_length=50, default=0)
     cantidad = models.CharField(max_length=50, default=0)
     valor = models.CharField(max_length=50, default=0)
-    total = models.CharField(max_length=50, default=0)
+    total = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     instalador = models.CharField(max_length=100, default=0)
     fecha=models.CharField(max_length=50, default=0)
 
@@ -32,52 +33,17 @@ class PedidoBoniFenix(models.Model):
         verbose_name = "Fénix"
         verbose_name_plural = "Fénix"
 
-class ValorBonificacion(models.Model):
-    pedido=models.CharField(max_length=50, default=0)
+class ProducidoDia(models.Model):
     instalador=models.CharField(max_length=100, default=0)
     fecha=models.CharField(max_length=100, default=0)
-    valor_fenix=models.CharField(max_length=50, default=0)
-    valor_perseo=models.CharField(max_length=50, default=0)
-    diferencia=models.CharField(max_length=50, default=0)
+    producido=models.CharField(max_length=50, default=0)
 
     class Meta:
-        verbose_name = "Pedido Bonificación"
-        verbose_name_plural = "Pedido Bonificación"
+        verbose_name = "Producido diario"
+        verbose_name_plural = "Producido diario"
 
-class BonificacionDia(models.Model):
-    instalador=models.CharField(max_length=100, default=0)
-    fecha=models.CharField(max_length=100, default=0)
-    laborado=models.CharField(max_length=50, default=0)
-    bonificacion=models.CharField(max_length=50, default=0)
 
-    class Meta:
-        verbose_name = "Bonificación diaria"
-        verbose_name_plural = "Bonificaciones diarias"
-
-class ActividadBon(models.Model):
-    nombre = models.CharField(max_length=100, default=0)
-
-    class Meta:
-        verbose_name = "Actividad Bon"
-        verbose_name_plural = "Actividades Bon"
-
-class DatosBon(models.Model):
-    nombre = models.CharField(max_length=100, default=0)
-    valor = models.CharField(max_length=100, default=0)
-
-    class Meta:
-        verbose_name = "Datos Bon"
-        verbose_name_plural = "Datos Bon"
-
-class RangoFechas(models.Model):
-    fecha_inicial = models.DateField()
-    fecha_final = models.DateField()
-
-    class Meta:
-        verbose_name = "Rango fechas"
-        verbose_name_plural = "Rango fechas"
-
-class PromedioDiario(models.Model):
+class PromedioMensual(models.Model):
     instalador = models.CharField(max_length=100, default=0)
     fecha = models.DateField()
     valor_producido_mes = models.CharField(max_length=100, default=0)
@@ -86,8 +52,8 @@ class PromedioDiario(models.Model):
     bonificacion = models.CharField(max_length=100, default=0)
 
     class Meta:
-        verbose_name = "Promedio diario"
-        verbose_name_plural = "Promedio diario"
+        verbose_name = "Promedio mensual"
+        verbose_name_plural = "Promedio mensual"
 
 
 

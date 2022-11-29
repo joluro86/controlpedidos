@@ -1,18 +1,18 @@
 {% extends 'index.html' %} {% load static %}{% load humanize %} {% block content %}
 <div class="table-id card mt-4" style="width: 100%; margin: auto">
   <div class="card-body">
-    <h6 class="m-0 text-center">Bonificaciones</h6>
+    <h6 class="m-0 text-center">Producido</h6>
     <table class="table" id="table_id" style="width: 100%; margin: auto">
       <thead>
         <tr class="text-center"style="background-color: #8ee7fa; font-size: 0.8em;">
 
           <th scope="col">Oficial</th>
           <th>Fecha</th>
-          <th scope="col">Bonificación</th>
+          <th scope="col">Excedente</th>
         </tr>
       </thead>
       <tbody>
-        {% for b in bonificaciones %}
+        {% for b in producido %}
 
         <tr class="text-center tr">
           <th scope="row">{{ b.instalador }}</th>

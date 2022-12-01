@@ -44,7 +44,6 @@ def concatenar(pedidos, indicador):
                 nombre_cambio_codigo = Guia.objects.get(nombre_perseo=p.codigo)
                 p.codigo = nombre_cambio_codigo.nombre_fenix
                 p.save()
-
             except:
                 pass
         my_str=p.codigo

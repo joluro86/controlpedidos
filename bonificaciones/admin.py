@@ -26,3 +26,9 @@ class PromedioMensual_Admin(ImportExportModelAdmin, admin.ModelAdmin):
     class Meta:
         model = PromedioMensual
 admin.site.register(PromedioMensual, PromedioMensual_Admin )
+
+class NovedadBonificacionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('descripcion','pedido')
+    class Meta:
+        model = NovedadBonificacion
+admin.site.register(NovedadBonificacion, NovedadBonificacionAdmin )

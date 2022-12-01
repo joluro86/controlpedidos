@@ -36,6 +36,8 @@ class PedidoBoniFenix(models.Model):
 class ProducidoDia(models.Model):
     instalador=models.CharField(max_length=100, default=0)
     fecha=models.CharField(max_length=100, default=0)
+    valor_fenix = models.CharField(max_length=100, default=0)
+    valor_perseo_descuento = models.CharField(max_length=100, default=0)
     producido=models.CharField(max_length=50, default=0)
 
     class Meta:
@@ -54,6 +56,14 @@ class PromedioMensual(models.Model):
     class Meta:
         verbose_name = "Promedio mensual"
         verbose_name_plural = "Promedio mensual"
+
+class NovedadBonificacion(models.Model):
+    pedido = models.CharField(max_length=200, default=0)
+    descripcion = models.CharField(max_length=200, default="--")
+
+    class Meta:
+        verbose_name = "Novedades"
+        verbose_name_plural = "Novedades"
 
 
 

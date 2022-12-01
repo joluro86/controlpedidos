@@ -6,73 +6,119 @@ from django.db.models import Sum
 
 def gestion_bd_fenix_perseo(request):
     
-    """
+    analisis_fechas_pedidos_perseo()
     pedidos_fenix = PedidoBoniFenix.objects.all()
-    cont=0
+
     identificador_calculado=[]
     for pf in pedidos_fenix:
-        try:
-            ped = PedidoBoniPerseo.objects.filter(pedido = pf.pedido)
-            
-            if len(ped)==0:
-                pf.instalador = "No está en Perseo"
-                pf.save()                
-            else:
-                for p in ped:
-                    p.fecha = p.fecha[0:10]
-                    p.save()    
-                    if p.pedido in identificador_calculado:
-                        
-                        pass
-                    else:
-                        if (p.codigo[0] >= '0' and p.codigo[0] <= '9'):
+
+        if pf.pedido in identificador_calculado:
+            pass
+        else:
+            try:
+                ped = PedidoBoniPerseo.objects.filter(pedido = pf.pedido)
+                
+                if len(ped)==0:
+                    pf.instalador = "No está en Perseo"
+                    pf.save()                
+                else:
+                    for p in ped:
+                        p.fecha = p.fecha[0:10]
+                        p.save()    
+                        if p.pedido in identificador_calculado:
+                            
                             pass
                         else:
-                            p.descuento_de_fenix=p.total
-                            p.save()                    
+                            if (p.codigo[0] >= '0' and p.codigo[0] <= '9'):
+                                pass
+                            else:
+                                p.descuento_de_fenix=p.total
+                                p.save()                    
 
-                    pf.instalador = p.instalador
-                    pf.fecha = p.fecha[0:10]
+                        pf.instalador = p.instalador
+                        pf.fecha = p.fecha[0:10]
 
-                    if pf.urbrur=='R':
-                        pf.total = (float(pf.valor))*1.27
-                    else:
-                        pf.total = (float(pf.valor))*1.17
+                        pf.save()
+            except:
+                pass
+        
+        if str(pf.tipo)=='CON':
+            print("entre a con")
+            if pf.urbrur=='R':
+                pf.total = (float(pf.valor))*1.27
+            else:
+                pf.total = (float(pf.valor))*1.17
+            pf.save()
 
-                    pf.save()
-        except:
-            print(str(pf.pedido)+ " : pedido no esta en perseo")
-    """
-    calculo_diario_instalador(0, 1)
+        identificador_calculado.append(pf.pedido)
+    
+    calculo_diario_instalador(0, 1)  
 
     return HttpResponse('Ya terminó')
 
-def calculo_diario_instalador(fecha_ini, fecha_fin):
+def analisis_fechas_pedidos_perseo():
+    pedidos = PedidoBoniPerseo.objects.only('pedido')
+    analizados = []
+    cont=0
+    for p in pedidos:
+        if p.pedido in analizados:
+            pass
+        else:
+            ped = PedidoBoniPerseo.objects.filter(pedido=p.pedido).only('pedido')
+            print(len(ped))
+            encontrados = []
+            for pe in ped:
+                
+                if pe.fecha[:10] in encontrados:
+                    pass
+                else:
+                        encontrados.append(pe.fecha[:10])
+                        
+            if len(encontrados)>1:
+                novedad = NovedadBonificacion()
+                novedad.pedido = p.pedido
+                novedad.descripcion = "Pedido con mas de una fecha"
+                novedad.save()
 
-    fecha_inicial_str = '2022-11-01'
-    fecha_final_str = '2022-11-10'
-    fecha_inicial = datetime.strptime(fecha_inicial_str, '%Y-%m-%d')
-    fecha_final = datetime.strptime(fecha_final_str, '%Y-%m-%d')
+            analizados.append(p.pedido)
+
+def calculo_diario_instalador(fecha_ini, fecha_fin):
+    print("llegue al calculo")
+    fecha_inicial = '2022-11-21'
+    fecha_final_str = '2022-11-25'
     
     instaladores = PedidoBoniPerseo.objects.all().only('instalador').order_by('instalador')
     calulados=[]
     for inst in instaladores:
         
-        fecha_busqueda = fecha_inicial
-        if inst.instalador in calulados:
-            
+        fecha_busqueda = datetime.strptime(fecha_inicial, '%Y-%m-%d')
+        fecha_final = datetime.strptime(fecha_final_str, '%Y-%m-%d')
+
+        if inst.instalador in calulados:            
             pass
         else:
-            print(fecha_busqueda)
-            while fecha_busqueda.date()<=fecha_final.date():
+            while fecha_busqueda<=fecha_final:
+                try:
+                    valor_perseo = PedidoBoniPerseo.objects.filter(instalador=inst.instalador).filter(fecha=fecha_busqueda.strftime('%Y-%m-%d')).aggregate(Sum('descuento_de_fenix'))
+                    valor_fenix = PedidoBoniFenix.objects.filter(instalador=inst.instalador).filter(fecha=fecha_busqueda.strftime('%Y-%m-%d')).aggregate(Sum('total'))
+                    
+                    producido_dia = ProducidoDia()
+                    producido_dia.instalador = inst.instalador
+                    producido_dia.fecha = fecha_busqueda.strftime('%Y-%m-%d')
+                    producido_dia.valor_fenix = str(valor_fenix['total__sum'])
+                    producido_dia.valor_perseo_descuento = str(valor_perseo['descuento_de_fenix__sum'])
+                    producido_dia.producido = float(valor_fenix['total__sum'])-float(valor_perseo['descuento_de_fenix__sum'])
+                    producido_dia.save()
+        
+                    print(inst.instalador)
+                    print(fecha_busqueda)
+                    print("tamaño perseo: " + str((valor_perseo['descuento_de_fenix__sum'])))
+                    print("tamaño fenix: " + str((valor_fenix['total__sum'])))
+                except:
+                    pass                   
                 
-                valor_perseo = PedidoBoniPerseo.objects.filter(instalador=inst.instalador, fecha=fecha_busqueda).aggregate(Sum('descuento_de_fenix'))
-                valor_fenix = PedidoBoniFenix.objects.filter(instalador=inst.instalador, fecha=fecha_busqueda).aggregate(Sum('total'))
                 
-                print(inst.instalador)
-                print(valor_perseo)
-                print(valor_fenix)
-                fecha_busqueda = (fecha_busqueda + timedelta(days=7)).date()
+                fecha_busqueda = (fecha_busqueda + timedelta(days=1))
             calulados.append(inst.instalador)
         
 
@@ -111,8 +157,13 @@ def crear_valor_por_pedido(pedido, instalador, fecha, valor_perseo, valor_fenix)
 
 
 def reiniciar_acta_bonificaciones(request):
-    
-    return redirect('datos_por_pedido')
+    PedidoBoniFenix.objects.all().delete()
+    PedidoBoniPerseo.objects.all().delete()
+    ProducidoDia.objects.all().delete()
+
+    producido = ProducidoDia.objects.all()
+    return render(request, 'producido_por_dia.html', {'producido': producido})
+
 
 
 def datos_por_pedido(request):

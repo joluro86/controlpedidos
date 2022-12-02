@@ -15,16 +15,15 @@ def gestion_bd_fenix_perseo(request):
     for pf in pedidos_fenix:
         try:
             primer = PedidoBoniPerseo.objects.filter(pedido=str(pf.pedido)).first()
-            print(pf.pedido)
+            cont_inst+=1
+            print("cont= " + str(cont_inst) + " - " + str(primer.instalador))
 
-            print(len(primer))
-            #pf.instalador = primer.instalador
-            #pf.save()
-
-            #print(cont_inst + str(primer.instalador))
+            pf.instalador = primer.instalador
+            pf.save()
 
         except Exception as e:
-            print("error 1" + str(e))
+            pass
+            #print("error 1" + str(e))
 
         if pf.pedido in identificador_calculado:
             pass
@@ -58,7 +57,7 @@ def gestion_bd_fenix_perseo(request):
         
         if str(pf.tipo)=='CON':
             cont_con+=1
-            print("entre a con "+ str(cont_con))
+            #print("entre a con "+ str(cont_con))
             if pf.urbrur=='R':
                 pf.total = (float(pf.valor))*1.27
             else:
@@ -124,16 +123,6 @@ def calculo_diario_instalador(fecha_ini, fecha_fin):
                     producido_dia.producido = float(valor_fenix['total__sum'])-float(valor_perseo['descuento_de_fenix__sum'])
                     producido_dia.save()
 
-                    if inst.instalador == "ANDRES FELIPE  MOSQUERA MORENO" and fecha_busqueda.strftime('%Y-%m-%d') == "2022-11-21":
-                        print(inst.instalador)
-                        print(fecha_busqueda)
-                        print("tamaño perseo: " + str((valor_perseo['descuento_de_fenix__sum'])))
-                        print("tamaño fenix: " + str((valor_fenix['total__sum'])))
-
-                        pedi = PedidoBoniFenix.objects.filter(instalador=inst.instalador).filter(fecha=fecha_busqueda.strftime('%Y-%m-%d'))
-                        print("pedidos")
-                        for e in pedi:
-                            print(e.pedido)
                 except:
                     pass                   
                 

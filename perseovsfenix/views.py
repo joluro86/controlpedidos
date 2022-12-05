@@ -64,7 +64,6 @@ def gestionarbd():
 
     concatenar(pedidos_fenix, 0)
     concatenar(pedidos_perseo, 1)
-   
 
 def calculo_novedades_perseo_vs_fenix(request):
     gestionarbd()
@@ -82,7 +81,8 @@ def calculo_novedades_perseo_vs_fenix(request):
                 existe_faltante.diferencia = existe_faltante.cantidad - pedido_fenix.cantidad
                 existe_faltante.save()
 
-            except:
+            except Exception as e:
+                print(e)
                 if pedido_perseo.cantidad != pedido_fenix.cantidad:
                     faltante= NovedadPerseoVsFenix()
                     faltante.concatenacion = pedido_perseo.concatenacion

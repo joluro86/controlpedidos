@@ -296,3 +296,22 @@ function reiniciar_novedades_bd_perseo_vs_fenix() {
       }
     });
 }
+
+function analisis_fechas_perseo() {
+  url = "/limpiar/";
+  swal
+    .fire({
+      title: "¿Esta seguro de Gestionar la base de datos?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Si, gestionar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        window.location.href = url;
+      }
+    });
+}

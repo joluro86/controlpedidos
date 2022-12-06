@@ -79,7 +79,7 @@ def calculo_novedades_perseo_vs_fenix(request):
     for pedido_perseo in pedidos_perseo:
         if pedido_perseo.concatenacion not in calculados:
             calculados.append(pedido_perseo.concatenacion)
-            if pedido_perseo.codigo[:1]=="M" or pedido_perseo.codigo[:1]=="G":
+            if pedido_perseo.codigo[:1] == "M" or pedido_perseo.codigo[:1] == "G":
                 pass
             else:
                 try:
@@ -93,9 +93,9 @@ def calculo_novedades_perseo_vs_fenix(request):
                             if float(cantidad_en_fenix['cantidad__sum']) != float(cantidad_en_perseo['cantidad__sum']):
                                 print(pedido_perseo.pedido)
                                 print("fenix: " +
-                                    str(cantidad_en_fenix['cantidad__sum']))
+                                      str(cantidad_en_fenix['cantidad__sum']))
                                 print("perseo: " +
-                                    str(cantidad_en_perseo['cantidad__sum']))
+                                      str(cantidad_en_perseo['cantidad__sum']))
 
                                 faltante = NovedadPerseoVsFenix()
                                 faltante.concatenacion = pedido_perseo.concatenacion
@@ -160,6 +160,46 @@ def calculo_numero_acta():
                 faltante.save()
         except:
             print("error en el acta")
+
+
+def analisis_fecha_perseo(request):
+
+    pedidos_perseo = matperseo.objects.all()
+
+    pedidos_calculados = []
+    for pedido_perseo in pedidos_perseo:
+
+        if pedido_perseo.pedido in pedidos_calculados:
+            pass
+
+        else:
+            pedidos_calculados.append(pedido_perseo.pedido)
+
+            pedidos = matperseo.objects.filter(
+                pedido=pedido_perseo.pedido).only('fecha')
+
+            calculados_fecha = []
+            for p in pedidos:
+                if p.fecha[:10] in calculados_fecha:
+                    pass
+                else:
+                    calculados_fecha.append(p.fecha[:10])
+
+            if len(calculados_fecha) > 1:
+                pedido_novedad = NovedadPerseoVsFenix()
+                pedido_novedad.concatenacion = pedido_perseo.concatenacion
+                pedido_novedad.pedido = pedido_perseo.pedido
+                pedido_novedad.actividad = pedido_perseo.actividad
+                pedido_novedad.fecha = pedido_perseo.fecha
+                pedido_novedad.codigo = pedido_perseo.codigo
+                pedido_novedad.observacion = "Pedido con mas de una fecha."
+                pedido_novedad.acta = pedido_perseo.acta
+                pedido_novedad.cantidad_fenix = '-999'
+                pedido_novedad.diferencia = '-999'
+                pedido_novedad.save()
+
+    novedades = NovedadPerseoVsFenix.objects.all()
+    return render(request, 'novedades_perseo_fenix.html', {'novedades': novedades})
 
 
 def reiniciar_novedades_perseo_vs_fenix(request):

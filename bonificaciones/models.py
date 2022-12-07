@@ -1,6 +1,6 @@
 from django.db import models
 
-class PedidoBoniPerseo(models.Model):
+class Perseo(models.Model):
     pedido=models.CharField(max_length=50, default=0)
     actividad=models.CharField(max_length=100, default=0)
     instalador=models.CharField(max_length=200, default=0)
@@ -16,10 +16,9 @@ class PedidoBoniPerseo(models.Model):
         verbose_name = "Perseo"
         verbose_name_plural = "Perseo"
 
-class PedidoBoniFenix(models.Model):
+class Fenix(models.Model):
     pedido = models.CharField(max_length=50, default=0)
     actividad = models.CharField(max_length=100, default=0)
-    pagina = models.CharField(max_length=50, default=0)
     urbrur = models.CharField(max_length=50, default=0)
     tipo = models.CharField(max_length=50, default=0)
     codigo = models.CharField(max_length=50, default=0)

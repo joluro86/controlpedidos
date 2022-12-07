@@ -240,8 +240,8 @@ function descartar(id) {
     });
 }
 
-function calculo_novedades_perseo_vs_fenix() {
-  url = "/comparativo/calculo_novedades_perseo_vs_fenix/";
+function gestion_fenix() {
+  url = "/comparativo/gestion_fenix/";
   swal
     .fire({
       title: "¿Esta seguro de realizar esta gestión?",

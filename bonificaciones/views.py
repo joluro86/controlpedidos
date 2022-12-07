@@ -4,81 +4,44 @@ from datetime import datetime, timedelta
 from django.http import HttpResponse
 from django.db.models import Sum
 
-def gestion_bd_fenix_perseo(request):
+def gestion_fenix(request):
     
     #analisis_fechas_pedidos_perseo()
-    pedidos_fenix = PedidoBoniFenix.objects.all()
+    pedidos_fenix = Fenix.objects.all()
 
-    identificador_calculado=[]
-    cont_inst=0
-    cont_con=0
-    for pf in pedidos_fenix:
+    for pf in pedidos_fenix:        
         try:
-            primer = PedidoBoniPerseo.objects.filter(pedido=str(pf.pedido)).first()
-            cont_inst+=1
-            print("cont= " + str(cont_inst) + " - " + str(primer.instalador))
 
-            pf.instalador = primer.instalador
-            pf.save()
-
-        except Exception as e:
-            pass
-            #print("error 1" + str(e))
-
-        if pf.pedido in identificador_calculado:
-            pass
-        else:
-            try:
-                ped = PedidoBoniPerseo.objects.filter(pedido = pf.pedido)
-                
-                if len(ped)==0:
-                    pf.instalador = "No está en Perseo"
-                    pf.save()                
+            if pf.tipo == "CON":
+                if pf.urbrur=="R":
+                    pf.total = float(pf.valor)*1.27
                 else:
-                    for p in ped:
-                        p.fecha = p.fecha[0:10]
-                        p.save()    
-                        if p.pedido in identificador_calculado:
-                            
-                            pass
-                        else:
-                            if (p.codigo[0] >= '0' and p.codigo[0] <= '9'):
-                                pass
-                            else:
-                                p.descuento_de_fenix=p.total
-                                p.save()                    
-
-                        #pf.instalador = p.instalador
-                        pf.fecha = p.fecha[0:10]
-
-                        pf.save()
-            except:
-                pass
-        
-        if str(pf.tipo)=='CON':
-            cont_con+=1
-            #print("entre a con "+ str(cont_con))
-            if pf.urbrur=='R':
-                pf.total = (float(pf.valor))*1.27
-            else:
-                pf.total = (float(pf.valor))*1.17
+                    pf.total = float(pf.valor)*1.17
             pf.save()
-
-        identificador_calculado.append(pf.pedido)
-    
-    calculo_diario_instalador(0, 1)  
+        except Exception as e:
+            print("excepcion total: "+ str(e))
+        
+        try:
+            primer = Perseo.objects.filter(pedido=pf.pedido).first()
+            pf.instalador = primer.instalador
+            pf.fecha = primer.fecha[:10]
+            pf.save()
+            
+        except Exception as e:
+            ## aqui vamos a crear la noveda de que esa linea no existe en fenix
+            print("error " + str(e))
 
     return HttpResponse('Ya terminó')
 
 def analisis_fechas_pedidos_perseo():
-    pedidos = PedidoBoniPerseo.objects.only('pedido')
+    pedidos = Perseo.objects.only('pedido')
     analizados = []
     cont=0
     for p in pedidos:
         if p.pedido in analizados:
             pass
         else:
-            ped = PedidoBoniPerseo.objects.filter(pedido=p.pedido).only('pedido')
+            ped = Perseo.objects.filter(pedido=p.pedido).only('pedido')
             encontrados = []
             for pe in ped:
                 
@@ -100,7 +63,7 @@ def calculo_diario_instalador(fecha_ini, fecha_fin):
     fecha_inicial = '2022-11-21'
     fecha_final_str = '2022-11-25'
     
-    instaladores = PedidoBoniPerseo.objects.all().only('instalador').order_by('instalador')
+    instaladores = Perseo.objects.all().only('instalador').order_by('instalador')
     calulados=[]
     for inst in instaladores:
         
@@ -112,8 +75,8 @@ def calculo_diario_instalador(fecha_ini, fecha_fin):
         else:
             while fecha_busqueda<=fecha_final:
                 try:
-                    valor_perseo = PedidoBoniPerseo.objects.filter(instalador=inst.instalador).filter(fecha=fecha_busqueda.strftime('%Y-%m-%d')).aggregate(Sum('descuento_de_fenix'))
-                    valor_fenix = PedidoBoniFenix.objects.filter(instalador=inst.instalador).filter(fecha=fecha_busqueda.strftime('%Y-%m-%d')).aggregate(Sum('total'))
+                    valor_perseo = Perseo.objects.filter(instalador=inst.instalador).filter(fecha=fecha_busqueda.strftime('%Y-%m-%d')).aggregate(Sum('descuento_de_fenix'))
+                    valor_fenix = Fenix.objects.filter(instalador=inst.instalador).filter(fecha=fecha_busqueda.strftime('%Y-%m-%d')).aggregate(Sum('total'))
                     
                     producido_dia = ProducidoDia()
                     producido_dia.instalador = inst.instalador
@@ -144,7 +107,7 @@ def calculo_valor_pedidos():
 
 # RETORNA EL VALOR DE LOS MATERIALES QUE MEJIA PONE
 def calculo_identificador_perseo(pedido):
-    pedidos = PedidoBoniPerseo.objects.filter(pedido=pedido)
+    pedidos = Perseo.objects.filter(pedido=pedido)
     valor = 0
     print("tam: " + str(len(pedidos)))
 
@@ -163,8 +126,8 @@ def crear_valor_por_pedido(pedido, instalador, fecha, valor_perseo, valor_fenix)
 
 
 def reiniciar_acta_bonificaciones(request):
-    PedidoBoniFenix.objects.all().delete()
-    PedidoBoniPerseo.objects.all().delete()
+    Fenix.objects.all().delete()
+    Perseo.objects.all().delete()
     ProducidoDia.objects.all().delete()
 
     producido = ProducidoDia.objects.all()

@@ -6,14 +6,14 @@ from import_export import resources
 class PedidoBoniPerseo_Admin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('pedido','actividad','instalador','fecha','codigo','cantidad','valor','total','acta', 'descuento_de_fenix')
     class Meta:
-        model = PedidoBoniPerseo
-admin.site.register(PedidoBoniPerseo, PedidoBoniPerseo_Admin)
+        model = Perseo
+admin.site.register(Perseo, PedidoBoniPerseo_Admin)
 
 class PedidoBoniFenix_Admin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('pedido','actividad', 'pagina', 'tipo', 'codigo','cantidad','valor','total')
+    list_display = ('pedido','actividad', 'tipo', 'codigo','cantidad','valor','total')
     class Meta:
-        model = PedidoBoniFenix
-admin.site.register(PedidoBoniFenix, PedidoBoniFenix_Admin)
+        model = Fenix
+admin.site.register(Fenix, PedidoBoniFenix_Admin)
 
 class ProducidoDia_Admin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('instalador','fecha','producido')

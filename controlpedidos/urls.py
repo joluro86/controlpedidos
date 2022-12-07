@@ -22,7 +22,6 @@ urlpatterns = [
     path('cerrar/<int:id_pedido>/', cerrar_pedido, name="cerrar"),
     path('week/<int:id_week>/', pedidos_week, name="week"),
     path('otros/<int:cliente>/<int:apla>/<int:pendi>/', otros_pedidos, name="otros"),
-    path('cierre_masivo/<str:fecha_cierre>/<str:hora_cierre>/', cierre_masivo, name="cierre_masivo"),
     path('epm/<str:inicio>/<str:final>/', vencimientos_epm, name="epm"),
     path('medidores/', importar_acta_medidores, name="medidores_cables"),
     path('gestion-medidores/', gestion_medidores, name="gestion_medidores"),

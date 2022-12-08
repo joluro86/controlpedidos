@@ -16,6 +16,14 @@ class Perseo(models.Model):
         verbose_name = "Perseo"
         verbose_name_plural = "Perseo"
 
+    def calculo_descuento_fenix(self):
+        if str(self.codigo[:1]).isdigit():
+            print(self.codigo[:1])
+            pass
+        else:
+            self.descuento_de_fenix = self.total
+            self.save()
+
 class Fenix(models.Model):
     pedido = models.CharField(max_length=50, default=0)
     actividad = models.CharField(max_length=100, default=0)

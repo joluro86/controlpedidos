@@ -21,11 +21,11 @@ class ProducidoDia_Admin(ImportExportModelAdmin, admin.ModelAdmin):
         model = ProducidoDia
 admin.site.register(ProducidoDia, ProducidoDia_Admin)
 
-class PromedioMensual_Admin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('instalador','fecha', 'valor_producido_mes', 'numero_de_dias_laborados', 'promedio', 'bonificacion')
+class PromedioDiario_Admin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('instalador','valor_producido_mes', 'numero_de_dias_laborados', 'promedio', 'bonificacion_cuadrilla', 'bonificacion_persona')
     class Meta:
-        model = PromedioMensual
-admin.site.register(PromedioMensual, PromedioMensual_Admin )
+        model = PromedioDiario
+admin.site.register(PromedioDiario, PromedioDiario_Admin )
 
 class NovedadBonificacionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('descripcion','pedido')

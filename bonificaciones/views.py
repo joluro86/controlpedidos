@@ -3,13 +3,13 @@ from bonificaciones.models import *
 from datetime import datetime, timedelta
 from django.http import HttpResponse
 from django.db.models import Sum
-
+from django.db.models import Avg
 
 def gestion_fenix(request):
 
-    
     print("llegue carajo")
-    """
+    
+    """ 
     # analisis_fechas_pedidos_perseo()
     pedidos_fenix = Fenix.objects.all()
     pedidos_modificados = []
@@ -47,10 +47,11 @@ def gestion_fenix(request):
             pp.calculo_descuento_fenix()
         except Exception as e:
             print(e)
+    
     """
-
-    calculo_diario_instalador(0,1)
-
+    calculo_diario_instalador(0, 1)
+    
+    calculo_promedio_diario()
     return HttpResponse('Ya terminó FENIX')
 
 
@@ -97,17 +98,25 @@ def calculo_diario_instalador(fecha_ini, fecha_fin):
         if inst.instalador in instaladores_calCulados:
             pass
         else:
-
+            print(inst.instalador)
             while fecha_busqueda <= fecha_final:
-                print(fecha_busqueda)
+
+                print(fecha_busqueda.strftime('%Y-%m-%d')[:10])
                 try:
                     valor_perseo = Perseo.objects.filter(instalador=inst.instalador).filter(
                         fecha=fecha_busqueda.strftime('%Y-%m-%d')).aggregate(Sum('descuento_de_fenix'))
                     valor_fenix = Fenix.objects.filter(instalador=inst.instalador).filter(
                         fecha=fecha_busqueda.strftime('%Y-%m-%d')).aggregate(Sum('total'))
-                    if valor_fenix['total__sum'] is None and valor_perseo['descuento_de_fenix__sum'] is None:
-                        print(valor_fenix)
-                        print(valor_perseo)
+                    if (valor_fenix['total__sum']) is not None:
+
+                        #print("fenix: " + str(valor_fenix['total__sum']))
+                        print("perseo: " + str(valor_perseo['descuento_de_fenix__sum']))
+
+                        if valor_perseo['descuento_de_fenix__sum'] is None:
+                            valor_perseo['descuento_de_fenix__sum']=0
+                            print(inst.instalador)
+                            print(fecha_busqueda)
+
                         producido_dia = ProducidoDia()
                         producido_dia.instalador = inst.instalador
                         producido_dia.fecha = fecha_busqueda.strftime(
@@ -121,45 +130,33 @@ def calculo_diario_instalador(fecha_ini, fecha_fin):
                         producido_dia.save()
 
                 except Exception as e:
-                    print(str(e)+ " " + str(inst.instalador))
+                    print(str(e))
 
                 fecha_busqueda = (fecha_busqueda + timedelta(days=1))
             instaladores_calCulados.append(inst.instalador)
-    
+
     return HttpResponse('Ya terminó calculo')
 
-def calcalulo_bonificaciones(request):
-    calculo_valor_pedidos()
-    # calcular_bonificacion_diaria()
+def calculo_promedio_diario():
+    instaladores = ProducidoDia.objects.all().only('instalador')
+    procesados=[]
+    for i in instaladores:
+        if i.instalador not in procesados:
+            try:
+                print(i.instalador)
+                producido = ProducidoDia.objects.filter(instalador=i.instalador).aggregate(Sum('producido'))
+                print(producido)
+                procesados.append(i.instalador)
+            except Exception as e:
+                print(e)
 
-    return redirect('datos_por_pedido')
 
 
-def calculo_valor_pedidos():
-    pass
-
-
-# RETORNA EL VALOR DE LOS MATERIALES QUE MEJIA PONE
-def calculo_identificador_perseo(pedido):
-    pedidos = Perseo.objects.filter(pedido=pedido)
-    valor = 0
-    print("tam: " + str(len(pedidos)))
-
-    for p in pedidos:
-        if (p.codigo[0] >= '0' and p.codigo[0] <= '9'):
-            pass
-        else:
-            p.descuento_de_fenix = p.total
-            p.save()
-            valor += float(p.total)
-    print(valor)
 
 # GUARDA EL VALOR DE LA BONIFICACION POR PEDIDO
 
-
 def crear_valor_por_pedido(pedido, instalador, fecha, valor_perseo, valor_fenix):
     pass
-
 
 def reiniciar_acta_bonificaciones(request):
     Fenix.objects.all().delete()
@@ -172,15 +169,6 @@ def reiniciar_acta_bonificaciones(request):
 
 def datos_por_pedido(request):
     pass
-
-
-def calcular_pducido_diario(fecha_inicial, fecha_final):
-    pass
-
-
-def guardar_bonificacion_diaria(instalador, valor_dia, fecha, bonificacion):
-    pass
-
 
 def producido_diario(request):
     producido = ProducidoDia.objects.all()

@@ -53,6 +53,7 @@ class ProducidoDia(models.Model):
         verbose_name_plural = "Producido diario"
 
 
+
 class PromedioDiario(models.Model):
     instalador = models.CharField(max_length=100, default=0)
     valor_producido_mes = models.CharField(max_length=100, default=0)

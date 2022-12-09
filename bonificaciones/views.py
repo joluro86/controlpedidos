@@ -5,17 +5,19 @@ from django.http import HttpResponse
 from django.db.models import Sum
 from django.db.models import Avg
 
+
 def gestion_fenix(request):
 
     print("llegue carajo")
     
-    """ 
     # analisis_fechas_pedidos_perseo()
     pedidos_fenix = Fenix.objects.all()
     pedidos_modificados = []
     cont = 0
-
     for pf in pedidos_fenix:
+        cont += 1
+        print(cont)
+
         try:
             if pf.tipo == "CON":
                 if pf.urbrur == "R":
@@ -27,20 +29,23 @@ def gestion_fenix(request):
             print("excepcion total: " + str(e))
 
         if pf.pedido in pedidos_modificados:
+
             pass
         else:
             try:
                 primer = Perseo.objects.filter(pedido=pf.pedido).first()
                 Fenix.objects.filter(pedido=primer.pedido).update(
-                    instalador=primer.instalador, fecha=primer.fecha[:10])
+                        instalador=primer.instalador, fecha=primer.fecha[:10])
                 con = Fenix.objects.filter(pedido=primer.pedido)
+                print(primer.pedido)
+                print(primer.fecha[:10])
                 print(len(con))
+
                 pedidos_modificados.append(pf.pedido)
             except Exception as e:
                 pass
 
     pedidos_perseo = Perseo.objects.all()
-    print(len(pedidos_perseo))
     for pp in pedidos_perseo:
         try:
             print(pp)
@@ -48,12 +53,12 @@ def gestion_fenix(request):
         except Exception as e:
             print(e)
     
-    """
     calculo_diario_instalador(0, 1)
-    
-    calculo_promedio_diario()
-    return HttpResponse('Ya terminó FENIX')
 
+    #calculo_promedio_diario()
+
+    return HttpResponse('Ya terminó FENIX')
+    
 
 def analisis_fechas_pedidos_perseo():
     pedidos = Perseo.objects.only('pedido')
@@ -94,28 +99,36 @@ def calculo_diario_instalador(fecha_ini, fecha_fin):
         cont += 1
         fecha_busqueda = datetime.strptime(fecha_inicial, '%Y-%m-%d')
         fecha_final = datetime.strptime(fecha_final_str, '%Y-%m-%d')
+        
+        #1
+        print("1:")
+        print(fecha_busqueda)
 
         if inst.instalador in instaladores_calCulados:
             pass
         else:
+            #2
+            print("2:")
             print(inst.instalador)
+            instaladores_calCulados.append(inst.instalador)
             while fecha_busqueda <= fecha_final:
-
-                print(fecha_busqueda.strftime('%Y-%m-%d')[:10])
                 try:
                     valor_perseo = Perseo.objects.filter(instalador=inst.instalador).filter(
                         fecha=fecha_busqueda.strftime('%Y-%m-%d')).aggregate(Sum('descuento_de_fenix'))
                     valor_fenix = Fenix.objects.filter(instalador=inst.instalador).filter(
                         fecha=fecha_busqueda.strftime('%Y-%m-%d')).aggregate(Sum('total'))
+                    #3
+                    print("3:")
+                    print("fenix: " + str(valor_fenix['total__sum']))
+                    print("perseo: " + str(valor_perseo['descuento_de_fenix__sum']))
+                    
                     if (valor_fenix['total__sum']) is not None:
 
                         #print("fenix: " + str(valor_fenix['total__sum']))
-                        print("perseo: " + str(valor_perseo['descuento_de_fenix__sum']))
+                        # print("perseo: " + str(valor_perseo['descuento_de_fenix__sum']))
 
                         if valor_perseo['descuento_de_fenix__sum'] is None:
                             valor_perseo['descuento_de_fenix__sum']=0
-                            print(inst.instalador)
-                            print(fecha_busqueda)
 
                         producido_dia = ProducidoDia()
                         producido_dia.instalador = inst.instalador
@@ -133,8 +146,7 @@ def calculo_diario_instalador(fecha_ini, fecha_fin):
                     print(str(e))
 
                 fecha_busqueda = (fecha_busqueda + timedelta(days=1))
-            instaladores_calCulados.append(inst.instalador)
-
+            
     return HttpResponse('Ya terminó calculo')
 
 def calculo_promedio_diario():

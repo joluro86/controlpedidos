@@ -8,7 +8,7 @@ class Perseo(models.Model):
     codigo=models.CharField(max_length=50, default=0)
     cantidad=models.CharField(max_length=50, default=0)
     valor=models.CharField(max_length=50, default=0)
-    total=models.CharField(max_length=50, default=0)
+    total=models.DecimalField(max_digits=10, decimal_places=2, default=0)
     acta=models.CharField(max_length=50, default=0)
     descuento_de_fenix = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
@@ -18,12 +18,11 @@ class Perseo(models.Model):
 
     def calculo_descuento_fenix(self):
         if str(self.codigo[:1]).isdigit():
-            print(self.codigo[:1])
             pass
         else:
             self.descuento_de_fenix = self.total
-            self.fecha = self.fecha[:10]
-            self.save()
+        self.fecha = self.fecha[:10]
+        self.save()
 
 class Fenix(models.Model):
     pedido = models.CharField(max_length=50, default=0)
@@ -67,6 +66,7 @@ class PromedioDiario(models.Model):
         verbose_name_plural = "Promedio"
 
     def calculo_bonificacion(self):
+        
         if float(self.promedio)>1000000:
             self.bonificacion_cuadrilla = float(self.promedio) - float(1000000)
             self.bonificacion_persona = (float(self.promedio) - float(1000000)) * 0.3

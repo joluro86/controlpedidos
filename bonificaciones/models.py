@@ -68,8 +68,8 @@ class PromedioDiario(models.Model):
     def calculo_bonificacion(self):
         
         if float(self.promedio)>1000000:
-            self.bonificacion_cuadrilla = float(self.promedio) - float(1000000)
-            self.bonificacion_persona = (float(self.promedio) - float(1000000)) * 0.3
+            self.bonificacion_cuadrilla = (float(self.promedio) - float(1000000)) * 0.3
+            self.bonificacion_persona = self.bonificacion_cuadrilla/3
         else:
             self.bonificacion = 0
         self.save() 

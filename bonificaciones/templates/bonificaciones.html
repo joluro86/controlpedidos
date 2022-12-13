@@ -1,23 +1,30 @@
 {% extends 'index.html' %} {% load static %}{% load humanize %} {% block content %}
 <div class="table-id card mt-4" style="max-width: 900px; margin: auto">
   <div class="card-body">
-    <h6 class="m-0 text-center">Producido diario por Oficial</h6>
+    <h6 class="m-0 text-center">Promedio diario y bonificaciones</h6>
     <table class="table" id="table_id" style="width: 100%; margin: auto">
       <thead>
         <tr class="text-left"style="background-color: #8ee7fa; font-size: 0.8em;">
 
           <th scope="col">Oficial</th>
-          <th>Fecha</th>
-          <th scope="col">Producido</th>
+          <th>Producido mes</th>
+          <th scope="col">Días</th>
+          <th scope="col">Promedio</th>
+          <th>Cuadrilla</th>
+          <th scope="col">Persona</th>
+
         </tr>
       </thead>
       <tbody>
-        {% for b in producido %}
+        {% for b in bonificaciones %}
 
         <tr class="text-left tr small">
           <th scope="row" class="small">{{ b.instalador }}</th>
-          <th scope="row" class="small">{{ b.fecha }}</th>
-          <th scope="row" class="small">{{ b.producido|intcomma  }}</th>
+          <th scope="row" class="small">{{ b.valor_producido_mes }}</th>
+          <th scope="row" class="small">{{ b.numero_de_dias_laborados }}</th>
+          <th scope="row" class="small">{{ b.promedio|intcomma }}</th>
+          <th scope="row" class="small">{{ b.bonificacion_cuadrilla|intcomma }}</th>
+          <th scope="row" class="small">{{ b.bonificacion_persona|intcomma  }}</th>
         </tr>
 
         {% endfor %}

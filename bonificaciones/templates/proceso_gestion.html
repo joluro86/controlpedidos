@@ -1,0 +1,59 @@
+{% extends 'index.html' %} {% load static %}{% load humanize %}
+
+{% block content %}
+<h4 class="mt-4 text-center text-primary">Elige el rancho de fecha para calcular promedio de los oficiales</h4>
+<div class="table-id card mt-4" style="max-width: 400px; margin: auto">
+  <div class="card-body">
+    <!-- plantilla HTML con el formulario de fechas -->
+    <form action="{% url 'calculo_promedio_oficiales' %}" method="post">
+      {% csrf_token %}
+      <div class="form-group m-4">
+        <label for="fecha_inicio">Fecha de inicio</label>
+        <input type="date" class="form-control" id="fecha_inicial" name="fecha_inicial">
+      </div>
+      <div class="form-group m-4">
+        <label for="fecha_fin">Fecha de fin</label>
+        <input type="date" class="form-control" id="fecha_final" name="fecha_final">
+      </div>
+      <button type="submit" class="btn btn-primary m-2  mx-auto text-center">Enviar</button>
+    </form>
+
+  </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script src="{% static 'js/js_pendientes.js' %}"></script>
+
+<script>
+  $(document).ready(function () {
+    $("#table_id").DataTable({
+      order: [[1, "desc"]],
+
+      dom: "Bfrtilp",
+
+      lengthMenu: [
+        [15, 30, 50, -1],
+        ['15', '30', '50', 'Todos']
+      ],
+
+      buttons: [
+        {
+          extend: "excelHtml5",
+          title: 'ACREV',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5],
+            format: {
+              body: function (data, row, column, node) {
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+            }
+          },
+        },
+
+      ],
+    });
+  });
+</script>
+{% endblock js %}

@@ -15,32 +15,6 @@ def index(request):
     return render(request, "index.html")
 
 
-def pedidos_fenix(request):
-    perseo = matperseo.objects.all()
-    fenix = matfenix.objects.all()
-    pedidos_fenix = []
-    no = []
-    cont = 0
-    cont2 = 0
-    for p in fenix:
-        try:
-            ped_f = matperseo.objects.get(pedido=p.pedido)
-            if ped_f.pedido in pedidos_fenix:
-                pass
-            else:
-                pedidos_fenix.append(ped_f.pedido)
-                cont += 1
-        except:
-            if p.pedido in no:
-                pass
-            else:
-                no.append(p.pedido)
-                cont2 += 1
-    print("pedidos que no estan en perseo: " + str(len(no)))
-
-    return HttpResponse("termino")  # (request, 'index.html')
-
-
 def concatenar(pedidos, indicador):
     con = 1
     for p in pedidos:

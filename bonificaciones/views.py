@@ -6,7 +6,7 @@ from django.db.models import Sum, Avg, Count
 
 
 def gestion_fenix(request):
-
+    
     pedidos_fenix = Fenix.objects.all()
     pedidos_modificados = []
     for pf in pedidos_fenix:

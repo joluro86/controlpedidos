@@ -241,7 +241,7 @@ function descartar(id) {
 }
 
 function gestion_fenix() {
-  url = "/comparativo/gestion_fenix/";
+  url = "/comparativo/calculo_novedades_perseo_vs_fenix/";
   swal
     .fire({
       title: "¿Esta seguro de realizar esta gestión?",

@@ -172,15 +172,16 @@
           Bonificaciones
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <li><a class="dropdown-item" href="/admin/bonificaciones/pedidoboniperseo/import/" target="_blank">Subir
+          <li><a class="dropdown-item" href="/admin/bonificaciones/perseo/import/" target="_blank">Subir
               Perseo</a></li>
-          <li><a class="dropdown-item" href="/admin/bonificaciones/pedidobonifenix/import/" target="_blank">Subir
+          <li><a class="dropdown-item" href="/admin/bonificaciones/fenix/import/" target="_blank">Subir
               Fénix</a></li>
-          <li><a class="dropdown-item" href="{% url 'calculo_bd_fenix_perseo' %}">Gestionar BD</a></li>
-          <li><a class="dropdown-item" href="#">Cálculo</a></li>
-          <li><a class="dropdown-item" href="{% url 'reiniciar_actas_bonificaciones' %}">Reiniciar</a></li>
+          <li><a class="dropdown-item" href="#" onclick="gestionar_bd_bonificacion()">Gestionar BD</a></li>
+          <li><a class="dropdown-item" href="{% url 'producido_rango_fechas' %}">Cálculo bonificación</a></li>          
           <li><a class="dropdown-item" href="{% url 'producido_diario' %}">Producido diario</a></li>
           <li><a class="dropdown-item" href="{% url 'bonificaciones' %}">Bonificaciones</a></li>
+          <li><a class="dropdown-item" href="#" onclick="reiniciar_bd_bonificacion()">Reiniciar BD</a></li>
+          <li><a class="dropdown-item" href="#" onclick="reiniciar_bonificaciones()">Reiniciar bonificaciones</a></li>
         </ul>
       </li>
       <!--

@@ -128,28 +128,7 @@ function otros_pedidos() {
   });
 }
 
-function cierre_masivo() {
-  Swal.fire({
-    title: "Ingrese fecha y hora de cierre",
-    html: `<input type="date" id="fecha_cierre" class="form-control input swal2-input" placeholder="Fecha de cierre">
-    <input type="time" id="hora_cierre" class="form-control input swal2-input" placeholder="Hora de cierre">`,
-    confirmButtonText: "Guardar",
-    focusConfirm: false,
-    preConfirm: () => {
-      const fecha = Swal.getPopup().querySelector("#fecha_cierre").value;
-      const hora = Swal.getPopup().querySelector("#hora_cierre").value;
-      if (!fecha || !hora) {
-        Swal.showValidationMessage(`Por favor ingrese fecha y hora`);
-      }
-      return { fecha: fecha, hora: hora };
-    },
-  }).then((result) => {
-    if (result.value) {
-      window.location.href =
-        "/cierre_masivo/" + result.value.fecha + "/" + result.value.hora;
-    }
-  });
-}
+
 
 function gestion_bd() {
   url = "/limpiar/";
@@ -311,6 +290,92 @@ function analisis_fechas_perseo() {
     })
     .then(function (result) {
       if (result.value) {
+        window.location.href = url;
+      }
+    });
+}
+
+// CODIGO MENU BONIFICACIONES
+
+function gestionar_bd_bonificacion() {
+  url = "/ped-bonficiaciones/gestion_fenix/";
+  swal
+    .fire({
+      title: "¿Esta seguro de gestionar la BBDD?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Si, gestionar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        Swal.fire({
+          title: 'Gestionando la base de datos...',
+          html: 'Por favor, espere...',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        })
+        window.location.href = url;
+      }
+    });
+}
+
+function reiniciar_bd_bonificacion() {
+  url = "/ped-bonficiaciones/reiniciar_actas_bonificaciones/";
+  swal
+    .fire({
+      title: "¿Esta seguro de reiniciar la BBDD?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Si, reiniciar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        Swal.fire({
+          title: 'Reiniciando la base de datos...',
+          html: 'Por favor, espere...',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        })
+        window.location.href = url;
+      }
+    });
+}
+
+function reiniciar_bonificaciones() {
+  url = "/ped-bonficiaciones/reiniciar_bonificaciones/";
+  swal
+    .fire({
+      title: "¿Esta seguro de reiniciar el dato de las bonificaciones?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Si, reiniciar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        Swal.fire({
+          title: 'Reiniciando...',
+          html: 'Por favor, espere...',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        })
         window.location.href = url;
       }
     });

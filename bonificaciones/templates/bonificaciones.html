@@ -20,9 +20,9 @@
 
         <tr class="text-left tr small">
           <th scope="row" class="small">{{ b.instalador }}</th>
-          <th scope="row" class="small">{{ b.valor_producido_mes }}</th>
+          <th scope="row" class="small">{{ b.valor_producido_mes|intcomma }}</th>
           <th scope="row" class="small">{{ b.numero_de_dias_laborados }}</th>
-          <th scope="row" class="small">{{ b.promedio|intcomma }}</th>
+          <th scope="row" class="small">{{ b.adicional|intcomma }}</th>
           <th scope="row" class="small">{{ b.bonificacion_cuadrilla|intcomma }}</th>
           <th scope="row" class="small">{{ b.bonificacion_persona|intcomma  }}</th>
         </tr>
@@ -39,7 +39,7 @@
 <script>
   $(document).ready(function () {
     $("#table_id").DataTable({
-      order: [[1, "desc"]],
+      order: [[5, "desc"]],
 
       dom: "Bfrtilp",
 

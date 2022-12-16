@@ -3,8 +3,18 @@ from email.policy import HTTP
 from django.shortcuts import redirect, render
 from material_oficiales.models import Material_utilizado_perseo
 from Analisis_acta.models import *
+import time
 
 def calculo_novedades_acta(request):
+    try:
+            codigo = pedido.item_cont
+            codigo_ultima_letra = codigo[-1]
+            if codigo_ultima_letra == 'A' or codigo_ultima_letra == 'P':
+                pedido.item_cont = str(codigo[:-1])
+                pedido.save()
+    except:
+        pass
+    start = time.perf_counter()
     pedidos = Acta.objects.all()
     cont = 0
     for pedido in pedidos:
@@ -42,14 +52,14 @@ def calculo_novedades_acta(request):
                     crear_novedad(pedido, nov)
 
             if pedido.item_cont == 'B 04':
-                if int(pedido.cantidad) > 12:
+                if int(pedido.cantidad) > 13:
                     nov = "Actividad: " + \
                         str(pedido.item_cont) + \
                         " con cantidad= " + str(pedido.cantidad)
                     crear_novedad(pedido, nov)
 
             if pedido.item_cont == 'B 06' or pedido.item_cont == 'B 07' or pedido.item_cont == 'B 08':
-                if int(pedido.cantidad) > 4:
+                if int(pedido.cantidad) > 5:
                     nov = "Actividad: " + \
                         str(pedido.item_cont) + \
                         " con cantidad= " + str(pedido.cantidad)
@@ -59,14 +69,6 @@ def calculo_novedades_acta(request):
             pedido.item_cont = pedido.suminis
             pedido.save()
 
-        try:
-            codigo = pedido.item_cont
-            codigo_ultima_letra = codigo[-1]
-            if codigo_ultima_letra == 'A' or codigo_ultima_letra == 'P':
-                pedido.item_cont = str(codigo[:-1])
-                pedido.save()
-        except:
-            pass
 
         pagina = pedido.pagina
 
@@ -288,6 +290,10 @@ def calculo_novedades_acta(request):
                 calculo_otros_incompatibles(pedido, 'A 10', pedido.item_cont)
 
     novedades = Novedad_acta.objects.all()
+
+    end = time.perf_counter()
+    elapsed = end - start
+    print(f"La función se ejecutó en {elapsed:0.6f} segundos")
 
     return render(request, "analisis.html", {'novedades': novedades})
 

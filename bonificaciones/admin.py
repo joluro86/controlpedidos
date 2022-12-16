@@ -22,7 +22,7 @@ class ProducidoDia_Admin(ImportExportModelAdmin, admin.ModelAdmin):
 admin.site.register(ProducidoDia, ProducidoDia_Admin)
 
 class PromedioDiario_Admin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('instalador','valor_producido_mes', 'numero_de_dias_laborados', 'promedio', 'bonificacion_cuadrilla', 'bonificacion_persona')
+    list_display = ('instalador','valor_producido_mes', 'numero_de_dias_laborados', 'adicional', 'bonificacion_cuadrilla', 'bonificacion_persona')
     class Meta:
         model = PromedioDiario
 admin.site.register(PromedioDiario, PromedioDiario_Admin )

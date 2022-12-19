@@ -1,0 +1,70 @@
+{% extends 'index.html' %} {% load static %} {% block head %} {% endblock head %}
+{% block content %}
+<div style="display: flex; justify-content: center" class="header-menu">
+  <h6>Acta Analisis</h6>
+  <div class="table-id card mt-1" style="width: 90%; margin: auto">
+    <div class="card-body">
+      <table class="table table-sm table-hover" class="display nowrap" id="table_id">
+        <thead class="p-0">
+          <tr class="text-center m-0 p-0" style="background-color: #8ee7fa">
+            <th scope="col" class="p-0">Pedido</th>
+            <th scope="col" class="p-0">Instalación</th>
+            <th scope="col" class="p-0">Actividad</th>
+            <th scope="col" class="p-0">Municipio</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in pedidos%}
+
+          <tr class="text-center p-0 tr">
+            <th class="pt-1">{{ a.pedido }}</th>
+            <td class="m-0 pb-0">{{ a.pagina}}</td>
+            <td class="m-0 pb-0">{{ a.actividad }}</td>
+            <td class="m-0 pb-0">{{ a.municipio }}</td>
+            
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock content %} {% block js %}
+
+<script src="{% static 'js/js_pendientes.js' %}"></script>
+
+<script>
+
+  $(document).ready(function () {
+    $("#table_id").DataTable({
+      order: [[1, "asc"]],
+
+      dom: "Bfrtilp",
+
+      lengthMenu: [
+        [15, 30, 50, -1],
+        ['15', '30', '50', 'Todos']
+      ],
+
+      buttons: [
+        {
+          text: 'Week',
+          action: function (e, dt, node, config) {
+            window.location.href = "/week/" + 1
+          }
+        },
+        {
+          extend: "excelHtml5",
+          title: '',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5]
+          },
+        },
+      ],
+    });
+  });
+</script>
+
+{% endblock js %}

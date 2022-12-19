@@ -17,7 +17,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
-  <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="{% static 'datatable/css/dataTables.bootstrap4.min.css' %}" />
   <link rel="stylesheet" href="{% static 'datatable/plugins/responsive-2.2.3/css/responsive.bootstrap4.min.css' %}" />
   <script src="{% static 'datatable/js/jquery.dataTables.js' %}"></script>
@@ -137,15 +137,15 @@
               Fénix</a></li>
           <li><a class="dropdown-item" id="pendi_a" href="#" onclick="gestion_fenix()">Gestionar Fenix</a>
           </li>
-          <li><a class="dropdown-item" id="pendi_a" href="#" onclick="calculo_novedades_perseo_vs_fenix()">Gestionar Perseo</a>
+          <li><a class="dropdown-item" id="pendi_a" href="#" onclick="calculo_novedades_perseo_vs_fenix()">Gestionar
+              Perseo</a>
           </li>
           <li><a class="dropdown-item" id="pendi_a" href="#" onclick="reiniciar_bd_perseo_vs_fenix()">Reiniciar
               actas</a></li>
           <li><a class="dropdown-item" id="pendi_a" href="{% url 'novedades_perseo_fenix' %}">Novedades</a></li>
           <li><a class="dropdown-item" id="pendi_a" href="#"
               onclick="reiniciar_novedades_bd_perseo_vs_fenix()">Reiniciar novedades</a></li>
-          <li><a class="dropdown-item" id="pendi_a" href="{% url 'fechas_perseo' %}"
-              >Analisis Fechas Perseo</a></li>
+          <li><a class="dropdown-item" id="pendi_a" href="{% url 'fechas_perseo' %}">Analisis Fechas Perseo</a></li>
         </ul>
       </li>
       <!--
@@ -177,11 +177,28 @@
           <li><a class="dropdown-item" href="/admin/bonificaciones/fenix/import/" target="_blank">Subir
               Fénix</a></li>
           <li><a class="dropdown-item" href="#" onclick="gestionar_bd_bonificacion()">Gestionar BD</a></li>
-          <li><a class="dropdown-item" href="{% url 'producido_rango_fechas' %}">Cálculo bonificación</a></li>          
+          <li><a class="dropdown-item" href="{% url 'producido_rango_fechas' %}">Cálculo bonificación</a></li>
           <li><a class="dropdown-item" href="{% url 'producido_diario' %}">Producido diario</a></li>
           <li><a class="dropdown-item" href="{% url 'bonificaciones' %}">Bonificaciones</a></li>
           <li><a class="dropdown-item" href="#" onclick="reiniciar_bd_bonificacion()">Reiniciar BD</a></li>
           <li><a class="dropdown-item" href="#" onclick="reiniciar_bonificaciones()">Reiniciar bonificaciones</a></li>
+        </ul>
+      </li>
+      <!--
+          FIN BONIFICACION
+        -->
+
+      <!--
+          INICIO BONIFICACION
+        -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">
+          Nuevo analisis
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item" href="{% url 'formulario_subir_acta_analisis' %}">Subir Acta</a></li>
+          <li class="dropdown-item"><button id="search-button">Buscar</button></li>
         </ul>
       </li>
       <!--

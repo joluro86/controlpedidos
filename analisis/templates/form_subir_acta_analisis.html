@@ -1,0 +1,70 @@
+{% extends 'index.html' %} {% load static %} {% block head %} {% endblock head %}
+{% block content %}
+
+<h3 style="color: red;text-align: center;">Subir Acta para análisis de obra</h3>
+
+<div class="card" style="width: 400px; margin: 40px auto">
+  <form method="post" action="{% url 'subir_acta_analisis' %}" enctype="multipart/form-data"
+    style="background-color: lightgray; padding: 20px; border-radius: 5px;">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Subir</button>
+  </form>
+
+  
+  
+
+</div>
+{% endblock content %} {% block js %}
+
+<script src="{% static 'js/js_pendientes.js' %}"></script>
+
+<script>
+
+  
+
+
+  $(document).ready(function () {
+    $("#table_id").DataTable({
+      order: [[1, "asc"]],
+
+      dom: "Bfrtilp",
+
+      lengthMenu: [
+        [15, 30, 50, -1],
+        ['15', '30', '50', 'Todos']
+      ],
+
+      buttons: [
+        {
+          extend: "excelHtml5",
+          title: '',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5, 6],
+            format: {
+              body: function (data, row, column, node) {
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+            }
+          },
+        },
+        {
+          extend: "copyHtml5",
+          title: '',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5, 6],
+            format: {
+              body: function (data, row, column, node) {
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+            }
+          },
+        },
+      ],
+    });
+  });
+</script>
+
+{% endblock js %}

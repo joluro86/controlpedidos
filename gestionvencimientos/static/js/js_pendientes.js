@@ -386,9 +386,9 @@ $('#search-button').click(function () {
   console.log("llegue a js")
   $.ajax({
     url: '/nuevo_analisis/busqueda-pedidos-acta-analisis/',  // URL de la vista de Django
-    type: 'GET',
+    type: 'POST',
     data: {
-      data: 'jorge'
+      'nombre': 'jorge'
     },
     success: function (response) {  // función a ejecutar si la solicitud es exitosa
       console.log(response);  // imprime la respuesta del servidor en la consola

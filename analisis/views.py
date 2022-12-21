@@ -57,7 +57,10 @@ def subir_acta(request):
     return render(request, 'form_subir_acta_analisis.html', {'form': form})
 
 def busqueda_pedidos_acta_analisis(request):
-    print(data)
-    pedidos = Acta_analisis.objects.all()
-    datos = {'pedidos': pedidos}
-    return render(request, 'pedidos_subidos_acta.html', datos)
+    try:
+        if request.method == 'POST':               
+            pedidos = Acta_analisis.objects.all()
+            datos = {'pedidos': pedidos}
+            return render(request, 'pedidos_subidos_acta.html', datos)
+    except Exception as e:
+        print(e)

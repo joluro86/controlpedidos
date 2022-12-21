@@ -17,7 +17,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="{% static 'datatable/css/dataTables.bootstrap4.min.css' %}" />
   <link rel="stylesheet" href="{% static 'datatable/plugins/responsive-2.2.3/css/responsive.bootstrap4.min.css' %}" />
   <script src="{% static 'datatable/js/jquery.dataTables.js' %}"></script>
@@ -189,8 +189,8 @@
         -->
 
       <!--
-          INICIO BONIFICACION
-        -->
+          INICIO NUEVO ANALISIS
+        
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
           aria-expanded="true">
@@ -198,11 +198,16 @@
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <li><a class="dropdown-item" href="{% url 'formulario_subir_acta_analisis' %}">Subir Acta</a></li>
-          <li class="dropdown-item"><button id="search-button">Buscar</button></li>
+          <li class="dropdown-item">
+            <form method="post">
+              {% csrf_token %}
+              <button id="search-button">Buscar</button>
+            </form>
+          </li>
         </ul>
       </li>
-      <!--
-          FIN BONIFICACION
+      
+          FIN NUEVO ANALISIS
         -->
       <li class="nav-item">
         <a class="nav-link" href="{% url 'logout' %}?next=/">Cerrar sesión</a>

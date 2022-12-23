@@ -4,16 +4,11 @@ from django.shortcuts import redirect, render
 from material_oficiales.models import Material_utilizado_perseo
 from Analisis_acta.models import *
 import time
+from django.db.models import F
 
 def calculo_novedades_acta(request):
-    try:
-            codigo = pedido.item_cont
-            codigo_ultima_letra = codigo[-1]
-            if codigo_ultima_letra == 'A' or codigo_ultima_letra == 'P':
-                pedido.item_cont = str(codigo[:-1])
-                pedido.save()
-    except:
-        pass
+    gestionar_nomnbre_utem_con_a_o_con_p(request)
+
     start = time.perf_counter()
     pedidos = Acta.objects.all()
     cont = 0
@@ -296,6 +291,26 @@ def calculo_novedades_acta(request):
     print(f"La función se ejecutó en {elapsed:0.6f} segundos")
 
     return render(request, "analisis.html", {'novedades': novedades})
+
+def gestionar_nomnbre_utem_con_a_o_con_p(request):
+
+    pedidos = Acta.objects.all()
+    print("empece")
+    cont=0
+    for p in pedidos:
+        if p.item_cont=="0":
+            cont+=1
+            print(cont)
+            p.item_cont=p.suminis
+            p.save()
+        if p.item_cont[-1] == 'A' or p.item_cont[-1] == 'P':
+            p.item_cont = p.item_cont[:-1]
+            p.save()
+        if p.suminis[-1] == 'A' or p.suminis[-1] == 'P':
+            p.item_cont = p.suminis[:-1]
+            p.save()
+            
+    print("termine")
 
 def busqueda_insumo_por_item(pedido, insumo, item):
     try:

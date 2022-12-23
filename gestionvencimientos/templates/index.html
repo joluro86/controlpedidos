@@ -84,7 +84,7 @@
         </ul>
       </li>
 
-      <li class="nav-item dropdown">
+      <li style="background-color: rgb(92, 171, 245) !important;" class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
           aria-expanded="true">
           Revisión Acta
@@ -92,9 +92,9 @@
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <li><a class="dropdown-item" href="/admin/Analisis_acta/acta/import/" target="blank">Importar Acta
               revisión</a></li>
-          <li><a class="dropdown-item" href="{% url 'calculo_novedades' %}">Calculo Novedades Acta</a></li>
-          <li><a class="dropdown-item" href="{% url 'limpiarnov' %}">Reiniciar Novedades</a></li>
-          <li><a class="dropdown-item" href="{% url 'limpiaracta' %}">Reiniciar Acta Analisis</a></li>
+          <li><a class="dropdown-item" href="#" onclick="calculo_novedades()">Calculo Novedades Acta</a></li>
+          <li><a class="dropdown-item" href="#" onclick="limpiar_novedades_acta()">Reiniciar Novedades</a></li>
+          <li><a class="dropdown-item" href="#" onclick="limpiar_acta_analisis()">Reiniciar Acta Analisis</a></li>
           <li class="nav-item" id="pendi_index">
             <a class="dropdown-item" id="pendi_a" href="{% url 'novedades_acta' %}">Novedades</a>
           </li>
@@ -102,7 +102,7 @@
         </ul>
       </li>
 
-      <li class="nav-item dropdown">
+      <li style="background-color: rgb(92, 171, 245) !important;" class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
           aria-expanded="true">
           Gestión Ans
@@ -125,7 +125,7 @@
       <!--
           PERSEO VS FENIX
         -->
-      <li class="nav-item dropdown">
+      <li style="background-color: rgb(92, 171, 245) !important;" class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
           aria-expanded="true">
           Perseo Vs Fénix
@@ -135,11 +135,13 @@
               Perseo</a></li>
           <li><a class="dropdown-item" id="pendi_a" href="/admin/perseovsfenix/matfenix/import/" target="_blank">Subir
               Fénix</a></li>
-          <li><a class="dropdown-item" id="pendi_a" href="#" onclick="gestion_fenix()">Gestionar Fenix</a>
+          <li><a class="dropdown-item" id="pendi_a" href="#" onclick="gestion_fenix()">Gestionar BD</a>
           </li>
+          <!--
           <li><a class="dropdown-item" id="pendi_a" href="#" onclick="calculo_novedades_perseo_vs_fenix()">Gestionar
               Perseo</a>
           </li>
+          -->
           <li><a class="dropdown-item" id="pendi_a" href="#" onclick="reiniciar_bd_perseo_vs_fenix()">Reiniciar
               actas</a></li>
           <li><a class="dropdown-item" id="pendi_a" href="{% url 'novedades_perseo_fenix' %}">Novedades</a></li>
@@ -152,7 +154,7 @@
           FIN PERSEO VS FENIX
         -->
 
-      <li class="nav-item dropdown">
+      <li style="background-color: rgb(92, 171, 245) !important;" class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
           aria-expanded="true">
           Programar

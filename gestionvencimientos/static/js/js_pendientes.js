@@ -381,6 +381,90 @@ function reiniciar_bonificaciones() {
     });
 }
 
+function calculo_novedades() {
+  url = "/analisis/calculo_novedades/";
+  swal
+    .fire({
+      title: "¿Esta seguro de Analizar la base de datos del Acta?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Si, gestionar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        Swal.fire({
+          title: 'Calculando novedades...',
+          html: 'Por favor, espere...',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading()
+          }
+        });
+        window.location.href = url;
+      }
+    });
+}
+
+function limpiar_novedades_acta() {
+  url = "/analisis/limpiar_novedades/";
+  swal
+    .fire({
+      title: "¿Esta seguro de reiniciar las novedades del Acta?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Si, reiniciar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        Swal.fire({
+          title: 'Limpiando novedades...',
+          html: 'Por favor, espere...',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        })
+        window.location.href = url;
+      }
+    });
+}
+
+function limpiar_acta_analisis() {
+  url = "/analisis/limpiar_acta/";
+  swal
+    .fire({
+      title: "¿Esta seguro de reiniciar la bases de datos del Acta?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Si, reiniciar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        Swal.fire({
+          title: 'Reiniciando...',
+          html: 'Por favor, espere...',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading()
+          }
+        });
+        window.location.href = url;
+      }
+    });
+}
+
 // consulta con ajax
 $('#search-button').click(function () {
   console.log("llegue a js")

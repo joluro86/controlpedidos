@@ -477,7 +477,8 @@ def busqueda_item(pedido, item, item2, novedad):
             busquedad_200411 = Acta.objects.filter(
                 pedido=pedido.pedido).filter(item_cont='200411').count()
             busquedad_200316 = Acta.objects.filter(
-                pedido=pedido.pedido).filter(item_cont='200316').count()
+                pedido=pedido.pedido).filter(item_cont='200316').count()          
+            
 
             if busquedad_200410 == 0 and busquedad_200411 == 0 and busquedad_200316 == 0:
                 novedad = novedad+" "+str(item)+"=0, 200411=0, 200316=0 "
@@ -498,6 +499,9 @@ def busqueda_item(pedido, item, item2, novedad):
                 pedido=pedido.pedido).filter(item_cont='A 28').count()
             busquedad_a29 = Acta.objects.filter(
                 pedido=pedido.pedido).filter(item_cont='A 29').count()
+            
+            print("20041__ " + str(busquedad_200410) + " " +busquedad_200411)
+            
 
             if busquedad_a03 != 0 and busquedad_a28 != 0 and busquedad_a29 != 0:
 

@@ -1,6 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.db.models import Sum
-from django.http import HttpResponse
 from perseovsfenix.models import *
 
 
@@ -16,9 +15,30 @@ def index(request):
 
 
 def concatenar(pedidos, indicador):
-    con = 1
+    calculados_existencia = []
     for p in pedidos:
-        if indicador == 1:
+
+        if indicador == 1:  
+
+            if p.pedido not in calculados_existencia:
+                numero_pedidos_perseo_en_fenix = matfenix.objects.filter(
+                    pedido=p.pedido).count()
+                if numero_pedidos_perseo_en_fenix < 1:
+                    faltante = NovedadPerseoVsFenix()
+                    faltante.concatenacion = p.concatenacion
+                    faltante.pedido = p.pedido
+                    faltante.actividad = p.actividad
+                    faltante.fecha = p.fecha
+                    faltante.codigo = p.codigo
+                    faltante.cantidad = '-999'
+                    faltante.observacion = "Pedido con cero registros en Fénix."
+                    faltante.acta = p.acta
+                    faltante.cantidad_fenix = '-999'
+                    faltante.diferencia = '-999'
+                    faltante.save()
+
+                calculados_existencia.append(p.pedido)
+
             try:
                 nombre_cambio_codigo = Guia.objects.get(nombre_perseo=p.codigo)
                 p.codigo = nombre_cambio_codigo.nombre_fenix
@@ -26,6 +46,26 @@ def concatenar(pedidos, indicador):
             except:
                 pass
         codigo = p.codigo
+
+        if indicador == 0:  
+
+            if p.pedido not in calculados_existencia:
+                numero_pedidos_perseo_en_perseo = matperseo.objects.filter(
+                    pedido=p.pedido).count()
+                if numero_pedidos_perseo_en_perseo < 1:
+                    faltante = NovedadPerseoVsFenix()
+                    faltante.concatenacion = p.concatenacion
+                    faltante.pedido = p.pedido
+                    faltante.actividad = p.actividad
+                    faltante.fecha = p.fecha
+                    faltante.codigo = p.codigo
+                    faltante.cantidad = '-999'
+                    faltante.observacion = "Pedido con cero registros en Perseo."
+                    faltante.cantidad_fenix = '-999'
+                    faltante.diferencia = '-999'
+                    faltante.save()
+
+                calculados_existencia.append(p.pedido)
 
         try:
             ultima_letra = codigo[-1]
@@ -48,66 +88,70 @@ def gestionarbd():
 
 def calculo_novedades_perseo_vs_fenix(request):
     gestionarbd()
+    
     calculados = []
     pedidos_perseo = matperseo.objects.all()
-    for pedido_perseo in pedidos_perseo:
+    for pedido_perseo in pedidos_perseo:            
+
         if pedido_perseo.concatenacion not in calculados:
             calculados.append(pedido_perseo.concatenacion)
-            if pedido_perseo.codigo[:1] == "M" or pedido_perseo.codigo[:1] == "G":
-                pass
-            else:
-                try:
-                    cantidad_en_fenix = matfenix.objects.filter(
-                        concatenacion=pedido_perseo.concatenacion).aggregate(Sum('cantidad'))
-                    cantidad_en_perseo = matperseo.objects.filter(
-                        concatenacion=pedido_perseo.concatenacion).aggregate(Sum('cantidad'))
-                    print(cantidad_en_fenix)
-                    if cantidad_en_fenix['cantidad__sum'] is not None:
-                        if float(cantidad_en_fenix['cantidad__sum']) >= 0:
-                            if float(cantidad_en_fenix['cantidad__sum']) != float(cantidad_en_perseo['cantidad__sum']):
-                                print(pedido_perseo.pedido)
-                                print("fenix: " +
-                                      str(cantidad_en_fenix['cantidad__sum']))
-                                print("perseo: " +
-                                      str(cantidad_en_perseo['cantidad__sum']))
+            if not NovedadPerseoVsFenix.objects.filter(pedido=pedido_perseo.pedido).filter(observacion="Pedido con cero registros en Fénix.").exists():
 
-                                faltante = NovedadPerseoVsFenix()
-                                faltante.concatenacion = pedido_perseo.concatenacion
-                                faltante.pedido = pedido_perseo.pedido
-                                faltante.actividad = pedido_perseo.actividad
-                                faltante.fecha = pedido_perseo.fecha
-                                faltante.codigo = pedido_perseo.codigo
-                                faltante.cantidad = float(
-                                    cantidad_en_perseo['cantidad__sum'])
-                                faltante.observacion = "Cantidad no coincide"
-                                faltante.acta = pedido_perseo.acta
-                                faltante.cantidad_fenix = str(
-                                    cantidad_en_fenix['cantidad__sum'])
-                                faltante.diferencia = float(
-                                    cantidad_en_perseo['cantidad__sum']) - float(cantidad_en_fenix['cantidad__sum'])
-                                faltante.save()
-                    else:
-                        faltante = NovedadPerseoVsFenix()
-                        faltante.concatenacion = pedido_perseo.concatenacion
-                        faltante.pedido = pedido_perseo.pedido
-                        faltante.actividad = pedido_perseo.actividad
-                        faltante.fecha = pedido_perseo.fecha
-                        faltante.codigo = pedido_perseo.codigo
-                        faltante.cantidad = float(
-                            cantidad_en_perseo['cantidad__sum'])
-                        faltante.observacion = "Item no registrado en Fénix."
-                        faltante.acta = pedido_perseo.acta
-                        faltante.cantidad_fenix = '-999'
-                        faltante.diferencia = '-999'
-                        faltante.save()
-
-                except Exception as e:
+                if pedido_perseo.codigo[:1] == "M" or pedido_perseo.codigo[:1] == "G":
                     pass
+                else:
+                    try:
+                        cantidad_en_fenix = matfenix.objects.filter(
+                            concatenacion=pedido_perseo.concatenacion).aggregate(Sum('cantidad'))
+                        cantidad_en_perseo = matperseo.objects.filter(
+                            concatenacion=pedido_perseo.concatenacion).aggregate(Sum('cantidad'))
+                        #print(cantidad_en_fenix)
+                        if cantidad_en_fenix['cantidad__sum'] is not None:
+                            if float(cantidad_en_fenix['cantidad__sum']) >= 0:
+                                if float(cantidad_en_fenix['cantidad__sum']) != float(cantidad_en_perseo['cantidad__sum']):
+                                    print(pedido_perseo.pedido)
+                                    print("fenix: " +
+                                        str(cantidad_en_fenix['cantidad__sum']))
+                                    print("perseo: " +
+                                        str(cantidad_en_perseo['cantidad__sum']))
+                                    
+                                    faltante = NovedadPerseoVsFenix()
+                                    faltante.concatenacion = pedido_perseo.concatenacion
+                                    faltante.pedido = pedido_perseo.pedido
+                                    faltante.actividad = pedido_perseo.actividad
+                                    faltante.fecha = pedido_perseo.fecha
+                                    faltante.codigo = pedido_perseo.codigo
+                                    faltante.cantidad = float(
+                                        cantidad_en_perseo['cantidad__sum'])
+                                    faltante.observacion = "Cantidad no coincide"
+                                    faltante.acta = pedido_perseo.acta
+                                    faltante.cantidad_fenix = str(
+                                        cantidad_en_fenix['cantidad__sum'])
+                                    faltante.diferencia = float(
+                                        cantidad_en_perseo['cantidad__sum']) - float(cantidad_en_fenix['cantidad__sum'])
+                                    faltante.save()
+                        else:
+                            faltante = NovedadPerseoVsFenix()
+                            faltante.concatenacion = pedido_perseo.concatenacion
+                            faltante.pedido = pedido_perseo.pedido
+                            faltante.actividad = pedido_perseo.actividad
+                            faltante.fecha = pedido_perseo.fecha
+                            faltante.codigo = pedido_perseo.codigo
+                            faltante.cantidad = float(
+                                cantidad_en_perseo['cantidad__sum'])
+                            faltante.observacion = "Item no registrado en Fénix."
+                            faltante.acta = pedido_perseo.acta
+                            faltante.cantidad_fenix = '-999'
+                            faltante.diferencia = '-999'
+                            faltante.save()
+
+                    except Exception as e:
+                        pass
 
         ped = NovedadPerseoVsFenix.objects.filter(diferencia=0)
-        ped.delete()
+        ped.delete()    
 
-    calculo_numero_acta()
+    calculo_numero_acta()    
 
     novedades = NovedadPerseoVsFenix.objects.all()
     return render(request, 'novedades_perseo_fenix.html', {'novedades': novedades})

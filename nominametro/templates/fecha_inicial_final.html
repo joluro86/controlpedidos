@@ -1,0 +1,15 @@
+{% extends 'index.html' %} {% load static %}{% load humanize %} {% block content %}
+<div class="table-id card mt-4" style="max-width: 900px; margin: auto">
+  <div class="card-body">
+
+    <form action="{% url 'gestionar_prenomina' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="file">Selecciona las fechas:</label>
+        <input type="date" id="fecha_inicial" name="fecha_inicial">
+        <input type="date" id="fecha_final" name="fecha_final">
+        <input type="submit">
+    </form>   
+    
+  </div>
+</div>
+{% endblock content %} 

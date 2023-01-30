@@ -186,6 +186,19 @@
           <li><a class="dropdown-item" href="#" onclick="reiniciar_bonificaciones()">Reiniciar bonificaciones</a></li>
         </ul>
       </li>
+
+      <li style="background-color: rgb(92, 171, 245) !important;" class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">
+          Nomina
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item" href="{% url 'subirnominametro' %}">Subir</a></li>
+          <li><a class="dropdown-item" href="{% url 'definir_fechas' %}">Gestionar archivo</a></li>
+          <li><a class="dropdown-item" href="#">Informe</a></li>
+          <li><a class="dropdown-item" href="{% url 'reiniciar_prenomina' %}">Reiniciar prenomina</a></li>
+        </ul>
+      </li>
       <!--
           FIN BONIFICACION
         -->
@@ -227,7 +240,6 @@
 
   {% block js %}
   <script src="{% static 'js/js_pendientes.js' %}"></script>
-  <script src="{% static 'js/logica_epm.js' %}"></script>
   {% endblock js %}
 
 </body>

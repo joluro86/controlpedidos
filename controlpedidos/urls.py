@@ -42,6 +42,8 @@ urlpatterns = [
 
     path('nuevo_analisis/', include('analisis.urls')),
 
+    path('nomina/', include('nominametro.urls')),
+
 ] +static(settings.STATIC_URL, document_root= settings.STATIC_ROOT)
 
 

@@ -40,21 +40,21 @@ def calculo_novedades_acta(request):
         if primera_letra == 'B':
             if pedido.item_cont == 'B 03':
 
-                if int(pedido.cantidad) > 60:
+                if float(pedido.cantidad) > 60:
                     nov = "Actividad: " + \
                         str(pedido.item_cont) + \
                         " con cantidad= " + str(pedido.cantidad)
                     crear_novedad(pedido, nov)
 
             if pedido.item_cont == 'B 04':
-                if int(pedido.cantidad) > 13:
+                if float(pedido.cantidad) > 13:
                     nov = "Actividad: " + \
                         str(pedido.item_cont) + \
                         " con cantidad= " + str(pedido.cantidad)
                     crear_novedad(pedido, nov)
 
             if pedido.item_cont == 'B 06' or pedido.item_cont == 'B 07' or pedido.item_cont == 'B 08':
-                if int(pedido.cantidad) > 5:
+                if float(pedido.cantidad) > 5:
                     nov = "Actividad: " + \
                         str(pedido.item_cont) + \
                         " con cantidad= " + str(pedido.cantidad)

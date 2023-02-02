@@ -15,8 +15,11 @@ class prenomina(models.Model):
     préstamo = models.CharField(max_length=100, null=True, default='-')
     salario_básico_hora = models.CharField(max_length=100,  null=True, default='-')
     tiempo = models.DecimalField(max_digits=12, decimal_places=4, default=0.00)
-    valor = models.CharField(max_length=200, default='-')
+    valor = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     conversor = models.CharField(max_length=200, default='-')
+    tipo = models.CharField(max_length=200, default='0')
+    factor = models.CharField(max_length=200, default='0')
+
 
     class Meta:
         verbose_name = 'prenomina'
@@ -75,6 +78,8 @@ class Concepto(models.Model):
     concepto = models.CharField(max_length=200)
     conversor = models.CharField(max_length=200)
     factor = models.DecimalField(max_digits=6, decimal_places=4, default=1.0000)
+    tipo = models.CharField(max_length=200, default='0')
+
 
     class Meta:
         verbose_name = 'Concepto'
@@ -84,6 +89,19 @@ class Concepto(models.Model):
 
     def __str__(self):
         return str(self.concepto)
+
+class Novedad_nomina(models.Model):
+    empleado = models.CharField(max_length=200)
+    novedad = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name = 'Novedad nomina'
+        verbose_name_plural = 'Novedad nomina'
+        db_table = 'novedad_nomina'
+        order_with_respect_to = 'empleado'
+
+    def __str__(self):
+        return str(self.empleado) + " novedad: " + str(self.novedad)
 
 
 

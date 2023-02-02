@@ -28,7 +28,7 @@ class Plantilla_Admin(ImportExportModelAdmin, admin.ModelAdmin):
 admin.site.register(plantilla, Plantilla_Admin)
 
 class Concepto_Admin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('concepto','conversor')
+    list_display = ('concepto','conversor', 'factor')
     class Meta:
         model = Concepto
 

@@ -1,11 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from openpyxl import load_workbook
-from django.db.models import Q, Sum, F
+from django.db.models import Sum
 
 from nominametro.models import Novedad_nomina, plantilla, prenomina, Concepto
-
-# Create your views here.
 
 
 def subirnominametro(request):
@@ -13,7 +11,7 @@ def subirnominametro(request):
         if request.method == 'POST':
             file = request.FILES['file']
             process_excel(file)
-            return HttpResponse("File uploaded and processed!")
+            return render(request, 'fecha_inicial_final.html')
     except Exception as e:
         print(e)
     return render(request, 'subirarchivo.html')
@@ -46,7 +44,8 @@ def process_excel(file):
 
             try:
                 nomina_empleado.conversor = buscar_conversor(row[6].value)
-                tipo_ingreso = Concepto.objects.filter(concepto=row[6].value).first()
+                tipo_ingreso = Concepto.objects.filter(
+                    concepto=row[6].value).first()
                 nomina_empleado. tipo = tipo_ingreso.tipo
                 nomina_empleado. factor = tipo_ingreso.factor
 
@@ -63,8 +62,6 @@ def process_excel(file):
             nomina_empleado. tiempo = row[11].value
             nomina_empleado. valor = row[12].value
 
-            
-            
             nomina_empleado.save()
     except Exception as e:
         print(e)
@@ -86,14 +83,11 @@ def gestionar_prenomina(request):
         fecha_inicial = request.POST['fecha_inicial']
         fecha_final = request.POST['fecha_final']
 
-        print(fecha_inicial)
-        print(fecha_final)
-
         empleados = prenomina.objects.values_list('empleado').distinct()
 
         cont = 1
 
-        valorhoras=0
+        valorhoras = 0
         for e in empleados.order_by('empleado'):
             cont += 1
 
@@ -161,7 +155,8 @@ def gestionar_prenomina(request):
 
             nomina_empleado.total_devengado = calculo_devengado(empleado)
 
-            nomina_empleado.deducción_retención_en_la_fuente = calculo_valor(empleado, 1600)
+            nomina_empleado.deducción_retención_en_la_fuente = calculo_valor(
+                empleado, 1600)
 
             nomina_empleado.otras_deducciones = calculo_valor(emplea, 1700)
 
@@ -171,18 +166,14 @@ def gestionar_prenomina(request):
 
             nomina_empleado.save()
 
-            # CALCULAR DEVENGADO TOTAL
-
-
-            # CALCULAR DEVENGADO TOTAL
-
-    return HttpResponse("Informe procesado!")
+    return redirect('informe')
 
 
 def reiniciar_prenomina(request):
     prenomina.objects.all().delete()
     plantilla.objects.all().delete()
-    return render(request, 'subirarchivo.html')
+    Novedad_nomina.objects.all().delete()
+    return redirect('informe')
 
 
 def calculo_horas(empleado, conversor):
@@ -192,7 +183,8 @@ def calculo_horas(empleado, conversor):
 
     if horas['suma'] is None:
         horas = 0
-    else: horas = horas['suma']
+    else:
+        horas = horas['suma']
 
     return horas
 
@@ -204,38 +196,37 @@ def calculo_valor(empleado, conversor):
 
     if valor['suma'] is None:
         valor = 0
-    else: valor = valor['suma']
+    else:
+        valor = valor['suma']
 
     return valor
 
+
 def calculo_devengado(empleado):
     valor = prenomina.objects.filter(empleado=empleado)\
-                                 .filter(tipo='devengado').aggregate(devengado=Sum('valor'))
+        .filter(tipo='devengado').aggregate(devengado=Sum('valor'))
     devengado = valor['devengado']
 
     return devengado
 
+
 def calculo_neto_a_pagar(empleado):
     valor = prenomina.objects.filter(empleado=empleado)\
-                                 .filter(tipo='devengado').aggregate(devengado=Sum('valor'))
+        .filter(tipo='devengado').aggregate(devengado=Sum('valor'))
 
     deduccion = prenomina.objects.filter(empleado=empleado)\
                                  .filter(tipo='deduccion').aggregate(deduccion=Sum('valor'))
 
-    print("decuccion " + str(deduccion['deduccion']))
-
     if deduccion['deduccion'] is None:
-        deduccion['deduccion']= 0  
+        deduccion['deduccion'] = 0
     if valor['devengado'] is None:
-        valor['devengado']= 0                       
+        valor['devengado'] = 0
 
     neto_a_pagar = float(valor['devengado'])-float(deduccion['deduccion'])
 
     return neto_a_pagar
 
 
-
-
-
-
-    
+def informe(request):
+    informe = plantilla.objects.all()
+    return render(request, 'informe.html', {'informe':informe})

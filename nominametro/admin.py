@@ -2,7 +2,7 @@ from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin 
 from import_export import resources
 
-from nominametro.models import Concepto, plantilla, prenomina
+from nominametro.models import Concepto, Novedad_nomina, plantilla, prenomina
 
 class StockBuscarResource(resources.ModelResource):
     class Meta:
@@ -28,9 +28,18 @@ class Plantilla_Admin(ImportExportModelAdmin, admin.ModelAdmin):
 admin.site.register(plantilla, Plantilla_Admin)
 
 class Concepto_Admin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('concepto','conversor', 'factor')
+    list_display = ('concepto','conversor', 'factor', 'tipo')
     class Meta:
         model = Concepto
 
 admin.site.register(Concepto, Concepto_Admin)
+
+class Novedad_Admin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('empleado','novedad')
+    class Meta:
+        model = Novedad_nomina
+
+admin.site.register(Novedad_nomina, Novedad_Admin)
+
+
 

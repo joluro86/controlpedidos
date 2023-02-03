@@ -1,15 +1,25 @@
 {% extends 'index.html' %} {% load static %}{% load humanize %} {% block content %}
-<div class="table-id card mt-4" style="max-width: 900px; margin: auto">
+<div class="table-id card bg-primary text-white" style="max-width: 400px; margin: 50px auto">
   <div class="card-body">
 
     <form action="{% url 'gestionar_prenomina' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <label for="file">Selecciona las fechas:</label>
-        <input type="date" id="fecha_inicial" name="fecha_inicial">
-        <input type="date" id="fecha_final" name="fecha_final">
-        <input type="submit">
+        <h5 class="text-center">Selecciona el rango de fechas</h5>
+        <div class="form-group mt-3">
+            <label for="file" class="mb-2 text-center">Fecha Inicial</label>
+            <input type="date" id="fecha_inicial" name="fecha_inicial" class="form-control bg-white text-secondary">
+        </div>
+        <div class="form-group mt-3">
+          <label for="file" class="mb-2 text-center">Fecha Final</label>
+            <input type="date" id="fecha_final" name="fecha_final" class="form-control bg-white text-secondary">
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+            <input type="submit" class="btn btn-light btn-long" value="Gestionar">
+        </div>
     </form>   
     
   </div>
 </div>
+
+
 {% endblock content %} 

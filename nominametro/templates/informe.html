@@ -1,0 +1,117 @@
+{% extends 'index.html' %} {% load static %} {% block content %}
+
+<div class="table-id card mt-1" style="width: 100%; margin: auto">
+  <div class="card-body">
+    <table class="table table-sm table-hover" class="display nowrap" id="table_id">
+      <thead class="p-0">
+        <tr class="text-center p-0" style="background-color: #8ee7fa; font-size: 0.5em;">
+          <th>Cédula</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Código</th>
+          <th>Cargo</th>
+          <th>Salario Mensual Basico / Honorario mensual</th>
+          <th> Valor/hora ordin.</th>
+          <th>Periodo Fecha Inicial (dd/mm/yyyy)</th>
+          <th>Periodo Fecha Final (dd/mm/yyyy)</th>
+          <th>Horas Ordinarias (1)</th>
+          <th>ON (0.35)</th>
+          <th>ED (1.25)</th>
+          <th>EN (1.75)</th>
+          <th>0FD (0.75)</th>
+          <th>0FN (1.1)</th>
+          <th>EFD (2)</th>
+          <th>EFN (2.5)</th>
+          <th>D o F D (1.75)</th>
+          <th>D o F N (2.1)</th>
+          <th>Ausencias remuneradas hora(s)</th>
+          <th>Ausencias No remuneradas hora(s)</th>
+          <th>Incapacidad por enfermedad general horas (s)</th>
+          <th>Vr Auxilio Transporte o Auxilio de Conectividad</th>
+          <th>Otros Ingresos $ No Prestacionales</th>
+          <th>Otros Ingresos $ Prestacionales</th>
+          <th>Total Devengado</th>
+          <th>Deducción Retención en la Fuente</th>
+          <th>Otras Deducciones $</th>
+          <th>Deducciones SGSS $</th>
+          <th>Neto a pagar</th>
+          <th>FIRMA</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in informe %}
+        <tr class="text-center tr" style="font-size: 0.7em !important">
+          <td>{{i.cedula }}</td>
+          <td>{{i.nombre }}</td>
+          <td>{{i.apellido }}</td>
+          <td>{{i.codigo }}</td>
+          <td>{{i.cargo }}</td>
+          <td>{{i.salario_mensual_basico }}</td>
+          <td>{{i.valor_hora_ordin }}</td>
+          <td>{{i.periodo_fecha_inicial }}</td>
+          <td>{{i.periodo_fecha_final }}</td>
+          <td>{{i.horas_ordinarias }}</td>
+          <td>{{i.on_0_35 }}</td>
+          <td>{{i.ed_1_25 }}</td>
+          <td>{{i.en_1_75 }}</td>
+          <td>{{i.fd_0_75 }}</td>
+          <td>{{i.fn_1_1 }}</td>
+          <td>{{i.efd_2 }}</td>
+          <td>{{i.efn_2_5 }}</td>
+          <td>{{i.d_o_f_d_1_75 }}</td>
+          <td>{{i.d_o_f_n_2_1 }}</td>
+          <td>{{i.ausencias_remuneradas_hora }}</td>
+          <td>{{i.ausencias_no_remuneradas_hora }}</td>
+          <td>{{i.incapacidad_por_enfermedad_general_horas }}</td>
+          <td>{{i.vr_auxilio_transporte_o_auxilio_de_conectividad }}</td>
+          <td>{{i.otros_ingresos_no_prestacionales }}</td>
+          <td>{{i.otros_ingresos_prestacionales }}</td>
+          <td>{{i.total_devengado }}</td>
+          <td>{{i.deducción_retención_en_la_fuente }}</td>
+          <td>{{i.otras_deducciones }}</td>
+          <td>{{i.deducciones_sgss }}</td>
+          <td>{{i.neto_a_pagar }}</td>
+          <td></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock content %} {% block js %}
+
+<script src="{% static 'js/js_pendientes.js' %}"></script>
+<script>
+  $(document).ready(function () {
+    $("#table_id").DataTable({
+      order: [[1, "asc"]],
+      dom: "Bfrtilp",
+
+      lengthMenu: [
+        [15, 30, 50, -1],
+        ["15 filas", "30 filas", "50 filas", "Todos"],
+      ],
+
+      buttons: [
+        {
+          extend: "excelHtml5",
+          title: '',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+          },
+          excelStyles: {
+            cells: "1",
+            style: {
+              font: {
+                color: '#F24747',
+                b:true
+              }
+            }
+          }
+        },
+      ],
+    });
+  });
+</script>
+
+{% endblock js %}

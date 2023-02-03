@@ -480,3 +480,31 @@ $('#search-button').click(function () {
   });
 });
 // fin consulta con ajax
+
+function reiniciar_prenomina() {
+  url = "/nomina/reiniciar_nomina_metro/";
+  swal
+    .fire({
+      title: "¿Esta seguro de reiniciar la bases de datos de la Prenomina?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Si, reiniciar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        Swal.fire({
+          title: 'Reiniciando...',
+          html: 'Por favor, espere...',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading()
+          }
+        });
+        window.location.href = url;
+      }
+    });
+}

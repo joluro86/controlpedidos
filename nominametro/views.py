@@ -1,3 +1,4 @@
+import openpyxl
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from openpyxl import load_workbook
@@ -79,92 +80,104 @@ def definir_fechas(request):
 
 def gestionar_prenomina(request):
 
-    if request.method == 'POST':
-        fecha_inicial = request.POST['fecha_inicial']
-        fecha_final = request.POST['fecha_final']
+    try:
 
-        empleados = prenomina.objects.values_list('empleado').distinct()
+        if request.method == 'POST':
+            fecha_inicial = request.POST['fecha_inicial']
+            fecha_final = request.POST['fecha_final']
 
-        cont = 1
+            empleados = prenomina.objects.values_list('empleado').distinct()
 
-        valorhoras = 0
-        for e in empleados.order_by('empleado'):
-            cont += 1
+            cont = 1
 
-            empleado = prenomina.objects.filter(empleado=e[0]).first()
+            valorhoras = 0
+            for e in empleados.order_by('empleado'):
+                cont += 1
 
-            emplea = e[0]
+                empleado = prenomina.objects.filter(empleado=e[0]).first()
 
-            nomina_empleado = plantilla()
-            nomina_empleado.cedula = empleado.empleado
-            nomina_empleado.nombre = empleado.nombre_del_empleado
-            nomina_empleado.apellido = empleado.nombre_del_empleado
-            nomina_empleado.periodo_fecha_inicial = fecha_inicial
-            nomina_empleado.periodo_fecha_final = fecha_final
-            nomina_empleado.valor_hora_ordin = empleado.salario_básico_hora
+                print(empleado)
 
-            horas_ordinarias = calculo_horas(emplea, 100)
-            nomina_empleado.horas_ordinarias = horas_ordinarias
+                emplea = e[0]
 
-            on_0_35 = calculo_horas(emplea, 200)
-            nomina_empleado.on_0_35 = on_0_35
+                nomina_empleado = plantilla()
+                nomina_empleado.cedula = empleado.empleado
+                nomina_empleado.nombre = empleado.nombre_del_empleado
+                nomina_empleado.apellido = empleado.nombre_del_empleado
+                nomina_empleado.periodo_fecha_inicial = fecha_inicial
+                nomina_empleado.periodo_fecha_final = fecha_final
+                nomina_empleado.valor_hora_ordin = empleado.salario_básico_hora
 
-            ed_1_25 = calculo_horas(emplea, 300)
-            nomina_empleado.ed_1_25 = ed_1_25
+                horas_ordinarias = calculo_horas(emplea, 100)
+                nomina_empleado.horas_ordinarias = horas_ordinarias
 
-            en_1_75 = calculo_horas(emplea, 400)
-            nomina_empleado.en_1_75 = en_1_75
+                on_0_35 = calculo_horas(emplea, 200)
+                nomina_empleado.on_0_35 = on_0_35
 
-            fd_0_75 = calculo_horas(emplea, 500)
-            nomina_empleado.fd_0_75 = fd_0_75
+                ed_1_25 = calculo_horas(emplea, 300)
+                nomina_empleado.ed_1_25 = ed_1_25
 
-            fn_1_1 = calculo_horas(emplea, 600)
-            nomina_empleado.fn_1_1 = fn_1_1
+                en_1_75 = calculo_horas(emplea, 400)
+                nomina_empleado.en_1_75 = en_1_75
 
-            efd_2 = calculo_horas(emplea, 700)
-            nomina_empleado.efd_2 = efd_2
+                fd_0_75 = calculo_horas(emplea, 500)
+                nomina_empleado.fd_0_75 = fd_0_75
 
-            efn_2_5 = calculo_horas(emplea, 800)
-            nomina_empleado.efn_2_5 = efn_2_5
+                fn_1_1 = calculo_horas(emplea, 600)
+                nomina_empleado.fn_1_1 = fn_1_1
 
-            d_o_f_d_1_75 = calculo_horas(emplea, 900)
-            nomina_empleado.d_o_f_d_1_75 = d_o_f_d_1_75
+                efd_2 = calculo_horas(emplea, 700)
+                nomina_empleado.efd_2 = efd_2
 
-            d_o_f_n_2_1 = calculo_horas(emplea, 1000)
-            nomina_empleado.d_o_f_n_2_1 = d_o_f_n_2_1
+                efn_2_5 = calculo_horas(emplea, 800)
+                nomina_empleado.efn_2_5 = efn_2_5
 
-            ausencias_remuneradas_hora = calculo_horas(emplea, 1100)
-            nomina_empleado.ausencias_remuneradas_hora = ausencias_remuneradas_hora
+                d_o_f_d_1_75 = calculo_horas(emplea, 900)
+                nomina_empleado.d_o_f_d_1_75 = d_o_f_d_1_75
 
-            ausencias_no_remuneradas_hora = calculo_horas(emplea, 1200)
-            nomina_empleado.ausencias_no_remuneradas_hora = ausencias_no_remuneradas_hora
+                d_o_f_n_2_1 = calculo_horas(emplea, 1000)
+                nomina_empleado.d_o_f_n_2_1 = d_o_f_n_2_1
 
-            incapacidad_por_enfermedad_general_horas = calculo_horas(
-                emplea, 1300)
-            nomina_empleado.incapacidad_por_enfermedad_general_horas = incapacidad_por_enfermedad_general_horas
+                ausencias_remuneradas_hora = calculo_horas(emplea, 1100)
+                nomina_empleado.ausencias_remuneradas_hora = ausencias_remuneradas_hora
 
-            vr_auxilio_transporte_o_auxilio_de_conectividad = calculo_valor(
-                emplea, 1400)
-            nomina_empleado.vr_auxilio_transporte_o_auxilio_de_conectividad = vr_auxilio_transporte_o_auxilio_de_conectividad
+                ausencias_no_remuneradas_hora = calculo_horas(emplea, 1200)
+                nomina_empleado.ausencias_no_remuneradas_hora = ausencias_no_remuneradas_hora
 
-            otros_ingresos_no_prestacionales = calculo_valor(emplea, 1500)
-            nomina_empleado.otros_ingresos_no_prestacionales = otros_ingresos_no_prestacionales
+                incapacidad_por_enfermedad_general_horas = calculo_horas(
+                    emplea, 1300)
+                nomina_empleado.incapacidad_por_enfermedad_general_horas = incapacidad_por_enfermedad_general_horas
 
-            otros_ingresos_prestacionales = calculo_valor(emplea, 1900)
-            nomina_empleado.otros_ingresos_prestacionales = otros_ingresos_prestacionales
+                vr_auxilio_transporte_o_auxilio_de_conectividad = calculo_valor(
+                    emplea, 1400)
+                nomina_empleado.vr_auxilio_transporte_o_auxilio_de_conectividad = vr_auxilio_transporte_o_auxilio_de_conectividad
 
-            nomina_empleado.total_devengado = calculo_devengado(empleado)
+                otros_ingresos_no_prestacionales = calculo_valor(emplea, 1500)
+                nomina_empleado.otros_ingresos_no_prestacionales = otros_ingresos_no_prestacionales
 
-            nomina_empleado.deducción_retención_en_la_fuente = calculo_valor(
-                empleado, 1600)
+                otros_ingresos_prestacionales = calculo_valor(emplea, 1900)
+                nomina_empleado.otros_ingresos_prestacionales = otros_ingresos_prestacionales
 
-            nomina_empleado.otras_deducciones = calculo_valor(emplea, 1700)
+                nomina_empleado.total_devengado = calculo_devengado(empleado)
 
-            nomina_empleado.deducciones_sgss = calculo_valor(emplea, 1800)
+                nomina_empleado.deducción_retención_en_la_fuente = calculo_valor(
+                    empleado, 1600)
 
-            nomina_empleado.neto_a_pagar = calculo_neto_a_pagar(emplea)
+                nomina_empleado.otras_deducciones = calculo_valor(emplea, 1700)
 
-            nomina_empleado.save()
+                nomina_empleado.deducciones_sgss = calculo_valor(emplea, 1800)
+
+                nomina_empleado.neto_a_pagar = calculo_neto_a_pagar(emplea)
+
+                nomina_empleado.definir_cargo()
+                nomina_empleado.definir_salario()
+
+                nomina_empleado.save()
+
+            calculo_nombre_apellido()
+
+    except Exception as e:
+        print(e)
 
     return redirect('informe')
 
@@ -229,4 +242,103 @@ def calculo_neto_a_pagar(empleado):
 
 def informe(request):
     informe = plantilla.objects.all()
-    return render(request, 'informe.html', {'informe':informe})
+    return render(request, 'informe.html', {'informe': informe})
+
+
+def calculo_nombre_apellido():
+
+    informe = plantilla.objects.all()
+
+    for i in informe:
+        numero_palabras = len(i.nombre.split())
+
+        if numero_palabras == 2:
+            cont = 1
+            for inf in i.nombre.split():
+                if cont == 1:
+                    i.apellido = inf
+                else:
+                    i.nombre = inf
+                cont += 1
+
+        if numero_palabras == 3:
+            cont = 1
+            apellido = ""
+            for inf in i.nombre.split():
+                if cont == 1:
+                    apellido = inf
+                if cont == 2:
+                    apellido = apellido + " " + str(inf)
+                    i.apellido = apellido
+                if cont == 3:
+                    i.nombre = inf
+                cont += 1
+
+        if numero_palabras == 4:
+            cont = 1
+            apellido = ""
+            nombre = ""
+            for inf in i.nombre.split():
+                if cont == 1:
+                    apellido = inf
+                if cont == 2:
+                    apellido = apellido + " " + str(inf)
+                    i.apellido = apellido
+                if cont == 3:
+                    nombre = inf
+                if cont == 4:
+                    i.nombre = nombre + " " + str(inf)
+
+                cont += 1
+
+        if numero_palabras > 4:
+            cont = 1
+            apellido = ""
+            nombre = ""
+            for inf in i.nombre.split():
+                if cont <= (numero_palabras-2) and cont < 3:
+                    apellido += inf + " "
+                if cont >= 3:
+                    nombre += inf + " "
+                cont += 1
+                print(inf)
+            i.nombre = nombre
+            i.apellido = apellido
+
+        i.save()
+
+
+def export_excel(request):
+    # Crear una nueva hoja de cálculo
+    wb = openpyxl.Workbook()
+    sheet = wb.active
+
+    # Agregar encabezados con formato
+    headers = ['Cédula',	'Nombre',	'Apellido',	'Código',	'Cargo',	'Salario Mensual Basico / Honorario mensual',	'Valor/hora ordin.',	'Periodo Fecha Inicial (dd/mm/yyyy)',	'Periodo Fecha Final (dd/mm/yyyy)',	'Horas Ordinarias (1)',	'ON (0.35)',	'ED (1.25)',	'EN (1.75)',	'0FD (0.75)',	'0FN (1.1)',	'EFD (2)',	'EFN (2.5)',	'D o F D (1.75)',	'D o F N (2.1)',
+               'Ausencias remuneradas hora(s)',	'Ausencias No remuneradas hora(s)',	'Incapacidad por enfermedad general horas (s)',	'Vr Auxilio Transporte o Auxilio de Conectividad',	'Otros Ingresos $ No Prestacionales',	'Otros Ingresos $ Prestacionales',	'Total Devengado',	'Deducción Retención en la Fuente',	'Otras Deducciones $',	'Deducciones SGSS $',	'Neto a pagar',	'FIRMA', ]
+    for i, header in enumerate(headers):
+        cell = sheet.cell(row=1, column=i+1)
+        cell.value = header
+        cell.font = openpyxl.styles.Font(bold=True, color="FF0000")
+
+    # Agregar datos a la hoja de cálculo
+    data = plantilla.objects.values_list('cedula', 'nombre', 'apellido', 'codigo', 'cargo', 'salario_mensual_basico', 'valor_hora_ordin', 'periodo_fecha_inicial', 'periodo_fecha_final', 'horas_ordinarias', 'on_0_35', 'ed_1_25', 'en_1_75', 'fd_0_75', 'fn_1_1', 'efd_2', 'efn_2_5', 'd_o_f_d_1_75', 'd_o_f_n_2_1', 'ausencias_remuneradas_hora',
+                                         'ausencias_no_remuneradas_hora', 'incapacidad_por_enfermedad_general_horas', 'vr_auxilio_transporte_o_auxilio_de_conectividad', 'otros_ingresos_no_prestacionales', 'otros_ingresos_prestacionales', 'total_devengado', 'deducción_retención_en_la_fuente', 'otras_deducciones', 'deducciones_sgss', 'neto_a_pagar',)
+    for i, row in enumerate(data):
+        for j, item in enumerate(row):
+            cell = sheet.cell(row=i+2, column=j+1)
+            cell.value = item
+
+            if j == 6:  # Salario
+                #cell.number_format = '0.0'
+                #cell.number_format = '"$"#,##0.00_);[Red]("$"#,##0.00)'
+                cell.number_format = '"$"#,##0.00'
+            # elif j == 4: # Sueldo
+            #    cell.number_format = '"$"#,##0.00_);[Red]("$"#,##0.00)'
+
+    # Enviar el archivo Excel al cliente
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=data.xlsx'
+    wb.save(response)
+    return response

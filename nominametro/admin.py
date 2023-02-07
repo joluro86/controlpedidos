@@ -2,7 +2,7 @@ from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin 
 from import_export import resources
 
-from nominametro.models import Concepto, Novedad_nomina, plantilla, prenomina
+from nominametro.models import Cargo, Concepto, Novedad_nomina, plantilla, prenomina
 
 class StockBuscarResource(resources.ModelResource):
     class Meta:
@@ -40,6 +40,13 @@ class Novedad_Admin(ImportExportModelAdmin, admin.ModelAdmin):
         model = Novedad_nomina
 
 admin.site.register(Novedad_nomina, Novedad_Admin)
+
+class Cargo_Admin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('cedula','cargo')
+    class Meta:
+        model = Cargo
+
+admin.site.register(Cargo, Cargo_Admin)
 
 
 

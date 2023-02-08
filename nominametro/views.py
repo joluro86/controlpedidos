@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from openpyxl import load_workbook
 from django.db.models import Sum
+from openpyxl.styles import PatternFill
+from openpyxl.styles import fills
 
 from nominametro.models import Novedad_nomina, plantilla, prenomina, Concepto
 
@@ -313,13 +315,20 @@ def export_excel(request):
     wb = openpyxl.Workbook()
     sheet = wb.active
 
+    yellow = "00FFFF00"
+    fill= PatternFill(start_color='010640',
+                                       end_color='010640',
+                                       fill_type='solid')   
+
     # Agregar encabezados con formato
     headers = ['Cédula',	'Nombre',	'Apellido',	'Código',	'Cargo',	'Salario Mensual Basico / Honorario mensual',	'Valor/hora ordin.',	'Periodo Fecha Inicial (dd/mm/yyyy)',	'Periodo Fecha Final (dd/mm/yyyy)',	'Horas Ordinarias (1)',	'ON (0.35)',	'ED (1.25)',	'EN (1.75)',	'0FD (0.75)',	'0FN (1.1)',	'EFD (2)',	'EFN (2.5)',	'D o F D (1.75)',	'D o F N (2.1)',
                'Ausencias remuneradas hora(s)',	'Ausencias No remuneradas hora(s)',	'Incapacidad por enfermedad general horas (s)',	'Vr Auxilio Transporte o Auxilio de Conectividad',	'Otros Ingresos $ No Prestacionales',	'Otros Ingresos $ Prestacionales',	'Total Devengado',	'Deducción Retención en la Fuente',	'Otras Deducciones $',	'Deducciones SGSS $',	'Neto a pagar',	'FIRMA', ]
     for i, header in enumerate(headers):
         cell = sheet.cell(row=1, column=i+1)
         cell.value = header
-        cell.font = openpyxl.styles.Font(bold=True, color="FF0000")
+        cell.font = openpyxl.styles.Font(bold=True,)
+        cell.fill = fills.PatternFill("solid", fgColor='00FF0000')
+
 
     # Agregar datos a la hoja de cálculo
     data = plantilla.objects.values_list('cedula', 'nombre', 'apellido', 'codigo', 'cargo', 'salario_mensual_basico', 'valor_hora_ordin', 'periodo_fecha_inicial', 'periodo_fecha_final', 'horas_ordinarias', 'on_0_35', 'ed_1_25', 'en_1_75', 'fd_0_75', 'fn_1_1', 'efd_2', 'efn_2_5', 'd_o_f_d_1_75', 'd_o_f_n_2_1', 'ausencias_remuneradas_hora',
@@ -329,12 +338,18 @@ def export_excel(request):
             cell = sheet.cell(row=i+2, column=j+1)
             cell.value = item
 
-            if j == 6:  # Salario
+            if j == 1:  # Salario
                 #cell.number_format = '0.0'
                 #cell.number_format = '"$"#,##0.00_);[Red]("$"#,##0.00)'
                 cell.number_format = '"$"#,##0.00'
+                cell.fill=fill
             # elif j == 4: # Sueldo
             #    cell.number_format = '"$"#,##0.00_);[Red]("$"#,##0.00)'
+
+    my_red = openpyxl.styles.colors.Color(rgb='00FF0000')
+    my_fill = fills.PatternFill("solid", fgColor='00FF0000')
+    sheet['A1'].fill = my_fill
+
 
     # Enviar el archivo Excel al cliente
     response = HttpResponse(

@@ -2,7 +2,6 @@
 
 <div class="table-id card mt-1" style="width: 100%; margin: auto">
   <div class="card-body">
-    <a style="margin: 0px !important; padding: 0px !important;" href="/nomina/export_excel/">Exportar</a>
     <table class="table table-sm table-hover" class="display nowrap" id="table_id">
       <thead class="p-0">
         <tr class="text-center p-0" style="background-color: #8ee7fa; font-size: 0.5em;">
@@ -86,7 +85,35 @@
   $(document).ready(function () {
     $("#table_id").DataTable({
       order: [[1, "asc"]],
-      dom: "frtilp",
+      dom: "Bfrtilp",
+      buttons: [
+        {
+          extend: "excel",
+          title: '',                  // Extend the excel button
+          excelStyles: {                      // Add an excelStyles definition
+            cells: "sh",                     // to row 2
+            style: {
+              alignment: {
+                vertical: "center",
+                horizontal: "center",
+                wrapText: true,
+              },                       // The style block
+              font: {                     // Style the font
+                name: "Trebuchet MS",          // Font name
+                size: "9",             // Font size
+                color: "000000",
+                class: 'text-center',       // Font Color
+                b: true,               // Remove bolding from header row
+              },
+              fill: {                     // Style the cell fill (background)
+                pattern: {              // Type of fill (pattern or gradient)
+                  color: "7AD400",    // Fill color
+                }
+              }
+            },
+          },    
+        },
+      ],
 
       lengthMenu: [
         [15, 30, 50, -1],

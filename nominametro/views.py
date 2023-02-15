@@ -1,10 +1,12 @@
+import xlsxwriter
+import pandas as pd
+import io
 import openpyxl
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from openpyxl import load_workbook
 from django.db.models import Sum
-from openpyxl.styles import PatternFill
-from openpyxl.styles import fills
+from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
 
 from nominametro.models import Novedad_nomina, plantilla, prenomina, Concepto
 
@@ -311,49 +313,51 @@ def calculo_nombre_apellido():
 
 
 def export_excel(request):
-    # Crear una nueva hoja de cálculo
-    wb = openpyxl.Workbook()
-    sheet = wb.active
+    registros = plantilla.objects.values_list()
+    df = pd.DataFrame(registros, columns=['ID', 'Cedula', 'Nombre', 'Apellido', 'Codigo', 'Cargo', 'Salario Mensual Basico / Honorario mensual', 'Valor/hora ordin.', 'Periodo Fecha Inicial (dd/mm/yyyy)', 'Periodo Fecha Final  (dd/mm/yyyy)', 'Horas Ordinarias (1)', 'ON (0.35)', 'ED (1.25)', 'EN (1.75)', '0FD(0.75)', '0FN(1.1)', 'EFD(2)', 'EFN(2.5)', 'D o F D(1.75)', 'D o F N(2.1)',
+                      'Ausencias remuneradas hora(s)', 'Ausencias No remuneradas hora(s)', 'Incapacidad por enfermedad general horas (s)', 'Vr Auxilio Transporte o Auxilio de Conectividad', 'Otros Ingresos $ No Prestacionales', 'Otros Ingresos $ Prestacionales', 'Total Devengado', 'Deducción Retención en la Fuente', 'Otras Deducciones $', 'Deducciones  SGSS $', 'Neto a pagar', 'FIRMA'])
 
-    yellow = "00FFFF00"
-    fill= PatternFill(start_color='010640',
-                                       end_color='010640',
-                                       fill_type='solid')   
+    # Crear objeto ExcelWriter
+    writer = pd.ExcelWriter('registros.xlsx', engine='xlsxwriter')
 
-    # Agregar encabezados con formato
-    headers = ['Cédula',	'Nombre',	'Apellido',	'Código',	'Cargo',	'Salario Mensual Basico / Honorario mensual',	'Valor/hora ordin.',	'Periodo Fecha Inicial (dd/mm/yyyy)',	'Periodo Fecha Final (dd/mm/yyyy)',	'Horas Ordinarias (1)',	'ON (0.35)',	'ED (1.25)',	'EN (1.75)',	'0FD (0.75)',	'0FN (1.1)',	'EFD (2)',	'EFN (2.5)',	'D o F D (1.75)',	'D o F N (2.1)',
-               'Ausencias remuneradas hora(s)',	'Ausencias No remuneradas hora(s)',	'Incapacidad por enfermedad general horas (s)',	'Vr Auxilio Transporte o Auxilio de Conectividad',	'Otros Ingresos $ No Prestacionales',	'Otros Ingresos $ Prestacionales',	'Total Devengado',	'Deducción Retención en la Fuente',	'Otras Deducciones $',	'Deducciones SGSS $',	'Neto a pagar',	'FIRMA', ]
-    for i, header in enumerate(headers):
-        cell = sheet.cell(row=1, column=i+1)
-        cell.value = header
-        cell.font = openpyxl.styles.Font(bold=True,)
-        cell.fill = fills.PatternFill("solid", fgColor='00FF0000')
+    # Escribir DataFrame en archivo de Excel
+    df.to_excel(writer, index=False, sheet_name='Registros')
 
+    # Obtener objeto workbook y worksheet
+    workbook = writer.book
+    worksheet = writer.sheets['Registros']
 
-    # Agregar datos a la hoja de cálculo
-    data = plantilla.objects.values_list('cedula', 'nombre', 'apellido', 'codigo', 'cargo', 'salario_mensual_basico', 'valor_hora_ordin', 'periodo_fecha_inicial', 'periodo_fecha_final', 'horas_ordinarias', 'on_0_35', 'ed_1_25', 'en_1_75', 'fd_0_75', 'fn_1_1', 'efd_2', 'efn_2_5', 'd_o_f_d_1_75', 'd_o_f_n_2_1', 'ausencias_remuneradas_hora',
-                                         'ausencias_no_remuneradas_hora', 'incapacidad_por_enfermedad_general_horas', 'vr_auxilio_transporte_o_auxilio_de_conectividad', 'otros_ingresos_no_prestacionales', 'otros_ingresos_prestacionales', 'total_devengado', 'deducción_retención_en_la_fuente', 'otras_deducciones', 'deducciones_sgss', 'neto_a_pagar',)
-    for i, row in enumerate(data):
-        for j, item in enumerate(row):
-            cell = sheet.cell(row=i+2, column=j+1)
-            cell.value = item
+    # Crear objeto header_format con estilo de encabezado
+    header_format = workbook.add_format({
+        'bold': True,
+        'text_wrap': True,
+        'valign': 'top',
+        'fg_color': '#7AD400',
+        'border': 1,
+        'align': 'justify',
+        'align': 'center'
+    })
 
-            if j == 1:  # Salario
-                #cell.number_format = '0.0'
-                #cell.number_format = '"$"#,##0.00_);[Red]("$"#,##0.00)'
-                cell.number_format = '"$"#,##0.00'
-                cell.fill=fill
-            # elif j == 4: # Sueldo
-            #    cell.number_format = '"$"#,##0.00_);[Red]("$"#,##0.00)'
+    format1 = workbook.add_format({'num_format': '#,##0.00'})
+    worksheet.set_column(7, 7, 18, format1)
 
-    my_red = openpyxl.styles.colors.Color(rgb='00FF0000')
-    my_fill = fills.PatternFill("solid", fgColor='00FF0000')
-    sheet['A1'].fill = my_fill
+    # Escribir encabezado en hoja de cálculo
+    for col_num, value in enumerate(df.columns.values):
+        worksheet.write(0, col_num, value, header_format)
 
+    # Escribir el resto de los datos en la hoja de cálculo
+    for row_num, row_data in enumerate(df.values):
+        for col_num, value in enumerate(row_data):
+            worksheet.write(row_num + 1, col_num, value)
 
-    # Enviar el archivo Excel al cliente
+    # Cerrar objeto ExcelWriter
+    writer.save()
+
+    # Crear respuesta HTTP
+    output = io.BytesIO()
+    with open('registros.xlsx', 'rb') as file:
+        output.write(file.read())
     response = HttpResponse(
-        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=data.xlsx'
-    wb.save(response)
+        output.getvalue(), content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=registros.xlsx'
     return response

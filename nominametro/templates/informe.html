@@ -2,6 +2,7 @@
 
 <div class="table-id card mt-1" style="width: 100%; margin: auto">
   <div class="card-body">
+    <a href="{% url 'export_excel' %}">Exportar</a>
     <table class="table table-sm table-hover" class="display nowrap" id="table_id">
       <thead class="p-0">
         <tr class="text-center p-0" style="background-color: #8ee7fa; font-size: 0.5em;">
@@ -46,11 +47,13 @@
           <td>{{i.apellido }}</td>
           <td>{{i.codigo }}</td>
           <td>{{i.cargo }}</td>
-          <td>{{i.salario_mensual_basico|floatformat:0}}</td>
-          <td>{{i.valor_hora_ordin|floatformat:0 }}</td>
+          <td>{{i.salario_mensual_basico}}</td>
+          <td>{{i.valor_hora_ordin}}</td>
           <td>{{i.periodo_fecha_inicial }}</td>
           <td>{{i.periodo_fecha_final }}</td>
-          <td>{{i.horas_ordinarias|floatformat:2}}</td>
+
+          <td>{{i.horas_ordinarias|intcomma:0|floatformat:2}}</td>
+
           <td>{{i.on_0_35|floatformat:0 }}</td>
           <td>{{i.ed_1_25|floatformat:0 }}</td>
           <td>{{i.en_1_75|floatformat:0 }}</td>
@@ -87,18 +90,17 @@
       order: [[1, "asc"]],
       dom: "Bfrtilp",
       exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ],
-            format: {
-              body: function(data, row, column, node) {
-                  data = $('<p>' + data + '</p>').text();
-                  return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
-              }
-          }
-          },
+        body: function ( data, row, column, node ) {
+                    // Strip $ from salary column to make it numeric
+                    return column === 6 ?
+                        data.replace( /[,]/g, '.' ) :
+                        data;
+                }
+      },
       buttons: [
         {
           extend: "excel",
-          title: '',                  // Extend the excel button
+          title: '',
           "excelStyles": [
             {
               "cells": "A",
@@ -124,18 +126,6 @@
               "cells": "H:AE",
               "width": 18,
             },
-            {
-              "cells": "F:G",
-              "style": {
-                "numFmt": "[$$-en-US] #,###"
-            }
-            },
-            {
-              "cells": "J:V",
-              "style": {
-                "numFmt": "#,##0;(#,##0)"
-            }
-            },            
             {
               "cells": "1",
               "style": {

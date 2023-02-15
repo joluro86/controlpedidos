@@ -1,4 +1,4 @@
-{% extends 'index.html' %} {% load static %} {% block content %}
+{% extends 'index.html' %} {% load humanize %} {% load static %} {% block content %}
 
 <div class="table-id card mt-1" style="width: 100%; margin: auto">
   <div class="card-body">
@@ -46,23 +46,23 @@
           <td>{{i.apellido }}</td>
           <td>{{i.codigo }}</td>
           <td>{{i.cargo }}</td>
-          <td>{{i.salario_mensual_basico }}</td>
-          <td>{{i.valor_hora_ordin }}</td>
+          <td>{{i.salario_mensual_basico|floatformat:0}}</td>
+          <td>{{i.valor_hora_ordin|floatformat:0 }}</td>
           <td>{{i.periodo_fecha_inicial }}</td>
           <td>{{i.periodo_fecha_final }}</td>
-          <td>{{i.horas_ordinarias }}</td>
-          <td>{{i.on_0_35 }}</td>
-          <td>{{i.ed_1_25 }}</td>
-          <td>{{i.en_1_75 }}</td>
-          <td>{{i.fd_0_75 }}</td>
-          <td>{{i.fn_1_1 }}</td>
-          <td>{{i.efd_2 }}</td>
-          <td>{{i.efn_2_5 }}</td>
-          <td>{{i.d_o_f_d_1_75 }}</td>
-          <td>{{i.d_o_f_n_2_1 }}</td>
-          <td>{{i.ausencias_remuneradas_hora }}</td>
-          <td>{{i.ausencias_no_remuneradas_hora }}</td>
-          <td>{{i.incapacidad_por_enfermedad_general_horas }}</td>
+          <td>{{i.horas_ordinarias|floatformat:2}}</td>
+          <td>{{i.on_0_35|floatformat:0 }}</td>
+          <td>{{i.ed_1_25|floatformat:0 }}</td>
+          <td>{{i.en_1_75|floatformat:0 }}</td>
+          <td>{{i.fd_0_75|floatformat:0 }}</td>
+          <td>{{i.fn_1_1|floatformat:0 }}</td>
+          <td>{{i.efd_2|floatformat:0 }}</td>
+          <td>{{i.efn_2_5|floatformat:0 }}</td>
+          <td>{{i.d_o_f_d_1_75|floatformat:0 }}</td>
+          <td>{{i.d_o_f_n_2_1|floatformat:0 }}</td>
+          <td>{{i.ausencias_remuneradas_hora|floatformat:0 }}</td>
+          <td>{{i.ausencias_no_remuneradas_hora|floatformat:0 }}</td>
+          <td>{{i.incapacidad_por_enfermedad_general_horas|floatformat:0 }}</td>
           <td>{{i.vr_auxilio_transporte_o_auxilio_de_conectividad }}</td>
           <td>{{i.otros_ingresos_no_prestacionales }}</td>
           <td>{{i.otros_ingresos_prestacionales }}</td>
@@ -86,32 +86,113 @@
     $("#table_id").DataTable({
       order: [[1, "asc"]],
       dom: "Bfrtilp",
+      exportOptions: {
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ],
+            format: {
+              body: function(data, row, column, node) {
+                  data = $('<p>' + data + '</p>').text();
+                  return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+          }
+          },
       buttons: [
         {
           extend: "excel",
           title: '',                  // Extend the excel button
-          excelStyles: {                      // Add an excelStyles definition
-            cells: "sh",                     // to row 2
-            style: {
-              alignment: {
-                vertical: "center",
-                horizontal: "center",
-                wrapText: true,
-              },                       // The style block
-              font: {                     // Style the font
-                name: "Trebuchet MS",          // Font name
-                size: "9",             // Font size
-                color: "000000",
-                class: 'text-center',       // Font Color
-                b: true,               // Remove bolding from header row
-              },
-              fill: {                     // Style the cell fill (background)
-                pattern: {              // Type of fill (pattern or gradient)
-                  color: "7AD400",    // Fill color
-                }
+          "excelStyles": [
+            {
+              "cells": "A",
+              "width": 11,
+              "style": {
+                "alignment": {
+                  "vertical": "center",
+                  "horizontal": "center",
+                },
               }
             },
-          },    
+            {
+              "cells": "B:I",
+              "width": 26,
+              "style": {
+                "alignment": {
+                  "vertical": "center",
+                  "horizontal": "center",
+                },
+              }
+            },
+            {
+              "cells": "H:AE",
+              "width": 18,
+            },
+            {
+              "cells": "F:G",
+              "style": {
+                "numFmt": "[$$-en-US] #,###"
+            }
+            },
+            {
+              "cells": "J:V",
+              "style": {
+                "numFmt": "#,##0;(#,##0)"
+            }
+            },            
+            {
+              "cells": "1",
+              "style": {
+                "border": {
+                  "right": {
+                    "style": "thin",
+                    "color": "FFFFFF"
+                  }
+                },
+
+                "font": {
+                  "color": "00000000",
+                  "weight": "bold",
+                  "name": "Trebuchet MS",
+                  "size": "9",
+                },
+                "fill": {
+                  "pattern": {
+                    "color": "7AD400"
+                  }
+                },
+                "alignment": {
+                  "vertical": "center",
+                  "horizontal": "justify",
+                },
+              }
+            },
+            {
+              "cells": "2:n,1",
+              "style": {
+                "font": {
+                  "color": "00000000",
+                  "name": "Trebuchet MS",
+                  "size": "8",
+                },
+
+                "border": {
+                  "top": {
+                    "style": "thin",
+                    "color": "00B050"
+                  },
+                  "bottom": {
+                    "style": "thin",
+                    "color": "00B050"
+                  },
+                  "left": {
+                    "style": "thin",
+                    "color": "00B050"
+                  },
+                  "right": {
+                    "style": "thin",
+                    "color": "00B050"
+                  }
+                },
+              }
+            },
+          ]
         },
       ],
 

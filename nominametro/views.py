@@ -1,13 +1,9 @@
-import xlsxwriter
 import pandas as pd
 import io
-import openpyxl
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from openpyxl import load_workbook
 from django.db.models import Sum
-from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
-
 from nominametro.models import Novedad_nomina, plantilla, prenomina, Concepto
 
 
@@ -317,6 +313,9 @@ def export_excel(request):
     df = pd.DataFrame(registros, columns=['ID', 'Cedula', 'Nombre', 'Apellido', 'Codigo', 'Cargo', 'Salario Mensual Basico / Honorario mensual', 'Valor/hora ordin.', 'Periodo Fecha Inicial (dd/mm/yyyy)', 'Periodo Fecha Final  (dd/mm/yyyy)', 'Horas Ordinarias (1)', 'ON (0.35)', 'ED (1.25)', 'EN (1.75)', '0FD(0.75)', '0FN(1.1)', 'EFD(2)', 'EFN(2.5)', 'D o F D(1.75)', 'D o F N(2.1)',
                       'Ausencias remuneradas hora(s)', 'Ausencias No remuneradas hora(s)', 'Incapacidad por enfermedad general horas (s)', 'Vr Auxilio Transporte o Auxilio de Conectividad', 'Otros Ingresos $ No Prestacionales', 'Otros Ingresos $ Prestacionales', 'Total Devengado', 'Deducción Retención en la Fuente', 'Otras Deducciones $', 'Deducciones  SGSS $', 'Neto a pagar', 'FIRMA'])
 
+    # Eliminar la columna "ID"
+    df = df.drop('ID', axis=1)
+
     # Crear objeto ExcelWriter
     writer = pd.ExcelWriter('registros.xlsx', engine='xlsxwriter')
 
@@ -333,13 +332,71 @@ def export_excel(request):
         'text_wrap': True,
         'valign': 'top',
         'fg_color': '#7AD400',
-        'border': 1,
         'align': 'justify',
+        'align': 'center',
+        'valign': 'vcenter',
+        'font_name': 'Trebuchet MS',
+        'font_size': 9,
+        'right': 1,
+        'right_color':'white'
+    })
+
+    format = workbook.add_format({
+        'num_format': '_-$ * #.##0,00_-;-$ * #.##0,00_-;_-$ * "-"??_-;_-@_-',
+        'font_name': 'Trebuchet MS',
+        'font_size': 8,
+        'border':1,
+        'border_color': '#00B050'
+    })
+
+    format1 = workbook.add_format({
+        'font_name': 'Trebuchet MS',
+        'font_size': 8,
+         'border':1,
+        'border_color': '#00B050'
+    })
+
+    format_fecha = workbook.add_format({
+        'num_format': '_-$ * #.##0,00_-;-$ * #.##0,00_-;_-$ * "-"??_-;_-@_-',
+        'font_name': 'Trebuchet MS',
+        'font_size': 8,
+        'border':1,
+        'border_color': '#00B050',
         'align': 'center'
     })
 
-    format1 = workbook.add_format({'num_format': '#,##0.00'})
-    worksheet.set_column(7, 7, 18, format1)
+    format_horas = workbook.add_format({
+        'font_name': 'Trebuchet MS',
+        'font_size': 8,
+        'num_format': '#,##0.00',
+        'border':1,
+        'border_color': '#00B050',
+        'align': 'center'
+    })
+
+    worksheet.set_column(0, 0, 12, format1)
+    worksheet.set_column(1, 1, 16, format1)
+    worksheet.set_column(2, 2, 18, format1)
+    worksheet.set_column(3, 3, 12, format1)
+    worksheet.set_column(4, 5, 26, format)
+    worksheet.set_column(6, 6, 18, format)
+    worksheet.set_column(7, 8, 22, format_fecha)
+    worksheet.set_column(9, 9, 21, format_horas)
+    worksheet.set_column(10, 16, 12, format_horas)
+    worksheet.set_column(17, 17, 16, format_horas)
+    worksheet.set_column(18, 18, 15, format_horas)
+    worksheet.set_column(19, 19, 23, format_horas)
+    worksheet.set_column(20, 20, 27, format_horas)
+    worksheet.set_column(21, 21, 28, format_horas)
+    worksheet.set_column(22, 22, 25, format)
+    worksheet.set_column(23, 23, 21, format)
+    worksheet.set_column(24, 25, 18, format)
+    worksheet.set_column(26, 26, 27, format)
+    worksheet.set_column(27, 28, 22, format)
+    worksheet.set_column(29, 29, 15, format)
+    worksheet.set_column(30, 30, 10, format)
+
+    worksheet.set_row(0, 75)
 
     # Escribir encabezado en hoja de cálculo
     for col_num, value in enumerate(df.columns.values):

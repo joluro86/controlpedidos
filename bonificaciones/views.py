@@ -35,8 +35,9 @@ def gestion_fenix(request):
 
     todos_perseo = Perseo.objects.all()
     print(len(todos_perseo))
-    pedidos_perseo_descuento = todos_perseo.filter(codigo__startswith="M") | todos_perseo.filter(codigo__startswith="G")
-    
+    pedidos_perseo_descuento = todos_perseo.filter(
+        codigo__startswith="M") | todos_perseo.filter(codigo__startswith="G")
+
     print(len(pedidos_perseo_descuento))
     pedidos_perseo_descuento.update(descuento_de_fenix=F('total'))
 
@@ -46,8 +47,10 @@ def gestion_fenix(request):
 
     return render(request, 'proceso_gestion.html')
 
+
 def producido_rango_fechas(request):
     return render(request, 'proceso_gestion.html')
+
 
 def analisis_fechas_pedidos_perseo():
     pedidos = Perseo.objects.only('pedido')
@@ -77,7 +80,7 @@ def analisis_fechas_pedidos_perseo():
 
 def calculo_diario_instalador(request):
     if request.method == 'POST':
-        
+
         try:
             fecha_inicial = request.POST['fecha_inicial']
             fecha_final_str = request.POST['fecha_final']
@@ -101,7 +104,8 @@ def calculo_diario_instalador(request):
                     if (res_perseo['descuento_de_fenix__sum']) is None:
                         novedad = NovedadBonificacion()
                         novedad.pedido = inst.instalador
-                        novedad.descripcion = str(fecha_busqueda) + " sin material de Mejía"
+                        novedad.descripcion = str(
+                            fecha_busqueda) + " sin material de Mejía"
                         novedad.save()
 
                     if (res_fenix['total__sum']) is not None:
@@ -128,7 +132,7 @@ def calculo_diario_instalador(request):
 
         except Exception as e:
             print(e)
-        
+
         calculo_promedio_diario()
 
     return redirect('producido_diario')
@@ -143,28 +147,30 @@ def sumar_por_fecha_persona(model, fecha, instalador, total):
 def calculo_promedio_diario():
     instaladores = ProducidoDia.objects.distinct('instalador')
     for i in instaladores:
-            try:
-                print(i.instalador)
-                
-                producido = ProducidoDia.objects.filter(
-                    instalador=i.instalador).aggregate(Sum('producido'))
+        try:
+            print(i.instalador)
 
-                numero_de_dias = ProducidoDia.objects.filter(
-                    instalador=i.instalador).aggregate(Count('producido'))
+            producido = ProducidoDia.objects.filter(
+                instalador=i.instalador).aggregate(Sum('producido'))
 
-                adicional = float(producido['producido__sum'])-(float(numero_de_dias['producido__count'])*1000000)
+            numero_de_dias = ProducidoDia.objects.filter(
+                instalador=i.instalador).aggregate(Count('producido'))
 
-                nuevo_prom = PromedioDiario()
-                nuevo_prom.instalador = i.instalador
-                nuevo_prom.numero_de_dias_laborados = str(numero_de_dias['producido__count'])
-                nuevo_prom.valor_producido_mes = float(producido['producido__sum'])
-                nuevo_prom.adicional = float(adicional)
-                nuevo_prom.bonificacion_cuadrilla = float(adicional)*0.3
-                nuevo_prom.bonificacion_persona = (float(adicional)*0.3)/3
-                nuevo_prom.save()
+            adicional = float(producido['producido__sum']) - \
+                (float(numero_de_dias['producido__count'])*1000000)
 
-            except Exception as e:
-                print(e)
+            nuevo_prom = PromedioDiario()
+            nuevo_prom.instalador = i.instalador
+            nuevo_prom.numero_de_dias_laborados = str(
+                numero_de_dias['producido__count'])
+            nuevo_prom.valor_producido_mes = float(producido['producido__sum'])
+            nuevo_prom.adicional = float(adicional)
+            nuevo_prom.bonificacion_cuadrilla = float(adicional)*0.3
+            nuevo_prom.bonificacion_persona = (float(adicional)*0.3)/3
+            nuevo_prom.save()
+
+        except Exception as e:
+            print(e)
 
 
 def reiniciar_acta_bonificaciones(request):
@@ -174,9 +180,11 @@ def reiniciar_acta_bonificaciones(request):
     producido = ProducidoDia.objects.all()
     return render(request, 'producido_por_dia.html', {'producido': producido})
 
+
 def reiniciar_bonificaciones(request):
     PromedioDiario.objects.all().delete()
     return redirect('bonificaciones')
+
 
 def producido_diario(request):
     producido = ProducidoDia.objects.all()

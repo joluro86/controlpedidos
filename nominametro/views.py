@@ -342,7 +342,7 @@ def export_excel(request):
     })
 
     format = workbook.add_format({
-        'num_format': '_-$ * #.##0,00_-;-$ * #.##0,00_-;_-$ * "-"??_-;_-@_-',
+        'num_format': '#,##0.00',
         'font_name': 'Trebuchet MS',
         'font_size': 8,
         'border':1,
@@ -357,7 +357,7 @@ def export_excel(request):
     })
 
     format_fecha = workbook.add_format({
-        'num_format': '_-$ * #.##0,00_-;-$ * #.##0,00_-;_-$ * "-"??_-;_-@_-',
+        'num_format': '#,##0.00',
         'font_name': 'Trebuchet MS',
         'font_size': 8,
         'border':1,
@@ -406,7 +406,6 @@ def export_excel(request):
     worksheet.set_column(30, 30, 15, format_firma)
 
     worksheet.set_row(0, 75)
-
 
     # Escribir encabezado en hoja de cálculo
     for col_num, value in enumerate(df.columns.values):

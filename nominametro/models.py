@@ -16,6 +16,8 @@ class prenomina(models.Model):
     salario_básico_hora = models.CharField(max_length=100,  null=True, default='-')
     tiempo = models.DecimalField(max_digits=12, decimal_places=4, default=0.00)
     valor = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    fecha_inicial = models.CharField(max_length=100, default='-')
+    fecha_final = models.CharField(max_length=100, default='-')    
     conversor = models.CharField(max_length=200, default='-')
     tipo = models.CharField(max_length=200, default='0')
     factor = models.CharField(max_length=200, default='0')

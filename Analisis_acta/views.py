@@ -624,11 +624,11 @@ def crear_novedad(pedido, nov):
 
 def limpiar_novedades(request):
     Novedad_acta.objects.all().delete()
-    Material_utilizado_perseo.objects.all().delete()
     return redirect('novedades_acta')
 
 def limpiar_acta(request):
     Acta.objects.all().delete()
+    Novedad_acta.objects.all().delete()
     return redirect('home')
 
 def calculo_enepre(pedido):

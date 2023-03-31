@@ -16,6 +16,13 @@ def calculo_novedades_acta(request):
     for pedido in pedidos:
 
         material = Materiales.objects.filter(material=pedido.suminis).exists()
+
+        #A04_200316 = Materiales.objects.filter(item_cont='A 04')
+
+        #for ped in A04_200316:
+         #   Materiales.objects.filter(pedido=ped)
+          #  print(pedidos)
+
         
         if material == False and pedido.suminis != "0":
             novedad = "Material no permitido " + str(pedido.suminis)

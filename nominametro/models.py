@@ -34,11 +34,10 @@ class prenomina(models.Model):
 
 
 class plantilla(models.Model):
-
+    nit= models.CharField(max_length=100, default='0')
     cedula = models.CharField(max_length=200, default='-')
     nombre = models.CharField(max_length=200, default='-')
     apellido = models.CharField(max_length=200, default='-')
-    codigo = models.CharField(max_length=200, default='-')
     cargo = models.CharField(max_length=200, default='-')
     salario_mensual_basico = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     valor_hora_ordin = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
@@ -47,24 +46,26 @@ class plantilla(models.Model):
     horas_ordinarias = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     on_0_35 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     ed_1_25 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
-    en_1_75 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     fd_0_75 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     fn_1_1 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
+    d_o_f_n_2_1 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     efd_2 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     efn_2_5 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
-    d_o_f_d_1_75 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
-    d_o_f_n_2_1 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
+    d_o_f_d_1_75 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)    
     ausencias_remuneradas_hora =models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     ausencias_no_remuneradas_hora = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
+    incapacidad_por_accidente_laboral = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     incapacidad_por_enfermedad_general_horas = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     vr_auxilio_transporte_o_auxilio_de_conectividad = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
-    otros_ingresos_no_prestacionales = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     otros_ingresos_prestacionales = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
+    otros_ingresos_no_prestacionales = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
+    valor_pago_prestaciones = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     total_devengado = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     deducción_retención_en_la_fuente = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     otras_deducciones = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     deducciones_sgss = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     neto_a_pagar = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
+    observaciones= models.CharField(max_length=100, default='-')
 
     class Meta:
 
@@ -133,6 +134,17 @@ class Cargo(models.Model):
 
     def __str__(self):
         return str(self.cargo) 
+
+class Mejia(models.Model):
+    nit = models.CharField(max_length=200)
+    
+    class Meta:
+        verbose_name = 'Nit'
+        verbose_name_plural = 'Nit'
+        db_table = 'mejia'
+
+    def __str__(self):
+        return str(self.nit) 
 
 
 

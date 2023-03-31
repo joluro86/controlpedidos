@@ -9,7 +9,8 @@ urlpatterns = [
     path('formulario_subir_acta_analisis/', formulario_subir_acta, name="formulario_subir_acta_analisis"),
     path('subir_acta_analisis/', subir_acta, name="subir_acta_analisis"),
     path('busqueda-pedidos-acta-analisis/', busqueda_pedidos_acta_analisis, name="busqueda-pedidos-acta-analisis"),
-    
+    path('analizar_acta2', analizar_acta, name='analizar_acta' ),
+    path('eliminar_acta2', eliminar_acta, name='eliminar_acta' )
 ] +static(settings.STATIC_URL, document_root= settings.STATIC_ROOT)
 
 

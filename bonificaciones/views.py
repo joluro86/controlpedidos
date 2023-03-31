@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from bonificaciones.models import *
 from datetime import datetime, timedelta
-from django.db.models import Sum, Avg, Count, F
+from django.db.models import Sum, Count, F
 import time
 
 

@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from openpyxl import load_workbook
 from django.db.models import Sum
-from nominametro.models import Novedad_nomina, plantilla, prenomina, Concepto
+from nominametro.models import Mejia, Novedad_nomina, plantilla, prenomina, Concepto
 
 
 def subirnominametro(request):
@@ -87,7 +87,7 @@ def gestionar_prenomina(request):
             fecha_final = request.POST['fecha_final']
 
             empleados = prenomina.objects.values_list('empleado').distinct()
-
+            nit= Mejia.objects.all().first()
             cont = 1
 
             valorhoras = 0
@@ -96,11 +96,11 @@ def gestionar_prenomina(request):
 
                 empleado = prenomina.objects.filter(empleado=e[0]).first()
 
-                print(empleado)
-
                 emplea = e[0]
+                print(nit)
 
                 nomina_empleado = plantilla()
+                nomina_empleado.nit=str(nit)
                 nomina_empleado.cedula = empleado.empleado
                 nomina_empleado.nombre = empleado.nombre_del_empleado
                 nomina_empleado.apellido = empleado.nombre_del_empleado
@@ -166,6 +166,10 @@ def gestionar_prenomina(request):
                 nomina_empleado.otras_deducciones = calculo_valor(emplea, 1700)
 
                 nomina_empleado.deducciones_sgss = calculo_valor(emplea, 1800)
+
+                nomina_empleado.incapacidad_por_accidente_laboral = calculo_valor(emplea, 2000)
+
+                nomina_empleado.valor_pago_prestaciones = calculo_valor(emplea, 2100)
 
                 nomina_empleado.neto_a_pagar = calculo_neto_a_pagar(emplea)
 
@@ -310,11 +314,14 @@ def calculo_nombre_apellido():
 
 def export_excel(request):
     registros = plantilla.objects.values_list()
-    df = pd.DataFrame(registros, columns=['ID', 'Cedula', 'Nombre', 'Apellido', 'Codigo', 'Cargo', 'Salario Mensual Basico / Honorario mensual', 'Valor/hora ordin.', 'Periodo Fecha Inicial (dd/mm/yyyy)', 'Periodo Fecha Final  (dd/mm/yyyy)', 'Horas Ordinarias (1)', 'ON (0.35)', 'ED (1.25)', 'EN (1.75)', '0FD(0.75)', '0FN(1.1)', 'EFD(2)', 'EFN(2.5)', 'D o F D(1.75)', 'D o F N(2.1)',
-                      'Ausencias remuneradas hora(s)', 'Ausencias No remuneradas hora(s)', 'Incapacidad por enfermedad general horas (s)', 'Vr Auxilio Transporte o Auxilio de Conectividad', 'Otros Ingresos $ No Prestacionales', 'Otros Ingresos $ Prestacionales', 'Total Devengado', 'Deducción Retención en la Fuente', 'Otras Deducciones $', 'Deducciones  SGSS $', 'Neto a pagar', 'FIRMA'])
+
+    for r in registros:
+        print(r)
+
+    df = pd.DataFrame(registros, columns=['id','Nit Empresa Contratista o Subcontratita ','Cedula','Nombre','Apellido','Cargo','Salario Mensual Basico / Honorario mensual','Valor/hora ordinaria','Periodo Fecha Inicial (dd/mm/yyyy)','Periodo Fecha Final  (dd/mm/yyyy)','Horas Ordinarias (1,00)','Horas recargo nocturno  (0.35)','Horas extra diurna (1.25)','Hora extra nocturna (1.75)','Horas ordinarias festivas diurnas (0.75)','Horas recargo ordinaria festiva nocturna (1.1)','Horas ordinaria festiva nocturna (2.1)','Horas extras festivas diurnas  (2,0)','Horas extras festivas nocturas (2.5)','Horas domingo o festivo  diurno (1.75)','Horas ausencias remuneradas','Horas ausencias No remuneradas','Horas incapacidad por accidente laboral ','Horas incapacidad por enfermedad general','Valor auxilio Transporte o Auxilio de Conectividad','Valor otros Ingresos prestacionales','Valor otros Ingresos No prestacionales','Valor pago prestaciones (prima, cesantias, Int.cesantias, vacaciones)','Valor total Devengado','Valor deducción Retención en la Fuente','Valor otras Deducciones','Valor Deducciones  salud y pensión','VALOR NETO A PAGAR','OBSERVACIONES'])
 
     # Eliminar la columna "ID"
-    df = df.drop('ID', axis=1)
+    df = df.drop('id', axis=1)
 
     # Crear objeto ExcelWriter
     writer = pd.ExcelWriter('registros.xlsx', engine='xlsxwriter')

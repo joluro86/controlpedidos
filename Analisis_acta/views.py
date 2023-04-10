@@ -310,7 +310,6 @@ def calculo_novedades_acta(request):
 def gestionar_nomnbre_utem_con_a_o_con_p(request):
 
     pedidos = Acta.objects.all()
-    print("empece")
     cont = 0
     for p in pedidos:
         if p.item_cont == "0":
@@ -325,7 +324,6 @@ def gestionar_nomnbre_utem_con_a_o_con_p(request):
             p.item_cont = p.suminis[:-1]
             p.save()
 
-    print("termine")
 
 
 def busqueda_insumo_por_item(pedido, insumo, item):

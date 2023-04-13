@@ -1,10 +1,9 @@
 from asyncio.windows_events import NULL
 from email.policy import HTTP
 from django.shortcuts import redirect, render
-from material_oficiales.models import Material_utilizado_perseo
 from Analisis_acta.models import *
 import time
-from django.db.models import F
+from django.db.models import Sum
 
 
 def calculo_novedades_acta(request):
@@ -12,18 +11,11 @@ def calculo_novedades_acta(request):
 
     start = time.perf_counter()
     pedidos = Acta.objects.all()
-    
+
     for pedido in pedidos:
 
         material = Materiales.objects.filter(material=pedido.suminis).exists()
 
-        #A04_200316 = Materiales.objects.filter(item_cont='A 04')
-
-        #for ped in A04_200316:
-         #   Materiales.objects.filter(pedido=ped)
-          #  print(pedidos)
-
-        
         if material == False and pedido.suminis != "0":
             novedad = "Material no permitido " + str(pedido.suminis)
             crear_novedad(pedido, novedad)
@@ -33,6 +25,12 @@ def calculo_novedades_acta(request):
             if primera_letra == 'A':
 
                 if pedido.item_cont == 'A 04':
+                    if int(pedido.cantidad) == 2:
+                        BREAKER_210949 = Acta.objects.filter(pedido=pedido).filter(
+                            item_cont='210949').aggregate(suma=Sum('cantidad'))
+                        if BREAKER_210949['suma'] != 2:
+                            crear_novedad(
+                                pedido, 'A 04: 2 - 210949: ' + str(BREAKER_210949['suma']))
                     if int(pedido.cantidad) > 2:
                         nov = "Actividad: " + \
                             str(pedido.item_cont) + \
@@ -94,6 +92,12 @@ def calculo_novedades_acta(request):
                 busqueda_calibracion(pedido)
 
             if pedido.actividad == 'AEJDO':
+
+                if pedido.item_cont == "200410" or pedido.item_cont == "200411":
+                    if int(pedido.cantidad) <= 5:
+                        crear_novedad(pedido, str(pedido.item_cont) +
+                                      " con cantidad: " + str(pedido.cantidad))
+
                 if pedido.item_cont == 'A 01':
                     try:
                         busquedad_a04 = Acta.objects.filter(
@@ -158,7 +162,7 @@ def calculo_novedades_acta(request):
 
                 if int(pedido.cantidad) > 1:
                     crear_novedad(pedido, str(pedido.item_cont) +
-                                ". Cantidad mayor a 1.")
+                                  ". Cantidad mayor a 1.")
 
             if pedido.item_cont == 'A 04':
                 nov = "A 04=1,"
@@ -168,7 +172,7 @@ def calculo_novedades_acta(request):
 
                 if int(pedido.cantidad) > 2:
                     crear_novedad(pedido, str(pedido.item_cont) +
-                                ". Cantidad mayor a 2.")
+                                  ". Cantidad mayor a 2.")
 
                 insumo = str(pedido.item_cont)
                 busqueda_insumo(pedido, insumo)
@@ -176,12 +180,12 @@ def calculo_novedades_acta(request):
             if pedido.item_cont == '210947':
                 if int(pedido.cantidad) > 3:
                     crear_novedad(pedido, str(pedido.item_cont) +
-                                ". Cantidad mayor a 3.")
+                                  ". Cantidad mayor a 3.")
 
             if pedido.item_cont == '220683':
                 if int(pedido.cantidad) > 1:
                     crear_novedad(pedido, str(pedido.item_cont) +
-                                ". Cantidad mayor a 1.")
+                                  ". Cantidad mayor a 1.")
 
             if pedido.item_cont == 'A 06':
                 nov = "A 06=1,"
@@ -202,7 +206,7 @@ def calculo_novedades_acta(request):
 
                 if int(pedido.cantidad) > 1:
                     crear_novedad(pedido, str(pedido.item_cont) +
-                                ". Cantidad mayor a 1.")
+                                  ". Cantidad mayor a 1.")
 
             if pedido.item_cont == 'A 24':
                 nov = "A 24=1,"
@@ -214,7 +218,7 @@ def calculo_novedades_acta(request):
 
                 if int(pedido.cantidad) > 1:
                     crear_novedad(pedido, str(pedido.item_cont) +
-                                ". Cantidad mayor a 1.")
+                                  ". Cantidad mayor a 1.")
 
             if pedido.item_cont == 'A 25':
                 nov = "A 25=1,"
@@ -226,7 +230,7 @@ def calculo_novedades_acta(request):
 
                 if int(pedido.cantidad) > 1:
                     crear_novedad(pedido, str(pedido.item_cont) +
-                                ". Cantidad mayor a 1.")
+                                  ". Cantidad mayor a 1.")
 
             if pedido.item_cont == 'A 34':
                 nov = "A 34=1,"
@@ -236,7 +240,7 @@ def calculo_novedades_acta(request):
                 insumo = str(pedido.item_cont)
                 busqueda_insumo_por_item(pedido, insumo, 'A 34')
 
-            if pedido.item_cont == 'A 39':
+            if pedido.item_cont == 'A 39' and pedido.actividad != "AEJDO":
                 nov = "A 39=1,"
                 busqueda_item(pedido, '200410', '200411', nov)
                 busquedad_200410 = Acta.objects.filter(
@@ -266,22 +270,23 @@ def calculo_novedades_acta(request):
 
             if pedido.cantidad == '0' or pedido.cantidad == "":
                 crear_novedad(pedido, str(pedido.item_cont) +
-                            ". Cantidad igual a cero.")
+                              ". Cantidad igual a cero.")
 
             if pedido.suminis == '200092' or pedido.suminis == '200098':
                 verificar_cable_acta(pedido.pedido, '200411',
-                                    '200410', pedido.suminis)
+                                     '200410', pedido.suminis)
 
                 if int(pedido.cantidad) > 1:
                     crear_novedad(pedido, str(pedido.item_cont) +
-                                ". Cantidad mayor a 1.")
+                                  ". Cantidad mayor a 1.")
 
             if pedido.suminis == '200093':
-                verificar_cable_acta(pedido, '200410', '200411', pedido.suminis)
+                verificar_cable_acta(
+                    pedido, '200410', '200411', pedido.suminis)
 
                 if int(pedido.cantidad) > 1:
                     crear_novedad(pedido, str(pedido.item_cont) +
-                                ". Cantidad mayor a 1.")
+                                  ". Cantidad mayor a 1.")
 
             if pedido.item_cont == 'A 40':
                 calculo_otros_incompatibles(pedido, 'A 41', pedido.item_cont)
@@ -292,11 +297,13 @@ def calculo_novedades_acta(request):
             if pedido.item_cont == 'A 10' or pedido.item_cont == 'A 11':
                 if int(pedido.cantidad) > 1:
                     crear_novedad(pedido, str(pedido.item_cont) +
-                                ". Cantidad mayor a 1.")
+                                  ". Cantidad mayor a 1.")
                 if pedido.item_cont == 'A 10':
-                    calculo_otros_incompatibles(pedido, 'A 11', pedido.item_cont)
+                    calculo_otros_incompatibles(
+                        pedido, 'A 11', pedido.item_cont)
                 if pedido.item_cont == 'A 11':
-                    calculo_otros_incompatibles(pedido, 'A 10', pedido.item_cont)
+                    calculo_otros_incompatibles(
+                        pedido, 'A 10', pedido.item_cont)
 
     novedades = Novedad_acta.objects.all()
 
@@ -323,7 +330,6 @@ def gestionar_nomnbre_utem_con_a_o_con_p(request):
         if p.suminis[-1] == 'A' or p.suminis[-1] == 'P':
             p.item_cont = p.suminis[:-1]
             p.save()
-
 
 
 def busqueda_insumo_por_item(pedido, insumo, item):
@@ -533,8 +539,6 @@ def busqueda_item(pedido, item, item2, novedad):
                 pedido=pedido.pedido).filter(item_cont='A 28').count()
             busquedad_a29 = Acta.objects.filter(
                 pedido=pedido.pedido).filter(item_cont='A 29').count()
-
-            print("20041__ " + str(busquedad_200410) + " " + busquedad_200411)
 
             if busquedad_a03 != 0 and busquedad_a28 != 0 and busquedad_a29 != 0:
 

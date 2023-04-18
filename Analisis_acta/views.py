@@ -88,8 +88,8 @@ def calculo_novedades_acta(request):
                 except:
                     pass
 
-            if pedido.item_cont[0:4] == 'CALE':
-                busqueda_calibracion(pedido)
+            if pedido.item_cont[0:4] == 'CALE' and int(pedido.cantidad)>1:
+                crear_novedad(pedido, '')
 
             if pedido.actividad == 'AEJDO':
 
@@ -279,8 +279,12 @@ def calculo_novedades_acta(request):
                 if int(pedido.cantidad) > 1:
                     crear_novedad(pedido, str(pedido.item_cont) +
                                   ". Cantidad mayor a 1.")
+            
+            if pedido.suminis == '200092':
+                comprobar_cobro_calibracion(pedido)
 
             if pedido.suminis == '200093':
+                comprobar_cobro_calibracion(pedido)
                 verificar_cable_acta(
                     pedido, '200410', '200411', pedido.suminis)
 
@@ -312,6 +316,15 @@ def calculo_novedades_acta(request):
     print(f"La función se ejecutó en {elapsed:0.6f} segundos")
 
     return render(request, "analisis.html", {'novedades': novedades})
+
+
+def comprobar_cobro_calibracion(pedido):
+    calibracion = Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='CALE1F').aggregate(suma=Sum('cantidad'))['suma']
+    if calibracion!=1:
+        if calibracion==None:
+            calibracion=0
+        crear_novedad(pedido, 'Calibración con cantidad= '+ str(calibracion))
+
 
 
 def gestionar_nomnbre_utem_con_a_o_con_p(request):
@@ -355,25 +368,8 @@ def busqueda_insumo_por_item(pedido, insumo, item):
 def busqueda_calibracion(pedido):
     try:
 
-        pedidos = Acta.objects.filter(pedido=pedido)
 
-        encontre_medidor = 0
-        for p in pedidos:
-            if str(p.suminis) == '200092' or str(p.suminis) == '200092P' or str(p.suminis) == '200098P' or str(p.suminis) == '200093P' or str(p.suminis) == '200093' or str(p.suminis) == '200098':
-                encontre_medidor += 1
-                if int(p.cantidad) > 1:
-                    nov = str(p.suminis) + str(' con cantidad= ') + \
-                        str(pedido.cantidad)
-                    crear_novedad(pedido, nov)
-
-        if encontre_medidor == 0:
-            nov = 'Calibración sin medidor'
-            crear_novedad(pedido, nov)
-
-        if encontre_medidor > 1:
-            nov = 'Calibración con mas de un medidor.'
-            crear_novedad(pedido, nov)
-
+        pass
     except:
         pass
 

@@ -94,9 +94,18 @@ def calculo_novedades_acta(request):
             if pedido.actividad == 'AEJDO':
 
                 if pedido.item_cont == "200410" or pedido.item_cont == "200411":
-                    if int(pedido.cantidad) <= 5:
-                        crear_novedad(pedido, str(pedido.item_cont) +
-                                      " con cantidad: " + str(pedido.cantidad))
+                    if int(pedido.cantidad) <= 5:                        
+                        
+                        cant_200411 = Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='200411').aggregate(suma=Sum('cantidad'))['suma']
+                        cant_200410 = Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='200410').aggregate(suma=Sum('cantidad'))['suma']
+                        
+                        if cant_200411 == None:
+                            cant_200411=0
+                        if cant_200410 == None:
+                            cant_200410=0
+
+                        if (cant_200411<=5 and cant_200411>0) or (cant_200410<=5 and cant_200410>0):
+                            crear_novedad(pedido, '200410= ' + str(cant_200410) + ' 200411= ' + str(cant_200411))
 
                 if pedido.item_cont == 'A 01':
                     try:

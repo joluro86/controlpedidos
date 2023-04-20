@@ -176,8 +176,11 @@ def calculo_promedio_diario():
 def reiniciar_acta_bonificaciones(request):
     Fenix.objects.all().delete()
     Perseo.objects.all().delete()
+    NovedadBonificacion.objects.all().delete()
+    ProducidoDia.objects.all().delete()
+    PromedioDiario.objects.all().delete()
 
-    producido = ProducidoDia.objects.all()
+    producido = {}
     return render(request, 'producido_por_dia.html', {'producido': producido})
 
 

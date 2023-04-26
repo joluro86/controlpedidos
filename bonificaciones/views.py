@@ -10,10 +10,10 @@ def gestion_fenix(request):
     todos = Fenix.objects.all()
     try:
         pedidos_rurales = todos.filter(tipo="CON", urbrur="R")
-        pedidos_rurales.update(total=F('valor')*1.27)
+        pedidos_rurales.update(total=F('valor')*1.08)
 
         pedidos_urbanos = todos.filter(tipo="CON", urbrur="U")
-        pedidos_urbanos.update(total=F('valor')*1.17)
+        pedidos_urbanos.update(total=F('valor')*1)
     except Exception as e:
         print("excepcion al calculo valor segun urbano o rural" + str(e))
 
@@ -176,8 +176,11 @@ def calculo_promedio_diario():
 def reiniciar_acta_bonificaciones(request):
     Fenix.objects.all().delete()
     Perseo.objects.all().delete()
+    NovedadBonificacion.objects.all().delete()
+    ProducidoDia.objects.all().delete()
+    PromedioDiario.objects.all().delete()
 
-    producido = ProducidoDia.objects.all()
+    producido = {}
     return render(request, 'producido_por_dia.html', {'producido': producido})
 
 

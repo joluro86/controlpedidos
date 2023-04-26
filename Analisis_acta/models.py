@@ -38,10 +38,10 @@ class Acta(models.Model):
     descent=models.CharField(max_length=100, default=0)
     tipo=models.CharField(max_length=100, default=0)
     cobro=models.CharField(max_length=100, default=0)
-    suminis=models.CharField(max_length=100, default=0)
-    item_cont=models.CharField(max_length=100, default=0)
+    suminis=models.CharField(max_length=100, default="0")
+    item_cont=models.CharField(max_length=100, default="0")
     item_res=models.CharField(max_length=100, default=0)
-    cantidad=models.CharField(max_length=100, default=0)
+    cantidad=models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     vlr_cliente=models.CharField(max_length=100, default=0)
     valor_costo=models.CharField(max_length=100, default=0)
     tipo_item=models.CharField(max_length=100, default=0)
@@ -54,4 +54,16 @@ class Acta(models.Model):
         
     def __str__(self):
         return str(self.pedido)
+
+class Materiales(models.Model):
+
+    material = models.CharField(max_length=100, default=0)
+    
+    class Meta:
+        verbose_name = 'Materiales'
+        verbose_name_plural = 'Materiales'
+
+    def __str__(self):
+        return str(self.material)
+        
 

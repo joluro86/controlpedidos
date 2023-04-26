@@ -1,7 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -32,8 +31,10 @@
   <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.print.min.js"></script>
   <script src="https://cdn.datatables.net/plug-ins/1.12.1/dataRender/datetime.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.2.0/js/buttons.html5.styles.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.2.0/js/buttons.html5.styles.templates.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.2.0/js/buttons.html5.styles.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.2.0/js/buttons.html5.styles.templates.min.js"></script>
 
   {% block head %} {% endblock head %}
 </head>
@@ -67,10 +68,10 @@
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <li>
-            <a class="dropdown-item" href="/admin/controlmateriales/matperseo/import/" target="_blank">Subir Perseo</a>
+            <a class="dropdown-item" href="/admin/material_oficiales/material_utilizado_perseo/import/" target="_blank">Subir Perseo</a>
           </li>
           <li>
-            <a class="dropdown-item" href="/admin/controlmateriales/matfenix/import/" target="_blank">Subir Fenix</a>
+            <a class="dropdown-item" href="/admin/material_oficiales/liquidacion_acta_epm/import/" target="_blank">Subir Fenix</a>
           </li>
           <li>
             <a class="dropdown-item" href="{% url 'gestionar_acta_perseo_inventario' %}">Gestion BD</a>
@@ -104,6 +105,24 @@
 
         </ul>
       </li>
+
+      <!--
+        NUEVO ANALISIS
+      -->
+      <li style="background-color: rgb(92, 171, 245) !important;" class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">
+          Nuevo Analisis
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item" href="{% url 'formulario_subir_acta_analisis' %}">Subir acta</a></li>
+          <li><a class="dropdown-item" href="{% url 'analizar_acta' %}">Analizar</a></li>
+          <li><a class="dropdown-item" href="{% url 'eliminar_acta' %}">Borrar acta</a></li>
+        </ul>
+      </li>
+      <!--
+        FIN NUEVO ANALISIS
+      -->
 
       <li style="background-color: rgb(92, 171, 245) !important;" class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
@@ -140,11 +159,6 @@
               Fénix</a></li>
           <li><a class="dropdown-item" id="pendi_a" href="#" onclick="gestion_fenix()">Gestionar BD</a>
           </li>
-          <!--
-          <li><a class="dropdown-item" id="pendi_a" href="#" onclick="calculo_novedades_perseo_vs_fenix()">Gestionar
-              Perseo</a>
-          </li>
-          -->
           <li><a class="dropdown-item" id="pendi_a" href="#" onclick="reiniciar_bd_perseo_vs_fenix()">Reiniciar
               actas</a></li>
           <li><a class="dropdown-item" id="pendi_a" href="{% url 'novedades_perseo_fenix' %}">Novedades</a></li>
@@ -202,36 +216,9 @@
           <li><a class="dropdown-item" href="#" onclick="reiniciar_prenomina()">Reiniciar prenomina</a></li>
         </ul>
       </li>
-      <!--
-          FIN BONIFICACION
-        -->
-
-      <!--
-          INICIO NUEVO ANALISIS
-        
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
-          aria-expanded="true">
-          Nuevo analisis
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <li><a class="dropdown-item" href="{% url 'formulario_subir_acta_analisis' %}">Subir Acta</a></li>
-          <li class="dropdown-item">
-            <form method="post">
-              {% csrf_token %}
-              <button id="search-button">Buscar</button>
-            </form>
-          </li>
-        </ul>
-      </li>
-      
-          FIN NUEVO ANALISIS
-        -->
       <li class="nav-item">
         <a class="nav-link" href="{% url 'logout' %}?next=/">Cerrar sesión</a>
       </li>
-
-
     </ul>
   </div>
   {% endif %}

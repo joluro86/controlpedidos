@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from bonificaciones.models import *
 from datetime import datetime, timedelta
-from django.db.models import Sum, Avg, Count, F
+from django.db.models import Sum, Count, F
 import time
 
 
@@ -157,7 +157,7 @@ def calculo_promedio_diario():
                 instalador=i.instalador).aggregate(Count('producido'))
 
             adicional = float(producido['producido__sum']) - \
-                (float(numero_de_dias['producido__count'])*1000000)
+                (float(numero_de_dias['producido__count'])*1100000)
 
             nuevo_prom = PromedioDiario()
             nuevo_prom.instalador = i.instalador

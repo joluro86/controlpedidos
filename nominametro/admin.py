@@ -32,7 +32,7 @@ class StockBuscarResource(resources.ModelResource):
         model = prenomina
 
 class Plantilla_Admin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('cedula','nombre', 'apellido')
+    list_display = ('nit', 'cedula','nombre', 'apellido')
     class Meta:
         model = plantilla
 

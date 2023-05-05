@@ -27,7 +27,6 @@ class prenomina(models.Model):
         verbose_name = 'prenomina'
         verbose_name_plural = 'prenomina'
         db_table = 'prenomina'
-        order_with_respect_to = 'empleado'
 
     def __str__(self):
         return str(self.empleado)
@@ -46,6 +45,7 @@ class plantilla(models.Model):
     horas_ordinarias = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     on_0_35 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     ed_1_25 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
+    en_1_75 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     fd_0_75 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     fn_1_1 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
     d_o_f_n_2_1 = models.DecimalField(max_digits=15, decimal_places=4, default=0.0000)
@@ -72,7 +72,6 @@ class plantilla(models.Model):
         verbose_name = 'plantilla'
         verbose_name_plural = 'plantilla'
         db_table = 'plantilla'
-        order_with_respect_to = 'nombre'
 
     def __str__(self):
         return str(self.nombre)
@@ -102,7 +101,6 @@ class Concepto(models.Model):
         verbose_name = 'Concepto'
         verbose_name_plural = 'Conceptos'
         db_table = 'conceptos'
-        order_with_respect_to = 'concepto'
 
     def __str__(self):
         return str(self.concepto)
@@ -130,7 +128,6 @@ class Cargo(models.Model):
         verbose_name = 'Cargo'
         verbose_name_plural = 'Cargos'
         db_table = 'cargos'
-        order_with_respect_to = 'cedula'
 
     def __str__(self):
         return str(self.cargo) 

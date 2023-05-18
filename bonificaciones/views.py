@@ -199,3 +199,5 @@ def producido_diario(request):
 def bonificaciones(request):
     bonificaciones = PromedioDiario.objects.all()
     return render(request, 'bonificaciones.html', {'bonificaciones': bonificaciones})
+
+    

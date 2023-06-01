@@ -2,9 +2,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge" name="viewport"
+    content="width=device-width, initial-scale=1.0" />
+
   <title>Gestión pedidos</title>
   <script src="{% static 'sweetalert/sweetalert2.all.min.js' %} "></script>
 
@@ -51,6 +51,7 @@
           aria-expanded="true">
           Admin
         </a>
+
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <li><a class="dropdown-item" href="/admin/gestionvencimientos/actividad/" target="blank">Actividades
               contrato</a></li>
@@ -68,10 +69,12 @@
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <li>
-            <a class="dropdown-item" href="/admin/material_oficiales/material_utilizado_perseo/import/" target="_blank">Subir Perseo</a>
+            <a class="dropdown-item" href="/admin/material_oficiales/material_utilizado_perseo/import/"
+              target="_blank">Subir Perseo</a>
           </li>
           <li>
-            <a class="dropdown-item" href="/admin/material_oficiales/liquidacion_acta_epm/import/" target="_blank">Subir Fenix</a>
+            <a class="dropdown-item" href="/admin/material_oficiales/liquidacion_acta_epm/import/" target="_blank">Subir
+              Fenix</a>
           </li>
           <li>
             <a class="dropdown-item" href="{% url 'gestionar_acta_perseo_inventario' %}">Gestion BD</a>

@@ -60,7 +60,6 @@
           <th scope="col">Pedido</th>
           <th>Fecha contrato</th>
           <th>Fecha epm</th>
-          <th>Fecha</th>
           <th scope="col">Encargado</th>
           <th scope="col">Instalación</th>
           <th scope="col">Actividad</th>
@@ -74,7 +73,6 @@
           <th class="pt-1">{{ a.Pedido }}</th>
           <td class="m-0 pb-0">{{ a.fecha_vencimiento }}</td>  
           <td class="m-0 pb-0">{{ a.fecha_vence_epm }}</td>  
-          <td class="m-0 pb-0">{{ a.fecha_vence_sin_hora }}</td>   
           <td class="m-0 pb-0">{{ a.encargado }}</td>
           <td class="m-0 pb-0">{{ a.Instalación }}</td>
           <td class="m-0 pb-0">{{ a.Actividad }}</td>
@@ -113,7 +111,7 @@
           extend: "excelHtml5",
           title:'',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4,5,6,7],
+            columns: [0, 1, 2, 3, 4,5,6],
           },
         },
       ],

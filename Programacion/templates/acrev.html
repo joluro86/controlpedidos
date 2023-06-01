@@ -13,8 +13,6 @@
           <th scope="col">Celular</th>
           <th scope="col">Instal</th>
           <th scope="col">Area</th>
-          <th scope="col">Coordenada x</th>
-          <th scope="col">Coordenada y</th>
           <th scope="col">Concepto</th>
           <th scope="col">Observación</th>
         </tr>
@@ -31,8 +29,6 @@
           <td>{{ a.Celular_Contacto }}</td>
           <td>{{ a.Instalación }}</td>
           <td>{{ a.Area_Trabajo }}</td>
-          <td>{{ a.Coordenadax }}</td>
-          <td>{{ a.Coordenaday }}</td>
           <td>{{ a.Concepto }}</td>  
           <td><textarea name="" class="p-1" id="" cols="20" rows="5">{{ a.Observación_Solicitud }}</textarea></td>
         </tr>
@@ -49,7 +45,8 @@
 <script>
   $(document).ready(function () {
     $("#table_id").DataTable({
-      order: [[1, "desc"]],
+
+      order: [[6, "asc"], [7, "asc"]],
 
       dom: "Bfrtilp",
 
@@ -63,7 +60,7 @@
           extend: "excelHtml5",
           title:'',
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ],
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
             format: {
               body: function(data, row, column, node) {
                   data = $('<p>' + data + '</p>').text();

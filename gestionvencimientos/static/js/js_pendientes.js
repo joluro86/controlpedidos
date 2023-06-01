@@ -169,11 +169,19 @@ function reiniciar_bd() {
 }
 
 function fechas_busqueda_epm() {
+  // Obtener fecha actual
+  const fechaActual = new Date().toISOString().split("T")[0];
+
   swal
     .fire({
       title: "Fechas a buscar",
       type: "warning",
-      html: '<div style="width:350px;margin:auto;"><label>Inicio</label><br><input id="inicio" type="date" class="form-control"><label>Final</label><br><input id="final" type="date" class="form-control"></div>',
+      html: `<div style="width:350px;margin:auto;">
+                <label>Inicio</label><br>
+                <input id="inicio" type="date" class="form-control" value="${fechaActual}">
+                <label>Final</label><br>
+                <input id="final" type="date" class="form-control" value="${fechaActual}">
+             </div>`,
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
@@ -191,14 +199,13 @@ function fechas_busqueda_epm() {
     })
     .then(function (result) {
       if (result.value) {
-        inicio=result.value.inicio
-        final=result.value.final
-        window.location.href = "/epm/"+inicio+"/"+final+"/";
-        
-        alert(i) 
+        const inicio = result.value.inicio;
+        const final = result.value.final;
+        window.location.href = "/epm/" + inicio + "/" + final + "/";
       }
     });
 }
+
 
 function descartar(id) {
   url = "/descartar/";

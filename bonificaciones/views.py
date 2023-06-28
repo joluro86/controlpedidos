@@ -10,10 +10,10 @@ def gestion_fenix(request):
     todos = Fenix.objects.all()
     try:
         pedidos_rurales = todos.filter(tipo="CON", urbrur="R")
-        pedidos_rurales.update(total=F('valor')*1.27)
+        pedidos_rurales.update(total=F('valor')*1.08)
 
         pedidos_urbanos = todos.filter(tipo="CON", urbrur="U")
-        pedidos_urbanos.update(total=F('valor')*1.17)
+        pedidos_urbanos.update(total=F('valor')*1)
     except Exception as e:
         print("excepcion al calculo valor segun urbano o rural" + str(e))
 
@@ -34,11 +34,8 @@ def gestion_fenix(request):
             pass
 
     todos_perseo = Perseo.objects.all()
-    print(len(todos_perseo))
     pedidos_perseo_descuento = todos_perseo.filter(
         codigo__startswith="M") | todos_perseo.filter(codigo__startswith="G")
-
-    print(len(pedidos_perseo_descuento))
     pedidos_perseo_descuento.update(descuento_de_fenix=F('total'))
 
     fin = time.time()
@@ -84,9 +81,10 @@ def calculo_diario_instalador(request):
         try:
             fecha_inicial = request.POST['fecha_inicial']
             fecha_final_str = request.POST['fecha_final']
-
+            
             instaladores = Perseo.objects.distinct('instalador')
-
+            print("instalador")
+            print(instaladores.count())
             for inst in instaladores:
 
                 fecha_busqueda = datetime.strptime(fecha_inicial, '%Y-%m-%d')
@@ -157,7 +155,7 @@ def calculo_promedio_diario():
                 instalador=i.instalador).aggregate(Count('producido'))
 
             adicional = float(producido['producido__sum']) - \
-                (float(numero_de_dias['producido__count'])*1100000)
+                (float(numero_de_dias['producido__count'])*1200000)
 
             nuevo_prom = PromedioDiario()
             nuevo_prom.instalador = i.instalador

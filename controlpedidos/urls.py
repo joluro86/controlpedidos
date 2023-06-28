@@ -23,6 +23,7 @@ urlpatterns = [
     path('week/<int:id_week>/', pedidos_week, name="week"),
     path('otros/<int:cliente>/<int:apla>/<int:pendi>/', otros_pedidos, name="otros"),
     path('epm/<str:inicio>/<str:final>/', vencimientos_epm, name="epm"),
+    path('contrato/<str:inicio>/<str:final>/', vencimientos_contrato, name="contrato"),
     path('medidores/', importar_acta_medidores, name="medidores_cables"),
     path('gestion-medidores/', gestion_medidores, name="gestion_medidores"),
     path('eliminar-medidores/', reiniciar_medidores, name="reiniciar_medidores"),

@@ -8,7 +8,7 @@ from django.db.models import Sum
 
 def calculo_novedades_acta(request):
     gestionar_nomnbre_utem_con_a_o_con_p(request)
-
+    
     start = time.perf_counter()
     pedidos = Acta.objects.all()
 
@@ -318,14 +318,82 @@ def calculo_novedades_acta(request):
                     calculo_otros_incompatibles(
                         pedido, 'A 10', pedido.item_cont)
 
-    novedades = Novedad_acta.objects.all()
+    
+    pagina_legalizaciones()
+    novedades = Novedad_acta.objects.all()    
 
     end = time.perf_counter()
     elapsed = end - start
-    print(f"La función se ejecutó en {elapsed:0.6f} segundos")
+    print(f"La función se ejecutó en {elapsed:0.6f} segundos")  
 
     return render(request, "analisis.html", {'novedades': novedades})
 
+
+def pagina_legalizaciones():
+    from django.db.models import F, Q
+
+    # Obtener registros con item_cont igual a C01
+    registros_C01 = Acta.objects.filter(item_cont='C 01')
+
+    # Verificar las condiciones para cada registro
+    for registro in registros_C01:
+        primeros_14_caracteres = registro.pagina[:14]
+        cantidad_apariciones = Acta.objects.filter(item_cont='C 01', pagina__startswith=primeros_14_caracteres).count()
+
+        if cantidad_apariciones == 1:
+            pass
+        else:
+            if Novedad_acta.objects.filter(pedido=registro.pedido, novedad="Novedad C 01").count()>0:
+                continue
+            crear_novedad(registro, 'Novedad C 01')
+
+
+    # Obtener registros con item_cont igual a C02
+    registros_C02 = Acta.objects.filter(item_cont='C 02')
+
+    # Verificar las condiciones para cada registro
+    for registro in registros_C02:
+        primeros_14_caracteres = registro.pagina[:14]
+        cantidad_apariciones = Acta.objects.filter(item_cont='C 02', pagina__startswith=primeros_14_caracteres).count()
+
+        if 2 <= cantidad_apariciones <= 4:
+            pass
+        else:
+            if Novedad_acta.objects.filter(pedido=registro.pedido, novedad="Novedad C 02").count()>0:
+                continue
+            crear_novedad(registro, 'Novedad C 02')
+
+    # Obtener registros con item_cont igual a C 03
+    registros_C03 = Acta.objects.filter(item_cont='C 03')
+
+    # Verificar las condiciones para cada registro
+    for registro in registros_C03:
+        primeros_14_caracteres = registro.pagina[:14]
+        cantidad_apariciones = Acta.objects.filter(item_cont='C 03', pagina__startswith=primeros_14_caracteres).count()
+
+        if 5 <= cantidad_apariciones <= 24:
+            pass
+        else:
+            if Novedad_acta.objects.filter(pedido=registro.pedido, novedad="Novedad C 03").count()>0:
+                continue
+            crear_novedad(registro, 'Novedad C 03')
+    
+    # Obtener registros con item_cont igual a C 03
+    registros_C04 = Acta.objects.filter(item_cont='C 04')
+
+    # Verificar las condiciones para cada registro
+    for registro in registros_C04:
+        primeros_14_caracteres = registro.pagina[:14]
+        cantidad_apariciones = Acta.objects.filter(item_cont='C 04', pagina__startswith=primeros_14_caracteres).count()
+
+        if cantidad_apariciones > 24:
+            pass
+        else:
+            if Novedad_acta.objects.filter(pedido=registro.pedido, novedad="Novedad C 04").count()>0:
+                continue
+            crear_novedad(registro, 'Novedad C 04')
+
+        
 
 def comprobar_cobro_calibracion(pedido):
     calibracion = Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='CALE1F').aggregate(suma=Sum('cantidad'))['suma']

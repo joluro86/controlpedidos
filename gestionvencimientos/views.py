@@ -395,6 +395,18 @@ def vencimientos_epm(request, inicio, final):
     aeneses = cambiar_formato_fecha_epm(aeneses)
     return render(request, "pendientes_epm.html", {"aneses": aeneses})
 
+def vencimientos_contrato(request, inicio, final):
+    fecha_inicio = inicio+" "+"00:00:00"
+    fecha_final = final+" "+"23:59:59"
+    aeneses = []
+    ans = Ans.objects.all()
+    for a in ans:
+        if a.fecha_vencimiento > fecha_inicio and a.fecha_vencimiento < fecha_final:
+            aeneses.append(a)
+    aeneses = cambiar_formato_fecha_epm(aeneses)
+    return render(request, "pendientes_epm.html", {"aneses": aeneses})
+
+
 
 def pedidos_week(request, id_week):
 

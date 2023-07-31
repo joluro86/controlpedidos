@@ -645,12 +645,13 @@ def calculo_inventario_por_oficial(request):
 
 
 def reiniciar_bd_oficiales(request):
-    Liquidacion_acta_epm.objects.all().delete()
+    #Liquidacion_acta_epm.objects.all().delete()
     #Inicio.objects.all().delete()
     #Despacho.objects.all().delete()
     #Stock.objects.all().delete()
     #Reintegro.objects.all().delete()
     #Material_utilizado_perseo.objects.all().delete()
+    Material_A_Buscar.objects.all().delete()
     return render(request,  "index.html")
 
 # CODIGO MEDIDORES VS CABLEADO USADO

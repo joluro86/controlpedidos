@@ -167,7 +167,7 @@ def gestionar_prenomina(request):
 
                 nomina_empleado.deducciones_sgss = calculo_valor(emplea, 1800)
 
-                nomina_empleado.incapacidad_por_accidente_laboral = calculo_valor(emplea, 2000)
+                nomina_empleado.incapacidad_por_accidente_laboral = calculo_horas(emplea, 2000)
 
                 nomina_empleado.valor_pago_prestaciones = calculo_valor(emplea, 2100)
 

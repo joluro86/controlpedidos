@@ -155,7 +155,7 @@ def calculo_promedio_diario():
                 instalador=i.instalador).aggregate(Count('producido'))
 
             adicional = float(producido['producido__sum']) - \
-                (float(numero_de_dias['producido__count'])*1200000)
+                (float(numero_de_dias['producido__count'])*1100000)
 
             nuevo_prom = PromedioDiario()
             nuevo_prom.instalador = i.instalador

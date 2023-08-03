@@ -39,10 +39,6 @@ urlpatterns = [
     path('oficial/', calculo_inventario_por_oficial, name="calculo_inventario_por_oficial"),
     path('oficial_reiniciar/', reiniciar_bd_oficiales, name="reiniciar_bd_oficiales"),
 
-    # NUEVO ANALISIS
-
-    path('nuevo_analisis/', include('analisis.urls')),
-
     path('nomina/', include('nominametro.urls')),
 
 ] +static(settings.STATIC_URL, document_root= settings.STATIC_ROOT)

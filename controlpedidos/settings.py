@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'medidores',
     'perseovsfenix',
     'bonificaciones',
-    'analisis',
     'nominametro',
 ]
 

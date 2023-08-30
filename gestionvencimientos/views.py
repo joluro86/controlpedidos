@@ -651,6 +651,7 @@ def reiniciar_bd_oficiales(request):
     Stock.objects.all().delete()
     Reintegro.objects.all().delete()
     Material_utilizado_perseo.objects.all().delete()
+    Material_A_Buscar.objects.all().delete()
     return render(request,  "index.html")
 
 # CODIGO MEDIDORES VS CABLEADO USADO

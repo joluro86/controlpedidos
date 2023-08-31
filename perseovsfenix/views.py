@@ -18,7 +18,7 @@ def concatenar(pedidos, indicador):
     calculados_existencia = []
     for p in pedidos:
 
-        if indicador == 1:  
+        if indicador == 1:
 
             if p.pedido not in calculados_existencia:
                 numero_pedidos_perseo_en_fenix = matfenix.objects.filter(
@@ -47,7 +47,7 @@ def concatenar(pedidos, indicador):
                 pass
         codigo = p.codigo
 
-        if indicador == 0:  
+        if indicador == 0:
 
             if p.pedido not in calculados_existencia:
                 numero_pedidos_perseo_en_perseo = matperseo.objects.filter(
@@ -87,11 +87,12 @@ def gestionarbd():
 
 
 def calculo_novedades_perseo_vs_fenix(request):
+    """
     gestionarbd()
-    
+
     calculados = []
     pedidos_perseo = matperseo.objects.all()
-    for pedido_perseo in pedidos_perseo:            
+    for pedido_perseo in pedidos_perseo:
 
         if pedido_perseo.concatenacion not in calculados:
             calculados.append(pedido_perseo.concatenacion)
@@ -105,16 +106,16 @@ def calculo_novedades_perseo_vs_fenix(request):
                             concatenacion=pedido_perseo.concatenacion).aggregate(Sum('cantidad'))
                         cantidad_en_perseo = matperseo.objects.filter(
                             concatenacion=pedido_perseo.concatenacion).aggregate(Sum('cantidad'))
-                        #print(cantidad_en_fenix)
+                        # print(cantidad_en_fenix)
                         if cantidad_en_fenix['cantidad__sum'] is not None:
                             if float(cantidad_en_fenix['cantidad__sum']) >= 0:
                                 if float(cantidad_en_fenix['cantidad__sum']) != float(cantidad_en_perseo['cantidad__sum']):
                                     print(pedido_perseo.pedido)
                                     print("fenix: " +
-                                        str(cantidad_en_fenix['cantidad__sum']))
+                                          str(cantidad_en_fenix['cantidad__sum']))
                                     print("perseo: " +
-                                        str(cantidad_en_perseo['cantidad__sum']))
-                                    
+                                          str(cantidad_en_perseo['cantidad__sum']))
+
                                     faltante = NovedadPerseoVsFenix()
                                     faltante.concatenacion = pedido_perseo.concatenacion
                                     faltante.pedido = pedido_perseo.pedido
@@ -149,12 +150,66 @@ def calculo_novedades_perseo_vs_fenix(request):
                         pass
 
         ped = NovedadPerseoVsFenix.objects.filter(diferencia=0)
-        ped.delete()    
+        ped.delete()
 
-    calculo_numero_acta()    
-
+    calculo_numero_acta()
+    """
+    # Llamar a la función para realizar la actualización
+    actualizar_novedades()
     novedades = NovedadPerseoVsFenix.objects.all()
     return render(request, 'novedades_perseo_fenix.html', {'novedades': novedades})
+
+def actualizar_novedades():
+    # Obtener todas las concatenaciones en Matperseo
+    concatenaciones_matperseo = matperseo.objects.values_list('concatenacion', flat=True)
+    
+    # Filtrar registros en Matfenix que no están en Matperseo
+    registros_faltantes_matfenix = matfenix.objects.exclude(concatenacion__in=concatenaciones_matperseo)
+    
+     # Crear instancias de NovedadPerseoVsFenix a partir de los registros faltantes en Matfenix
+    nuevas_novedades = [
+        NovedadPerseoVsFenix(
+            concatenacion=registro.concatenacion,
+            pedido=registro.pedido,
+            actividad=registro.actividad,
+            fecha=registro.fecha,
+            codigo=registro.codigo,
+            cantidad=registro.cantidad,
+            acta="0",  # Valor predeterminado
+            observacion="Item en fenix y no en perseo",  # Valor predeterminado
+            cantidad_fenix=0,  # Valor predeterminado
+            diferencia=0  # Valor predeterminado
+        )
+        for registro in registros_faltantes_matfenix
+    ]
+    
+    # Insertar las nuevas instancias de NovedadPerseoVsFenix en la base de datos
+    NovedadPerseoVsFenix.objects.bulk_create(nuevas_novedades)
+
+
+def registros_faltantes_en_perseo_y_estan_en_fenix():
+    # Obtener todas las concatenaciones en Matperseo
+    concatenaciones_matperseo = matperseo.objects.values_list(
+        'concatenacion', flat=True)
+
+    # Filtrar registros en Matfenix que no están en Matperseo
+    registros_faltantes_matfenix = matfenix.objects.exclude(
+        concatenacion__in=concatenaciones_matperseo)
+
+    for faltantes_en_perseo in registros_faltantes_matfenix:
+        faltante = NovedadPerseoVsFenix()
+        faltante.concatenacion = faltantes_en_perseo.concatenacion
+        faltante.pedido = faltantes_en_perseo.pedido
+        faltante.actividad = faltantes_en_perseo.actividad
+        faltante.fecha = faltantes_en_perseo.fecha
+        faltante.codigo = faltantes_en_perseo.codigo
+        faltante.cantidad = float(
+            faltantes_en_perseo.cantidad)
+        faltante.observacion = "Item no registrado en Perseo y esta en Fénix."
+        faltante.acta = '-999'
+        faltante.cantidad_fenix = '-999'
+        faltante.diferencia = '-999'
+        faltante.save()
 
 
 def calculo_numero_acta():

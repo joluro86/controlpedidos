@@ -87,6 +87,7 @@ def gestionarbd():
 
 
 def calculo_novedades_perseo_vs_fenix(request):
+    """
     gestionarbd()
 
     calculados = []
@@ -152,10 +153,38 @@ def calculo_novedades_perseo_vs_fenix(request):
         ped.delete()
 
     calculo_numero_acta()
-    
-    registros_faltantes_en_perseo_y_estan_en_fenix()
+    """
+    # Llamar a la función para realizar la actualización
+    actualizar_novedades()
     novedades = NovedadPerseoVsFenix.objects.all()
     return render(request, 'novedades_perseo_fenix.html', {'novedades': novedades})
+
+def actualizar_novedades():
+    # Obtener todas las concatenaciones en Matperseo
+    concatenaciones_matperseo = matperseo.objects.values_list('concatenacion', flat=True)
+    
+    # Filtrar registros en Matfenix que no están en Matperseo
+    registros_faltantes_matfenix = matfenix.objects.exclude(concatenacion__in=concatenaciones_matperseo)
+    
+     # Crear instancias de NovedadPerseoVsFenix a partir de los registros faltantes en Matfenix
+    nuevas_novedades = [
+        NovedadPerseoVsFenix(
+            concatenacion=registro.concatenacion,
+            pedido=registro.pedido,
+            actividad=registro.actividad,
+            fecha=registro.fecha,
+            codigo=registro.codigo,
+            cantidad=registro.cantidad,
+            acta="0",  # Valor predeterminado
+            observacion="Item en fenix y no en perseo",  # Valor predeterminado
+            cantidad_fenix=0,  # Valor predeterminado
+            diferencia=0  # Valor predeterminado
+        )
+        for registro in registros_faltantes_matfenix
+    ]
+    
+    # Insertar las nuevas instancias de NovedadPerseoVsFenix en la base de datos
+    NovedadPerseoVsFenix.objects.bulk_create(nuevas_novedades)
 
 
 def registros_faltantes_en_perseo_y_estan_en_fenix():

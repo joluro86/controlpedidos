@@ -87,7 +87,7 @@ def gestionarbd():
 
 
 def calculo_novedades_perseo_vs_fenix(request):
-    """
+
     gestionarbd()
 
     calculados = []
@@ -153,7 +153,7 @@ def calculo_novedades_perseo_vs_fenix(request):
         ped.delete()
 
     calculo_numero_acta()
-    """
+
     # Llamar a la función para realizar la actualización
     actualizar_novedades()
     novedades = NovedadPerseoVsFenix.objects.all()

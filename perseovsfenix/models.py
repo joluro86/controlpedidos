@@ -26,7 +26,7 @@ class matperseo(models.Model):
     actividad=models.CharField(verbose_name='Actividad', max_length=500)
     fecha=models.CharField(verbose_name='Fecha', max_length=100)
     codigo=models.CharField(verbose_name='Código', max_length=100)
-    cantidad=models.DecimalField(verbose_name='Cantidad', decimal_places=2, default=0, max_digits=6)   
+    cantidad=models.DecimalField(verbose_name='Cantidad', decimal_places=2, default=0, max_digits=9)   
     acta= models.CharField(verbose_name='Acta', max_length=100, default='0') 
     concatenacion= models.CharField(verbose_name='Concat', max_length=100, default="0")
 
@@ -44,7 +44,7 @@ class matfenix(models.Model):
     actividad=models.CharField(verbose_name='Actividad', max_length=500)
     fecha=models.CharField(verbose_name='Fecha', max_length=100)
     codigo=models.CharField(verbose_name='Código', max_length=100)
-    cantidad=models.DecimalField(verbose_name='Cantidad', decimal_places=2, default=0, max_digits=6)    
+    cantidad=models.DecimalField(verbose_name='Cantidad', decimal_places=2, default=0, max_digits=9)    
     concatenacion= models.CharField(verbose_name='Concat', max_length=100, default="0")
     enperseo = models.IntegerField(default=0) 
 
@@ -66,7 +66,7 @@ class NovedadPerseoVsFenix(models.Model):
     cantidad=models.DecimalField(verbose_name='Cantidad', decimal_places=2, default=0, max_digits=6)   
     acta= models.CharField(verbose_name='Acta', max_length=100, default=0)  
     observacion = models.CharField(verbose_name='Observación', max_length=200, default="-")
-    cantidad_fenix=models.DecimalField(verbose_name='Can Fenix', decimal_places=2, default=0, max_digits=6) 
+    cantidad_fenix=models.DecimalField(verbose_name='Can Fenix', decimal_places=2, default=0, max_digits=9) 
     diferencia=models.DecimalField(verbose_name='Diferencia', decimal_places=2, default=0, max_digits=6)
 
     class Meta:

@@ -24,9 +24,34 @@
 
 
 
-.table tbody .tr{
+table tbody tr{
   font-size: 0.8em !important;
+  
 }
+table tbody tr th{
+  padding: 0px 0px !important;
+  margin: 0px 0px !important;
+}
+table tbody tr td{
+  padding: 0px 0px !important;
+  margin: 0px 0px !important;
+}
+
+table tbody tr td i{
+  padding: 0px 0px !important;
+  margin: 0px 0px !important;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+table thead tr{
+  background-color: rgb(41, 40, 38) !important;
+  color: #eee;
+}
+
+
+
+
 
 .card .dt-buttons {
   float: left;
@@ -49,11 +74,13 @@
   margin-bottom: 10px;
 }
 .card .dt-buttons .dt-button {
-  background-color: rgb(87, 248, 173);
+  background-color: #9479f5;
   border-radius: 3px;
   padding: 2px !important;
   font-size: 0.7em;
-  border: solid 1px gray;
+  border: solid 1px rgb(66, 150, 247);
+  color:#eee;
+  font-weight: bold;
 }
 
 .card .dt-buttons :hover{
@@ -64,31 +91,26 @@
   color: rgb(59, 53, 53);
 }
 
+.header .nav a:hover {
+  background-color: #9479f5;
+  color: #eee;
+}
+
 .header-menu {
   margin-top: 2px;
 }
 
 .header-menu .nav .nav-item a {
   border-radius: 5px;
-  margin: 1px;
+  color: rgb(22, 19, 19);
 }
 
-.header .nav :hover {
-  background-color: #7d736c;
-  color: white;
+.bg-dias-week{
+  background-color: #a28bf5;
+  font-weight: bold;
 }
 
-.header-menu .nav .nav-item a:hover {
-  border-radius: 5px;
-  background-color: #fcb67f;
-  color: black;
-  transition: color 0.15s ease-in-out;
-}
 
-.table .tr:hover {
-  background-color: rgb(244, 244, 245);
-  transition: background-color 0.3s ease;
-}
 .div-oculto {
   display: none;
 }

@@ -2,13 +2,6 @@
 {% block content %}
 <div style="display: flex; justify-content: center" class="header-menu">
   <ul class="nav text-light">
-    <!--
-      <li class="nav-item">
-      <a class="nav-link" href="{% url 'pendientes_last_week' 10 %}" style="color:#05DF90; font-weight:bold" onmouseover='this.style.color="black"'; onmouseout='this.style.color="#05DF90";'
-        ><i class="fas fa-arrow-circle-left"></i> Anterior</a
-      >
-    </li>
-    -->
     <li class="nav-item">
       <a class="nav-link" id="id_url_1" href="{% url 'pendientes' 1 %}"
         >Lunes</a
@@ -34,13 +27,7 @@
         >Viernes</a
       >
     </li>
-    <!--
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'pendientes_next_week' 10 %}" style="color:#05DF90; font-weight:bold" onmouseover='this.style.color="black"'; onmouseout='this.style.color="#05DF90";'
-        >Siguiente <i class="fas fa-arrow-circle-right"></i></a
-      >
-    </li>
-    -->
+
   </ul>
   <div class="div-oculto" id="div_id-oculto">
     <input type="hidden" id="id-oculto" value="{{ id_dia }}" />

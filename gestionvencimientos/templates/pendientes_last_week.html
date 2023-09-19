@@ -43,7 +43,7 @@
       >
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'menu_pendientes' %}" style="color:#05DF90; font-weight:bold;" onmouseover='this.style.color="black"'; onmouseout='this.style.color="#05DF90";'
+      <a class="nav-link" href="{% url 'menu_pendientes' %}" style="color:#9479f5; font-weight:bold;" ; onmouseout='this.style.color="#9479f5;;";'
         >Siguiente <i class="fas fa-arrow-circle-right"></i></a
       >
     </li>
@@ -78,15 +78,6 @@
           <td class="m-0 pb-0">{{ a.encargado }}</td>
           <td class="m-0 pb-0">{{ a.Instalación }}</td>
           <td class="m-0 pb-0">{{ a.Actividad }}</td>
-          <td class="m-0 pb-0">
-            <a
-              href="#"
-              onclick="cerrar_pedido({{ a.id }})"
-              class="m-0 p-0 btn btn-sm text-info"
-              id="btn_cerrar_pedido"
-              ><i class="fas fa-check-circle"></i
-            ></a>
-          </td>
         </tr>
 
         {% endfor %}

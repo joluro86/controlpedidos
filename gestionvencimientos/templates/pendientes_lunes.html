@@ -63,13 +63,13 @@
       <tbody>
         {% for a in aneses %}
 
-        <tr class="text-center m-0 pb-0">
-          <th class="m-0 pb-0">{{ a.Pedido }}</th>
-          <th class="m-0 pb-0">{{ a.fecha_vencimiento }}</td>
+        <tr class="text-start m-0 pb-0">
+          <th class="m-0 pb-0 text-center">{{ a.Pedido }}</th>
+          <td class="m-0 pb-0 text-center">{{ a.fecha_vencimiento }}</td>
           <td class="m-0 pb-0">{{ a.encargado }}</td>
-          <td class="m-0 pb-0">{{ a.Instalación }}</td>
-          <td class="m-0 pb-0">{{ a.Actividad }}</td>
-          <td class="m-0 pb-0">{{ a.Municipio }}</td>
+          <td class="m-0 pb-0 text-center">{{ a.Instalación }}</td>
+          <td class="m-0 pb-0 text-center">{{ a.Actividad }}</td>
+          <td class="m-0 pb-0 ">{{ a.Area_Trabajo }}</td>
         </tr>
 
         {% endfor %}

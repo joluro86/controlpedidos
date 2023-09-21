@@ -55,10 +55,7 @@ function pintar_dia_semana() {
     id_url = document.getElementById("id_url_" + id_dia);
     id_url.classList.add("bg-dias-week", "text-light");
 
-    bgpendi = document.getElementById("pendi_index");
-    bgpendi.classList.add("bg-dias-week");
-    a = document.getElementById("pendi_a");
-    a.classList.add("text-light");
+    
   }
 }
 

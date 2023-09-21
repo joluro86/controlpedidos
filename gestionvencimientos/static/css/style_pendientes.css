@@ -84,7 +84,9 @@ table thead tr{
 }
 
 .card .dt-buttons :hover{
-  background-color:#fcb67f;
+  background-color: #212529;
+  color: #eee;
+  font-weight: bold;
 }
 
 .header .nav a {
@@ -134,4 +136,14 @@ height: calc(100% - 73px);
 .h-custom {
 height: 100%;
 }
+}
+
+.header-menu .nav .nav-item a:hover {
+  background-color: #212529;
+  color: #eee;
+  font-weight: bold;
+}
+
+.header .dropdown-item{
+  font-size: 0.9em;
 }

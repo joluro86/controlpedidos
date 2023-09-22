@@ -147,3 +147,11 @@ height: 100%;
 .header .dropdown-item{
   font-size: 0.9em;
 }
+
+.swal2-styled.swal2-confirm {
+  background-color: #9479f5 !important;
+}
+
+.swal2-styled.swal2-cancel {
+  background-color: #f87a7a !important;
+}

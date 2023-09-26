@@ -50,8 +50,18 @@ table thead tr{
 }
 
 
+.page-item.active .page-link {
+  background-color: #9479f5 !important;
+  border-color: #9479f5 !important;
+}
 
+.page-link {
+  color: black !important;
+}
 
+.page-link:hover {
+  border-color: none !important;
+}
 
 .card .dt-buttons {
   float: left;

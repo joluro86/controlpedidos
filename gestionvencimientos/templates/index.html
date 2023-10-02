@@ -42,7 +42,7 @@
 <body class="body">
   {% if request.user.is_authenticated %}
   <div class="header" id="sub-header">
-    <ul class="nav">
+    <ul class="nav box-index">
       <li class="nav-item" id="inicio">
         <a class="nav-link" href="{% url 'home' %}">Inicio</a>
       </li>
@@ -91,7 +91,7 @@
         </ul>
       </li>
 
-      <li style="background-color: rgb(92, 171, 245) !important;" class="nav-item dropdown">
+      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
           aria-expanded="true">
           Revisión Acta
@@ -109,7 +109,7 @@
         </ul>
       </li>
 
-      <li style="background-color: rgb(92, 171, 245) !important;" class="nav-item dropdown">
+      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
           aria-expanded="true">
           Gestión Ans
@@ -133,7 +133,7 @@
       <!--
           PERSEO VS FENIX
         -->
-      <li style="background-color: rgb(92, 171, 245) !important;" class="nav-item dropdown">
+      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
           aria-expanded="true">
           Perseo Vs Fénix
@@ -157,15 +157,15 @@
           FIN PERSEO VS FENIX
         -->
 
-      <li style="background-color: rgb(92, 171, 245) !important;" class="nav-item dropdown">
+      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
           aria-expanded="true">
           Programar
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <li><a class="dropdown-item" href="{% url 'acrev' %}">ACREV</a></li>
-          <li><a class="dropdown-item" href="{% url 'amrtr' %}">AMRTR</a></li>
-          <li><a class="dropdown-item" href="{% url 'lega' %}">LEGA</a></li>
+          <li><a class="dropdown-item" href="{% url 'acrev' %}">Puntos de Conexión</a></li>
+          <li><a class="dropdown-item" href="{% url 'amrtr' %}">Movimiento de Redes</a></li>
+          <li><a class="dropdown-item" href="{% url 'lega' %}">Legalizaciones</a></li>
         </ul>
       </li>
       <!--
@@ -190,7 +190,7 @@
         </ul>
       </li>
 
-      <li style="background-color: rgb(92, 171, 245) !important;" class="nav-item dropdown">
+      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
           aria-expanded="true">
           Nomina

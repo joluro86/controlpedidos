@@ -24,6 +24,29 @@ def calculo_novedades_acta(request):
             primera_letra = cod[0]
             if primera_letra == 'A':
 
+                if pedido.item_cont == 'A 05':
+                    if int(pedido.cantidad) > 1:
+                        crear_novedad(
+                                pedido, 'A 05 mayor a 1')
+                    try:
+                        BREAKER_210954 = Acta.objects.filter(pedido=pedido).filter(
+                            item_cont='210954').aggregate(suma=Sum('cantidad'))
+                        if BREAKER_210954['suma']<1:
+                            crear_novedad(
+                                pedido, 'A 05 con 210954 menor a 1')
+                    except Exception as e:
+                        print(e)                      
+
+
+                    if pedido.item_cont == '210954':
+                        
+                        A05 = Acta.objects.filter(pedido=pedido).filter(
+                                    item_cont='A 05').aggregate(suma=Sum('cantidad'))
+                        if BREAKER_210954['suma']<1:
+                            crear_novedad(
+                                        pedido, '210954 sin A 05')                        
+                    
+
                 if pedido.item_cont == 'A 04':
                     if int(pedido.cantidad) == 2:
                         BREAKER_210949 = Acta.objects.filter(pedido=pedido).filter(
@@ -111,10 +134,18 @@ def calculo_novedades_acta(request):
                     try:
                         busquedad_a04 = Acta.objects.filter(
                             pedido=pedido.pedido).filter(item_cont='A 04').count()
+                        busquedad_a05 = Acta.objects.filter(
+                            pedido=pedido.pedido).filter(item_cont='A 05').count()                       
 
-                        if busquedad_a04 == 0:
-                            novedad = "A 01=1, A 04=0"
+
+                        if busquedad_a04 == 0 and busquedad_a05==0:
+                            novedad = "A 01=1, Sin A 04 y A 05"
                             crear_novedad(pedido, novedad)
+                        
+                        if busquedad_a04 > 0 and busquedad_a05 > 0:
+                            novedad = "A 04 y A 05 incompatibles"
+                            crear_novedad(pedido, novedad)
+
                     except:
                         pass
 
@@ -652,7 +683,7 @@ def calculo_incompatible_A01(pedido, novedad):
         for p in pedidos:
             letra = p.item_cont[0]
             if letra == 'A':
-                if p.item_cont != 'A 01' and p.item_cont != 'A 04' and p.item_cont != 'A 23':
+                if p.item_cont != 'A 01' and p.item_cont != 'A 04' and p.item_cont != 'A 23' and p.item_cont != 'A 05':
                     nov = 'A 01=1, ' + p.item_cont + ">0. Incompatibles."
                     crear_novedad(p, nov)
     except:

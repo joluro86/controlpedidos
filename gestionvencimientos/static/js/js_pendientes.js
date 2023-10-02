@@ -53,12 +53,9 @@ function pintar_dia_semana() {
 
   if (id_dia > 0 || id_dia <= 50) {
     id_url = document.getElementById("id_url_" + id_dia);
-    id_url.classList.add("bg-secondary", "text-light");
+    id_url.classList.add("bg-dias-week", "text-light");
 
-    bgpendi = document.getElementById("pendi_index");
-    bgpendi.classList.add("bg-secondary");
-    a = document.getElementById("pendi_a");
-    a.classList.add("text-light");
+    
   }
 }
 

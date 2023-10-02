@@ -3,7 +3,7 @@
 <div style="display: flex; justify-content: center" class="header-menu">
   <ul class="nav text-light">
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'pendientes_last_week' 10 %}" style="color:#05DF90; font-weight:bold" onmouseover='this.style.color="black"'; onmouseout='this.style.color="#05DF90";'
+      <a class="nav-link" href="{% url 'pendientes_last_week' 10 %}" style="color:#9479f5; font-weight:bold"; onmouseout='this.style.color="#9479f5;";'
         ><i class="fas fa-arrow-circle-left"></i> Anterior</a
       >
     </li>
@@ -33,7 +33,7 @@
       >
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'pendientes_next_week' 10 %}" style="color:#05DF90; font-weight:bold" onmouseover='this.style.color="black"'; onmouseout='this.style.color="#05DF90";'
+      <a class="nav-link" href="{% url 'pendientes_next_week' 10 %}" style="color:#9479f5; font-weight:bold"; onmouseout='this.style.color="#9479f5;";'
         >Siguiente <i class="fas fa-arrow-circle-right"></i></a
       >
     </li>
@@ -58,28 +58,18 @@
           <th scope="col" class="p-0">Instalación</th>
           <th scope="col" class="p-0">Actividad</th>
           <th scope="col" class="p-0">Municipio</th>
-          <th scope="col" class="p-0">Cerrar</th>
         </tr>
       </thead>
       <tbody>
         {% for a in aneses %}
 
-        <tr class="text-center p-0 tr">
-          <th class="pt-1">{{ a.Pedido }}</th>
-          <td class="m-0 pb-0"><p id="fecha">{{ a.fecha_vencimiento }}</p></td>
+        <tr class="text-start m-0 pb-0">
+          <th class="m-0 pb-0 text-center">{{ a.Pedido }}</th>
+          <td class="m-0 pb-0 text-center">{{ a.fecha_vencimiento }}</td>
           <td class="m-0 pb-0">{{ a.encargado }}</td>
-          <td class="m-0 pb-0">{{ a.Instalación }}</td>
-          <td class="m-0 pb-0">{{ a.Actividad }}</td>
-          <td class="m-0 pb-0">{{ a.Municipio }}</td>
-          <td class="m-0 pb-0">
-            <a
-              href="#"
-              onclick="cerrar_pedido({{ a.id }})"
-              class="m-0 p-0 btn btn-sm text-info"
-              id="btn_cerrar_pedido"
-              ><i class="fas fa-check-circle p-0"></i
-            ></a>
-          </td>
+          <td class="m-0 pb-0 text-center">{{ a.Instalación }}</td>
+          <td class="m-0 pb-0 text-center">{{ a.Actividad }}</td>
+          <td class="m-0 pb-0 ">{{ a.Area_Trabajo }}</td>
         </tr>
 
         {% endfor %}

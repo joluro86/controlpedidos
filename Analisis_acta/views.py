@@ -3,13 +3,12 @@ from email.policy import HTTP
 from django.shortcuts import redirect, render
 from Analisis_acta.models import *
 import time
-from django.db.models import Sum
+from django.db.models import Sum, Q
 
 
 def calculo_novedades_acta(request):
     gestionar_nomnbre_utem_con_a_o_con_p(request)
-    
-    start = time.perf_counter()
+
     pedidos = Acta.objects.all()
 
     for pedido in pedidos:
@@ -27,25 +26,23 @@ def calculo_novedades_acta(request):
                 if pedido.item_cont == 'A 05':
                     if int(pedido.cantidad) > 1:
                         crear_novedad(
-                                pedido, 'A 05 mayor a 1')
+                            pedido, 'A 05 mayor a 1')
                     try:
                         BREAKER_210954 = Acta.objects.filter(pedido=pedido).filter(
                             item_cont='210954').aggregate(suma=Sum('cantidad'))
-                        if BREAKER_210954['suma']<1:
+                        if BREAKER_210954['suma'] < 1:
                             crear_novedad(
                                 pedido, 'A 05 con 210954 menor a 1')
                     except Exception as e:
-                        print(e)                      
-
+                        print(e)
 
                     if pedido.item_cont == '210954':
-                        
+
                         A05 = Acta.objects.filter(pedido=pedido).filter(
-                                    item_cont='A 05').aggregate(suma=Sum('cantidad'))
-                        if BREAKER_210954['suma']<1:
+                            item_cont='A 05').aggregate(suma=Sum('cantidad'))
+                        if BREAKER_210954['suma'] < 1:
                             crear_novedad(
-                                        pedido, '210954 sin A 05')                        
-                    
+                                pedido, '210954 sin A 05')
 
                 if pedido.item_cont == 'A 04':
                     if int(pedido.cantidad) == 2:
@@ -111,37 +108,39 @@ def calculo_novedades_acta(request):
                 except:
                     pass
 
-            if pedido.item_cont[0:4] == 'CALE' and int(pedido.cantidad)>1:
+            if pedido.item_cont[0:4] == 'CALE' and int(pedido.cantidad) > 1:
                 crear_novedad(pedido, '')
 
             if pedido.actividad == 'AEJDO':
 
                 if pedido.item_cont == "200410" or pedido.item_cont == "200411":
-                    if int(pedido.cantidad) <= 5:                        
-                        
-                        cant_200411 = Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='200411').aggregate(suma=Sum('cantidad'))['suma']
-                        cant_200410 = Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='200410').aggregate(suma=Sum('cantidad'))['suma']
-                        
-                        if cant_200411 == None:
-                            cant_200411=0
-                        if cant_200410 == None:
-                            cant_200410=0
+                    if int(pedido.cantidad) <= 5:
 
-                        if (cant_200411<=5 and cant_200411>0) or (cant_200410<=5 and cant_200410>0):
-                            crear_novedad(pedido, '200410= ' + str(cant_200410) + ' 200411= ' + str(cant_200411))
+                        cant_200411 = Acta.objects.filter(pedido=pedido.pedido).filter(
+                            item_cont='200411').aggregate(suma=Sum('cantidad'))['suma']
+                        cant_200410 = Acta.objects.filter(pedido=pedido.pedido).filter(
+                            item_cont='200410').aggregate(suma=Sum('cantidad'))['suma']
+
+                        if cant_200411 == None:
+                            cant_200411 = 0
+                        if cant_200410 == None:
+                            cant_200410 = 0
+
+                        if (cant_200411 <= 5 and cant_200411 > 0) or (cant_200410 <= 5 and cant_200410 > 0):
+                            crear_novedad(
+                                pedido, '200410= ' + str(cant_200410) + ' 200411= ' + str(cant_200411))
 
                 if pedido.item_cont == 'A 01':
                     try:
                         busquedad_a04 = Acta.objects.filter(
                             pedido=pedido.pedido).filter(item_cont='A 04').count()
                         busquedad_a05 = Acta.objects.filter(
-                            pedido=pedido.pedido).filter(item_cont='A 05').count()                       
+                            pedido=pedido.pedido).filter(item_cont='A 05').count()
 
-
-                        if busquedad_a04 == 0 and busquedad_a05==0:
+                        if busquedad_a04 == 0 and busquedad_a05 == 0:
                             novedad = "A 01=1, Sin A 04 y A 05"
                             crear_novedad(pedido, novedad)
-                        
+
                         if busquedad_a04 > 0 and busquedad_a05 > 0:
                             novedad = "A 04 y A 05 incompatibles"
                             crear_novedad(pedido, novedad)
@@ -319,7 +318,7 @@ def calculo_novedades_acta(request):
                 if int(pedido.cantidad) > 1:
                     crear_novedad(pedido, str(pedido.item_cont) +
                                   ". Cantidad mayor a 1.")
-            
+
             if pedido.suminis == '200092':
                 comprobar_cobro_calibracion(pedido)
 
@@ -348,14 +347,13 @@ def calculo_novedades_acta(request):
                 if pedido.item_cont == 'A 11':
                     calculo_otros_incompatibles(
                         pedido, 'A 10', pedido.item_cont)
-
+                 
     
-    pagina_legalizaciones()
-    novedades = Novedad_acta.objects.all()    
 
-    end = time.perf_counter()
-    elapsed = end - start
-    print(f"La función se ejecutó en {elapsed:0.6f} segundos")  
+    pagina_legalizaciones()
+
+    verificar_A03_MEDIDOR()
+    novedades = Novedad_acta.objects.all()
 
     return render(request, "analisis.html", {'novedades': novedades})
 
@@ -369,15 +367,15 @@ def pagina_legalizaciones():
     # Verificar las condiciones para cada registro
     for registro in registros_C01:
         primeros_14_caracteres = registro.pagina[:14]
-        cantidad_apariciones = Acta.objects.filter(item_cont='C 01', pagina__startswith=primeros_14_caracteres).count()
+        cantidad_apariciones = Acta.objects.filter(
+            item_cont='C 01', pagina__startswith=primeros_14_caracteres).count()
 
         if cantidad_apariciones == 1:
             pass
         else:
-            if Novedad_acta.objects.filter(pedido=registro.pedido, novedad="Novedad C 01").count()>0:
+            if Novedad_acta.objects.filter(pedido=registro.pedido, novedad="Novedad C 01").count() > 0:
                 continue
             crear_novedad(registro, 'Novedad C 01')
-
 
     # Obtener registros con item_cont igual a C02
     registros_C02 = Acta.objects.filter(item_cont='C 02')
@@ -385,12 +383,13 @@ def pagina_legalizaciones():
     # Verificar las condiciones para cada registro
     for registro in registros_C02:
         primeros_14_caracteres = registro.pagina[:14]
-        cantidad_apariciones = Acta.objects.filter(item_cont='C 02', pagina__startswith=primeros_14_caracteres).count()
+        cantidad_apariciones = Acta.objects.filter(
+            item_cont='C 02', pagina__startswith=primeros_14_caracteres).count()
 
         if 2 <= cantidad_apariciones <= 4:
             pass
         else:
-            if Novedad_acta.objects.filter(pedido=registro.pedido, novedad="Novedad C 02").count()>0:
+            if Novedad_acta.objects.filter(pedido=registro.pedido, novedad="Novedad C 02").count() > 0:
                 continue
             crear_novedad(registro, 'Novedad C 02')
 
@@ -400,39 +399,40 @@ def pagina_legalizaciones():
     # Verificar las condiciones para cada registro
     for registro in registros_C03:
         primeros_14_caracteres = registro.pagina[:14]
-        cantidad_apariciones = Acta.objects.filter(item_cont='C 03', pagina__startswith=primeros_14_caracteres).count()
+        cantidad_apariciones = Acta.objects.filter(
+            item_cont='C 03', pagina__startswith=primeros_14_caracteres).count()
 
         if 5 <= cantidad_apariciones <= 24:
             pass
         else:
-            if Novedad_acta.objects.filter(pedido=registro.pedido, novedad="Novedad C 03").count()>0:
+            if Novedad_acta.objects.filter(pedido=registro.pedido, novedad="Novedad C 03").count() > 0:
                 continue
             crear_novedad(registro, 'Novedad C 03')
-    
+
     # Obtener registros con item_cont igual a C 03
     registros_C04 = Acta.objects.filter(item_cont='C 04')
 
     # Verificar las condiciones para cada registro
     for registro in registros_C04:
         primeros_14_caracteres = registro.pagina[:14]
-        cantidad_apariciones = Acta.objects.filter(item_cont='C 04', pagina__startswith=primeros_14_caracteres).count()
+        cantidad_apariciones = Acta.objects.filter(
+            item_cont='C 04', pagina__startswith=primeros_14_caracteres).count()
 
         if cantidad_apariciones > 24:
             pass
         else:
-            if Novedad_acta.objects.filter(pedido=registro.pedido, novedad="Novedad C 04").count()>0:
+            if Novedad_acta.objects.filter(pedido=registro.pedido, novedad="Novedad C 04").count() > 0:
                 continue
             crear_novedad(registro, 'Novedad C 04')
 
-        
 
 def comprobar_cobro_calibracion(pedido):
-    calibracion = Acta.objects.filter(pedido=pedido.pedido).filter(item_cont='CALE1F').aggregate(suma=Sum('cantidad'))['suma']
-    if calibracion!=1:
-        if calibracion==None:
-            calibracion=0
-        crear_novedad(pedido, 'Calibración con cantidad= '+ str(calibracion))
-
+    calibracion = Acta.objects.filter(pedido=pedido.pedido).filter(
+        item_cont='CALE1F').aggregate(suma=Sum('cantidad'))['suma']
+    if calibracion != 1:
+        if calibracion == None:
+            calibracion = 0
+        crear_novedad(pedido, 'Calibración con cantidad= ' + str(calibracion))
 
 
 def gestionar_nomnbre_utem_con_a_o_con_p(request):
@@ -475,7 +475,6 @@ def busqueda_insumo_por_item(pedido, insumo, item):
 
 def busqueda_calibracion(pedido):
     try:
-
 
         pass
     except:
@@ -858,3 +857,25 @@ def verificar_cable_acta(pedido, cable1, cable2, medidor):
                                 str(p.suminis) + " : " + str(p.cantidad)
 
                 crear_novedad(p, novedad)
+
+
+from django.db.models import Q
+
+def verificar_A03_MEDIDOR():
+    # Obtén todos los registros donde item_cont es "A 03"
+    actas_a03 = Acta.objects.filter(item_cont="A 03")
+
+    for acta in actas_a03:
+        # Verifica si hay otros registros con el mismo pedido y item_cont no igual a "A 03"
+        otros_actas = Acta.objects.filter(
+            Q(pedido=acta.pedido),
+            ~Q(item_cont="A 03"),
+            Q(item_cont="200092") | Q(item_cont="200093") | Q(item_cont="200098"),
+            cantidad__gt=0
+        )
+
+        # Si no hay otros registros que cumplan las condiciones, llama a la función para crear una novedad
+        if not otros_actas.exists():
+            crear_novedad(acta, "A 03 sin medidor")
+
+    

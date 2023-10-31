@@ -83,7 +83,8 @@ def calculo_diario_instalador(request):
             fecha_final_str = request.POST['fecha_final']
             
             instaladores = Perseo.objects.distinct('instalador')
-            print("instalador")
+            print(fecha_inicial)
+            print(fecha_final_str)
             print(instaladores.count())
             for inst in instaladores:
 
@@ -98,7 +99,7 @@ def calculo_diario_instalador(request):
                         '%Y-%m-%d'), inst.instalador, 'descuento_de_fenix')
                     res_fenix = sumar_por_fecha_persona(
                         Fenix, fecha_busqueda.strftime('%Y-%m-%d'), inst.instalador, 'total')
-
+                    print(fecha_busqueda.strftime('%Y-%m-%d'))
                     if (res_perseo['descuento_de_fenix__sum']) is None:
                         novedad = NovedadBonificacion()
                         novedad.pedido = inst.instalador

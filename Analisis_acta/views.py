@@ -2,7 +2,6 @@ from asyncio.windows_events import NULL
 from email.policy import HTTP
 from django.shortcuts import redirect, render
 from Analisis_acta.models import *
-import time
 from django.db.models import Sum, Q
 
 
@@ -346,17 +345,37 @@ def calculo_novedades_acta(request):
                         pedido, 'A 11', pedido.item_cont)
                 if pedido.item_cont == 'A 11':
                     calculo_otros_incompatibles(
-                        pedido, 'A 10', pedido.item_cont)
-                 
+                        pedido, 'A 10', pedido.item_cont)                
     
-
     pagina_legalizaciones()
 
     verificar_A03_MEDIDOR()
+
+    verificar_y_crear_novedades_duplicadas()
+
     novedades = Novedad_acta.objects.all()
 
     return render(request, "analisis.html", {'novedades': novedades})
 
+from django.db.models import Count
+def verificar_y_crear_novedades_duplicadas():
+    # Obtener todos los registros con duplicados
+    registros_duplicados = Acta.objects.values('pedido', 'item_cont').annotate(count=Count('id')).filter(count__gt=1)
+
+    # Crear un conjunto para realizar un seguimiento de las novedades ya creadas
+    novedades_creadas = set()
+    cont=0
+
+    for duplicado in registros_duplicados:
+        pedido = Acta.objects.filter(pedido=duplicado['pedido']).first()
+        item_cont = duplicado['item_cont']
+
+        novedad = str(str(duplicado['pedido']) + str(item_cont) +  ' Linea duplicada')
+        
+        # Verificar si la novedad ya ha sido creada
+        if novedad not in novedades_creadas:
+            crear_novedad(pedido, str( str(item_cont) +  ' Linea duplicada'))
+            novedades_creadas.add(novedad)
 
 def pagina_legalizaciones():
     from django.db.models import F, Q

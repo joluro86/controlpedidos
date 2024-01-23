@@ -1,0 +1,70 @@
+{% extends 'index.html' %} {% load static %}{% load humanize %} {% block content %}
+<div class="table-id card mt-4" style="max-width: 900px; margin: auto">
+  <div class="card-body">
+    <h6 class="m-0 text-center">Producido</h6>
+    <table class="table" id="table_id" style="width: 100%; margin: auto">
+      <thead>
+        <tr class="text-left"style="background-color: #9479f5; font-size: 0.8em;">
+
+          <th scope="col">Oficial</th>
+          <th>Días laborados</th>
+          <th scope="col">Mano de obra</th>
+          <th scope="col">Valor materiales</th>
+          <th scope="col">Meta</th>
+          <th>Producido</th>
+          <th scope="col">30%</th>
+          <th>Por persona</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in bonificaciones %}
+
+        <tr class="text-left tr small">
+          <th scope="row" class="small">{{ b.instalador }}</th>
+          <th scope="row" class="small">{{ b.dias }}</th>
+          <th scope="row" class="small">{{ b.mano_obra|intcomma }}</th>
+          <th scope="row" class="small">{{ b.materiales|intcomma }}</th>
+          <th scope="row" class="small">{{ b.meta|intcomma }}</th>
+          <th scope="row" class="small">{{ b.producido|intcomma }}</th>
+          <th scope="row" class="small">{{ b.treinta_porciento|intcomma  }}</th>
+          <th scope="row" class="small">{{ b.por_persona|intcomma  }}</th>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock content %} {% block js %}
+
+<script src="{% static 'js/js_pendientes.js' %}"></script>
+
+<script>
+  $(document).ready(function () {
+    $("#table_id").DataTable({
+      order: [[5, "desc"]],
+
+      dom: "Bfrtilp",
+
+      lengthMenu: [
+            [ 15, 30, 50, -1 ],
+            [ '15', '30', '50', 'Todos' ]
+        ],
+        
+      buttons: [   
+        {
+          extend: "excelHtml5",
+          title:'',
+          exportOptions: {
+            columns: [ 0, 1, 2, 3, 4, 5 ],
+          },
+        }, 
+           
+      ],
+    });
+  });
+</script>
+
+{% endblock js %}
+

@@ -13,7 +13,7 @@ def gestion_fenix(request):
         pedidos_rurales.update(total=F('valor')*1.08)
 
         pedidos_urbanos = todos.filter(tipo="CON", urbrur="U")
-        pedidos_urbanos.update(total=F('valor')*1)
+        pedidos_urbanos.update(total=F('valor')*1.0)
     except Exception as e:
         print("excepcion al calculo valor segun urbano o rural" + str(e))
 

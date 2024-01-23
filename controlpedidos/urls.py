@@ -40,6 +40,8 @@ urlpatterns = [
     path('oficial_reiniciar/', reiniciar_bd_oficiales, name="reiniciar_bd_oficiales"),
 
     path('nomina/', include('nominametro.urls')),
+    
+    path('produccion/', include('produccion.urls')),
 
 ] +static(settings.STATIC_URL, document_root= settings.STATIC_ROOT)
 

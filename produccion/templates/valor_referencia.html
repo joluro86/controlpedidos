@@ -1,0 +1,50 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">Configuración de Valor de Referencia</h2>
+
+        <div class="mb-4">
+          <p>Valor Actual: {{ valor_actual.valor|intcomma }}</p>
+        </div>
+
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script src="{% static 'js/js_pendientes.js' %}"></script>
+
+  <script>
+    $(document).ready(function () {
+      $('#table_id').DataTable({
+        order: [[1, 'desc']],
+        dom: 'Bfrtilp',
+        lengthMenu: [
+          [15, 30, 50, -1],
+          ['15', '30', '50', 'Todos']
+        ],
+        buttons: [
+          {
+            extend: 'excelHtml5',
+            title: '',
+            exportOptions: {
+              columns: [0, 1, 2, 3, 4, 5]
+            }
+          }
+        ]
+      });
+    });
+  </script>
+{% endblock %}
+

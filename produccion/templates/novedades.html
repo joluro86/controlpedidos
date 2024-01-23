@@ -1,0 +1,51 @@
+{% extends 'index.html' %} {% load static %}
+{% load humanize %} {% block content %}
+  <div class="table-id card mt-4" style="max-width: 900px; margin: auto">
+    <div class="card-body">
+      <h6 class="m-0 text-center">Novedades</h6>
+      <table class="table" id="table_id" style="width: 100%; margin: auto">
+        <thead>
+          <tr class="text-left" style="background-color: #9479f5; font-size: 0.8em;">
+            <th scope="col">Pedido</th>
+            <th>Novedad</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for n in novedades %}
+            <tr class="text-left tr small">
+              <th scope="row" class="small">{{ n.pedido.pedido }}</th>
+              <th scope="row" class="small">{{ n.novedad }}</th>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %} {% block js %}
+  <script src="{% static 'js/js_pendientes.js' %}"></script>
+
+  <script>
+    $(document).ready(function () {
+      $('#table_id').DataTable({
+        order: [[1, 'desc']],
+    
+        dom: 'Bfrtilp',
+    
+        lengthMenu: [
+          [15, 30, 50, -1],
+          ['15', '30', '50', 'Todos']
+        ],
+    
+        buttons: [
+          {
+            extend: 'excelHtml5',
+            title: '',
+            exportOptions: {
+              columns: [0, 1, 2, 3, 4, 5]
+            }
+          }
+        ]
+      })
+    })
+  </script>
+{% endblock %}

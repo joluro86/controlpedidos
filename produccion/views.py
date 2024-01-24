@@ -1,13 +1,13 @@
-from datetime import date
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import Perseo_produccion, NovedadProduccion, Dia_dia, Valor_referencia
 from .forms import ImportDataForm, ValorReferenciaForm
 import pandas as pd
-from django.db.models import Sum, Q, F
+from django.db.models import Sum, Q, F, Value, DecimalField
 from django.db.models.functions import Coalesce
 from decimal import Decimal
 from django.shortcuts import render
+from django.db.models.fields import DecimalField 
 
 def dia_dia(request):
     producido = Dia_dia.objects.all()
@@ -299,7 +299,7 @@ def verificar_material_con_B08():
 
 def actualizar_dia_dia():
     
-    try:
+
         # Obtener todos los instaladores y fechas únicas de Perseo_produccion
         instaladores_fechas = Perseo_produccion.objects.values('instalador', 'fecha').distinct()
 
@@ -314,18 +314,23 @@ def actualizar_dia_dia():
                 Q(instalador=instalador, fecha=fecha, codigo__startswith='A') |
                 Q(instalador=instalador, fecha=fecha, codigo__startswith='B') |
                 Q(instalador=instalador, fecha=fecha, codigo__startswith='C')
-            ).aggregate(suma_mano_obra=Coalesce(Sum(F('total')), 0))['suma_mano_obra']
+            ).aggregate(suma_mano_obra=Sum(F('total'), output_field=DecimalField()) + Value(0, output_field=DecimalField()))['suma_mano_obra']            
+            
+            print(Perseo_produccion._meta.get_field('total').get_internal_type())
 
             suma_materiales = Perseo_produccion.objects.filter(
                 instalador=instalador, fecha=fecha
             ).exclude(
                 Q(codigo__startswith='A') | Q(codigo__startswith='B') | Q(codigo__startswith='2') | Q(codigo__startswith='C')
-            ).aggregate(suma_materiales=Coalesce(Sum(F('total')), 0))['suma_materiales']
+            ).aggregate(suma_materiales=Sum(F('total'), output_field=DecimalField()) + Value(0, output_field=DecimalField()))['suma_materiales']
+            
+            # Verificar si alguno de los valores es None y asignar un valor predeterminado
+            suma_mano_obra = suma_mano_obra if suma_mano_obra is not None else Decimal('0.0')
+            suma_materiales = suma_materiales if suma_materiales is not None else Decimal('0.0')
 
-                
             # Calcular el producido como la diferencia entre la mano de obra y los materiales
             producido = suma_mano_obra - suma_materiales            
-            
+                        
             # Valor fijo para referencia
             valor_referencia_actual = Valor_referencia.objects.first()  
 
@@ -346,8 +351,7 @@ def actualizar_dia_dia():
             dia_dia.por_persona = por_persona
             dia_dia.save()  
               
-    except Exception as e:
-        print(e)       
+     
  
 def bonificacion_prod(request):
     # Obtener la lista de instaladores (oficiales)

@@ -350,9 +350,7 @@ def actualizar_dia_dia():
             dia_dia.treinta_porciento = treinta_porciento
             dia_dia.por_persona = por_persona
             dia_dia.save()  
-              
-     
- 
+             
 def bonificacion_prod(request):
     # Obtener la lista de instaladores (oficiales)
     instaladores = Dia_dia.objects.values('instalador').distinct()
@@ -380,7 +378,7 @@ def bonificacion_prod(request):
         suma_producido = registros_instalador.aggregate(suma_producido=Sum('producido'))['suma_producido'] or Decimal('0')
 
         # Calcular el 30%
-        treinta_porciento = suma_producido - meta
+        treinta_porciento = float(suma_producido - meta)*.3
 
         # Calcular Por persona
         por_persona = treinta_porciento / 3
@@ -391,14 +389,15 @@ def bonificacion_prod(request):
             'dias': dias_laborados,
             'mano_obra': suma_mano_obra,
             'materiales': suma_materiales,
+            'diferencia': suma_mano_obra-suma_materiales,
             'meta': meta,
-            'producido': suma_producido,
+            'producido': suma_producido-meta,
+            'promedio':  (suma_producido-meta)/dias_laborados,
             'treinta_porciento': treinta_porciento,
             'por_persona': por_persona,
         }
 
         informe_data.append(instalador_data)
         
-        print(informe_data)
 
     return render(request, 'bonificaciones_prod.html', {'bonificaciones': informe_data})

@@ -1,8 +1,8 @@
 {% extends 'index.html' %} {% load static %}{% load humanize %} {% block content %}
-<div class="table-id card mt-4" style="max-width: 900px; margin: auto">
+<div class="table-id card mt-4" style="max-width: 1300px; margin: auto">
   <div class="card-body">
     <h6 class="m-0 text-center">Producido</h6>
-    <table class="table" id="table_id" style="width: 100%; margin: auto">
+    <table class="table table_prod" id="table_id" style="width: 100%; margin: auto">
       <thead>
         <tr class="text-left"style="background-color: #9479f5; font-size: 0.8em;">
 
@@ -10,11 +10,12 @@
           <th>Días laborados</th>
           <th scope="col">Mano de obra</th>
           <th scope="col">Valor materiales</th>
+          <th scope="col">Diferencia</th>
           <th scope="col">Meta</th>
           <th>Producido</th>
-          <th scope="col">30%</th>
-          <th>Por persona</th>
-
+          <th>Promedio diario</th>
+          <th scope="col">Treinta %</th>
+          <th>Por persona</th>         
         </tr>
       </thead>
       <tbody>
@@ -22,13 +23,15 @@
 
         <tr class="text-left tr small">
           <th scope="row" class="small">{{ b.instalador }}</th>
-          <th scope="row" class="small">{{ b.dias }}</th>
-          <th scope="row" class="small">{{ b.mano_obra|intcomma }}</th>
-          <th scope="row" class="small">{{ b.materiales|intcomma }}</th>
-          <th scope="row" class="small">{{ b.meta|intcomma }}</th>
-          <th scope="row" class="small">{{ b.producido|intcomma }}</th>
-          <th scope="row" class="small">{{ b.treinta_porciento|intcomma  }}</th>
-          <th scope="row" class="small">{{ b.por_persona|intcomma  }}</th>
+          <th scope="row" class="small text-center">{{ b.dias }}</th>
+          <th scope="row" class="small text-center">{{ b.mano_obra|floatformat:2 }}</th>
+          <th scope="row" class="small text-center">{{ b.materiales |floatformat:2 }}</th>
+          <th scope="row" class="small text-center">{{ b.diferencia |floatformat:2 }}</th>
+          <th scope="row" class="small text-center">{{ b.meta|floatformat:0 }}</th>
+          <th scope="row" class="small text-center person {% if b.producido > 0 %}bg-boniprod{% endif %}">{{ b.producido|floatformat:2 }}</th>
+          <th scope="row" class="small text-center person {% if b.promedio > 0 %}bg-boniprod{% endif %}">{{ b.promedio|floatformat:2 }}</th>
+          <th scope="row" class="small text-center person {% if b.treinta_porciento > 0 %}bg-boniprod{% endif %}">{{ b.treinta_porciento|floatformat:2 }}</th>
+          <th scope="row" class="small text-center person {% if b.por_persona > 0 %}bg-boniprod{% endif %}">{{ b.por_persona|floatformat:2 }}</th>
         </tr>
 
         {% endfor %}
@@ -43,7 +46,7 @@
 <script>
   $(document).ready(function () {
     $("#table_id").DataTable({
-      order: [[5, "desc"]],
+      order: [[9, "desc"]],
 
       dom: "Bfrtilp",
 
@@ -57,7 +60,17 @@
           extend: "excelHtml5",
           title:'',
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ],
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
+            format: {
+              body: function ( data, row, column, node ) {
+                // Strip $ from salary column to make it numeric
+                if (column >= 2 && column <= 9) {
+                  return data.replace(/[,]/g, '.');
+                }
+                return data; // Para otras columnas, devuelve el dato sin cambios
+              
+            }
+            },
           },
         }, 
            

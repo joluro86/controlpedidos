@@ -382,7 +382,11 @@ def bonificacion_prod(request):
 
         # Calcular Por persona
         por_persona = treinta_porciento / 3
-
+        
+        if (suma_mano_obra-suma_materiales-meta)/dias_laborados<=0:
+            promedio_excedente=((suma_mano_obra-suma_materiales-meta)/dias_laborados)/dias_laborados
+        else:
+            promedio_excedente=(suma_mano_obra-suma_materiales-meta)/dias_laborados
         # Crear un diccionario con los datos para este instalador
         instalador_data = {
             'instalador': instalador['instalador'],
@@ -391,8 +395,9 @@ def bonificacion_prod(request):
             'materiales': suma_materiales,
             'diferencia': suma_mano_obra-suma_materiales,
             'meta': meta,
-            'producido': suma_producido-meta,
-            'promedio':  (suma_producido-meta)/dias_laborados,
+            'producido': suma_mano_obra-suma_materiales-meta,
+            'promedio_producido':  (suma_mano_obra-suma_materiales-meta)/dias_laborados,
+            'promedio_excedente':  promedio_excedente,
             'treinta_porciento': treinta_porciento,
             'por_persona': por_persona,
         }

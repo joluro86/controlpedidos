@@ -7,13 +7,14 @@
         <tr class="text-left"style="background-color: #9479f5; font-size: 0.8em;">
 
           <th scope="col">Oficial</th>
-          <th>Días laborados</th>
+          <th>Días</th>
           <th scope="col">Mano de obra</th>
           <th scope="col">Valor materiales</th>
           <th scope="col">Diferencia</th>
           <th scope="col">Meta</th>
           <th>Producido</th>
-          <th>Promedio diario</th>
+          <th>Pro. producido</th>
+          <th>Pro. excedente</th>
           <th scope="col">Treinta %</th>
           <th>Por persona</th>         
         </tr>
@@ -29,7 +30,8 @@
           <th scope="row" class="small text-center">{{ b.diferencia |floatformat:2 }}</th>
           <th scope="row" class="small text-center">{{ b.meta|floatformat:0 }}</th>
           <th scope="row" class="small text-center person {% if b.producido > 0 %}bg-boniprod{% endif %}">{{ b.producido|floatformat:2 }}</th>
-          <th scope="row" class="small text-center person {% if b.promedio > 0 %}bg-boniprod{% endif %}">{{ b.promedio|floatformat:2 }}</th>
+          <th scope="row" class="small text-center person {% if b.promedio_producido > 0 %}bg-boniprod{% endif %}">{{ b.promedio_producido|floatformat:2 }}</th>
+          <th scope="row" class="small text-center person {% if b.promedio_excedente > 0 %}bg-boniprod{% endif %}">{{ b.promedio_excedente|floatformat:2 }}</th>
           <th scope="row" class="small text-center person {% if b.treinta_porciento > 0 %}bg-boniprod{% endif %}">{{ b.treinta_porciento|floatformat:2 }}</th>
           <th scope="row" class="small text-center person {% if b.por_persona > 0 %}bg-boniprod{% endif %}">{{ b.por_persona|floatformat:2 }}</th>
         </tr>

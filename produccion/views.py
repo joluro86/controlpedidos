@@ -88,6 +88,7 @@ class ImportDataView(View):
 
             # Verificar duplicados después de haber guardado todos los datos
             check_duplicate_dates()
+            check_duplicate_oficial()
             pedidos_interna()
             verificar_material_con_B03()
             verificar_material_con_B04()
@@ -112,6 +113,17 @@ def check_duplicate_dates():
 
         if len(dates_for_pedido) > 1:
             NovedadProduccion.objects.create(pedido=Perseo_produccion.objects.filter(pedido=pedido).first(), novedad=f'Más de una fecha para el pedido {pedido}')
+
+def check_duplicate_oficial():
+    """
+    Esta función verifica si hay más de un oficial asociado al mismo pedido"""
+    all_pedidos = Perseo_produccion.objects.values_list('pedido', flat=True).distinct()
+
+    for pedido in all_pedidos:
+        dates_for_pedido = Perseo_produccion.objects.filter(pedido=pedido).values_list('instalador', flat=True).distinct()
+
+        if len(dates_for_pedido) > 1:
+            NovedadProduccion.objects.create(pedido=Perseo_produccion.objects.filter(pedido=pedido).first(), novedad=f'Pedido con mas un oficial - {pedido}')
 
 def pedidos_interna():
         hv_interna_records = Perseo_produccion.objects.filter(actividad='HV+INTERNA').values_list('pedido', flat=True).distinct()

@@ -32,7 +32,7 @@ def calculo_novedades_acta(request):
                         
                         if BREAKER_210954['suma'] == None:
                             crear_novedad(
-                                pedido, 'A 05 sin 210954')
+                                pedido, 'A 05 sin 210954.')
                             
                         if BREAKER_210954['suma'] < 1:
                             crear_novedad(

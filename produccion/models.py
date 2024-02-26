@@ -8,8 +8,6 @@ class Valor_referencia(models.Model):
         verbose_name = 'Valor referencia'
         verbose_name_plural = 'Valor referencia'
 
-
-
 class Perseo_produccion(models.Model):
     pedido= models.CharField(max_length=50, default=0)
     actividad= models.CharField(max_length=100, default=0)

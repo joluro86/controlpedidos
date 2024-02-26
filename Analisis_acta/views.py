@@ -29,6 +29,11 @@ def calculo_novedades_acta(request):
                     try:
                         BREAKER_210954 = Acta.objects.filter(pedido=pedido).filter(
                             item_cont='210954').aggregate(suma=Sum('cantidad'))
+                        
+                        if BREAKER_210954['suma'] == None:
+                            crear_novedad(
+                                pedido, 'A 05 sin 210954')
+                            
                         if BREAKER_210954['suma'] < 1:
                             crear_novedad(
                                 pedido, 'A 05 con 210954 menor a 1')

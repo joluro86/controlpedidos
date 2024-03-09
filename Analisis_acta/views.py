@@ -805,6 +805,7 @@ def calculo_enepre(pedido):
         try:
             novedad = "A 27=1, "
             busqueda_item(pedido, 'A 41', 0, novedad)
+            busqueda_item(pedido, '200098', 0, novedad)
             busqueda_item(pedido, '219404', 0, novedad)
             busqueda_item(pedido, 'A 10', 'A 11', novedad)
             calculo_incompatible_A27(pedido, novedad)

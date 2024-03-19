@@ -129,6 +129,18 @@ def calculo_novedades_acta(request):
                             cant_200411 = 0
                         if cant_200410 == None:
                             cant_200410 = 0
+                        
+                        if cant_200410>0 or cant_200411>0:
+                            if Acta.objects.filter(pedido=pedido.pedido).filter(
+                            item_cont='A 01').aggregate(suma=Sum('cantidad'))['suma']==None:
+                                
+                                if Acta.objects.filter(pedido=pedido.pedido).filter(
+                                item_cont='A 06').aggregate(suma=Sum('cantidad'))['suma']==None:
+                                    crear_novedad(
+                                    pedido, pedido.item_cont + ' No cobró A 06')
+                            
+                            
+                            
 
                         if (cant_200411 <= 5 and cant_200411 > 0) or (cant_200410 <= 5 and cant_200410 > 0):
                             crear_novedad(
@@ -493,14 +505,6 @@ def busqueda_insumo_por_item(pedido, insumo, item):
             nov = insumo + ', insumo sin actividad'
             crear_novedad(pedido, nov)
 
-    except:
-        pass
-
-
-def busqueda_calibracion(pedido):
-    try:
-
-        pass
     except:
         pass
 

@@ -37,7 +37,7 @@ def amrtr(request):
    
 def lega(request):
     
-    aeneses = Ans.objects.filter(Q(Actividad="ALEGA") | Q(Actividad="ALEGN") | Q(Actividad="ALECA") |Q(Actividad="ACAMN") ).filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495")| Q(Concepto="430"))
+    aeneses = Ans.objects.filter(Q(Actividad="ALEGA") | Q(Actividad="ALEGN") | Q(Actividad="ALECA") |Q(Actividad="ACAMN") ).filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495")| Q(Concepto="430")).exclude(Tipo_Elemento_ID="ENEGED")
     aeneses = cambiar_formato_fecha(aeneses)
     return render(request, "lega.html", {"aneses": aeneses} )
 

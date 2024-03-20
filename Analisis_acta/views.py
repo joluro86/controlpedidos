@@ -461,7 +461,6 @@ def pagina_legalizaciones():
                 continue
             crear_novedad(registro, 'Novedad C 04')
 
-
 def comprobar_cobro_calibracion(pedido):
     calibracion = Acta.objects.filter(pedido=pedido.pedido).filter(
         item_cont='CALE1F').aggregate(suma=Sum('cantidad'))['suma']
@@ -469,7 +468,6 @@ def comprobar_cobro_calibracion(pedido):
         if calibracion == None:
             calibracion = 0
         crear_novedad(pedido, 'Calibración con cantidad= ' + str(calibracion))
-
 
 def gestionar_nomnbre_utem_con_a_o_con_p(request):
 
@@ -487,7 +485,6 @@ def gestionar_nomnbre_utem_con_a_o_con_p(request):
         if p.suminis[-1] == 'A' or p.suminis[-1] == 'P':
             p.item_cont = p.suminis[:-1]
             p.save()
-
 
 def busqueda_insumo_por_item(pedido, insumo, item):
     try:
@@ -507,7 +504,6 @@ def busqueda_insumo_por_item(pedido, insumo, item):
 
     except:
         pass
-
 
 def busqueda_insumo(pedido, insumo):
     try:
@@ -611,7 +607,6 @@ def busqueda_insumo(pedido, insumo):
     except:
         pass
 
-
 def busqueda_item(pedido, item, item2, novedad):
 
     if item == 'A 03':
@@ -702,7 +697,6 @@ def busqueda_item(pedido, item, item2, novedad):
         except:
             pass
 
-
 def calculo_incompatible_A01(pedido, novedad):
     try:
         pedidos = Acta.objects.filter(pedido=pedido.pedido)
@@ -715,7 +709,6 @@ def calculo_incompatible_A01(pedido, novedad):
                     crear_novedad(p, nov)
     except:
         pass
-
 
 def calculo_incompatible_A27(pedido, novedad):
     try:

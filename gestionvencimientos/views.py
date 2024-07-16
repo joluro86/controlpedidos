@@ -7,6 +7,7 @@ from django.shortcuts import redirect, render
 import holidays_co
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from Analisis_acta.views import crear_novedad
 from gestionvencimientos.models import *
 from material_oficiales.models import *
 from medidores.models import NovedadMedidores, PedidoMedidores
@@ -89,6 +90,8 @@ def limpiar_base(request):
 
         elif ans.Actividad != "FSE" and ans.Actividad != "DSPRE" and ans.Actividad != "INFSM" and ans.Actividad != "ACREV" and ans.Actividad != "AEJDO" and ans.Actividad != "ARTER" and ans.Actividad != "DIPRE" and ans.Actividad != "INPRE" and ans.Actividad != "REEQU" and ans.Actividad != "APLIN" and ans.Actividad != "ALEGA" and ans.Actividad != "ALEGN" and ans.Actividad != "ALECA" and ans.Actividad != "ACAMN" and ans.Actividad != "AMRTR":
             ans.delete()
+            
+            
 
     return redirect("gestionbd")
 
@@ -263,7 +266,7 @@ def gestion_bd(request):
         if ans.Actividad != "DSPRE" and ans.Actividad != "AEJDO" and ans.Actividad != "ACREV" and ans.Actividad != "ARTER" and ans.Actividad != "DIPRE" and ans.Actividad != "ACREV" and ans.Actividad != "INPRE" and ans.Actividad != "REEQU" and ans.Actividad != "APLIN" and ans.Actividad != "ALEGA" and ans.Actividad != "ALEGN" and ans.Actividad != "ALECA" and ans.Actividad != "ACAMN" and ans.Actividad != "AMRTR":
             ans.delete()
 
-        if ans.Concepto != "INFSM" and ans.Concepto != "CEFSM" and ans.Concepto != "626" and ans.Concepto != "498" and ans.Concepto != "406" and ans.Concepto != "414" and ans.Concepto != "430" and ans.Concepto != "495" and ans.Concepto != "PENDI" and ans.Concepto != "FSE" and ans.Concepto != "PPRG" and ans.Concepto != "PROG":
+        if ans.Concepto != "405" and ans.Concepto != "INFSM" and ans.Concepto != "CEFSM" and ans.Concepto != "626" and ans.Concepto != "498" and ans.Concepto != "406" and ans.Concepto != "414" and ans.Concepto != "430" and ans.Concepto != "495" and ans.Concepto != "PENDI" and ans.Concepto != "FSE" and ans.Concepto != "PPRG" and ans.Concepto != "PROG":
             ans.delete()
 
     aneses = Ans.objects.all()
@@ -755,3 +758,5 @@ def reiniciar_medidores(request):
     PedidoMedidores.objects.all().delete()
     NovedadMedidores.objects.all().delete()
     return render(request,  "index.html")
+
+

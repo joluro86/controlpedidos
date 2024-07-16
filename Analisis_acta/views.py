@@ -4,8 +4,27 @@ from django.shortcuts import redirect, render
 from Analisis_acta.models import *
 from django.db.models import Sum, Q
 
+from gestionvencimientos.models import Ans
+
 
 def calculo_novedades_acta(request):
+    pedidos = Acta.objects.filter(actividad__in=["ALEGA", "ALECA", "ACAMN", "ALEGN"]).exclude(suminis__exact='0')
+
+    for pedido in pedidos:
+        if pedido.suminis and pedido.suminis not in ["215887A", "219404A"]:
+            crear_novedad(pedido, "Legalización: Suministro " + pedido.suminis)
+            
+    pedidos_aejdo = Acta.objects.filter(actividad__in=["AEJDO"]).exclude(suminis__exact='0').exclude(
+    suminis__exact='CALE1F')
+    
+    for pedido in pedidos_aejdo:
+        if pedido.suminis.endswith("P"):
+            crear_novedad(pedido, "AEJDO: con suministro " + pedido.suminis)
+
+    for pedido in pedidos:
+        if pedido.suminis and pedido.suminis not in ["215887A", "219404A"]:
+            crear_novedad(pedido, "Legalización: Suministro " + pedido.suminis)
+                
     gestionar_nomnbre_utem_con_a_o_con_p(request)
 
     pedidos = Acta.objects.all()
@@ -184,12 +203,11 @@ def calculo_novedades_acta(request):
                     calculo_incompatible_A01(pedido, nov)
 
             if pedido.tipre == 'ENESUB' and (pedido.item_cont == 'A 27' or pedido.item_cont == 'A 03' or pedido.item_cont == 'A 28' or pedido.item_cont == 'A 29'):
-                print("error enesub")
                 nov = 'ENESUB con item ' + str(pedido.item_cont)
                 crear_novedad(pedido, nov)
 
             if pedido.tipre == 'ENEPRE' and pedido.item_cont == 'A 44':
-                print("error ENEPRE")
+
                 nov = 'ENEPRE con item ' + str(pedido.item_cont)
                 crear_novedad(pedido, nov)
 
@@ -369,7 +387,7 @@ def calculo_novedades_acta(request):
     verificar_A03_MEDIDOR()
 
     verificar_y_crear_novedades_duplicadas()
-
+    
     novedades = Novedad_acta.objects.all()
 
     return render(request, "analisis.html", {'novedades': novedades})
@@ -476,7 +494,6 @@ def gestionar_nomnbre_utem_con_a_o_con_p(request):
     for p in pedidos:
         if p.item_cont == "0":
             cont += 1
-            print(cont)
             p.item_cont = p.suminis
             p.save()
         if p.item_cont[-1] == 'A' or p.item_cont[-1] == 'P':
@@ -671,6 +688,10 @@ def busqueda_item(pedido, item, item2, novedad):
                 if busquedad_200410 == 0 and busquedad_200411 == 0:
                     novedad = novedad + " 200410=0, 200411=0."
                     crear_novedad(pedido, novedad)
+                    
+            elif busquedad_200410<1 and busquedad_200411<1:
+                novedad = novedad + " 200410=0, 200411=0."
+                crear_novedad(pedido, novedad)
         except:
             pass
 
@@ -899,5 +920,25 @@ def verificar_A03_MEDIDOR():
         # Si no hay otros registros que cumplan las condiciones, llama a la función para crear una novedad
         if not otros_actas.exists():
             crear_novedad(acta, "A 03 sin medidor")
+            
+
+
+def filtrar_aejdo_sin_interna():
+    # Filtrar pedidos con actividad AEJDO y item_cont que comience con B (incluir repetidos)
+    pedidos_filtrados = Acta.objects.filter(
+        actividad='AEJDO',
+        item_cont__startswith='B'
+    )   
+    
+    
+    # Eliminar pedidos que tengan item_cont B 03
+    pedidos_sin_b03 = pedidos_filtrados.exclude(item_cont='B 03')
+
+
+    # Eliminar duplicados
+    pedidos_finales = pedidos_sin_b03.values('pedido').distinct()
+    
+
+
 
     

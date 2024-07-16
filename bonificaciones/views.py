@@ -10,10 +10,10 @@ def gestion_fenix(request):
     todos = Fenix.objects.all()
     try:
         pedidos_rurales = todos.filter(tipo="CON", urbrur="R")
-        pedidos_rurales.update(total=F('valor')*1.08)
+        pedidos_rurales.update(total=F('valor')*1.27)
 
         pedidos_urbanos = todos.filter(tipo="CON", urbrur="U")
-        pedidos_urbanos.update(total=F('valor')*1.0)
+        pedidos_urbanos.update(total=F('valor')*1.17)
     except Exception as e:
         print("excepcion al calculo valor segun urbano o rural" + str(e))
 
@@ -39,8 +39,6 @@ def gestion_fenix(request):
     pedidos_perseo_descuento.update(descuento_de_fenix=F('total'))
 
     fin = time.time()
-
-    print("tiempo: " + str(fin-inicio))
 
     return render(request, 'proceso_gestion.html')
 
@@ -156,7 +154,7 @@ def calculo_promedio_diario():
                 instalador=i.instalador).aggregate(Count('producido'))
 
             adicional = float(producido['producido__sum']) - \
-                (float(numero_de_dias['producido__count'])*1100000)
+                (float(numero_de_dias['producido__count'])*1200000)
 
             nuevo_prom = PromedioDiario()
             nuevo_prom.instalador = i.instalador

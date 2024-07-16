@@ -13,7 +13,8 @@ urlpatterns = [
     path('limpiar_acta/', limpiar_acta, name="limpiaracta"),
     path('calculo_novedades/', calculo_novedades_acta, name="calculo_novedades"),
     path('novedades-acta/', novedades_acta, name="novedades_acta"),
-    
+    path('novedades-acta/', novedades_acta, name="novedades_acta"),
+        
 ] +static(settings.STATIC_URL, document_root= settings.STATIC_ROOT)
 
 

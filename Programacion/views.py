@@ -30,7 +30,7 @@ def inconsistencias(request):
     return render(request, "inconsistencias.html", {"aneses": aeneses} )
 
 def amrtr(request):   
-    aeneses = Ans.objects.filter(Actividad = "AMRTR").filter(Q(Estado="PENDI") | Q(Concepto="406") | Q(Concepto="414")| Q(Concepto="495")| Q(Concepto="430"))
+    aeneses = Ans.objects.filter(Actividad = "AMRTR").filter(Q(Estado="PENDI") | Q(Concepto__startswith='4'))
     aeneses = cambiar_formato_fecha(aeneses)
 
     return render(request, "amrtr.html", {"aneses": aeneses} )

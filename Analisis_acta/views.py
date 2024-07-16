@@ -8,9 +8,9 @@ from gestionvencimientos.models import Ans
 
 
 def calculo_novedades_acta(request):
-    pedidos = Acta.objects.filter(actividad__in=["ALEGA", "ALECA", "ACAMN", "ALEGN"]).exclude(suminis__exact='0')
+    pedidos_LEGA = Acta.objects.filter(actividad__in=["ALEGA", "ALECA", "ACAMN", "ALEGN"]).exclude(suminis__exact='0').exclude(suminis__exact='CALE1F')
 
-    for pedido in pedidos:
+    for pedido in pedidos_LEGA:
         if pedido.suminis and pedido.suminis not in ["215887A", "219404A"]:
             crear_novedad(pedido, "Legalización: Suministro " + pedido.suminis)
             
@@ -21,10 +21,6 @@ def calculo_novedades_acta(request):
         if pedido.suminis.endswith("P"):
             crear_novedad(pedido, "AEJDO: con suministro " + pedido.suminis)
 
-    for pedido in pedidos:
-        if pedido.suminis and pedido.suminis not in ["215887A", "219404A"]:
-            crear_novedad(pedido, "Legalización: Suministro " + pedido.suminis)
-                
     gestionar_nomnbre_utem_con_a_o_con_p(request)
 
     pedidos = Acta.objects.all()

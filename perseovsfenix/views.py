@@ -30,11 +30,11 @@ def concatenar(pedidos, indicador):
                     faltante.actividad = p.actividad
                     faltante.fecha = p.fecha
                     faltante.codigo = p.codigo
-                    faltante.cantidad = '-999'
+                    faltante.cantidad = '0'
                     faltante.observacion = "Pedido con cero registros en Fénix."
                     faltante.acta = p.acta
-                    faltante.cantidad_fenix = '-999'
-                    faltante.diferencia = '-999'
+                    faltante.cantidad_fenix = '0'
+                    faltante.diferencia = '0'
                     faltante.save()
 
                 calculados_existencia.append(p.pedido)
@@ -59,10 +59,10 @@ def concatenar(pedidos, indicador):
                     faltante.actividad = p.actividad
                     faltante.fecha = p.fecha
                     faltante.codigo = p.codigo
-                    faltante.cantidad = '-999'
+                    faltante.cantidad = '0'
                     faltante.observacion = "Pedido con cero registros en Perseo."
-                    faltante.cantidad_fenix = '-999'
-                    faltante.diferencia = '-999'
+                    faltante.cantidad_fenix = '0'
+                    faltante.diferencia = '0'
                     faltante.save()
 
                 calculados_existencia.append(p.pedido)
@@ -142,8 +142,8 @@ def calculo_novedades_perseo_vs_fenix(request):
                                 cantidad_en_perseo['cantidad__sum'])
                             faltante.observacion = "Item no registrado en Fénix."
                             faltante.acta = pedido_perseo.acta
-                            faltante.cantidad_fenix = '-999'
-                            faltante.diferencia = '-999'
+                            faltante.cantidad_fenix = '0'
+                            faltante.diferencia = '0'
                             faltante.save()
 
                     except Exception as e:
@@ -174,10 +174,10 @@ def actualizar_novedades():
             actividad=registro.actividad,
             fecha=registro.fecha,
             codigo=registro.codigo,
-            cantidad=registro.cantidad,
+            cantidad=0,
             acta="0",  # Valor predeterminado
             observacion="Item en fenix y no en perseo",  # Valor predeterminado
-            cantidad_fenix=0,  # Valor predeterminado
+            cantidad_fenix=registro.cantidad,  # Valor predeterminado
             diferencia=0  # Valor predeterminado
         )
         for registro in registros_faltantes_matfenix
@@ -203,12 +203,12 @@ def registros_faltantes_en_perseo_y_estan_en_fenix():
         faltante.actividad = faltantes_en_perseo.actividad
         faltante.fecha = faltantes_en_perseo.fecha
         faltante.codigo = faltantes_en_perseo.codigo
-        faltante.cantidad = float(
-            faltantes_en_perseo.cantidad)
+        faltante.cantidad = '0'
         faltante.observacion = "Item no registrado en Perseo y esta en Fénix."
-        faltante.acta = '-999'
-        faltante.cantidad_fenix = '-999'
-        faltante.diferencia = '-999'
+        faltante.acta = '0'
+        faltante.cantidad_fenix = float(
+            faltantes_en_perseo.cantidad)
+        faltante.diferencia = '0'
         faltante.save()
 
 
@@ -229,7 +229,7 @@ def calculo_numero_acta():
                 faltante.cantidad = pedido_perseo.cantidad
                 faltante.observacion = "Acta incorrecta"
                 faltante.acta = pedido_perseo.acta
-                faltante.diferencia = -9999
+                faltante.diferencia = 0
                 faltante.save()
         except:
             print("error en el acta")
@@ -267,8 +267,8 @@ def analisis_fecha_perseo(request):
                 pedido_novedad.codigo = pedido_perseo.codigo
                 pedido_novedad.observacion = "Pedido con mas de una fecha."
                 pedido_novedad.acta = pedido_perseo.acta
-                pedido_novedad.cantidad_fenix = '-999'
-                pedido_novedad.diferencia = '-999'
+                pedido_novedad.cantidad_fenix = '0'
+                pedido_novedad.diferencia = '0'
                 pedido_novedad.save()
 
     novedades = NovedadPerseoVsFenix.objects.all()

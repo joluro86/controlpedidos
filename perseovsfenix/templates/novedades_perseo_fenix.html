@@ -9,14 +9,14 @@
       <thead class="p-0">
         <tr class="text-center m-0 p-0" style="background-color: #8ee7fa">
           <th scope="col" class="p-0">Pedido</th>
-          <th scope="col" class="p-0">Actividad</th>
-          <th scope="col" class="p-0">Fecha</th>
+          <th scope="col" class="p-0">Actividad</th>          
           <th scope="col" class="p-0">Código</th>
-          <th scope="col" class="p-0">Cantidad</th>
-          <th scope="col" class="p-0">Acta</th>
-          <th scope="col" class="p-0">Observación</th>
           <th scope="col" class="p-0">Cantidad Fénix</th>
+          <th scope="col" class="p-0">Cantidad Perseo</th>
           <th scope="col" class="p-0">Diferencia</th>
+          <th scope="col" class="p-0">Observación</th>
+          <th scope="col" class="p-0">Fecha</th>
+          <th scope="col" class="p-0">Acta</th>        
         </tr>
       </thead>
       <tbody>
@@ -24,14 +24,14 @@
 
         <tr class="text-center p-0 tr">
           <th class="pt-1">{{ a.pedido }}</th>
-          <td class="m-0 pb-0">{{ a.actividad }}</td>
-          <td class="m-0 pb-0">{{ a.fecha }}</td>
+          <td class="m-0 pb-0">{{ a.actividad }}</td>          
           <td class="m-0 pb-0">{{ a.codigo }}</td>
-          <td class="m-0 pb-0">{{ a.cantidad }}</td>
-          <td class="m-0 pb-0">{{ a.acta }}</td>
-          <td class="m-0 pb-0">{{ a.observacion }}</td>
           <td class="m-0 pb-0">{{ a.cantidad_fenix }}</td>
-          <td class="m-0 pb-0">{{ a.diferencia }}</td>
+          <td class="m-0 pb-0">{{ a.cantidad }}</td>
+          <td class="m-0 pb-0">{{ a.diferencia }}</td>          
+          <td class="m-0 pb-0">{{ a.observacion }}</td>
+          <td class="m-0 pb-0">{{ a.fecha }}</td>
+          <td class="m-0 pb-0">{{ a.acta }}</td>       
         </tr>
 
         {% endfor %}

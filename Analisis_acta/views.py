@@ -80,6 +80,11 @@ def calculo_novedades_acta(request):
                         str(pedido.item_cont) + \
                         " con cantidad= " + str(pedido.cantidad)
                     crear_novedad(pedido, nov)
+            
+            if pedido.item_cont == 'A 06':
+                # Validar que el pedido tenga un item_cont 'A 10' o 'A 11'
+                validar_pedido_A06(pedido)
+            
 
             if primera_letra == 'C' or primera_letra == 'D' or primera_letra == 'R':
                 if int(pedido.cantidad) > 1:
@@ -376,7 +381,9 @@ def calculo_novedades_acta(request):
                         pedido, 'A 11', pedido.item_cont)
                 if pedido.item_cont == 'A 11':
                     calculo_otros_incompatibles(
-                        pedido, 'A 10', pedido.item_cont)                
+                        pedido, 'A 10', pedido.item_cont)  
+            
+                          
     
     pagina_legalizaciones()
 
@@ -387,6 +394,18 @@ def calculo_novedades_acta(request):
     novedades = Novedad_acta.objects.all()
 
     return render(request, "analisis.html", {'novedades': novedades})
+
+def validar_pedido_A06(pedido):
+    # Buscar todos los registros asociados a este pedido
+    items_pedido = Acta.objects.filter(pedido=pedido.pedido)
+    
+    # Verificar si existe un registro con item_cont = 'A 10' o 'A 11'
+    tiene_A10_o_A11 = items_pedido.filter(item_cont__in=['A 10', 'A 11']).exists()
+
+    # Validar que si tiene 'A 06' también debe tener 'A 10' o 'A 11'
+    if not tiene_A10_o_A11:
+        # Crear la novedad si no cumple la condición
+        crear_novedad(pedido, "A 06 no tiene asociado A 10 o A 11")
 
 from django.db.models import Count
 def verificar_y_crear_novedades_duplicadas():

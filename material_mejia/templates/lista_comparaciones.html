@@ -1,0 +1,83 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+<div class="table-id card mt-4" style="width: 100%; margin: auto">
+  <div class="card-body">
+    <h6 class="m-0 text-center">Lista de Comparaciones de Pedidos y Actas</h6>
+    <table class="table" id="table_id" style="width: 100%; margin: auto">
+      <thead>
+        <tr class="text-center" style="background-color: #8ee7fa; font-size: 0.8em;">
+          <th scope="col">Pedido</th>
+          <th>Actividad</th>
+          <th>Código</th>
+          <th>Suma Pedido</th>
+          <th>Suma Acta</th>
+          <th>Diferencia</th>
+          <th>Instalador</th>
+          <th>Observación</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for comparacion in comparaciones %}
+        <tr class="text-center tr">
+          <th scope="row">{{ comparacion.pedido }}</th>
+          <td>{{ comparacion.actividad }}</td>
+          <td>{{ comparacion.codigo }}</td>
+          <td>{{ comparacion.suma_material_pedido|floatformat:2 }}</td>
+          <td>{{ comparacion.suma_material_acta|floatformat:2 }}</td>
+          <td>{{ comparacion.diferencia|floatformat:2 }}</td>
+          <td>{{ comparacion.instalador }}</td>
+          <td>{{ comparacion.observacion }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script src="{% static 'js/js_pendientes.js' %}"></script>
+
+<script>
+  $(document).ready(function () {
+    $("#table_id").DataTable({
+      order: [[0, "asc"]],
+      dom: "Bfrtilp",
+      lengthMenu: [
+        [15, 30, 50, -1],
+        ['15', '30', '50', 'Todos']
+      ],
+      buttons: [
+        {
+          extend: "excelHtml5",
+          title: '',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5, 6, 7],
+            format: {
+              body: function (data, row, column, node) {
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+            }
+          },
+        },
+        {
+          extend: "copyHtml5",
+          title: '',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5, 6, 7],
+            format: {
+              body: function (data, row, column, node) {
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+            }
+          },
+        },
+      ],
+    });
+  });
+</script>
+{% endblock js %}
+

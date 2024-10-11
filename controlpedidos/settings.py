@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'bonificaciones',
     'nominametro',
     'produccion',
+    'material_mejia',
 ]
 
 

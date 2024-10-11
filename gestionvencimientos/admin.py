@@ -2,7 +2,17 @@ from django.contrib import admin
 from gestionvencimientos.models import *
 from import_export.admin import ImportExportModelAdmin 
 from import_export import resources
+from material_mejia.models import MaterialSeleccionado
 from perseovsfenix.models import Guia
+
+class MaterialSeleccionadoResource(resources.ModelResource):
+    class Meta:
+        model = MaterialSeleccionado
+        
+class MaterialSeleccionadoAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('codigo', 'guia')
+    resource_class = MaterialSeleccionadoResource
+    search_fields = ['codigo', 'guia']
 
 class EncargadoResource(resources.ModelResource):
     class Meta:
@@ -56,4 +66,5 @@ admin.site.register(Ans, AnsAdmin)
 admin.site.register(Encargado, EncargadoAdmin)
 admin.site.register(Actividad, ActividadAdmin)
 admin.site.register(Actividad_epm, Actividad_epm_Admin )
+admin.site.register(MaterialSeleccionado, MaterialSeleccionadoAdmin)
     

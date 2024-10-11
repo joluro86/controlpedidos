@@ -1,4 +1,3 @@
-from django import urls
 from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
@@ -42,6 +41,7 @@ urlpatterns = [
     path('nomina/', include('nominametro.urls')),
     
     path('produccion/', include('produccion.urls')),
+    path('material_mejia/', include('material_mejia.urls')),
 
 ] +static(settings.STATIC_URL, document_root= settings.STATIC_ROOT)
 

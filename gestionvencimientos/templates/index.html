@@ -43,41 +43,28 @@
             <a class="nav-link" href="{% url 'home' %}">Inicio</a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">Internas</a>
-
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">Material Mejía</a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <li>
-                <a class="dropdown-item" href="/admin/Analisis_acta/acta/import/" target="blank">Subir acta</a>
+                <a class="dropdown-item" href="{% url 'formulario_subir_perseo' %}">Subir Perseo</a>
               </li>
               <li>
-                <a class="dropdown-item" href="#" onclick="limpiar_acta_analisis()">Reiniciar</a>
+                <a class="dropdown-item" href="{% url 'formulario_subir_acta' %}">Subir Acta</a>
               </li>
               <li>
-                <a class="dropdown-item" href="/produccion/reiniciar-novedades">Sin Interna</a>
-              </li>
-            </ul>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">Material Oficiales</a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li>
-                <a class="dropdown-item" href="/admin/material_oficiales/material_utilizado_perseo/import/" target="_blank">Subir Perseo</a>
+                <a class="dropdown-item" href="{% url 'ver_material_mejia' %}">Material Mejía</a>
               </li>
               <li>
-                <a class="dropdown-item" href="/admin/material_oficiales/liquidacion_acta_epm/import/" target="_blank">Subir Fenix</a>
+                <a class="dropdown-item" href="{% url 'ver_material_acta' %}">Material Acta</a>
               </li>
               <li>
-                <a class="dropdown-item" href="{% url 'gestionar_acta_perseo_inventario' %}">Gestion BD</a>
+                <a class="dropdown-item" href="{% url 'comparar_pedidos' %}">Gestionar comparativo</a>
               </li>
               <li>
-                <a class="dropdown-item" href="{% url 'calculo_inventario_por_oficial' %}">Calculo Oficiales</a>
+                <a class="dropdown-item" href="{% url 'reiniciar_actas' %}">Reiniciar actas</a>
               </li>
               <li>
-                <a class="dropdown-item" href="/admin" target="_blank">Admin</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'reiniciar_bd_oficiales' %}">Reiniciar</a>
+                <a class="dropdown-item" href="{% url 'lista_comparaciones' %}">Informe comparativo</a>
               </li>
             </ul>
           </li>
@@ -145,9 +132,9 @@
             </ul>
           </li>
 
-          <!-- 
+          <!--  
           PERSEO VS FENIX
-         -->
+          -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">Perseo Vs Fénix</a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -174,9 +161,9 @@
               </li>
             </ul>
           </li>
-          <!-- 
+          <!--  
           FIN PERSEO VS FENIX
-         -->
+          -->
 
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">Programar</a>
@@ -192,9 +179,9 @@
               </li>
             </ul>
           </li>
-          <!-- 
+          <!--  
           INICIO BONIFICACION
-         -->
+          -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">Bonificaciones</a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">

@@ -1,15 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 import openpyxl
-from .models import Pedido, ActaB, MaterialSeleccionado
-
+from django.db.models import Sum
+from .models import Pedido, ActaB, ComparacionPedido, MaterialSeleccionado
 
 def formulario_subir_pedido(request):
     return render(request, 'formulario_subir_perseo.html')  # Asegúrate de usar el nombre correcto del template
 
 def formulario_subir_acta(request):
     return render(request, 'formulario_subir_acta.html')  # Asegúrate de usar el nombre correcto del template
-
 
 def subir_material_mejia(request):
     if request.method == 'POST':
@@ -28,18 +27,21 @@ def subir_material_mejia(request):
             wb = openpyxl.load_workbook(file)
             sheet = wb.active  # Seleccionar la hoja activa del archivo Excel
 
-            # Obtener todos los códigos que están en el modelo MaterialSeleccionado
-            codigos_seleccionados = MaterialSeleccionado.objects.values_list('codigo', flat=True)
+            # Obtener todos los códigos y guías desde MaterialSeleccionado
+            seleccionados = MaterialSeleccionado.objects.values('codigo', 'guia')
+
+            # Crear un diccionario para mapear codigo a guia
+            codigo_to_guia = {s['codigo']: s['guia'] for s in seleccionados}
 
             # Empezar desde la segunda fila (ignorar el encabezado)
             for row in sheet.iter_rows(min_row=2, values_only=True):
                 codigo = row[18]  # Columna S (índice 18)
                 
-                 # Convertir el código a string en caso de que sea numérico
+                # Convertir el código a string en caso de que sea numérico
                 codigo = str(codigo)
                 
                 # Verificar si el código está en MaterialSeleccionado
-                if codigo in codigos_seleccionados:
+                if codigo in codigo_to_guia:
                     pedido = row[3]   # Columna D (índice 3)
                     actividad = row[11]  # Columna L (índice 11)
                     instalador = row[12]  # Columna M (índice 12)
@@ -47,12 +49,16 @@ def subir_material_mejia(request):
                     fecha = row[25]  # Columna Z (índice 25)
                     acta = row[26]  # Columna AA (índice 26)
 
-                    # Crear la instancia del modelo Pedido y guardarla
+                    # Obtener la guía correspondiente del diccionario
+                    guia = codigo_to_guia[codigo]
+
+                    # Crear la instancia del modelo Pedido y guardarla con la guía
                     Pedido.objects.create(
                         pedido=pedido,
                         actividad=actividad,
                         instalador=instalador,
                         codigo=codigo,
+                        guia=guia,  # Asignar la guía correspondiente
                         cantidad=cantidad,
                         fecha=fecha,
                         acta=acta
@@ -68,7 +74,6 @@ def subir_material_mejia(request):
 
     return redirect('ver_material_mejia')
 
-
 def ver_material_mejia(request):
     pedidos = Pedido.objects.all()  # Obtén todos los pedidos desde la base de datos
     return render(request, 'material_mejia.html', {'pedidos': pedidos}) 
@@ -76,11 +81,6 @@ def ver_material_mejia(request):
 def ver_material_acta(request):
     pedidos = ActaB.objects.all()  # Obtén todos los pedidos desde la base de datos
     return render(request, 'material_acta.html', {'actas': pedidos}) 
-
-from django.shortcuts import render, redirect
-from django.contrib import messages
-import openpyxl
-from .models import ActaB, MaterialSeleccionado
 
 def subir_material_acta(request):
     if request.method == 'POST':
@@ -142,82 +142,79 @@ def subir_material_acta(request):
 
     return redirect('ver_material_acta')
 
-
 def reiniciar_actas(request):
-    Pedido.objects.all().delete()
-    ActaB.objects.all().delete()
+    #Pedido.objects.all().delete()
+    #ActaB.objects.all().delete()
     ComparacionPedido.objects.all().delete()
     return render(request, 'material_mejia.html') 
 
-from django.db.models import Sum
-from .models import Pedido, ActaB, ComparacionPedido
-
-from django.db.models import Sum
-from .models import Pedido, ActaB, ComparacionPedido
-
-from django.db.models import Sum
-from .models import Pedido, ActaB, ComparacionPedido, MaterialSeleccionado
-
-from django.shortcuts import render, redirect
-from .models import Pedido, ActaB, ComparacionPedido, MaterialSeleccionado
-from django.db.models import Sum
+def reiniciar_novedades(request):
+    ComparacionPedido.objects.all().delete()
+    return render(request, 'material_mejia.html') 
 
 def comparar_pedidos(request):
     # Obtener las sumas de materiales del modelo Pedido, incluyendo todos los campos necesarios
     pedidos = Pedido.objects.values(
-        'pedido', 'codigo', 'fecha', 'actividad', 'instalador'
+        'pedido', 'codigo', 'guia', 'fecha', 'actividad', 'instalador'
     ).annotate(suma_pedido=Sum('cantidad'))
 
-    # Obtener la relación de códigos y guías del modelo MaterialSeleccionado
-    seleccionados = MaterialSeleccionado.objects.values('codigo', 'guia')
-
-    # Crear un diccionario de 'guia' a 'codigo' para asociar código en Pedido con guía en ActaB
-    guia_to_codigo = {s['guia']: s['codigo'] for s in seleccionados}
-
-    # Obtener las sumas de materiales del modelo ActaB, usando 'guia' en lugar de 'codigo'
+    # Obtener las sumas de materiales del modelo ActaB
     actas = ActaB.objects.values('pedido', 'codigo').annotate(suma_acta=Sum('cantidad'))
 
+    # Lista para controlar los pedidos y guías ya procesados
+    pedidos_procesados = set()
+
+    # Iterar sobre los pedidos y buscar la guía correspondiente al código en ActaB
     for pedido in pedidos:
-        # Encontrar la guía correspondiente al código del pedido en MaterialSeleccionado
-        guia_correspondiente = next((g for g, c in guia_to_codigo.items() if c == pedido['codigo']), None)
+        # Crear un identificador único para cada combinación de pedido y guía (no el código)
+        pedido_guia = (pedido['pedido'], pedido['guia'])
 
-        if guia_correspondiente:
-            # Buscar la suma correspondiente en ActaB con el código relacionado (la guía)
-            acta = next((a for a in actas if a['pedido'] == pedido['pedido'] and a['codigo'] == guia_correspondiente), None)
+        # Si ya hemos procesado este pedido y guía, saltamos esta iteración
+        if pedido_guia in pedidos_procesados:
+            continue
 
-            suma_material_acta = acta['suma_acta'] if acta else 0
-            suma_material_pedido = pedido['suma_pedido']
+        # Obtener la suma de todas las cantidades para el mismo pedido y código
+        suma_material_pedido_total = Pedido.objects.filter(pedido=pedido['pedido'], guia=pedido['guia']).aggregate(total_pedido=Sum('cantidad'))['total_pedido']
 
-            # Solo guardamos los registros donde las sumas no coinciden
-            if suma_material_acta != suma_material_pedido:
-                # Asegúrate de que 'fecha' y demás campos existen en el diccionario 'pedido'
-                fecha = pedido.get('fecha', None)
-                actividad = pedido.get('actividad', '')
-                instalador = pedido.get('instalador', '')
+        # Usamos la guía del pedido para encontrar el registro correspondiente en ActaB
+        acta = next((a for a in actas if a['pedido'] == pedido['pedido'] and a['codigo'] == pedido['guia']), None)
 
-                # Establecer la observación si las cantidades no coinciden
-                observacion = 'Cantidad no coincide' if suma_material_acta != suma_material_pedido else ''
+        suma_material_acta = acta['suma_acta'] if acta else 0
+        suma_material_pedido = suma_material_pedido_total if suma_material_pedido_total is not None else 0
 
-                # Crear una instancia del modelo ComparacionPedido
-                ComparacionPedido.objects.create(
-                    pedido=pedido['pedido'],
-                    codigo=pedido['codigo'],
-                    suma_material_pedido=suma_material_pedido,
-                    suma_material_acta=suma_material_acta,
-                    diferencia=suma_material_acta - suma_material_pedido,
-                    actividad=actividad,
-                    fecha=fecha,
-                    instalador=instalador,
-                    observacion=observacion
-                )
+        # Solo guardamos los registros donde las sumas no coinciden
+        if suma_material_acta != suma_material_pedido:
+            # Asegúrate de que 'fecha' y demás campos existen en el diccionario 'pedido'
+            fecha = pedido.get('fecha', None)
+            actividad = pedido.get('actividad', '')
+            instalador = pedido.get('instalador', '')
+
+            # Establecer la observación si las cantidades no coinciden
+            observacion = 'Cantidad no coincide' if suma_material_acta != suma_material_pedido else ''
+
+            # Calcular la diferencia
+            diferencia = suma_material_acta - suma_material_pedido
+
+            # Crear una instancia del modelo ComparacionPedido
+            ComparacionPedido.objects.create(
+                pedido=pedido['pedido'],
+                codigo=pedido['codigo'],
+                suma_material_pedido=suma_material_pedido,
+                suma_material_acta=suma_material_acta,
+                diferencia=diferencia,
+                actividad=actividad,
+                fecha=fecha,
+                instalador=instalador,
+                observacion=observacion
+            )
+
+            # Añadir este pedido y guía a la lista de procesados
+            pedidos_procesados.add(pedido_guia)
+
+    # Verificar si hay códigos en ActaB que no están en Pedido
     verificar_codigos_actab_sin_pedido(request)
 
     return redirect('lista_comparaciones')
-
-from .models import Pedido, ActaB, ComparacionPedido
-
-from .models import Pedido, ActaB, ComparacionPedido, MaterialSeleccionado
-from django.db.models import Sum
 
 def verificar_codigos_actab_sin_pedido(request):
     # Obtener todos los códigos y pedidos del modelo Pedido
@@ -258,10 +255,6 @@ def verificar_codigos_actab_sin_pedido(request):
     messages.success(request, 'Verificación completada. Registros creados para códigos que no aparecen en Perseo.')
     return redirect('lista_comparaciones')
 
-
-from django.shortcuts import render
-from .models import ComparacionPedido, MaterialSeleccionado
-
 def lista_comparaciones(request):
     # Obtener todas las comparaciones guardadas en la base de datos
     comparaciones = ComparacionPedido.objects.all()
@@ -291,3 +284,4 @@ def lista_comparaciones(request):
         })
 
     return render(request, 'lista_comparaciones.html', {'comparaciones': comparaciones_con_guia})
+

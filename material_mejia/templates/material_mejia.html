@@ -12,6 +12,7 @@
           <th>Actividad</th>
           <th>Instalador</th>
           <th>Código</th>
+          <th>Guía</th>
           <th>Cantidad</th>
           <th>Fecha</th>
           <th>Acta</th>
@@ -23,7 +24,8 @@
           <th scope="row">{{ pedido.pedido }}</th>
           <td>{{ pedido.actividad }}</td>
           <td>{{ pedido.instalador }}</td>
-          <td>{{ pedido.codigo }}</td>
+          <td>{{ pedido.guia }}</td>
+          <td>{{ pedido.codigo }}</td>          
           <td>{{ pedido.cantidad|floatformat:2 }}</td>
           <td>{{ pedido.fecha|date:"d/m/Y" }}</td>
           <td>{{ pedido.acta }}</td>

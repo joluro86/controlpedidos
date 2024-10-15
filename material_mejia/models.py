@@ -5,12 +5,14 @@ class Pedido(models.Model):
     actividad = models.CharField(max_length=255)  # Columna L
     instalador = models.CharField(max_length=255)  # Columna M
     codigo = models.CharField(max_length=255)  # Columna S
+    guia = models.CharField(max_length=255, blank=True)  # Nuevo campo para almacenar la guía del modelo MaterialSeleccionado
     cantidad = models.DecimalField(max_digits=10, decimal_places=2)  # Columna U
     fecha = models.DateField()  # Columna Z
     acta = models.CharField(max_length=255)  # Columna AA
 
     def __str__(self):
         return f"Pedido {self.pedido} - {self.actividad}"
+
     
 
 class ActaB(models.Model):

@@ -217,8 +217,8 @@ def comparar_pedidos(request):
     return redirect('lista_comparaciones')
 
 def verificar_codigos_actab_sin_pedido(request):
-    # Obtener todos los códigos y pedidos del modelo Pedido
-    pedidos = Pedido.objects.values('pedido', 'codigo')
+    # Obtener todos los códigos y pedidos del modelo Pedido, incluyendo la actividad e instalador
+    pedidos = Pedido.objects.values('pedido', 'codigo', 'actividad', 'instalador', 'fecha')
 
     # Convertir los pedidos y códigos en un conjunto para facilitar la búsqueda
     pedidos_codigos = set((p['pedido'], p['codigo']) for p in pedidos)
@@ -230,15 +230,16 @@ def verificar_codigos_actab_sin_pedido(request):
     guia_to_codigo = {ms['guia']: ms['codigo'] for ms in material_seleccionado}
 
     # Obtener todos los códigos y pedidos del modelo ActaB
-    actas = ActaB.objects.values('pedido', 'codigo', 'cantidad')
+    actas = ActaB.objects.values('pedido', 'codigo', 'cantidad', 'actividad')
 
     # Iterar sobre los códigos de ActaB
     for acta in actas:
         # Verificar si el código en ActaB (que corresponde a la 'guía') no está asociado a un código en Pedido
         codigo_pedido = guia_to_codigo.get(acta['codigo'], None)
 
-        # Si no hay un código en Pedido asociado a la guía (código en ActaB), creamos el registro en ComparacionPedido
+        # Si no hay un código en Pedido asociado a la guía (código en ActaB), buscamos actividad e instalador
         if not codigo_pedido or (acta['pedido'], codigo_pedido) not in pedidos_codigos:
+           
             # Si el código no está en Pedido, creamos un registro en ComparacionPedido
             ComparacionPedido.objects.create(
                 pedido=acta['pedido'],
@@ -246,9 +247,9 @@ def verificar_codigos_actab_sin_pedido(request):
                 suma_material_pedido=0,  # No hay datos en Pedido, así que la suma es 0
                 suma_material_acta=acta['cantidad'],  # Usar el valor de ActaB
                 diferencia=acta['cantidad'],  # Diferencia será igual a la suma de ActaB
-                actividad='',  # Si necesitas copiar datos adicionales, puedes hacerlo aquí
-                fecha=None,  # Usar None si no hay una fecha correspondiente
-                instalador='',  # Usar valores por defecto o buscar una manera de obtener estos datos
+                actividad=acta['actividad'],  # Actividad del pedido
+                fecha=None,  # Fecha del pedido
+                instalador='No disponible',  # Instalador del pedido
                 observacion=f'Código {acta["codigo"]} no aparece en Perseo'
             )
 

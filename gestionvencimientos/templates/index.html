@@ -58,16 +58,20 @@
                 <a class="dropdown-item" href="{% url 'ver_material_acta' %}">Material Acta</a>
               </li>
               <li>
-                <a class="dropdown-item" href="{% url 'comparar_pedidos' %}">Gestionar comparativo</a>
+                <a class="dropdown-item" href="#" onclick="confirmar_gestionar_comparativo()">Gestionar comparativo</a>
               </li>
               <li>
-                <a class="dropdown-item" href="{% url 'reiniciar_actas' %}">Reiniciar actas</a>
+                <a class="dropdown-item" href="#" onclick="confirmar_reiniciar_actas()">Reiniciar actas</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#" onclick="confirmar_reiniciar_novedades()">Reiniciar novedades</a>
               </li>
               <li>
                 <a class="dropdown-item" href="{% url 'lista_comparaciones' %}">Informe comparativo</a>
               </li>
             </ul>
           </li>
+          
 
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">Revisión Acta</a>

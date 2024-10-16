@@ -143,14 +143,14 @@ def subir_material_acta(request):
     return redirect('ver_material_acta')
 
 def reiniciar_actas(request):
-    #Pedido.objects.all().delete()
-    #ActaB.objects.all().delete()
+    Pedido.objects.all().delete()
+    ActaB.objects.all().delete()
     ComparacionPedido.objects.all().delete()
-    return render(request, 'material_mejia.html') 
+    return redirect('lista_comparaciones')
 
 def reiniciar_novedades(request):
     ComparacionPedido.objects.all().delete()
-    return render(request, 'material_mejia.html') 
+    return redirect('lista_comparaciones') 
 
 def comparar_pedidos(request):
     # Obtener las sumas de materiales del modelo Pedido, incluyendo todos los campos necesarios

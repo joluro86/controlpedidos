@@ -550,3 +550,88 @@ function reiniciar_prenomina() {
     });
 }
 
+// Confirmación para reiniciar actas
+function confirmar_reiniciar_actas() {
+  let url = "/material_mejia/reiniciar-actas/";
+  swal
+    .fire({
+      title: "¿Está seguro de reiniciar las actas?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Sí, reiniciar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        Swal.fire({
+          title: 'Reiniciando...',
+          html: 'Por favor, espere...',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        window.location.href = url;
+      }
+    });
+}
+
+function confirmar_reiniciar_novedades() {
+  let url = "/material_mejia/reiniciar-novedades/";
+  swal
+    .fire({
+      title: "¿Está seguro de reiniciar las novedades?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Sí, reiniciar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        Swal.fire({
+          title: 'Reiniciando...',
+          html: 'Por favor, espere...',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        window.location.href = url;
+      }
+    });
+}
+
+// Confirmación para gestionar el comparativo
+function confirmar_gestionar_comparativo() {
+  let url = "/material_mejia/comparar-pedidos";
+  swal
+    .fire({
+      title: "¿Desea gestionar el comparativo de Materiales?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Sí, continuar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        Swal.fire({
+          title: 'Procesando...',
+          html: 'Por favor, espere...',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        window.location.href = url;
+      }
+    });
+}

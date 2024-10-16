@@ -6,6 +6,7 @@ urlpatterns = [
     path('subir-material-mejia/', views.subir_material_mejia, name='subir_material_mejia'),    
     path('ver-material-mejia/', views.ver_material_mejia, name='ver_material_mejia'),
     path('reiniciar-actas/', views.reiniciar_actas, name='reiniciar_actas'),
+    path('reiniciar-novedades/', views.reiniciar_novedades, name='reiniciar_novedades'),
     path('formulario-subir-material-acta/', views.formulario_subir_acta, name='formulario_subir_acta'),
     path('subir-material-acta/', views.subir_material_acta, name='subir_material_acta'),
     path('ver-material-acta/', views.ver_material_acta, name='ver_material_acta'),

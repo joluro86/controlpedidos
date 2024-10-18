@@ -153,6 +153,10 @@ def reiniciar_novedades(request):
     return redirect('lista_comparaciones') 
 
 def comparar_pedidos(request):
+    
+    # Verificar si hay códigos en ActaB que no están en Pedido
+    verificar_codigos_actab_sin_pedido(request)
+    
     # Obtener las sumas de materiales del modelo Pedido, incluyendo todos los campos necesarios
     pedidos = Pedido.objects.values(
         'pedido', 'codigo', 'guia', 'fecha', 'actividad', 'instalador'
@@ -211,9 +215,6 @@ def comparar_pedidos(request):
             # Añadir este pedido y guía a la lista de procesados
             pedidos_procesados.add(pedido_guia)
 
-    # Verificar si hay códigos en ActaB que no están en Pedido
-    verificar_codigos_actab_sin_pedido(request)
-
     return redirect('lista_comparaciones')
 
 def verificar_codigos_actab_sin_pedido(request):
@@ -234,12 +235,13 @@ def verificar_codigos_actab_sin_pedido(request):
 
     # Iterar sobre los códigos de ActaB
     for acta in actas:
+        
         # Verificar si el código en ActaB (que corresponde a la 'guía') no está asociado a un código en Pedido
         codigo_pedido = guia_to_codigo.get(acta['codigo'], None)
 
         # Si no hay un código en Pedido asociado a la guía (código en ActaB), buscamos actividad e instalador
         if not codigo_pedido or (acta['pedido'], codigo_pedido) not in pedidos_codigos:
-           
+            print(acta)
             # Si el código no está en Pedido, creamos un registro en ComparacionPedido
             ComparacionPedido.objects.create(
                 pedido=acta['pedido'],

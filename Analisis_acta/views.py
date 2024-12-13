@@ -137,6 +137,13 @@ def calculo_novedades_acta(request):
 
             if pedido.actividad == 'AEJDO':
 
+                if pedido.item_cont == "A 06":
+                    if Acta.objects.filter(pedido=pedido.pedido).filter(
+                            item_cont='A 39').aggregate(suma=Sum('cantidad'))['suma']==None and Acta.objects.filter(pedido=pedido.pedido).filter(
+                            item_cont='A 42').aggregate(suma=Sum('cantidad'))['suma']==None:
+                        crear_novedad(
+                                    pedido, pedido.item_cont + ' No cobró A 39 ni A 42')                       
+
                 if pedido.item_cont == "200410" or pedido.item_cont == "200411":
                     if int(pedido.cantidad) <= 5:
 
@@ -216,9 +223,26 @@ def calculo_novedades_acta(request):
                 if pedido.tipre == 'ENEPRE':
                     calculo_enepre(pedido)
 
+                if pedido.item_cont == '200099':
+                    if Acta.objects.filter(pedido=pedido.pedido).filter(
+                                item_cont='200319').aggregate(suma=Sum('cantidad'))['suma']==None:
+                            crear_novedad(
+                                        pedido, pedido.item_cont + ' No cobró 200319')                                         
+
                 if pedido.tipre == 'ENESUB':
                     calculo_enepre(pedido)
 
+            # Obtenemos la suma para item_cont='200099'
+            suma_cantidad = Acta.objects.filter(pedido=pedido.pedido, item_cont='200099').aggregate(suma=Sum('cantidad'))['suma']
+
+            if suma_cantidad is not None and suma_cantidad > 1:
+                # Antes de crear la novedad, verificamos si ya existe
+                novedad_texto = 'Cobro de 200099 mayor a 1.'
+                existe_novedad = Novedad_acta.objects.filter(pedido=pedido.pedido, novedad=novedad_texto).exists()
+
+                if not existe_novedad:
+                    crear_novedad(pedido, novedad_texto)
+                            
             if pedido.tipre == 'ENESUB' and (pedido.item_cont == 'A 27' or pedido.item_cont == 'A 03' or pedido.item_cont == 'A 28' or pedido.item_cont == 'A 29'):
                 print("error enesub")
 
@@ -265,6 +289,7 @@ def calculo_novedades_acta(request):
                 nov = "A 06=1,"
                 busqueda_item(pedido, '200410', '200411', nov)
                 busqueda_item(pedido, 'A 03', 'A 27', nov)
+
 
             if pedido.item_cont == '200410' or pedido.item_cont == '200411':
                 insumo = str(pedido.item_cont)

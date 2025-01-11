@@ -1,251 +1,258 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge" name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Gestión pedidos</title>
-    <script src="{% static 'sweetalert/sweetalert2.all.min.js' %} "></script>
+<head>
+  <meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge" name="viewport"
+    content="width=device-width, initial-scale=1.0" />
 
-    <link href="{% static 'css/style_pendientes.css' %}" rel="stylesheet" />
+  <title>Gestión pedidos</title>
+  <script src="{% static 'sweetalert/sweetalert2.all.min.js' %} "></script>
 
-    <link href="{% static 'icons/css/all.css' %}" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="{% static 'datatable/css/dataTables.bootstrap4.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'datatable/plugins/responsive-2.2.3/css/responsive.bootstrap4.min.css' %}" />
-    <script src="{% static 'datatable/js/jquery.dataTables.js' %}"></script>
-    <script src="{% static 'datatable/js/dataTables.bootstrap4.min.js' %}"></script>
-    <script src="{% static 'datatable/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
-    <script src="{% static 'datatable/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.0/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/plug-ins/1.12.1/dataRender/datetime.js"></script>
+  <link href="{% static 'css/style_pendientes.css' %}" rel="stylesheet" />
 
-    <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.2.0/js/buttons.html5.styles.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.2.0/js/buttons.html5.styles.templates.min.js"></script>
+  <link href="{% static 'icons/css/all.css' %}" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="{% static 'datatable/css/dataTables.bootstrap4.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'datatable/plugins/responsive-2.2.3/css/responsive.bootstrap4.min.css' %}" />
+  <script src="{% static 'datatable/js/jquery.dataTables.js' %}"></script>
+  <script src="{% static 'datatable/js/dataTables.bootstrap4.min.js' %}"></script>
+  <script src="{% static 'datatable/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
+  <script src="{% static 'datatable/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
+  <script src="https://cdn.datatables.net/buttons/2.1.0/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.print.min.js"></script>
+  <script src="https://cdn.datatables.net/plug-ins/1.12.1/dataRender/datetime.js"></script>
 
-    {% block head %}
+  <script
+    src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.2.0/js/buttons.html5.styles.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.2.0/js/buttons.html5.styles.templates.min.js"></script>
 
-    {% endblock %}
-  </head>
+  {% block head %}
 
-  <body class="body">
-    {% if request.user.is_authenticated %}
-      <div class="header" id="sub-header">
-        <ul class="nav box-index">
-          <li class="nav-item" id="inicio">
-            <a class="nav-link" href="{% url 'home' %}">Inicio</a>
+  {% endblock %}
+</head>
+
+<body class="body">
+  {% if request.user.is_authenticated %}
+  <div class="header" id="sub-header">
+    <ul class="nav box-index">
+      <li class="nav-item" id="inicio">
+        <a class="nav-link" href="{% url 'home' %}">Inicio</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">Material Mejía</a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li>
+            <a class="dropdown-item" href="{% url 'formulario_subir_perseo' %}">Subir Perseo</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">Material Mejía</a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li>
-                <a class="dropdown-item" href="{% url 'formulario_subir_perseo' %}">Subir Perseo</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'formulario_subir_acta' %}">Subir Acta</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'ver_material_mejia' %}">Material Mejía</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'ver_material_acta' %}">Material Acta</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" onclick="confirmar_gestionar_comparativo()">Gestionar comparativo</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" onclick="confirmar_reiniciar_actas()">Reiniciar actas</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" onclick="confirmar_reiniciar_novedades()">Reiniciar novedades</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'lista_comparaciones' %}">Informe comparativo</a>
-              </li>
-            </ul>
+          <li>
+            <a class="dropdown-item" href="{% url 'formulario_subir_acta' %}">Subir Acta</a>
           </li>
-          
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">Revisión Acta</a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li>
-                <a class="dropdown-item" href="/admin/Analisis_acta/acta/import/" target="blank">Importar Acta revisión</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" onclick="calculo_novedades()">Calculo Novedades Acta</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" onclick="limpiar_novedades_acta()">Reiniciar Novedades</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" onclick="limpiar_acta_analisis()">Reiniciar Acta Analisis</a>
-              </li>
-              <li class="nav-item" id="pendi_index">
-                <a class="dropdown-item" id="pendi_a" href="{% url 'novedades_acta' %}">Novedades</a>
-              </li>
-              <li class="nav-item" id="pendi_index">
-                <a class="dropdown-item" id="pendi_a" href="#">Sin interna</a>
-              </li>
-            </ul>
+          <li>
+            <a class="dropdown-item" href="{% url 'ver_material_mejia' %}">Material Mejía</a>
           </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">Gestión Ans</a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li>
-                <a class="dropdown-item" id="pendi_a" href="{% url 'menu_pendientes' %}">Pendientes</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="/admin/gestionvencimientos/ans/import/" target="blank">Subir extracción</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" onclick="gestion_bd()">Gestionar BD extracción</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" onclick="reiniciar_bd()">Reiniciar BD extracción</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" onclick="fechas_busqueda_epm()">Vence epm</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'programador' %}">Programador</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'inconsistencias' %}">Inconsistencias</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'medidores_cables' %}">Medidores vs Cables</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'gestion_medidores' %}">Gestión Medidores</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'reiniciar_medidores' %}">Reiniciar Medidores</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" onclick="fechas_busqueda_contrato()">Vence contrato</a>
-              </li>
-            </ul>
+          <li>
+            <a class="dropdown-item" href="{% url 'ver_material_acta' %}">Material Acta</a>
           </li>
+          <li>
+            <a class="dropdown-item" href="#" onclick="confirmar_gestionar_comparativo()">Gestionar comparativo</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" onclick="confirmar_reiniciar_actas()">Reiniciar actas</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" onclick="confirmar_reiniciar_novedades()">Reiniciar novedades</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'lista_comparaciones' %}">Informe comparativo</a>
+          </li>
+        </ul>
+      </li>
 
-          <!--  
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">Revisión Acta</a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li>
+            <a class="dropdown-item" href="/admin/Analisis_acta/acta/import/" target="blank">Importar Acta revisión</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" onclick="calculo_novedades()">Calculo Novedades Acta</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" onclick="limpiar_novedades_acta()">Reiniciar Novedades</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" onclick="limpiar_acta_analisis()">Reiniciar Acta Analisis</a>
+          </li>
+          <li class="nav-item" id="pendi_index">
+            <a class="dropdown-item" id="pendi_a" href="{% url 'novedades_acta' %}">Novedades</a>
+          </li>
+          <li class="nav-item" id="pendi_index">
+            <a class="dropdown-item" id="pendi_a" href="#">Sin interna</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">Gestión Ans</a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li>
+            <a class="dropdown-item" id="pendi_a" href="{% url 'menu_pendientes' %}">Pendientes</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'subir_acta_ans' %}" target="blank">Subir extracción</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" onclick="gestion_bd()">Gestionar Ans</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" onclick="reiniciar_bd()">Reiniciar BD extracción</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" onclick="fechas_busqueda_epm()">Vence epm</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'inconsistencias' %}">Inconsistencias</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" onclick="fechas_busqueda_contrato()">Vence contrato</a>
+          </li>
+        </ul>
+      </li>
+
+      <!--  
           PERSEO VS FENIX
           -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">Perseo Vs Fénix</a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li>
-                <a class="dropdown-item" id="pendi_a" href="/admin/perseovsfenix/matperseo/import/" target="_blank">Subir Perseo</a>
-              </li>
-              <li>
-                <a class="dropdown-item" id="pendi_a" href="/admin/perseovsfenix/matfenix/import/" target="_blank">Subir Fénix</a>
-              </li>
-              <li>
-                <a class="dropdown-item" id="pendi_a" href="#" onclick="gestion_fenix()">Gestionar BD</a>
-              </li>
-              <li>
-                <a class="dropdown-item" id="pendi_a" href="#" onclick="reiniciar_bd_perseo_vs_fenix()">Reiniciar actas</a>
-              </li>
-              <li>
-                <a class="dropdown-item" id="pendi_a" href="{% url 'novedades_perseo_fenix' %}">Novedades</a>
-              </li>
-              <li>
-                <a class="dropdown-item" id="pendi_a" href="#" onclick="reiniciar_novedades_bd_perseo_vs_fenix()">Reiniciar novedades</a>
-              </li>
-              <li>
-                <a class="dropdown-item" id="pendi_a" href="{% url 'fechas_perseo' %}">Analisis Fechas Perseo</a>
-              </li>
-            </ul>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">Perseo Vs Fénix</a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li>
+            <a class="dropdown-item" id="pendi_a" href="/admin/perseovsfenix/matperseo/import/" target="_blank">Subir
+              Perseo</a>
           </li>
-          <!--  
+          <li>
+            <a class="dropdown-item" id="pendi_a" href="/admin/perseovsfenix/matfenix/import/" target="_blank">Subir
+              Fénix</a>
+          </li>
+          <li>
+            <a class="dropdown-item" id="pendi_a" href="#" onclick="gestion_fenix()">Gestionar BD</a>
+          </li>
+          <li>
+            <a class="dropdown-item" id="pendi_a" href="#" onclick="reiniciar_bd_perseo_vs_fenix()">Reiniciar actas</a>
+          </li>
+          <li>
+            <a class="dropdown-item" id="pendi_a" href="{% url 'novedades_perseo_fenix' %}">Novedades</a>
+          </li>
+          <li>
+            <a class="dropdown-item" id="pendi_a" href="#" onclick="reiniciar_novedades_bd_perseo_vs_fenix()">Reiniciar
+              novedades</a>
+          </li>
+          <li>
+            <a class="dropdown-item" id="pendi_a" href="{% url 'fechas_perseo' %}">Analisis Fechas Perseo</a>
+          </li>
+        </ul>
+      </li>
+      <!--  
           FIN PERSEO VS FENIX
           -->
 
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">Programar</a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li>
-                <a class="dropdown-item" href="{% url 'acrev' %}">Puntos de Conexión</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'amrtr' %}">Movimiento de Redes</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'lega' %}">Legalizaciones</a>
-              </li>
-            </ul>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">Programar</a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li>
+            <a class="dropdown-item" href="{% url 'acrev' %}">Puntos de Conexión</a>
           </li>
-          <!--  
-          INICIO BONIFICACION
-          -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">Bonificaciones</a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li>
-                <a class="dropdown-item" href="/admin/bonificaciones/perseo/import/" target="_blank">Subir Perseo</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="/admin/bonificaciones/fenix/import/" target="_blank">Subir Fénix</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" onclick="gestionar_bd_bonificacion()">Gestionar BD</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'producido_rango_fechas' %}">Cálculo bonificación</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'producido_diario' %}">Producido diario</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'bonificaciones' %}">Bonificaciones</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" onclick="reiniciar_bd_bonificacion()">Reiniciar BD</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" onclick="reiniciar_bonificaciones()">Reiniciar bonificaciones</a>
-              </li>
-            </ul>
+          <li>
+            <a class="dropdown-item" href="{% url 'amrtr' %}">Movimiento de Redes</a>
           </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">Nomina</a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li>
-                <a class="dropdown-item" href="{% url 'subirnominametro' %}">Subir</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'definir_fechas' %}">Gestionar archivo</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'informe' %}">Informe</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" onclick="reiniciar_prenomina()">Reiniciar prenomina</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}?next=/">Cerrar sesión</a>
+          <li>
+            <a class="dropdown-item" href="{% url 'lega' %}">Legalizaciones</a>
           </li>
         </ul>
-      </div>
-    {% endif %}
+      </li>
+      <!--  
+          INICIO BONIFICACION
+          -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">Bonificaciones</a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li>
+            <a class="dropdown-item" href="/admin/bonificaciones/perseo/import/" target="_blank">Subir Perseo</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="/admin/bonificaciones/fenix/import/" target="_blank">Subir Fénix</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" onclick="gestionar_bd_bonificacion()">Gestionar BD</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'producido_rango_fechas' %}">Cálculo bonificación</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'producido_diario' %}">Producido diario</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'bonificaciones' %}">Bonificaciones</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" onclick="reiniciar_bd_bonificacion()">Reiniciar BD</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" onclick="reiniciar_bonificaciones()">Reiniciar bonificaciones</a>
+          </li>
+        </ul>
+      </li>
 
-    {% block content %}
-      <p class="text-center mt-4 text-primary fw-bold fs-2">Bienvenido {{ user.username }} a la app para la gestión de ANS pendientes.</p>
-    {% endblock %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+          aria-expanded="true">Nomina</a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li>
+            <a class="dropdown-item" href="{% url 'subirnominametro' %}">Subir</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'definir_fechas' %}">Gestionar archivo</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'informe' %}">Informe</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" onclick="reiniciar_prenomina()">Reiniciar prenomina</a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'logout' %}?next=/">Cerrar sesión</a>
+      </li>
+    </ul>
+  </div>
+  {% endif %}
 
-    {% block js %}
-      <script src="{% static 'js/js_pendientes.js' %}"></script>
-    {% endblock %}
-  </body>
+  {% block content %}
+  <p class="text-center mt-4 text-primary fw-bold fs-2">Bienvenido {{ user.username }} a la app para la gestión de ANS
+    pendientes.</p>
+  {% endblock %}
+
+  {% block js %}
+  <script src="{% static 'js/js_pendientes.js' %}"></script>
+  {% endblock %}
+</body>
+
 </html>

@@ -299,6 +299,12 @@ def calculo_novedades_acta(request):
                 nov = "A 23=1,"
                 busqueda_item(pedido, '211673', '210947', nov)
 
+            if pedido.item_cont == "A 23":
+                    if Acta.objects.filter(pedido=pedido.pedido).filter(
+                            item_cont='211673').aggregate(suma=Sum('cantidad'))['suma']==None:
+                        crear_novedad(
+                                    pedido, pedido.item_cont + ' No cobró 211673')  
+
             if pedido.item_cont == '211673':
                 insumo = str(pedido.item_cont)
                 busqueda_insumo(pedido, insumo)

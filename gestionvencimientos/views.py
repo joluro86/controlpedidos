@@ -1,8 +1,9 @@
 from asyncio.windows_events import NULL
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 from email.policy import HTTP
+import tempfile
 import pandas as pd
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 import holidays_co
 from django.contrib.auth.decorators import login_required
@@ -12,18 +13,20 @@ from material_oficiales.models import Despacho, Inicio, Liquidacion_acta_epm, Ma
 from medidores.models import NovedadMedidores, PedidoMedidores
 from perseovsfenix.models import Guia
 from openpyxl import load_workbook
+from django.urls import reverse
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from openpyxl import load_workbook
+from .models import Ans
+import os
+from openpyxl import load_workbook
+from io import BytesIO
 
 
 @login_required
 def index(request):
     return render(request,  "index.html")
-
-from django.http import JsonResponse
-
-from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from openpyxl import load_workbook
-from .models import Ans
 
 def subir_acta_ans(request):
     try:
@@ -33,94 +36,83 @@ def subir_acta_ans(request):
                 return JsonResponse({'status': 'error', 'message': 'No file provided'}, status=400)
                 
             file = request.FILES['file']
-            # Procesar el archivo en segundo plano
+            # Procesar el archivo en segundo plano (en este ejemplo, se hace síncronamente)
             process_excel(file)
-            return redirect('home')
+            return HttpResponseRedirect(reverse('home'))  # Usamos HttpResponseRedirect en lugar de redirect
         
         # Si no es un POST, solo renderizamos la página
         return render(request, 'subir_extraccion_ans.html')
     
     except Exception as e:
-        print(e)
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
 
 def process_excel(file):
     try:
-        wb = load_workbook(file)
-        ws = wb[wb.sheetnames[0]]
+        # Cargar el archivo en memoria usando BytesIO
+        content = file.read()
+        wb = load_workbook(filename=BytesIO(content))
+        ws = wb.active  # Usamos la hoja activa por defecto
         total_rows = ws.max_row
         row_count = 0
 
-        for row in ws.iter_rows():
-            if row_count == 0:
-                row_count += 1
-                continue
+        for row in ws.iter_rows(min_row=2, values_only=True):  # Comenzamos desde la fila 2
+            row_count += 1
 
             # Crear una nueva instancia del modelo Ans
             ans = Ans()
 
             # Asignar los valores de las filas del Excel a los campos del modelo Ans
-            ans.Pedido = row[0].value
-            ans.Subped = row[1].value
-            ans.Soli = row[2].value
-            ans.Producto_id = row[3].value
-            ans.Tipo_Trabajo = row[4].value
-            ans.Tipo_Elemento_ID = row[5].value
-            ans.Fecha_Recibo = row[6].value
-            ans.Fecha_Ingreso_Sol = row[7].value
-            ans.Fecha_Concepto = row[8].value
-            ans.Fecha_Inicio_ANS = row[9].value
-            ans.Días_ANS = row[10].value if row[10].value is not None else 0.00
-            ans.Estado = row[11].value
-            ans.Concepto = row[12].value
-            ans.Nombre_concepto = row[13].value
-            ans.ClienteID = row[14].value
-            ans.Nombre_Cliente = row[15].value
-            ans.Telefono = row[16].value
-            ans.Correo = row[17].value
-            ans.Direccion_Correspondencia = row[18].value
-            ans.Municipio_Correspondencia = row[19].value
-            ans.Telefono_Contacto = row[20].value
-            ans.Celular_Contacto = row[21].value
-            ans.Direccion = row[22].value
-            ans.Municipio = row[23].value
-            ans.Instalación = row[24].value
-            ans.Area_Operativa = row[25].value
-            ans.Subzona = row[26].value
-            ans.Area_Trabajo = row[27].value
-            ans.Ruta = row[28].value
-            ans.Coordenadax = row[29].value
-            ans.Coordenaday = row[30].value
-            ans.Actividad = row[31].value
-            ans.Equipo = row[32].value
-            ans.Nombre = row[33].value
-            ans.Fecha_Programación = row[34].value
-            ans.Num_Proyecto = row[35].value
-            ans.Tipo_Dirección = row[36].value
-            ans.Observación = row[37].value
-            ans.Observación_Solicitud = row[38].value
-            ans.Pedido_CRM = row[39].value
+            ans.Pedido = row[0]
+            ans.Subped = row[1]
+            ans.Soli = row[2]
+            ans.Producto_id = row[3]
+            ans.Tipo_Trabajo = row[4]
+            ans.Tipo_Elemento_ID = row[5]
+            ans.Fecha_Recibo = row[6]
+            ans.Fecha_Ingreso_Sol = row[7]
+            ans.Fecha_Concepto = row[8]
+            ans.Fecha_Inicio_ANS = row[9]
+            ans.Días_ANS = row[10] if row[10] is not None else 0.00
+            ans.Estado = row[11]
+            ans.Concepto = row[12]
+            ans.Nombre_concepto = row[13]
+            ans.ClienteID = row[14]
+            ans.Nombre_Cliente = row[15]
+            ans.Telefono = row[16]
+            ans.Correo = row[17]
+            ans.Direccion_Correspondencia = row[18]
+            ans.Municipio_Correspondencia = row[19]
+            ans.Telefono_Contacto = row[20]
+            ans.Celular_Contacto = row[21]
+            ans.Direccion = row[22]
+            ans.Municipio = row[23]
+            ans.Instalación = row[24]
+            ans.Area_Operativa = row[25]
+            ans.Subzona = row[26]
+            ans.Area_Trabajo = row[27]
+            ans.Ruta = row[28]
+            ans.Coordenadax = row[29]
+            ans.Coordenaday = row[30]
+            ans.Actividad = row[31]
+            ans.Equipo = row[32]
+            ans.Nombre = row[33]
+            ans.Fecha_Programación = row[34]
+            ans.Num_Proyecto = row[35]
+            ans.Tipo_Dirección = row[36]
+            ans.Observación = row[37]
+            ans.Observación_Solicitud = row[38]
+            ans.Pedido_CRM = row[39]
 
             try:
                 ans.save()
             except Exception as e:
                 print(f"Error al guardar la fila {row_count}: {e}")
 
-            row_count += 1
-
-            # Actualizamos el progreso en la base de datos
-            progress = int((row_count / total_rows) * 100)
-
-            # Enviar el progreso (esto debe ser asíncrono en un sistema real)
-            # Aquí solo mostramos cómo calcular y reportar el progreso
-            if row_count % 10 == 0:  # Solo por cada 10 filas (puedes ajustar esto)
-                print(f"Progreso: {progress}%")
-
     except Exception as e:
         print(f"Error al procesar el archivo: {e}")
 
-
-
+        
 def calculo_dia_actutal():
 
     fecha_actual = datetime.now()

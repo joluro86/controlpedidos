@@ -1,24 +1,124 @@
 from asyncio.windows_events import NULL
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 from email.policy import HTTP
+import tempfile
 import pandas as pd
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 import holidays_co
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+<<<<<<< HEAD
 from analisis_acta.views import crear_novedad
 from gestionvencimientos.models import *
 from material_oficiales.models import *
+=======
+from gestionvencimientos.models import Actividad, Actividad_epm, Ans, Encargado, Vencido
+from material_oficiales.models import Despacho, Inicio, Liquidacion_acta_epm, Material_A_Buscar, Material_utilizado_perseo, Oficial, Reintegro, Stock
+>>>>>>> 652bc702163a5af21ab7b0e4c3ecb8080413b151
 from medidores.models import NovedadMedidores, PedidoMedidores
 from perseovsfenix.models import Guia
+from openpyxl import load_workbook
+from django.urls import reverse
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from openpyxl import load_workbook
+from .models import Ans
+import os
+from openpyxl import load_workbook
+from io import BytesIO
 
 
 @login_required
 def index(request):
     return render(request,  "index.html")
 
+def subir_acta_ans(request):
+    try:
+        if request.method == 'POST':
+            # Verificar si el archivo fue subido correctamente
+            if 'file' not in request.FILES:
+                return JsonResponse({'status': 'error', 'message': 'No file provided'}, status=400)
+                
+            file = request.FILES['file']
+            # Procesar el archivo en segundo plano (en este ejemplo, se hace síncronamente)
+            process_excel(file)
+            return HttpResponseRedirect(reverse('home'))  # Usamos HttpResponseRedirect en lugar de redirect
+        
+        # Si no es un POST, solo renderizamos la página
+        return render(request, 'subir_extraccion_ans.html')
+    
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
+
+def process_excel(file):
+    try:
+        # Cargar el archivo en memoria usando BytesIO
+        content = file.read()
+        wb = load_workbook(filename=BytesIO(content))
+        ws = wb.active  # Usamos la hoja activa por defecto
+        total_rows = ws.max_row
+        row_count = 0
+
+        for row in ws.iter_rows(min_row=2, values_only=True):  # Comenzamos desde la fila 2
+            row_count += 1
+
+            # Crear una nueva instancia del modelo Ans
+            ans = Ans()
+
+            # Asignar los valores de las filas del Excel a los campos del modelo Ans
+            ans.Pedido = row[0]
+            ans.Subped = row[1]
+            ans.Soli = row[2]
+            ans.Producto_id = row[3]
+            ans.Tipo_Trabajo = row[4]
+            ans.Tipo_Elemento_ID = row[5]
+            ans.Fecha_Recibo = row[6]
+            ans.Fecha_Ingreso_Sol = row[7]
+            ans.Fecha_Concepto = row[8]
+            ans.Fecha_Inicio_ANS = row[9]
+            ans.Días_ANS = row[10] if row[10] is not None else 0.00
+            ans.Estado = row[11]
+            ans.Concepto = row[12]
+            ans.Nombre_concepto = row[13]
+            ans.ClienteID = row[14]
+            ans.Nombre_Cliente = row[15]
+            ans.Telefono = row[16]
+            ans.Correo = row[17]
+            ans.Direccion_Correspondencia = row[18]
+            ans.Municipio_Correspondencia = row[19]
+            ans.Telefono_Contacto = row[20]
+            ans.Celular_Contacto = row[21]
+            ans.Direccion = row[22]
+            ans.Municipio = row[23]
+            ans.Instalación = row[24]
+            ans.Area_Operativa = row[25]
+            ans.Subzona = row[26]
+            ans.Area_Trabajo = row[27]
+            ans.Ruta = row[28]
+            ans.Coordenadax = row[29]
+            ans.Coordenaday = row[30]
+            ans.Actividad = row[31]
+            ans.Equipo = row[32]
+            ans.Nombre = row[33]
+            ans.Fecha_Programación = row[34]
+            ans.Num_Proyecto = row[35]
+            ans.Tipo_Dirección = row[36]
+            ans.Observación = row[37]
+            ans.Observación_Solicitud = row[38]
+            ans.Pedido_CRM = row[39]
+
+            try:
+                ans.save()
+            except Exception as e:
+                print(f"Error al guardar la fila {row_count}: {e}")
+
+    except Exception as e:
+        print(f"Error al procesar el archivo: {e}")
+
+        
 def calculo_dia_actutal():
 
     fecha_actual = datetime.now()
@@ -89,8 +189,7 @@ def limpiar_base(request):
             ans.delete()
 
         elif ans.Actividad != "FSE" and ans.Actividad != "DSPRE" and ans.Actividad != "INFSM" and ans.Actividad != "ACREV" and ans.Actividad != "AEJDO" and ans.Actividad != "ARTER" and ans.Actividad != "DIPRE" and ans.Actividad != "INPRE" and ans.Actividad != "REEQU" and ans.Actividad != "APLIN" and ans.Actividad != "ALEGA" and ans.Actividad != "ALEGN" and ans.Actividad != "ALECA" and ans.Actividad != "ACAMN" and ans.Actividad != "AMRTR":
-            ans.delete()
-            
+            ans.delete()          
             
 
     return redirect("gestionbd")
@@ -659,55 +758,6 @@ def reiniciar_bd_oficiales(request):
 
 # CODIGO MEDIDORES VS CABLEADO USADO
 
-
-def importar_acta_medidores(request):
-
-    df = pd.read_excel("C:\JOLURO\MEDIDORES\BASE\Acta_medidores.xlsx")
-
-    for index, row in df.iterrows():
-
-        pedido = PedidoMedidores()
-        try:
-            pedido.pedido = str(row["pedido"])
-        except:
-            pedido.pedido = str(row["Pedido"])
-
-        try:
-            pedido.municipio = str(row["municipio"])
-        except:
-            pedido.municipio = str(row["Municipio"])
-        try:
-            pedido.actividad = str(row["actividad"])
-        except:
-            pedido.actividad = str(row["Actividad"])
-
-        try:
-            pedido.pagina = str(row["pagina"])
-        except:
-            pedido.pagina = str(row["Instalación"])
-
-        try:
-            pedido.item_cont = str(row["item_cont"])
-        except:
-            pedido.item_cont = str(row["Cód. Ing."])
-
-        try:
-            pedido.suminis = str(row["suminis"])
-        except:
-            pedido.suminis = str(row["Cód. Ing."])
-
-        try:
-            pedido.cantidad = str(row["cantidad"])
-        except:
-            pedido.cantidad = str(row["Cantidad"])
-
-        pedido.save()
-
-    gestion_medidores()
-
-    novedades_medidores = NovedadMedidores.objects.all()
-
-    return render(request, 'inconsistencias_medidores.html', {'novedades_medidores': novedades_medidores})
 
 
 def gestion_medidores():

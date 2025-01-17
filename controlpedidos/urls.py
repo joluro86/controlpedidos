@@ -4,8 +4,9 @@ from django.urls.conf import include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from gestionvencimientos.views import *
+from gestionvencimientos.views import calculo_inventario_por_oficial, reiniciar_medidores, reiniciar_bd_oficiales, gestion_medidores, reiniciar_medidores, gestionar_acta_perseo_inventario, pedidos_week, otros_pedidos, vencimientos_contrato, vencimientos_epm,  index, fechas, vencidos, busqueda_pendientes, busqueda_vencidos, gestion_bd, cerrar_pedido,  limpiar_base, eliminar_bd, subir_acta_ans, calculo_pendientes, calculo_next_week, calculo_last_week, menu_pendientes
 urlpatterns = [
+    path('subir_acta_ans/', subir_acta_ans, name="subir_acta_ans"),
     path('admin/', admin.site.urls, name="administrador"),
     path('', index, name="home"),
     path('pendientes/<int:id_dia>', calculo_pendientes, name="pendientes"),
@@ -23,7 +24,6 @@ urlpatterns = [
     path('otros/<int:cliente>/<int:apla>/<int:pendi>/', otros_pedidos, name="otros"),
     path('epm/<str:inicio>/<str:final>/', vencimientos_epm, name="epm"),
     path('contrato/<str:inicio>/<str:final>/', vencimientos_contrato, name="contrato"),
-    path('medidores/', importar_acta_medidores, name="medidores_cables"),
     path('gestion-medidores/', gestion_medidores, name="gestion_medidores"),
     path('eliminar-medidores/', reiniciar_medidores, name="reiniciar_medidores"),
     path('accounts/', include('django.contrib.auth.urls')),

@@ -28,7 +28,7 @@ urlpatterns = [
     path('eliminar-medidores/', reiniciar_medidores, name="reiniciar_medidores"),
     path('accounts/', include('django.contrib.auth.urls')),
 
-    path('analisis/', include('Analisis_acta.urls')),
+    path('analisis/', include('analisis_acta.urls')),
     path('programar/', include('Programacion.urls')),
     path('comparativo/', include('perseovsfenix.urls')),
     path('material_oficiales/', include('material_oficiales.urls')),

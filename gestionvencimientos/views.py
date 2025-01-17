@@ -7,7 +7,7 @@ from django.shortcuts import redirect, render
 import holidays_co
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from Analisis_acta.views import crear_novedad
+from analisis_acta.views import crear_novedad
 from gestionvencimientos.models import *
 from material_oficiales.models import *
 from medidores.models import NovedadMedidores, PedidoMedidores

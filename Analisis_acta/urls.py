@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 
 
 
-from Analisis_acta.views import *
+from analisis_acta.views import *
 urlpatterns = [
     path('limpiar_novedades/', limpiar_novedades, name="limpiarnov"),
     path('limpiar_acta/', limpiar_acta, name="limpiaracta"),

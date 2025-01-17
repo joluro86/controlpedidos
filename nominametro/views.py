@@ -21,6 +21,7 @@ def subirnominametro(request):
 def process_excel(file):
 
     try:
+        
         wb = load_workbook(file)
         ws = wb[wb.sheetnames[0]]
 
@@ -424,7 +425,7 @@ def export_excel(request):
             worksheet.write(row_num + 1, col_num, value)
 
     # Cerrar objeto ExcelWriter
-    writer.save()
+    writer.close()
 
     # Crear respuesta HTTP
     output = io.BytesIO()

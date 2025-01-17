@@ -1,7 +1,7 @@
 from asyncio.windows_events import NULL
 from email.policy import HTTP
 from django.shortcuts import redirect, render
-from Analisis_acta.models import *
+from analisis_acta.models import *
 from django.db.models import Sum, Q
 
 from gestionvencimientos.models import Ans

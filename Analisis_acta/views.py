@@ -1,11 +1,86 @@
 from asyncio.windows_events import NULL
 from email.policy import HTTP
 from django.shortcuts import redirect, render
-from analisis_acta.models import *
+from django.urls import reverse
+from analisis_acta.models import Acta, Materiales, Novedad_acta
 from django.db.models import Sum, Q
+from django.http import JsonResponse, HttpResponseRedirect
+from openpyxl import load_workbook
+from io import BytesIO
 
-from gestionvencimientos.models import Ans
+# codigo subir acta para revisar
 
+def subir_acta_revision(request):
+    try:
+        if request.method == 'POST':
+            # Verificar si el archivo fue subido correctamente
+            if 'file' not in request.FILES:
+                return JsonResponse({'status': 'error', 'message': 'No file provided'}, status=400)
+            file = request.FILES['file']
+            # Procesar el archivo en segundo plano (en este ejemplo, se hace sincrónicamente)
+            process_excel_acta(file)
+            return HttpResponseRedirect(reverse('home'))  # Usamos HttpResponseRedirect en lugar de redirect
+        
+        # Si no es un POST, solo renderizamos la página
+        return render(request, 'subir_acta_revision.html')
+    
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+def process_excel_acta(file):
+    try:         
+        # Validar que el archivo es un Excel válido
+        if not file.name.endswith('.xlsx'):
+            raise ValueError("El archivo debe tener formato .xlsx")
+
+        # Cargar el archivo en memoria usando BytesIO
+        content = file.read()
+        wb = load_workbook(filename=BytesIO(content))
+        ws = wb.active  # Usamos la hoja activa por defecto
+        row_count = 0
+
+        for row in ws.iter_rows(min_row=2, values_only=True):  # Comenzamos desde la fila 2
+            row_count += 1
+
+            # Crear una nueva instancia del modelo Acta
+            acta = Acta()
+
+            # Asignar los valores de las filas del Excel a los campos del modelo Acta
+            acta.pedido = row[0]
+            acta.area_operativa = row[1]
+            acta.subz = row[2]
+            acta.ruta = row[3]
+            acta.municipio = row[4]
+            acta.contrato = row[5]
+            acta.acta = row[6]
+            acta.actividad = row[7]
+            acta.fecha_estado = row[8]
+            acta.pagina = row[9]
+            acta.urbrur = row[10]
+            acta.tipre = row[11]
+            acta.red_interna = row[12]
+            acta.tipo_operacion = row[13]
+            acta.descent = row[14]
+            acta.tipo = row[15]
+            acta.cobro = row[16]
+            acta.suminis = row[17] if row[17] is not None else '0'
+            acta.item_cont = row[18] if row[18] is not None else '0'
+            acta.item_res = row[19]
+            acta.cantidad = row[20] if row[20] is not None else '0'
+            acta.vlr_cliente = row[21]
+            acta.valor_costo = row[22]
+            acta.tipo_item = row[23]
+
+            try:
+                acta.save()
+            except Exception as e:
+                print(f"Error al guardar la fila {row_count}: {e}")
+
+    except Exception as e:
+        print(f"Error al procesar el archivo: {e}")
+
+
+# fin codigo para subir acta a rEVISAR
 
 def calculo_novedades_acta(request):
     pedidos_LEGA = Acta.objects.filter(actividad__in=["ALEGA", "ALECA", "ACAMN", "ALEGN"]).exclude(suminis__exact='0').exclude(suminis__exact='CALE1F')
@@ -15,9 +90,9 @@ def calculo_novedades_acta(request):
             crear_novedad(pedido, "Legalización: Suministro " + pedido.suminis)
             
     pedidos_aejdo = Acta.objects.filter(actividad__in=["AEJDO"]).exclude(suminis__exact='0').exclude(
-    suminis__exact='CALE1F')
+    suminis__exact='CALE1F').exclude(suminis__isnull=True)
     
-    for pedido in pedidos_aejdo:
+    for pedido in pedidos_aejdo: 
         if pedido.suminis.endswith("P"):
             crear_novedad(pedido, "AEJDO: con suministro " + pedido.suminis)
 
@@ -28,11 +103,15 @@ def calculo_novedades_acta(request):
     for pedido in pedidos:
 
         material = Materiales.objects.filter(material=pedido.suminis).exists()
-
-        if material == False and pedido.suminis != "0":
+        
+        if pedido.suminis != '0' and material == False and pedido.suminis[0]!="C" and pedido.suminis[0]!="R":
+            print(material)
+            print(pedido.pedido)
+            print(pedido.item_cont)
+            print(pedido.suminis)
             novedad = "Material no permitido " + str(pedido.suminis)
             crear_novedad(pedido, novedad)
-        else:
+        else:            
             cod = pedido.item_cont
             primera_letra = cod[0]
             if primera_letra == 'A':
@@ -538,14 +617,14 @@ def gestionar_nomnbre_utem_con_a_o_con_p(request):
     pedidos = Acta.objects.all()
     cont = 0
     for p in pedidos:
-        if p.item_cont == "0":
+        if p.item_cont is not None and p.item_cont == "0":
             cont += 1
             p.item_cont = p.suminis
             p.save()
-        if p.item_cont[-1] == 'A' or p.item_cont[-1] == 'P':
+        if p.item_cont is not None and (p.item_cont[-1] == 'A' or p.item_cont[-1] == 'P'):
             p.item_cont = p.item_cont[:-1]
             p.save()
-        if p.suminis[-1] == 'A' or p.suminis[-1] == 'P':
+        if p.suminis is not None and (p.suminis[-1] == 'A' or p.suminis[-1] == 'P'):
             p.item_cont = p.suminis[:-1]
             p.save()
 
@@ -835,7 +914,6 @@ def crear_novedad(pedido, nov):
     novedad.pedido = pedido.pedido
     novedad.actividad = pedido.actividad
     novedad.municipio = pedido.municipio
-    novedad.tipre = pedido.tipre
     novedad.pagina = pedido.pagina
     novedad.item = pedido.item_cont
     novedad.novedad = nov
@@ -869,7 +947,7 @@ def calculo_enepre(pedido):
         try:
             novedad = "A 27=1, "
             busqueda_item(pedido, 'A 41', 0, novedad)
-            busqueda_item(pedido, '200098', 0, novedad)
+            busqueda_item(pedido, '200098', '200099', novedad)
             busqueda_item(pedido, '219404', 0, novedad)
             busqueda_item(pedido, 'A 10', 'A 11', novedad)
             calculo_incompatible_A27(pedido, novedad)

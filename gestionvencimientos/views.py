@@ -1,21 +1,13 @@
 from asyncio.windows_events import NULL
 from datetime import datetime, timedelta
 from email.policy import HTTP
-import tempfile
-import pandas as pd
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 import holidays_co
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-<<<<<<< HEAD
-from analisis_acta.views import crear_novedad
-from gestionvencimientos.models import *
-from material_oficiales.models import *
-=======
 from gestionvencimientos.models import Actividad, Actividad_epm, Ans, Encargado, Vencido
 from material_oficiales.models import Despacho, Inicio, Liquidacion_acta_epm, Material_A_Buscar, Material_utilizado_perseo, Oficial, Reintegro, Stock
->>>>>>> 652bc702163a5af21ab7b0e4c3ecb8080413b151
 from medidores.models import NovedadMedidores, PedidoMedidores
 from perseovsfenix.models import Guia
 from openpyxl import load_workbook
@@ -25,7 +17,6 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from openpyxl import load_workbook
 from .models import Ans
-import os
 from openpyxl import load_workbook
 from io import BytesIO
 
@@ -40,7 +31,7 @@ def subir_acta_ans(request):
             # Verificar si el archivo fue subido correctamente
             if 'file' not in request.FILES:
                 return JsonResponse({'status': 'error', 'message': 'No file provided'}, status=400)
-                
+             
             file = request.FILES['file']
             # Procesar el archivo en segundo plano (en este ejemplo, se hace síncronamente)
             process_excel(file)
@@ -59,7 +50,6 @@ def process_excel(file):
         content = file.read()
         wb = load_workbook(filename=BytesIO(content))
         ws = wb.active  # Usamos la hoja activa por defecto
-        total_rows = ws.max_row
         row_count = 0
 
         for row in ws.iter_rows(min_row=2, values_only=True):  # Comenzamos desde la fila 2

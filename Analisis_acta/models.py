@@ -2,14 +2,13 @@ from tkinter import CASCADE
 from django.db import models
 
 class Novedad_acta(models.Model):    
-    pedido = models.CharField(max_length=200, default=0)
-    actividad = models.CharField(max_length=200, default=0)
-    municipio = models.CharField(max_length=200, default=0)
-    pagina = models.CharField(max_length=200, default=0)
-    item = models.CharField(max_length=200, default=0)
-    novedad = models.CharField(max_length=200, default=0)
-    estado = models.CharField(max_length=100, default="Aplica")
-    tipre = models.CharField(max_length=200, default=0)
+    pedido = models.CharField(max_length=200, default=0, null=True)
+    actividad = models.CharField(max_length=200, default=0, null=True)
+    municipio = models.CharField(max_length=200, default=0, null=True)
+    pagina = models.CharField(max_length=200, default=0, null=True)
+    item = models.CharField(max_length=200, default=0, null=True)
+    novedad = models.CharField(max_length=200, default=0, null=True)
+    estado = models.CharField(max_length=100, default="Aplica", null=True)
 
 
     class Meta:
@@ -21,30 +20,30 @@ class Novedad_acta(models.Model):
         return str(self.pedido)+ " " + str(self.novedad)
 
 class Acta(models.Model):    
-    pedido=models.CharField(max_length=100, default=0)
-    area_operativa=models.CharField(max_length=100, default=0)
-    subz=models.CharField(max_length=100, default=0)
-    ruta=models.CharField(max_length=100, default=0)
-    municipio=models.CharField(max_length=100, default=0)
-    contrato=models.CharField(max_length=100, default=0)
-    acta=models.CharField(max_length=100, default=0)
-    actividad=models.CharField(max_length=100, default=0)
-    fecha_estado=models.CharField(max_length=100, default=0)
-    pagina=models.CharField(max_length=100, default=0)
-    urbrur=models.CharField(max_length=100, default=0)
-    tipre=models.CharField(max_length=100, default=0)
-    red_interna=models.CharField(max_length=100, default=0)
-    tipo_operacion=models.CharField(max_length=100, default=0)
-    descent=models.CharField(max_length=100, default=0)
-    tipo=models.CharField(max_length=100, default=0)
-    cobro=models.CharField(max_length=100, default=0)
-    suminis=models.CharField(max_length=100, default="0")
-    item_cont=models.CharField(max_length=100, default="0")
-    item_res=models.CharField(max_length=100, default=0)
-    cantidad=models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
-    vlr_cliente=models.CharField(max_length=100, default=0)
-    valor_costo=models.CharField(max_length=100, default=0)
-    tipo_item=models.CharField(max_length=100, default=0)
+    pedido=models.CharField(max_length=100, default=0, null=True)
+    area_operativa=models.CharField(max_length=100, default=0, null=True)
+    subz=models.CharField(max_length=100, default=0, null=True)
+    ruta=models.CharField(max_length=100, default=0, null=True)
+    municipio=models.CharField(max_length=100, default=0, null=True)
+    contrato=models.CharField(max_length=100, default=0, null=True)
+    acta=models.CharField(max_length=100, default=0, null=True)
+    actividad=models.CharField(max_length=100, default=0, null=True)
+    fecha_estado=models.CharField(max_length=100, default=0, null=True)
+    pagina=models.CharField(max_length=100, default=0, null=True)
+    urbrur=models.CharField(max_length=100, default=0, null=True)
+    tipre=models.CharField(max_length=100, default=0, null=True)
+    red_interna=models.CharField(max_length=100, default=0, null=True)
+    tipo_operacion=models.CharField(max_length=100, default=0, null=True)
+    descent=models.CharField(max_length=100, default=0, null=True)
+    tipo=models.CharField(max_length=100, default=0, null=True)
+    cobro=models.CharField(max_length=100, default=0, null=True)
+    suminis=models.CharField(max_length=100, default="0", null=True)
+    item_cont=models.CharField(max_length=100, default="0", null=True)
+    item_res=models.CharField(max_length=100, default=0, null=True)
+    cantidad=models.DecimalField(max_digits=12, decimal_places=2, default=0.00, null=True)
+    vlr_cliente=models.CharField(max_length=100, default=0, null=True)
+    valor_costo=models.CharField(max_length=100, default=0, null=True)
+    tipo_item=models.CharField(max_length=100, default=0, null=True)
 
 
     class Meta:
@@ -57,7 +56,7 @@ class Acta(models.Model):
 
 class Materiales(models.Model):
 
-    material = models.CharField(max_length=100, default=0)
+    material = models.CharField(max_length=100, default=0, null=True)
     
     class Meta:
         verbose_name = 'Materiales'

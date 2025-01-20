@@ -4,6 +4,7 @@ from django.urls import path
 from perseovsfenix.views import *
 
 urlpatterns = [
+    path('subir_pvf_matfenix/', subir_pvf_matfenix, name="subir_pvf_matfenix"),
     path('gestion_fenix_perseo/', gestionarbd, name="gestion_perseo_fenix"),
     path('reiniciar/', reiniciar_bd_materiales, name="reiniciar_bd_materiales"),
     path('calculo_novedades_perseo_vs_fenix/', calculo_novedades_perseo_vs_fenix, name="calculo_novedades_perseo_vs_fenix"),

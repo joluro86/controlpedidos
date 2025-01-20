@@ -46,7 +46,6 @@ class matfenix(models.Model):
     codigo=models.CharField(verbose_name='Código', max_length=100)
     cantidad=models.DecimalField(verbose_name='Cantidad', decimal_places=2, default=0, max_digits=9)    
     concatenacion= models.CharField(verbose_name='Concat', max_length=100, default="0")
-    enperseo = models.IntegerField(default=0) 
 
     class Meta:
         db_table = 'fenix'

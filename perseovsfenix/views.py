@@ -51,6 +51,57 @@ def subir_pvf_matfenix(request):
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
+def subir_pvf_matperseo(request):
+    try:
+        if request.method == 'POST' and 'file' in request.FILES:
+            file = request.FILES['file']
+
+            # Leer el archivo de Excel en memoria
+            content = file.read()
+            wb = openpyxl.load_workbook(filename=BytesIO(content), data_only=True)
+            ws = wb.active  # Obtener la hoja activa
+
+            row_count = 0
+
+            for row in ws.iter_rows(min_row=2, values_only=True):  # Empezamos desde la fila 2 para omitir el encabezado
+                row_count += 1
+
+                # Obtener valores de las columnas según la posición indicada
+                pedido = str(row[3])  # Columna A
+                actividad = str(row[11])  # Columna H
+                fecha = str(row[25])  # Columna I
+                
+                # Columna S si no está vacía, de lo contrario, tomar columna R
+                codigo = str(row[18]) 
+
+                # Columna U, si está vacía, asignar cero
+                cantidad = row[20] if row[20] is not None else 0.00  # Columna U
+
+                # Columna U, si está vacía, asignar cero
+                acta = row[26] if row[26] is not None else 0  # Columna U
+
+                # Concatenación de pedido y código
+                concatenacion = f"{pedido}-{codigo}"
+
+                # Guardar en la base de datos
+                matperseo.objects.create(
+                    pedido=pedido,
+                    actividad=actividad,
+                    fecha=fecha,
+                    codigo=codigo,
+                    cantidad=cantidad,
+                    concatenacion=concatenacion,
+                    acta=acta
+                )
+            return redirect('home')        
+        # Si no es un POST, solo renderizamos la página
+        return render(request, 'subir_pvf_matperseo.html')
+
+    except Exception as e:
+        print(e)
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+
 
 def reiniciar_bd_materiales(request):
     matfenix.objects.all().delete()
@@ -128,11 +179,11 @@ def concatenar(pedidos, indicador):
 
 
 def gestionarbd():
-    pedidos_perseo = matperseo.objects.all()
+    ##pedidos_perseo = matperseo.objects.all()
     pedidos_fenix = matfenix.objects.all()
 
     concatenar(pedidos_fenix, 0)
-    concatenar(pedidos_perseo, 1)
+    #concatenar(pedidos_perseo, 1)
 
 
 def calculo_novedades_perseo_vs_fenix(request):

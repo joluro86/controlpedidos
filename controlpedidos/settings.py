@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'import_export',
     'django.contrib.humanize',
     'analisis_acta',
-    'Programacion',
+    'programacion',
     'material_oficiales',
     'medidores',
     'perseovsfenix',

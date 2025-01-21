@@ -79,7 +79,6 @@ def process_excel_acta(file):
     except Exception as e:
         print(f"Error al procesar el archivo: {e}")
 
-
 # fin codigo para subir acta a rEVISAR
 
 def calculo_novedades_acta(request):
@@ -764,6 +763,7 @@ def busqueda_item(pedido, item, item2, novedad):
             if busquedad_A27 > 0:
                 novedad = novedad+" incompatible con "+str(item2)+">0."
                 crear_novedad(pedido, novedad)
+                
         except:
             pass
 
@@ -1037,7 +1037,7 @@ def verificar_A03_MEDIDOR():
         otros_actas = Acta.objects.filter(
             Q(pedido=acta.pedido),
             ~Q(item_cont="A 03"),
-            Q(item_cont="200092") | Q(item_cont="200093") | Q(item_cont="200098"),
+            Q(item_cont="200092") | Q(item_cont="200093") | Q(item_cont="200098") | Q(item_cont="200099"),
             cantidad__gt=0
         )
 

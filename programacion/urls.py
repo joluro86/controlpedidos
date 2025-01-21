@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 
 
 
-from Programacion.views import *
+from programacion.views import *
 urlpatterns = [
     path('acrev/', acrev, name="acrev"),
     path('amrtr/', amrtr, name="amrtr"),

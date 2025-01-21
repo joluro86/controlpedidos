@@ -2,9 +2,9 @@ from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
 from django.conf import settings
-from django.conf.urls.static import static
+from django.conf.urls.static import static 
 
-from gestionvencimientos.views import calculo_inventario_por_oficial, reiniciar_medidores, reiniciar_bd_oficiales, gestion_medidores, reiniciar_medidores, gestionar_acta_perseo_inventario, pedidos_week, otros_pedidos, vencimientos_contrato, vencimientos_epm,  index, fechas, vencidos, busqueda_pendientes, busqueda_vencidos, gestion_bd, cerrar_pedido,  limpiar_base, eliminar_bd, subir_acta_ans, calculo_pendientes, calculo_next_week, calculo_last_week, menu_pendientes
+from gestionvencimientos.views import registrar_acta, calculo_inventario_por_oficial, reiniciar_medidores, reiniciar_bd_oficiales, gestion_medidores, reiniciar_medidores, gestionar_acta_perseo_inventario, pedidos_week, otros_pedidos, vencimientos_contrato, vencimientos_epm,  index, fechas, vencidos, busqueda_pendientes, busqueda_vencidos, gestion_bd, cerrar_pedido,  limpiar_base, eliminar_bd, subir_acta_ans, calculo_pendientes, calculo_next_week, calculo_last_week, menu_pendientes
 urlpatterns = [
     path('subir_acta_ans/', subir_acta_ans, name="subir_acta_ans"),
     path('admin/', admin.site.urls, name="administrador"),
@@ -42,6 +42,8 @@ urlpatterns = [
     
     path('produccion/', include('produccion.urls')),
     path('material_mejia/', include('material_mejia.urls')),
+
+    path('registrar-acta/', registrar_acta, name='registrar_acta'),
 
 ] +static(settings.STATIC_URL, document_root= settings.STATIC_ROOT)
 

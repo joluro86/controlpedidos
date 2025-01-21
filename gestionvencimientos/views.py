@@ -9,7 +9,7 @@ from django.db.models import Q
 from gestionvencimientos.models import Actividad, Actividad_epm, Ans, Encargado, Vencido
 from material_oficiales.models import Despacho, Inicio, Liquidacion_acta_epm, Material_A_Buscar, Material_utilizado_perseo, Oficial, Reintegro, Stock
 from medidores.models import NovedadMedidores, PedidoMedidores
-from perseovsfenix.models import Guia
+from perseovsfenix.models import Guia, NumeroActa
 from openpyxl import load_workbook
 from django.urls import reverse
 from django.http import JsonResponse
@@ -20,6 +20,26 @@ from .models import Ans
 from openpyxl import load_workbook
 from io import BytesIO
 
+@login_required
+def registrar_acta(request):
+    if request.method == 'POST':
+        numero = request.POST.get('numero')
+        
+        # Asegurarse de que siempre haya un solo registro
+        acta_actual = NumeroActa.objects.first()
+        
+        if acta_actual:
+            # Si ya existe un registro, actualízalo
+            acta_actual.numero = numero
+            acta_actual.save()
+        else:
+            # Si no existe, crea uno nuevo
+            NumeroActa.objects.create(numero=numero)
+        
+        # Redirigir a la misma página o a otra página que se desee
+        return redirect('home')  # Reemplaza con el nombre de la vista que corresponde
+    
+    return HttpResponse('Método no permitido', status=405)
 
 @login_required
 def index(request):

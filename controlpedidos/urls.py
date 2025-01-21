@@ -44,6 +44,7 @@ urlpatterns = [
     path('material_mejia/', include('material_mejia.urls')),
 
     path('registrar-acta/', registrar_acta, name='registrar_acta'),
+    path('administrador/', include('administrador.urls')),
 
 ] +static(settings.STATIC_URL, document_root= settings.STATIC_ROOT)
 

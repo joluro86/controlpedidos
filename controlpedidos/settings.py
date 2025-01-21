@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'nominametro',
     'produccion',
     'material_mejia',
+    'administrador',
 ]
 
 

@@ -36,7 +36,7 @@
     src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.2.0/js/buttons.html5.styles.min.js"></script>
   <script
     src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.2.0/js/buttons.html5.styles.templates.min.js"></script>
-
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   {% block head %}
 
   {% endblock %}
@@ -244,7 +244,7 @@
           {% csrf_token %}
           <div class="mb-3">
             <label for="numero_acta" class="form-label">Número de Acta</label>
-            <input type="number" class="form-control" id="numero_acta" name="numero" required>
+            <input type="text" class="form-control" id="numero_acta" name="numero" required value="{{ numero_acta_actual.numero|default_if_none:'' }}">
           </div>
           <button type="submit" class="btn btn-primary">Registrar</button>
         </form>

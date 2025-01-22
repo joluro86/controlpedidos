@@ -1,7 +1,7 @@
 from django.db import models
 
 class NumeroActa(models.Model):
-    numero= models.IntegerField()
+    numero= models.CharField(verbose_name='Acta actual', max_length=10)
 
     class Meta:
         verbose_name = 'Acta actual'

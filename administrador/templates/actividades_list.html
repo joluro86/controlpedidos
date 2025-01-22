@@ -1,0 +1,40 @@
+<div class="d-flex justify-content-center align-items-center admin_actividades">
+    <div class="card shadow-sm actividades_contrato" style="max-width: 500px;">
+        <div class="title_contrato">
+            <h6 class="text-center m-2">Días Ans Contrato</h6>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table tabla_actividades m-0 text-center">
+                <thead>
+                    <tr class="" style="font-size: 13px;">
+                        <th >Actividad</th>
+                        <th >Días Urbano</th>
+                        <th >Días Rural</th>
+                        <th >Encargado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for actividad in actividades_contrato %}
+                    <tr>
+                        <td style="font-size: 11px;"><a href="#">{{ actividad.nombre }}</a></td>
+                        <td>{{ actividad.dias_urbano }}</td>
+                        <td>{{ actividad.dias_rural }}</td>
+                        <td class="px-2" style="font-size: 11px;">{{ actividad.encargado }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-muted">No hay actividades registradas.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        <div class="card-footer p-0 text-end">
+            <button class="btn tabla_actividades btn-sm p-0 mx-3">
+                <i class="fa fa-plus m-0"></i> <!-- Icono de Font Awesome -->
+            </button>
+        </div>
+    </div>
+</div>

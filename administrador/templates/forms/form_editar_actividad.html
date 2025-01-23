@@ -29,11 +29,12 @@
                             <p>Hola {{encargados}}</p>
                             {% for encargado in encargados %}
                                 <option value="{{ encargado.id }}" 
-                                    >
+                                    {% if actividad.encargado and encargado.id == actividad.encargado.id %} 
+                                        selected 
+                                    {% endif %}>
                                     {{ encargado.nombre }}
                                    
                                 </option>
-                                <option value="">{{ encargado.nombre }}</option>
                             {% endfor %}
                         </select>
                         

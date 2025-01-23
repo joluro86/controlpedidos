@@ -7,11 +7,16 @@ from gestionvencimientos.models import Actividad, Encargado
 
 def index(request):
     act_cont = actividades_contrato(request)
-    return render(request, "admin.html", {'actividades_contrato':act_cont})
+    encargados = Encargado.objects.all()
+    print("hola")
+    print(encargados)
+    return render(request, "admin.html", {'actividades_contrato':act_cont, 'encargados':encargados})
 
 def actividades_view(request):
     actividades = Actividad.objects.all()
     encargados = Encargado.objects.all()
+    print("hola")
+    print(encargados)
     return render(request, 'administrador/actividades_list.html', {
         'actividades_contrato': actividades, 'encargados': encargados,
     })

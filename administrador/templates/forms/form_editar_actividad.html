@@ -1,0 +1,48 @@
+<div class="modal fade" id="editarActividadModal{{ actividad.id }}" tabindex="-1"
+    aria-labelledby="editarActividadLabel{{ actividad.id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarActividadLabel{{ actividad.id }}">Editar Actividad</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-editar-actividad-{{ actividad.id }}" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" name="nombre" value="{{ actividad.nombre }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Días Urbano</label>
+                        <input type="number" class="form-control" name="dias_urbano"
+                            value="{{ actividad.dias_urbano }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Días Rural</label>
+                        <input type="number" class="form-control" name="dias_rural" value="{{ actividad.dias_rural }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Encargado</label>
+                        <select class="form-control" name="encargado">
+                            <option value="">-- Seleccione un encargado --</option>
+                            <p>Hola {{encargados}}</p>
+                            {% for encargado in encargados %}
+                                <option value="{{ encargado.id }}" 
+                                    >
+                                    {{ encargado.nombre }}
+                                   
+                                </option>
+                                <option value="">{{ encargado.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                        
+                        
+                    </div>
+                    <button type="submit" class="btn btn-success btn-guardar"
+                        data-id="{{ actividad.id }}">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

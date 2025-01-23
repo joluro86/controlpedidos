@@ -3,34 +3,43 @@
         <div class="title_contrato">
             <h6 class="text-center m-2">Días Ans Contrato</h6>
         </div>
-        
+
         <div class="table-responsive">
             <table class="table tabla_actividades m-0 text-center">
                 <thead>
-                    <tr class="" style="font-size: 13px;">
-                        <th >Actividad</th>
-                        <th >Días Urbano</th>
-                        <th >Días Rural</th>
-                        <th >Encargado</th>
+                    <tr style="font-size: 13px;">
+                        <th>Actividad</th>
+                        <th>Días Urbano</th>
+                        <th>Días Rural</th>
+                        <th>Encargado</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for actividad in actividades_contrato %}
                     <tr>
-                        <td style="font-size: 11px;"><a href="#">{{ actividad.nombre }}</a></td>
+                        <td style="font-size: 11px;">
+                            <a href="#" class="text-decoration-none text-primary" data-bs-toggle="modal"
+                                data-bs-target="#editarActividadModal{{ actividad.id }}">
+                                {{ actividad.nombre }}
+                            </a>
+                        </td>
                         <td>{{ actividad.dias_urbano }}</td>
                         <td>{{ actividad.dias_rural }}</td>
                         <td class="px-2" style="font-size: 11px;">{{ actividad.encargado }}</td>
                     </tr>
+
+                    <!-- Modal de edición dentro de la fila correspondiente -->
+                    {% include 'forms/form_editar_actividad.html' with encargados=encargados %}
+
                     {% empty %}
                     <tr>
-                        <td colspan="3" class="text-muted">No hay actividades registradas.</td>
+                        <td colspan="4" class="text-muted">No hay actividades registradas.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
-
         </div>
+
         <div class="card-footer p-0 text-end">
             <button class="btn tabla_actividades btn-sm p-0 mx-3">
                 <i class="fa fa-plus m-0"></i> <!-- Icono de Font Awesome -->
@@ -38,3 +47,38 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.btn-guardar').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                let actividadId = this.getAttribute('data-id');
+                let form = document.querySelector(`#form-editar-actividad-${actividadId}`);
+
+                let formData = new FormData(form);
+
+                let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                fetch(`/administrador/editar-actividad/${actividadId}/`, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Actividad actualizada correctamente');
+                            location.reload();  // Recargar la página para reflejar los cambios
+                        } else {
+                            alert('Error al actualizar: ' + JSON.stringify(data.errors));
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+        });
+    });
+</script>

@@ -1,20 +1,36 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
 from administrador.query.actividades.actividades import actividades_contrato
-from .models import Actividad
-from .forms import ActividadForm
+from administrador.templates.forms.forms_actividad import ActividadForm
+from gestionvencimientos.models import Actividad, Encargado
+
 
 def index(request):
     act_cont = actividades_contrato(request)
     return render(request, "admin.html", {'actividades_contrato':act_cont})
 
-def editar_actividad(request, id):
-    actividad = get_object_or_404(Actividad, id=id)
-    if request.method == 'POST':
-        form = ActividadForm(request.POST, instance=actividad)
-        if form.is_valid():
-            form.save()
-            return redirect('nombre_de_tu_vista_principal')
-    else:
-        form = ActividadForm(instance=actividad)
-    return render(request, 'editar_actividad.html', {'form': form})
+def actividades_view(request):
+    actividades = Actividad.objects.all()
+    encargados = Encargado.objects.all()
+    return render(request, 'administrador/actividades_list.html', {
+        'actividades_contrato': actividades, 'encargados': encargados,
+    })
 
+def editar_actividad(request, actividad_id):
+    if request.method == 'POST':
+        try:
+            actividad = Actividad.objects.get(id=actividad_id)
+            actividad.nombre = request.POST.get('nombre', actividad.nombre)
+            actividad.dias_urbano = request.POST.get('dias_urbano', actividad.dias_urbano)
+            actividad.dias_rural = request.POST.get('dias_rural', actividad.dias_rural)
+            
+            # Asignar el encargado que viene en el formulario
+            actividad.encargado = Encargado.objects.get(id=request.POST.get('encargado'))
+            
+            actividad.save()
+            return JsonResponse({'success': True})
+        except Actividad.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Actividad no encontrada'})
+        except Encargado.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Encargado no encontrado'})
+    return JsonResponse({'success': False, 'error': 'Método no permitido'})

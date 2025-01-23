@@ -1,0 +1,29 @@
+.modal .modal-content{
+ max-width: 400px;
+}
+
+.modal .modal-header {
+    background-color: #a4edcb !important;
+    color: rgb(63, 49, 49) !important;
+    padding: 8px;
+}
+
+.modal h5 {
+    margin-left: 10px;
+}
+
+
+.modal .btn-guardar {
+    background-color: #3498db !important;
+    border-color: #3498db !important;
+    color: white !important;
+}
+
+
+.modal .modal-body {
+    font-size: 13px !important;
+}
+
+.modal .modal-body input, select {
+    font-size: 14px !important;
+}

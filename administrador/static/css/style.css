@@ -1,5 +1,5 @@
-.modal .modal-content{
- max-width: 400px;
+.modal .modal-content {
+    max-width: 400px;
 }
 
 .modal .modal-header {
@@ -24,6 +24,23 @@
     font-size: 13px !important;
 }
 
-.modal .modal-body input, select {
+.modal .modal-body input,
+select {
     font-size: 14px !important;
+}
+
+.boton-guardar .btn-guardar {
+    background-color: #3498db !important;
+    border-color: #3498db !important;
+    color: white !important;
+}
+
+.container .card-header {
+    background-color: #a4edcb !important;
+    color: rgb(63, 49, 49) !important;
+    padding: 5px;
+}
+
+.bug{
+    background-color: red;
 }

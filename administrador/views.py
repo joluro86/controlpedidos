@@ -21,6 +21,24 @@ def actividades_view(request):
         'actividades_contrato': actividades, 'encargados': encargados,
     })
 
+def nueva_actividad(request):
+    if request.method == 'POST':
+        try:
+            actividad = Actividad()
+            actividad.nombre = request.POST.get('nombre', actividad.nombre)
+            actividad.dias_urbano = request.POST.get('dias_urbano', actividad.dias_urbano)
+            actividad.dias_rural = request.POST.get('dias_rural', actividad.dias_rural)
+            actividad.encargado = Encargado.objects.get(id=request.POST.get('encargado'))
+            
+            actividad.save()
+            return JsonResponse({'success': True})
+        except Encargado.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Encargado no encontrado'})
+    
+    encargados = Encargado.objects.all()
+    return render(request, "nueva_actividad.html", {'encargados':encargados})
+
+
 def editar_actividad(request, actividad_id):
     if request.method == 'POST':
         try:

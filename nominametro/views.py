@@ -365,13 +365,13 @@ def export_excel(request):
     })
 
     format_fecha = workbook.add_format({
-        'num_format': '#,##0.00',
-        'font_name': 'Trebuchet MS',
-        'font_size': 8,
-        'border':1,
-        'border_color': '#00B050',
-        'align': 'center'
-    })
+    'num_format': 'dd/mm/yyyy',  # Formato correcto para fechas
+    'font_name': 'Trebuchet MS',
+    'font_size': 8,
+    'border': 1,
+    'border_color': '#00B050',
+    'align': 'center'
+})
 
     format_horas = workbook.add_format({
         'font_name': 'Trebuchet MS',
@@ -411,7 +411,8 @@ def export_excel(request):
     worksheet.set_column(26, 26, 27, format)
     worksheet.set_column(27, 28, 22, format)
     worksheet.set_column(29, 29, 15, format)
-    worksheet.set_column(30, 30, 15, format_firma)
+    worksheet.set_column(29, 30, 15, format)
+    worksheet.set_column(31, 32, 15, format_firma)
 
     worksheet.set_row(0, 75)
 

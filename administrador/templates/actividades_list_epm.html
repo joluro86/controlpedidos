@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-center align-items-center admin_actividades">
     <div class="card shadow-sm actividades_contrato" style="max-width: 500px;">
         <div class="title_contrato">
-            <h6 class="text-center m-2">Días Ans Contrato</h6>
+            <h6 class="text-center m-2">Días Ans Epm</h6>
         </div>
 
         <div class="table-responsive">
@@ -11,24 +11,22 @@
                         <th>Actividad</th>
                         <th>Días Urbano</th>
                         <th>Días Rural</th>
-                        <th>Encargado</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for actividad in actividades_contrato %}
+                    {% for actividad in actividades_epm %}
                     <tr>
                         <td style="font-size: 11px;">
                             <a href="#" class="text-decoration-none text-primary" data-bs-toggle="modal"
-                                data-bs-target="#editarActividadModal{{ actividad.id }}">
+                                data-bs-target="#editarActividadEpmModal{{ actividad.id }}">
                                 {{ actividad.nombre }}
                             </a>
                         </td>
                         <td>{{ actividad.dias_urbano }}</td>
                         <td>{{ actividad.dias_rural }}</td>
-                        <td class="px-2" style="font-size: 11px;">{{ actividad.encargado }}</td>
                     </tr>
                     <!-- Modal de edición dentro de la fila correspondiente -->
-                    {% include 'forms/form_editar_actividad.html' with encargados=encargados %}
+                    {% include 'forms/form_editar_actividad_epm.html' with encargados=encargados %}
                     {% empty %}
                     <tr>
                         <td colspan="4" class="text-muted">No hay actividades registradas.</td>
@@ -39,7 +37,7 @@
         </div>
 
         <div class="card-footer p-0 text-end">
-            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'nueva_actividad_form' %}">
+            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'nueva_actividad_epm_form' %}">
                 <i class="fa fa-plus m-0"></i> <!-- Icono de Font Awesome -->
             </a>
         </div>
@@ -48,17 +46,18 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll('.btn-guardar').forEach(button => {
+        document.querySelectorAll('.btn-guardar-epm').forEach(button => {
             button.addEventListener('click', function (e) {
                 e.preventDefault();
                 let actividadId = this.getAttribute('data-id');
-                let form = document.querySelector(`#form-editar-actividad-${actividadId}`);
+                console.log(actividadId)
+                let form = document.querySelector(`#form-editar-actividad-epm-${actividadId}`);
 
                 let formData = new FormData(form);
 
                 let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-                fetch(`/administrador/editar-actividad/${actividadId}/`, {
+                fetch(`/administrador/editar-actividad-epm/${actividadId}/`, {
                     method: 'POST',
                     body: formData,
                     headers: {
@@ -69,7 +68,7 @@
                     .then(data => {
                         if (data.success) {
                             // Cerrar el modal antes de mostrar la alerta
-                            let modalElement = document.querySelector(`#editarActividadModal${actividadId}`);
+                            let modalElement = document.querySelector(`#editarActividadEpmModal${actividadId}`);
                             let modalInstance = bootstrap.Modal.getInstance(modalElement);
                             modalInstance.hide();
 
@@ -84,7 +83,7 @@
                         } else {
                             Swal.fire({
                                 title: 'Error',
-                                text: data.error || 'Hubo un problema al actualizar.',
+                                text: data.error || 'Hubo un problema al actualizar epm.',
                                 icon: 'error',
                                 confirmButtonText: 'Cerrar'
                             });

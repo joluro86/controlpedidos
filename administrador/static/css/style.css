@@ -2,6 +2,10 @@
     max-width: 400px;
 }
 
+.color_primary{
+ color: #3498db !important;
+}
+
 .modal .modal-header {
     background-color: #a4edcb !important;
     color: rgb(63, 49, 49) !important;

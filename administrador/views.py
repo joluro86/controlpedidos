@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.http import JsonResponse
 from administrador.query.actividades.actividades import actividades_contrato
 from administrador.templates.forms.forms_actividad import ActividadForm
@@ -31,7 +31,7 @@ def nueva_actividad(request):
             actividad.encargado = Encargado.objects.get(id=request.POST.get('encargado'))
             
             actividad.save()
-            return JsonResponse({'success': True})
+            return redirect('index_admin')
         except Encargado.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Encargado no encontrado'})
     

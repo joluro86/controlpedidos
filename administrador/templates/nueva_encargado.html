@@ -1,0 +1,34 @@
+{% extends 'admin.html' %}
+{% load static %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="card shadow-sm actividades_contrato" style="min-width: 450px;">
+        <div class="card-header bg-light border-bottom">
+            <h5 class="card-title text-center">Nueva Encargado</h5>
+        </div>
+        <div class="card-body">
+            <form id="form-editar-encargado-{{ encargado.id }}" method="post">
+                {% csrf_token %}
+                <div class="mb-2 input-group-sm">
+                    <label class="form-label m-1">Nombre</label>
+                    <input type="text" class="form-control m-0 nombre_encargado" name="nombre" required>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="text-start boton-guardar mt-2">
+                        <button type="submit" class="btn btn-success btn-guardar_epm" data-id-epm="{{ actividad.id }}">
+                            Guardar
+                        </button>
+                    </div>
+                    <div class="text-end mt-2">
+                        <a class="btn tabla_actividades btn-sm p-0 mx-3 color_primary" href="{% url 'index_admin' %}">
+                            <i class="fa fa-arrow-left m-0"><span class="mx-2 fw-bold">Regresar</span></i>
+                            <!-- Icono de Font Awesome -->
+                        </a>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

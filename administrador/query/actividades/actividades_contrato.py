@@ -33,6 +33,11 @@ def actividad_por_id(id):
 def encargados(request):
     return Encargado.objects.all()
 
+def crear_nuevo_encargado(request):
+            encargado= Encargado()
+            encargado= request.POST.get('nombre', encargado.nombre)
+            encargado.save()
+
 def actividades_epm(request):
     return Actividad_epm.objects.all()
 

@@ -12,7 +12,10 @@ def nuevo_encargado(request):
             return redirect('index_admin')
         except:
             return JsonResponse({'success': False, 'error': 'Encargado no guardado'})
-    return render(request, "nuevo_encargado.html", {'encargados':encargados(request)})
+    context = {
+    'encargados':encargados(request),
+     }
+    return render(request, "nuevo_encargado.html", context)
 
 def editar_encargado(request, encargado_id):
     if request.method == 'POST':

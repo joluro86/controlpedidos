@@ -256,11 +256,12 @@
     </div>
   </div>
 
-
-
   {% block content %}
-  <p class="text-center mt-4 text-primary fw-bold fs-2">Bienvenido {{ user.username }} a la app para la gestión de ANS
-    pendientes.</p>
+  <div class="main bug">
+    <p class="text-center py-4 text-primary fw-bold fs-2">Bienvenido {{ user.username }} a la app para la gestión de ANS
+      pendientes.</p>
+  </div>
+  
   {% endblock %}
 
   {% block js %}

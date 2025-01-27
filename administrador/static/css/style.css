@@ -45,8 +45,21 @@ select {
     padding: 5px;
 }
 
+
+body {
+    display: flex;
+    flex-direction: column; /* Apilar los hijos verticalmente */
+    height: 100vh; /* 100% del viewport */
+    margin: 0; /* Quitar márgenes por defecto */
+  }
+  
+  .header {
+    flex: 0 0 auto; /* La altura del navbar es fija */
+  }
+  
 .container-admin.card{
-    height: 100vh;
+    margin-bottom: 20px;
+    flex: 1 1 auto; /* Este div ocupará todo el espacio restante */
 }
 
 .bug{

@@ -25,13 +25,13 @@ def eliminar_actividad(id):
     actividad.delete()
 
 def actividades_contrato(request):
-    return Actividad.objects.all()
+    return Actividad.objects.all().order_by('nombre')
 
 def actividad_por_id(id):
        return Actividad.objects.get(id=id)
 
 def encargados(request):
-    return Encargado.objects.all()
+    return Encargado.objects.all().order_by('nombre')
 
 def crear_nuevo_encargado(request):
     if request.method == "POST":
@@ -52,7 +52,7 @@ def crear_nuevo_encargado(request):
         print("Error: La solicitud no es de tipo POST.")
 
 def actividades_epm(request):
-    return Actividad_epm.objects.all()
+    return Actividad_epm.objects.all().order_by('nombre')
 
 def encargado_por_id(id):
        return Encargado.objects.get(id=id)

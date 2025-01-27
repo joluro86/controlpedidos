@@ -5,12 +5,19 @@ from gestionvencimientos.models import Actividad, Encargado
 
 
 def index(request):
-    return render(request, "admin.html", {'actividades_contrato':actividades_contrato(request), 'actividades_epm':actividades_epm(request), 'encargados':encargados(request)})
+    context = {
+    'actividades_contrato':actividades_contrato(request), 
+    'actividades_epm':actividades_epm(request),
+    'encargados':encargados(request)
+    }
+    return render(request, "admin.html", context)
 
 def actividades_view(request): 
-    return render(request, 'administrador/actividades_list.html', {
-        'actividades_contrato': actividades_contrato(request), 'encargados': encargados(request),
-    })
+    context = {
+    'encargados':encargados(request),
+    'actividades_contrato': actividades_contrato(request),
+    }
+    return render(request, 'administrador/actividades_list.html', context)
 
 def nueva_actividad(request):
     if request.method == 'POST':
@@ -19,7 +26,10 @@ def nueva_actividad(request):
             return redirect('index_admin')
         except Encargado.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Encargado no encontrado'})
-    return render(request, "nueva_actividad.html", {'encargados':encargados(request)})
+    context = {
+    'encargados':encargados(request),
+     }
+    return render(request, "nueva_actividad.html", context)
 
 
 def editar_actividad(request, actividad_id):

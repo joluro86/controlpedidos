@@ -1,6 +1,9 @@
 
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
+from administrador.query.actividades.actividades_contrato import encargados, crear_nuevo_encargado, actualizar_encargado, eliminar_encargado_query
+from gestionvencimientos.models import Encargado
 
 def nuevo_encargado(request):
     if request.method == 'POST':
@@ -8,31 +11,19 @@ def nuevo_encargado(request):
             crear_nuevo_encargado(request)
             return redirect('index_admin')
         except:
-            return JsonResponse({'success': False, 'error': 'Encargado no encontrado'})
-    return render(request, "nueva_actividad.html", {'encargados':encargados(request)})
+            return JsonResponse({'success': False, 'error': 'Encargado no guardado'})
+    return render(request, "nuevo_encargado.html", {'encargados':encargados(request)})
 
-
-"""
-
-def encargados_view(request): 
-    return render(request, 'administrador/actividades_list.html', {
-        'actividades_contrato': actividades_contrato(request), 'encargados': encargados(request),
-    })
-
-
-
-def editar_actividad(request, actividad_id):
+def editar_encargado(request, encargado_id):
     if request.method == 'POST':
         try:
-            actualizar_actividad(request, actividad_id)
+            actualizar_encargado(request, encargado_id)
             return JsonResponse({'success': True})
-        except Actividad.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Actividad no encontrada'})
         except Encargado.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Encargado no encontrado'})
+        
     return JsonResponse({'success': False, 'error': 'Método no permitido'})
 
-def eliminar_actividad_por_id(request,id):
-    eliminar_actividad(id)
+def eliminar_encargado(request,id):
+    eliminar_encargado_query(id)
     return redirect('index_admin')
-"""

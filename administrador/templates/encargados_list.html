@@ -1,11 +1,11 @@
 <div class="admin_actividades">
-    <div class="card shadow-sm actividades_contrato" style="max-width: 500px;">
+    <div class="card shadow-sm actividades_contrato" style="max-width: 200px;">
         <div class="title_contrato">
             <h6 class="text-center m-2">Encargados</h6>
         </div>
 
         <div class="table-responsive">
-            <table class="table tabla_actividades m-0 text-center">
+            <table class="table tabla_actividades m-0">
                 <thead>
                     <tr style="font-size: 13px;">
                         <th>Nombre</th>    
@@ -14,14 +14,14 @@
                 <tbody>
                     {% for encargado in encargados %}
                     <tr>
-                        <td style="font-size: 11px;">
-                            <a href="#" class="text-decoration-none text-primary" data-bs-toggle="modal"
-                                data-bs-target="#editarActividadModal{{ actividad.id }}">
+                        <td style="font-size: 11px;" class="">
+                            <a href="#" class="text-decoration-none text-primary mx-2" data-bs-toggle="modal"
+                                data-bs-target="#editarEncargadoModal{{ encargado.id }}">
                                 {{ encargado.nombre }}
                             </a>
                     </tr>
                     <!-- Modal de edición dentro de la fila correspondiente -->
-                    {% include 'forms/form_editar_actividad.html' with encargados=encargados %}
+                    {% include 'forms/form_editar_encargado.html' with encargados=encargados %}
                     {% empty %}
                     <tr>
                         <td colspan="4" class="text-muted">No encargados registrados.</td>
@@ -32,7 +32,7 @@
         </div>
 
         <div class="card-footer p-0 text-end">
-            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'nueva_actividad_form' %}">
+            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'nueva_encargado_form' %}">
                 <i class="fa fa-plus m-0"></i> <!-- Icono de Font Awesome -->
             </a>
         </div>
@@ -41,17 +41,18 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll('.btn-guardar').forEach(button => {
+        document.querySelectorAll('.btn-guardar-encargado').forEach(button => {
             button.addEventListener('click', function (e) {
                 e.preventDefault();
-                let actividadId = this.getAttribute('data-id');
-                let form = document.querySelector(`#form-editar-actividad-${actividadId}`);
-
+                let encargadoId = this.getAttribute('data-id');
+                let form = document.querySelector(`#form-editar-encargado-${encargadoId}`);
+                console.log("id enc")
+                console.log(encargadoId)
                 let formData = new FormData(form);
 
                 let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-                fetch(`/administrador/editar-actividad/${actividadId}/`, {
+                fetch(`/administrador/editar-encargado/${encargadoId}/`, {
                     method: 'POST',
                     body: formData,
                     headers: {
@@ -62,13 +63,13 @@
                     .then(data => {
                         if (data.success) {
                             // Cerrar el modal antes de mostrar la alerta
-                            let modalElement = document.querySelector(`#editarActividadModal${actividadId}`);
+                            let modalElement = document.querySelector(`#editarEncargadoModal${encargadoId}`);
                             let modalInstance = bootstrap.Modal.getInstance(modalElement);
                             modalInstance.hide();
 
                             Swal.fire({
                                 title: 'Éxito',
-                                text: 'Actividad actualizada correctamente',
+                                text: 'Encargado actualizado correctamente',
                                 icon: 'success',
                                 confirmButtonText: 'OK'
                             }).then(() => {
@@ -86,7 +87,7 @@
                     .catch(error => {
                         Swal.fire({
                             title: 'Error',
-                            text: 'No se pudo actualizar la actividad',
+                            text: 'No se pudo actualizar...',
                             icon: 'error',
                             confirmButtonText: 'Cerrar'
                         });

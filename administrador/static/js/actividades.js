@@ -60,3 +60,34 @@ function eliminarActividadEpm(element) {
     });
 }
   
+
+// Confirmación para eliminar encargado
+function eliminarEncargado(element) {
+  let encargadoId = element.getAttribute("data-id");    
+  let url = `/administrador/eliminar-encargado/${encargadoId}/`;
+  console.log(url)
+  swal
+    .fire({
+      title: "¿Desea eliminar esta encargado? Esta acción no es revertible",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Sí, continuar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        Swal.fire({
+          title: 'Procesando...',
+          html: 'Por favor, espere...',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        window.location.href = url;
+      }
+    });
+}

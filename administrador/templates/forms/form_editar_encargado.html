@@ -1,0 +1,31 @@
+<div class="modal fade" id="editarEncargadoModal{{ encargado.id }}" tabindex="-1"
+    aria-labelledby="editarEncargadoLabel{{ encargado.id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarEncargadoLabel{{ encargado.id }}">Actualizar Encargado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-editar-encargado-{{ encargado.id }}" method="post">
+                    {% csrf_token %}
+                    <div class="mb-2 input-group-sm">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control nombre_encargado" name="nombre" value="{{ encargado.nombre }}">
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-success btn-guardar-encargado"
+                        data-id="{{ encargado.id }}">Guardar</button>
+                        <a class="btn tabla_actividades btn-sm p-0 mx-1 text-danger btn-eliminar" 
+                            data-id="{{ encargado.id }}"
+                            onclick="eliminarEncargado(this)"
+                            >
+                            <i class="fa fa-arrow-left mt-2"></i>
+                            <span class="fw-bold mx-2">Eliminar</span>
+                        </a>
+                    </div>                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

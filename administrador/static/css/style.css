@@ -45,6 +45,11 @@ select {
     padding: 5px;
 }
 
+.container-admin.card{
+    height: 100vh;
+}
+
 .bug{
-    background-color: red;
+    background-color: red !important; 
+    color: red !important;
 }

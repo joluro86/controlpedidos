@@ -2,9 +2,9 @@
 {% load static %}
 {% block content %}
 <div class="container d-flex justify-content-center align-items-center">
-    <div class="card shadow-sm actividades_contrato" style="min-width: 450px;">
+    <div class="card shadow-sm actividades_contrato" style="min-width: 400px;">
         <div class="card-header bg-light border-bottom">
-            <h5 class="card-title text-center">Nueva Encargado</h5>
+            <h5 class="card-title text-center">Nuevo Encargado</h5>
         </div>
         <div class="card-body">
             <form id="form-editar-encargado-{{ encargado.id }}" method="post">
@@ -15,7 +15,7 @@
                 </div>
                 <div class="d-flex justify-content-between">
                     <div class="text-start boton-guardar mt-2">
-                        <button type="submit" class="btn btn-success btn-guardar_epm" data-id-epm="{{ actividad.id }}">
+                        <button type="submit" class="btn btn-success btn-guardar_encargado" data-id-epm="{{ encargado.id }}">
                             Guardar
                         </button>
                     </div>

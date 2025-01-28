@@ -38,7 +38,11 @@
             </table>
         </div>
 
-        <div class="card-footer p-0 text-end">
+        <div class="card-footer p-0 d-flex">
+            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'nueva_actividad_form' %}">
+                <i class="fas fa-cloud-upload-alt"></i> <!-- Subida en la nube -->
+
+            </a>
             <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'nueva_actividad_form' %}">
                 <i class="fa fa-plus m-0"></i> <!-- Icono de Font Awesome -->
             </a>

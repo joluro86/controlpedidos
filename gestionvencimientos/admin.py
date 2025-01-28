@@ -66,5 +66,5 @@ admin.site.register(Ans, AnsAdmin)
 admin.site.register(Encargado, EncargadoAdmin)
 admin.site.register(Actividad, ActividadAdmin)
 admin.site.register(Actividad_epm, Actividad_epm_Admin )
-admin.site.register(MaterialSeleccionado, MaterialSeleccionadoAdmin)
+
     

@@ -19,38 +19,28 @@ def subirnominametro(request):
 
 
 def process_excel(file):
-
-    try:
-        
+    try:        
         wb = load_workbook(file)
         ws = wb[wb.sheetnames[0]]
-
         row_count = 0
-
         for row in ws.iter_rows():
-
             if row_count == 0:
                 row_count += 1
                 continue
-
             nomina_empleado = prenomina()
-
             nomina_empleado. centro_de_costos = row[0].value
             nomina_empleado. nombre_del_centro_de_costos = row[1].value
             nomina_empleado. empleado = row[2].value
             nomina_empleado. nombre_del_empleado = row[3].value
             nomina_empleado. turno = row[4].value
             nomina_empleado. descripción_del_turno = row[5].value
-
             nomina_empleado. concepto = row[6].value
-
             try:
                 nomina_empleado.conversor = buscar_conversor(row[6].value)
                 tipo_ingreso = Concepto.objects.filter(
                     concepto=row[6].value).first()
                 nomina_empleado. tipo = tipo_ingreso.tipo
                 nomina_empleado. factor = tipo_ingreso.factor
-
             except Exception as e:
                 novedad = Novedad_nomina()
                 novedad.empleado = nomina_empleado.empleado

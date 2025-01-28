@@ -8,13 +8,15 @@
             <table class="table tabla_actividades m-0">
                 <thead>
                     <tr style="font-size: 13px;">
-                        <th>Nombre</th>    
+                        <th class="text-center">Id</th>
+                        <th>Nombre</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for encargado in encargados %}
                     <tr>
-                        <td style="font-size: 11px;" class="">
+                        <td class="text-center">{{encargado.id}}</td>
+                        <td style="font-size: 11px;">
                             <a href="#" class="text-decoration-none text-primary mx-2" data-bs-toggle="modal"
                                 data-bs-target="#editarEncargadoModal{{ encargado.id }}">
                                 {{ encargado.nombre }}
@@ -31,9 +33,12 @@
             </table>
         </div>
 
-        <div class="card-footer p-0 text-end">
-            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'nueva_encargado_form' %}">
-                <i class="fa fa-plus m-0"></i> <!-- Icono de Font Awesome -->
+        <div class="card-footer p-0">
+            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'subir_masivo_encargados' %}">
+                <i class="fas fa-cloud-upload-alt icon-masivo-crear"></i> <!-- Subida en la nube -->
+            </a>
+            <a class="btn tabla_actividades btn-sm p-0" href="{% url 'nueva_encargado_form' %}">
+                <i class="fa fa-plus m-0 icon-masivo-crear"></i> <!-- Icono de Font Awesome -->
             </a>
         </div>
     </div>

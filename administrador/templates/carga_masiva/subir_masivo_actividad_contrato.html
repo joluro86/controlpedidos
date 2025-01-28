@@ -1,0 +1,28 @@
+{% extends 'admin.html' %}
+{% load static %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="card shadow-sm carga-masiva" style="min-width: 450px;">
+        <div class="card-header bg-light border-bottom">
+            <h5 class="card-title text-center">Carga Masiva de Actividades de Contrato</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="file" class="form-label">Seleccionar archivo</label>
+                    <input type="file" id="file" name="file" class="form-control" required>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success">
+                        Subir Archivo
+                    </button>
+                    <a class="btn btn-sm p-0 mx-3 color_primary" href="{% url 'index_admin' %}">
+                        <i class="fa fa-arrow-left m-0"><span class="mx-2 fw-bold">Regresar</span></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

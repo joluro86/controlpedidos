@@ -37,19 +37,16 @@
                 </tbody>
             </table>
         </div>
-
-        <div class="card-footer p-0 d-flex">
-            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'nueva_actividad_form' %}">
-                <i class="fas fa-cloud-upload-alt"></i> <!-- Subida en la nube -->
-
+        <div class="card-footer p-0 d-flex list-masivo-actividad-contrato">
+            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'subir_masivo_actividad_contrato' %}">
+                <i class="fas fa-cloud-upload-alt icon-masivo-crear"></i> <!-- Subida en la nube -->
             </a>
-            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'nueva_actividad_form' %}">
-                <i class="fa fa-plus m-0"></i> <!-- Icono de Font Awesome -->
-            </a>
+            <a class="btn tabla_actividades btn-sm p-0" href="{% url 'nueva_actividad_form' %}">
+                <i class="fa fa-plus m-0 icon-masivo-crear"></i> <!-- Icono de Font Awesome -->
+            </a>            
         </div>
     </div>
 </div>
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll('.btn-guardar').forEach(button => {

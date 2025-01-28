@@ -3,6 +3,7 @@ from bonificaciones.models import *
 from import_export.admin import ImportExportModelAdmin 
 from import_export import resources
 
+"""
 class PedidoBoniPerseo_Admin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('pedido','actividad','instalador','fecha','codigo','cantidad','valor','total','acta', 'descuento_de_fenix')
     class Meta:
@@ -32,3 +33,4 @@ class NovedadBonificacionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     class Meta:
         model = NovedadBonificacion
 admin.site.register(NovedadBonificacion, NovedadBonificacionAdmin )
+"""

@@ -1,8 +1,9 @@
-from django.contrib import admin
 from django.urls import path
 from administrador.views import index, editar_actividad, nueva_actividad, eliminar_actividad_por_id
 from administrador.views_epm import nueva_actividad_epm, editar_actividad_epm, eliminar_actividad_por_id_epm
 from administrador.views_encargado import editar_encargado, nuevo_encargado, eliminar_encargado
+from administrador.views_masivo import subir_masivo_actividad_contrato, subir_masivo_actividad_epm, subir_masivo_encargados
+
 urlpatterns = [
     path('new_admin/', index, name="index_admin"),
     path('editar-actividad/<int:actividad_id>/', editar_actividad, name='editar_actividad'), 
@@ -16,5 +17,9 @@ urlpatterns = [
     path('nuevo_encargado/', nuevo_encargado, name='nueva_encargado_form'),
     path('editar-encargado/<int:encargado_id>/', editar_encargado, name='editar_encargado'),
     path('eliminar-encargado/<int:id>/', eliminar_encargado, name='eliminar_encargado'),
+    
+    path('masivo-actividad-contrato/', subir_masivo_actividad_contrato, name='subir_masivo_actividad_contrato'),
+    path('masivo-actividad-epm/', subir_masivo_actividad_epm, name='subir_masivo_actividad_epm'),
+    path('masivo-actividad-encargados/', subir_masivo_encargados, name='subir_masivo_encargados'),    
     ]
 

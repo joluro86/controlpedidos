@@ -2,7 +2,7 @@ from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin 
 from import_export import resources
 from material_oficiales.models import *
-
+""""
 class StockBuscarResource(resources.ModelResource):
     class Meta:
         model = Stock
@@ -83,3 +83,4 @@ admin.site.register(Despacho, DespachoAdmin)
 admin.site.register(Material_utilizado_perseo, Material_utilizado_perseo_Admin)
 admin.site.register(Liquidacion_acta_epm, Liquidacion_acta_epm_Admin)
 admin.site.register(Reintegro, ReintegroAdmin)
+"""

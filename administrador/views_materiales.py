@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect
 from openpyxl import load_workbook
 from gestionvencimientos.models import Actividad, Actividad_epm, Encargado
+from analisis_acta.models import Materiales
 
 def materiales_permitidos_list(request):
-    
-    return render(request, "materiales_permitidos_list.html")
+    context={
+        'materiales_permitidos': Materiales.objects.all()
+    }
+    print(context)
+    print("aqui")
+    return render(request, "materiales_permitidos_list.html", context)
     
     
 def subir_masivo_materiales_contrato(request):

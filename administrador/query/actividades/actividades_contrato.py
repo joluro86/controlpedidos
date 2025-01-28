@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from analisis_acta.models import Materiales
 from gestionvencimientos.models import Actividad, Actividad_epm, Encargado
 
 def crear_nueva_actividad(request):
@@ -70,3 +71,7 @@ def actualizar_encargado(request, encargado_id):
 def eliminar_encargado_query(id):
     encargado = get_object_or_404(Encargado, id=id)
     encargado.delete()
+    
+    
+def materiales(request):
+    return Materiales.objects.all()

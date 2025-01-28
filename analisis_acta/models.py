@@ -55,7 +55,6 @@ class Acta(models.Model):
         return str(self.pedido)
 
 class Materiales(models.Model):
-
     material = models.CharField(max_length=100, default=0, null=True)
     
     class Meta:

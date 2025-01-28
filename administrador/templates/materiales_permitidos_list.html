@@ -1,51 +1,47 @@
-<div class="d-flex admin_actividades">
-    <div class="card shadow-sm actividades_contrato" style="max-width: 500px; min-width: 250px;">
-        <div class="title_contrato">
-            <h6 class="text-center m-2">Materiales permitidos Contrato</h6>
+    <div class="card shadow-sm mx-auto p-3">
+        <div class="d-flex justify-content-between align-items-center border p-3 mb-2">
+            <h6 class="mx-auto">Materiales permitidos Contrato</h6>
+            <div class="ms-auto">
+                <a class="btn btn-sm p-0" href="{% url 'subir_masivo_actividad_epm' %}">
+                    <i class="fas fa-cloud-upload-alt icon-masivo-crear"></i> <!-- Subida en la nube -->
+                </a>
+                <a class="btn    btn-sm p-0 mx-3" href="{% url 'nueva_actividad_epm_form' %}">
+                    <i class="fa fa-plus m-0 icon-masivo-crear"></i> <!-- Icono de Font Awesome -->
+                </a>
+            </div>
         </div>
 
-        <div class="table-responsive">
-            <table class="table tabla_actividades m-0 text-center">
-                <thead>
-                    <tr style="font-size: 13px;">
-                        <th>Actividad</th>
-                        <th>Urbano</th>
-                        <th>Rural</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for actividad in actividades_epm %}
-                    <tr>
-                        <td style="font-size: 11px;">
-                            <a href="#" class="text-decoration-none text-primary" data-bs-toggle="modal"
-                                data-bs-target="#editarActividadEpmModal{{ actividad.id }}">
-                                {{ actividad.nombre }}
-                            </a>
-                        </td>
-                        <td>{{ actividad.dias_urbano }}</td>
-                        <td>{{ actividad.dias_rural }}</td>
-                    </tr>
-                    <!-- Modal de edición dentro de la fila correspondiente -->
-                    {% include 'forms/form_editar_actividad_epm.html' with encargados=encargados %}
-                    {% empty %}
-                    <tr>
-                        <td colspan="4" class="text-muted">No hay actividades registradas.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="card-footer p-0 d-flex">
-            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'subir_masivo_actividad_epm' %}">
-                <i class="fas fa-cloud-upload-alt icon-masivo-crear"></i> <!-- Subida en la nube -->
-            </a>
-            <a class="btn tabla_actividades btn-sm p-0" href="{% url 'nueva_actividad_epm_form' %}">
-                <i class="fa fa-plus m-0 icon-masivo-crear"></i> <!-- Icono de Font Awesome -->
-            </a>
+        <div class="container-fluid">
+            <div class="table-responsive">
+                <table class="table text-center mx-2" id="table_id">
+                    <thead>
+                        <tr style="font-size: 13px;">
+                            <th>Id</th>
+                            <th>Descripción</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for material in materiales_permitidos %}
+                        <tr>
+                            <td style="font-size: 11px;">
+                                {{material.id}}
+                            </td>
+                            <td>{{ material.material }}</td>
+                            <td>Editar Eliminar</td>
+                        </tr>
+                        <!-- Modal de edición dentro de la fila correspondiente -->
+                        {% include 'forms/form_editar_actividad_epm.html' with encargados=encargados %}
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-muted">No hay actividades registradas.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -101,6 +97,21 @@
                         });
                     });
             });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#table_id").DataTable({
+            order: [[1, "asc"]],
+
+            dom: "Bfrtil",
+
+            lengthMenu: [
+                [15, 30, 50, -1],
+                ['15', '30', '50', 'Todos']
+            ],
         });
     });
 </script>

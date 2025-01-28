@@ -4,47 +4,45 @@
 {% block content %}
 <div class="card mt-3 container container-admin py-0 py-4 px-4">
     <div class="row">
-        <div class="col-4">
-            <div class="list-group" id="list-tab" role="tablist">
-                <h6>Control Ans</h6>
-                <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list"
-                    href="#list-home" role="tab" aria-controls="home">Actividades</a>
-                <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list"
-                    href="#list-profile" role="tab" aria-controls="profile">Encargados</a>
-                <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list"
-                    href="#list-messages" role="tab" aria-controls="messages">Messages</a>
-                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list"
-                    href="#list-settings" role="tab" aria-controls="settings">Settings</a>
+        <div class="col-3">
+            <div class="">
+                <div class="list-group" id="list-tab" role="tablist">
+                    <h6>Control Ans</h6>
+                    <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list"
+                        href="#list-home" role="tab" aria-controls="home">Actividades</a>
+                    <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list"
+                        href="#list-profile" role="tab" aria-controls="profile">Encargados</a>
+
+                    <h6 class="mb-2 mt-3 ">Revisión Acta</h6>
+                    <a class="list-group-item list-group-item-action" id="list-home-list2" data-toggle="list"
+                        href="#list-home2" role="tab" aria-controls="home">Materiales permitidos</a>
+                    <a class="list-group-item list-group-item-action" id="list-profile-list2" data-toggle="list"
+                        href="#list-profile2" role="tab" aria-controls="profile">Reglas</a>
+                    <h6 class="mb-2 mt-3 ">Menu 3</h6>
+                    <a class="list-group-item list-group-item-action" id="list-home-list2" data-toggle="list"
+                        href="#list-home2" role="tab" aria-controls="home">Materiales permitidos</a>
+                    <a class="list-group-item list-group-item-action" id="list-profile-list2" data-toggle="list"
+                        href="#list-profile2" role="tab" aria-controls="profile">Reglas</a>
+                    <h6 class="mb-2 mt-3 ">Menu 4</h6>
+                    <a class="list-group-item list-group-item-action" id="list-home-list2" data-toggle="list"
+                        href="#list-home2" role="tab" aria-controls="home">Materiales permitidos</a>
+                    <a class="list-group-item list-group-item-action" id="list-profile-list2" data-toggle="list"
+                        href="#list-profile2" role="tab" aria-controls="profile">Reglas</a>
+                </div>
             </div>
         </div>
-        <div class="col-4">
-            <div class="list-group" id="list-tab" role="tablist">
-                <h6>Control Ans</h6>
-                <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list"
-                    href="#list-home" role="tab" aria-controls="home">Actividades</a>
-                <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list"
-                    href="#list-profile" role="tab" aria-controls="profile">Encargados</a>
-                <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list"
-                    href="#list-messages" role="tab" aria-controls="messages">Messages</a>
-                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list"
-                    href="#list-settings" role="tab" aria-controls="settings">Settings</a>
-            </div>
-        </div>
-        <div class="col-8">
+        <div class="col-8 my-4">
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
-                    <div class="d-flex align-items-start gap-4 mx-4" id="list-home"
-                        role="tabpanel" aria-labelledby="list-home-list">
+                    <div class="d-flex align-items-start gap-4 mx-4" id="list-home" role="tabpanel"
+                        aria-labelledby="list-home-list">
                         {% include 'actividades_list.html' %}
                         {% include 'actividades_list_epm.html' %}
                     </div>
                 </div>
-                <div class="tab-pane fade gap-4 mx-4" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+                <div class="tab-pane fade gap-4 mx-4" id="list-profile" role="tabpanel"
+                    aria-labelledby="list-profile-list">
                     {% include 'encargados_list.html' %}
-                </div>
-                <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">3
-                </div>
-                <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">4
                 </div>
             </div>
         </div>

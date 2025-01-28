@@ -3,6 +3,7 @@ from administrador.views import index, editar_actividad, nueva_actividad, elimin
 from administrador.views_epm import nueva_actividad_epm, editar_actividad_epm, eliminar_actividad_por_id_epm
 from administrador.views_encargado import editar_encargado, nuevo_encargado, eliminar_encargado
 from administrador.views_masivo import subir_masivo_actividad_contrato, subir_masivo_actividad_epm, subir_masivo_encargados
+from administrador.views_materiales import materiales_permitidos_list
 
 urlpatterns = [
     path('new_admin/', index, name="index_admin"),
@@ -20,6 +21,8 @@ urlpatterns = [
     
     path('masivo-actividad-contrato/', subir_masivo_actividad_contrato, name='subir_masivo_actividad_contrato'),
     path('masivo-actividad-epm/', subir_masivo_actividad_epm, name='subir_masivo_actividad_epm'),
-    path('masivo-actividad-encargados/', subir_masivo_encargados, name='subir_masivo_encargados'),    
+    path('masivo-actividad-encargados/', subir_masivo_encargados, name='subir_masivo_encargados'),  
+    
+    path('materiales-revision-acta/', materiales_permitidos_list, name='materiales_permitidos_list'),    
     ]
 

@@ -1,117 +1,56 @@
-    <div class="card shadow-sm mx-auto p-3">
-        <div class="d-flex justify-content-between align-items-center border p-3 mb-2">
-            <h6 class="mx-auto">Materiales permitidos Contrato</h6>
-            <div class="ms-auto">
-                <a class="btn btn-sm p-0" href="{% url 'subir_masivo_actividad_epm' %}">
-                    <i class="fas fa-cloud-upload-alt icon-masivo-crear"></i> <!-- Subida en la nube -->
-                </a>
-                <a class="btn    btn-sm p-0 mx-3" href="{% url 'nueva_actividad_epm_form' %}">
-                    <i class="fa fa-plus m-0 icon-masivo-crear"></i> <!-- Icono de Font Awesome -->
-                </a>
-            </div>
-        </div>
-
-        <div class="container-fluid">
-            <div class="table-responsive">
-                <table class="table text-center mx-2" id="table_id">
-                    <thead>
-                        <tr style="font-size: 13px;">
-                            <th>Id</th>
-                            <th>Descripción</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for material in materiales_permitidos %}
-                        <tr>
-                            <td style="font-size: 11px;">
-                                {{material.id}}
-                            </td>
-                            <td>{{ material.material }}</td>
-                            <td>Editar Eliminar</td>
-                        </tr>
-                        <!-- Modal de edición dentro de la fila correspondiente -->
-                        {% include 'forms/form_editar_actividad_epm.html' with encargados=encargados %}
-                        {% empty %}
-                        <tr>
-                            <td colspan="4" class="text-muted">No hay actividades registradas.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+<div class="card shadow-sm mx-auto p-3 card-materiales-permitidos">
+    <div class="d-flex justify-content-between align-items-center border p-1">
+        <h6 class="mx-auto m-0">Materiales permitidos Contrato</h6>
+        <div class="ms-auto">
+            <a class="btn btn-sm" href="{% url 'subir_masivo_actividad_epm' %}">
+                <i class="fas fa-cloud-upload-alt icon-masivo-crear"></i>
+            </a>
+            <a class="btn btn-sm" href="{% url 'nueva_actividad_epm_form' %}">
+                <i class="fa fa-plus icon-masivo-crear"></i>
+            </a>
         </div>
     </div>
 
+    <!-- Campo de búsqueda -->
+    <div class="p-2">
+        <input type="text" id="buscarMaterial" class="form-control form-control-sm" placeholder="Buscar material...">
+    </div>
+
+    <div class="">
+        <table class="table text-center mx-2">
+            <thead>
+                <tr style="font-size: 13px;">
+                    <th>Id</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaMateriales">
+                {% for material in materiales_permitidos %}
+                <tr style="font-size: 10px !important;">
+                    <td>{{ material.id }}</td>
+                    <td class="material-nombre">{{ material.material }}</td>
+                    <td>Editar Eliminar</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-muted">No hay actividades registradas.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Script para buscar dinámicamente -->
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll('.btn-guardar-epm').forEach(button => {
-            button.addEventListener('click', function (e) {
-                e.preventDefault();
-                let actividadId = this.getAttribute('data-id');
-                console.log(actividadId)
-                let form = document.querySelector(`#form-editar-actividad-epm-${actividadId}`);
+    document.getElementById("buscarMaterial").addEventListener("keyup", function() {
+        let filtro = this.value.toLowerCase();
+        let filas = document.querySelectorAll("#tablaMateriales tr");
 
-                let formData = new FormData(form);
-
-                let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-                fetch(`/administrador/editar-actividad-epm/${actividadId}/`, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRFToken': csrfToken
-                    }
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Cerrar el modal antes de mostrar la alerta
-                            let modalElement = document.querySelector(`#editarActividadEpmModal${actividadId}`);
-                            let modalInstance = bootstrap.Modal.getInstance(modalElement);
-                            modalInstance.hide();
-
-                            Swal.fire({
-                                title: 'Éxito',
-                                text: 'Actividad actualizada correctamente',
-                                icon: 'success',
-                                confirmButtonText: 'OK'
-                            }).then(() => {
-                                location.reload();  // Recargar la página para reflejar los cambios
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Error',
-                                text: data.error || 'Hubo un problema al actualizar epm.',
-                                icon: 'error',
-                                confirmButtonText: 'Cerrar'
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        Swal.fire({
-                            title: 'Error',
-                            text: 'No se pudo actualizar la actividad',
-                            icon: 'error',
-                            confirmButtonText: 'Cerrar'
-                        });
-                    });
-            });
-        });
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        $("#table_id").DataTable({
-            order: [[1, "asc"]],
-
-            dom: "Bfrtil",
-
-            lengthMenu: [
-                [15, 30, 50, -1],
-                ['15', '30', '50', 'Todos']
-            ],
+        filas.forEach(fila => {
+            let material = fila.querySelector(".material-nombre").textContent.toLowerCase();
+            fila.style.display = material.includes(filtro) ? "" : "none";
         });
     });
 </script>

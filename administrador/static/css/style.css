@@ -62,8 +62,25 @@ body {
     flex: 1 1 auto; /* Este div ocupará todo el espacio restante */
 }
 
+
+.card-materiales-permitidos .dataTables_filter{
+    background-color: aqua;
+    margin: 0px;
+
+}
+
 .bug{
     background-color: red !important; 
+    color: red !important;
+}
+
+.bug-2{
+    background-color: rgb(88, 36, 209) !important; 
+    color: red !important;
+}
+
+.bug-3{
+    background-color: rgb(220, 210, 27) !important; 
     color: red !important;
 }
 
@@ -75,4 +92,17 @@ body {
 
 .icon-masivo-crear{
     color: #028e6d;
+}
+
+.dataTables_wrapper .dataTables_filter {
+    float: right !important;
+    text-align: right;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    width: 200px;
+    margin-left: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 5px;
 }

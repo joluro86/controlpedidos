@@ -18,7 +18,7 @@
                     <tr>
                         <td style="font-size: 11px;">
                             <a href="#" class="text-decoration-none text-primary" data-bs-toggle="modal"
-                                data-bs-target="#editarActividadEpmModal{{ actividad.id }}">
+                                data-bs-target="#editarActividadEpmModal{{ actividad.id }}" title="Pulse para editar">
                                 {{ actividad.nombre }}
                             </a>
                         </td>
@@ -37,10 +37,10 @@
         </div>
 
         <div class="card-footer p-0 d-flex">
-            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'subir_masivo_actividad_epm' %}">
+            <a class="btn tabla_actividades btn-sm p-0 mx-3" title="Carga masiva actividades Epm" href="{% url 'subir_masivo_actividad_epm' %}">
                 <i class="fas fa-cloud-upload-alt icon-masivo-crear"></i> <!-- Subida en la nube -->
             </a>
-            <a class="btn tabla_actividades btn-sm p-0" href="{% url 'nueva_actividad_epm_form' %}">
+            <a class="btn tabla_actividades btn-sm p-0" title="Crear una nueva actividad Epm" href="{% url 'nueva_actividad_epm_form' %}">
                 <i class="fa fa-plus m-0 icon-masivo-crear"></i> <!-- Icono de Font Awesome -->
             </a>
         </div>

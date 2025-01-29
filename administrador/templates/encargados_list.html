@@ -18,7 +18,7 @@
                         <td class="text-center">{{encargado.id}}</td>
                         <td style="font-size: 11px;">
                             <a href="#" class="text-decoration-none text-primary mx-2" data-bs-toggle="modal"
-                                data-bs-target="#editarEncargadoModal{{ encargado.id }}">
+                                data-bs-target="#editarEncargadoModal{{ encargado.id }}" title="Pulse para editar">
                                 {{ encargado.nombre }}
                             </a>
                     </tr>
@@ -34,10 +34,10 @@
         </div>
 
         <div class="card-footer p-0">
-            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'subir_masivo_encargados' %}">
+            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'subir_masivo_encargados' %}" title="Carga masiva de encargados">
                 <i class="fas fa-cloud-upload-alt icon-masivo-crear"></i> <!-- Subida en la nube -->
             </a>
-            <a class="btn tabla_actividades btn-sm p-0" href="{% url 'nueva_encargado_form' %}">
+            <a class="btn tabla_actividades btn-sm p-0" href="{% url 'nueva_encargado_form' %}" title="Crear nuevo encargado">
                 <i class="fa fa-plus m-0 icon-masivo-crear"></i> <!-- Icono de Font Awesome -->
             </a>
         </div>

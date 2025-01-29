@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from openpyxl import load_workbook
 from gestionvencimientos.models import Actividad, Encargado
 from analisis_acta.models import Materiales
-from administrador.query.actividades.actividades_contrato import crear_nuevo_material
+from administrador.query.actividades.actividades_contrato import crear_nuevo_material, eliminar_material
 
 def materiales_permitidos_list(request):
     context={
@@ -48,3 +48,6 @@ def process_excel_materiales_contrato(file):
     except Exception as e:
         print(e)
 
+def eliminar_material_contrato(request, id):
+    eliminar_material(id)
+    return redirect('index_admin')

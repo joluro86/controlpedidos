@@ -91,3 +91,35 @@ function eliminarEncargado(element) {
       }
     });
 }
+
+
+// Confirmación para eliminar material contrato
+function eliminarMaterialContrato(element) {
+  let materialId = element.getAttribute("data-id");    
+  let url = `/administrador/eliminar-material-contrato/${materialId}/`;
+  console.log(element.getAttribute("idd"))
+  swal
+    .fire({
+      title: "¿Desea eliminar esta material? Esta acción no es revertible",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Sí, continuar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        Swal.fire({
+          title: 'Procesando...',
+          html: 'Por favor, espere...',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        window.location.href = url;
+      }
+    });
+}

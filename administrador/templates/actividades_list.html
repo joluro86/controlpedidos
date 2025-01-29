@@ -19,7 +19,7 @@
                     <tr>
                         <td style="font-size: 11px;">
                             <a href="#" class="text-decoration-none text-primary" data-bs-toggle="modal"
-                                data-bs-target="#editarActividadModal{{ actividad.id }}">
+                                data-bs-target="#editarActividadModal{{ actividad.id }}" title="Pulse para editar">
                                 {{ actividad.nombre }}
                             </a>
                         </td>
@@ -38,10 +38,10 @@
             </table>
         </div>
         <div class="card-footer p-0 d-flex list-masivo-actividad-contrato">
-            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'subir_masivo_actividad_contrato' %}">
+            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'subir_masivo_actividad_contrato' %}" title="Carga masiva actividades del contrato">
                 <i class="fas fa-cloud-upload-alt icon-masivo-crear"></i> <!-- Subida en la nube -->
             </a>
-            <a class="btn tabla_actividades btn-sm p-0" href="{% url 'nueva_actividad_form' %}">
+            <a class="btn tabla_actividades btn-sm p-0" href="{% url 'nueva_actividad_form' %}" title="Crear nueva actividad del contrato">
                 <i class="fa fa-plus m-0 icon-masivo-crear"></i> <!-- Icono de Font Awesome -->
             </a>            
         </div>

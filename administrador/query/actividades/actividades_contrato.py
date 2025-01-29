@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from analisis_acta.models import Materiales
 from gestionvencimientos.models import Actividad, Actividad_epm, Encargado
-from django.contrib import messages
+from django.http import JsonResponse
 
 def crear_nueva_actividad(request):
             actividad = Actividad()
@@ -75,9 +75,8 @@ def eliminar_encargado_query(id):
     
     
 def materiales(request):
-    return Materiales.objects.all()
+    return Materiales.objects.all().order_by("material")
 
-from django.http import JsonResponse
 
 def crear_nuevo_material(request):
     if request.method == 'POST':
@@ -97,3 +96,7 @@ def crear_nuevo_material(request):
             return JsonResponse({'success': False, 'message': f"Error al guardar: {str(e)}"})
 
     return JsonResponse({'success': False, 'message': "Método no permitido."})
+
+def eliminar_material(id):
+    material = get_object_or_404(Materiales, id=id)
+    material.delete()

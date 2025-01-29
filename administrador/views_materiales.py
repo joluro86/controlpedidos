@@ -1,16 +1,21 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from openpyxl import load_workbook
-from gestionvencimientos.models import Actividad, Actividad_epm, Encargado
+from gestionvencimientos.models import Actividad, Encargado
 from analisis_acta.models import Materiales
+from administrador.query.actividades.actividades_contrato import crear_nuevo_material
 
 def materiales_permitidos_list(request):
     context={
         'materiales_permitidos': Materiales.objects.all()
     }
-    print(context)
-    print("aqui")
     return render(request, "materiales_permitidos_list.html", context)
-    
+
+def nuevo_material(request):
+    if request.method == 'POST':
+        return crear_nuevo_material(request)  # Devolver el JsonResponse directamente    
+    return render(request, "nuevo_material.html")
+
     
 def subir_masivo_materiales_contrato(request):
     try:
@@ -20,7 +25,7 @@ def subir_masivo_materiales_contrato(request):
             return redirect('index_admin')
     except Exception as e:
         print(e)
-    return render(request, 'carga_masiva/subir_masivo_actividad_contrato.html') 
+    return render(request, 'carga_masiva/subir_masivo_materiales_contrato.html') 
 
 
 def process_excel_materiales_contrato(file):
@@ -33,13 +38,10 @@ def process_excel_materiales_contrato(file):
             if row_count == 0:
                 row_count += 1
                 continue
-            actividad_contrato = Actividad()
-            actividad_contrato.id = row[0].value
-            actividad_contrato.nombre = row[1].value
-            actividad_contrato.dias_urbano = row[2].value
-            actividad_contrato.dias_rural = row[3].value
-            actividad_contrato.encargado = Encargado.objects.get(id=row[4].value)
-            actividad_contrato.save()
+            materiale = Materiales()
+            materiale.id = row[0].value
+            materiale.material = row[1].value
+            materiale.save()
 
             row_count += 1
             

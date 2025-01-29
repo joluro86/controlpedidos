@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from analisis_acta.models import Materiales
 from gestionvencimientos.models import Actividad, Actividad_epm, Encargado
+from django.contrib import messages
 
 def crear_nueva_actividad(request):
             actividad = Actividad()
@@ -75,3 +76,24 @@ def eliminar_encargado_query(id):
     
 def materiales(request):
     return Materiales.objects.all()
+
+from django.http import JsonResponse
+
+def crear_nuevo_material(request):
+    if request.method == 'POST':
+        mat = request.POST.get('material', None)
+
+        if not mat:
+            return JsonResponse({'success': False, 'message': "Error: No se proporcionó un nombre válido."})
+
+        if Materiales.objects.filter(material=mat).exists():
+            return JsonResponse({'success': False, 'message': f"El material '{mat}' ya existe."})
+
+        try:
+            material = Materiales(material=mat)
+            material.save()
+            return JsonResponse({'success': True, 'message': f"Material '{mat}' guardado exitosamente."})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': f"Error al guardar: {str(e)}"})
+
+    return JsonResponse({'success': False, 'message': "Método no permitido."})

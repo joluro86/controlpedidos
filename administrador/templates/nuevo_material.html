@@ -1,0 +1,78 @@
+{% extends 'admin.html' %}
+{% load static %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="card shadow-sm actividades_contrato" style="min-width: 450px;">
+        <div class="card-header bg-light border-bottom">
+            <h5 class="card-title text-center">Nuevo Material</h5>
+        </div>
+        <div class="card-body">
+            <form id="formNuevoMaterial" method="post">
+                {% csrf_token %}
+                <div class="mb-2 input-group-sm">
+                    <label class="form-label m-1">Descripción</label>
+                    <input type="text" class="form-control m-0 nombre_encargado" name="material" autofocus required>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="text-start boton-guardar mt-2">
+                        <button type="submit" class="btn btn-success btn-guardar" data-id="{{ material.id }}">
+                            Guardar
+                        </button>
+                    </div>
+                    <div class="text-end mt-2">
+                        <a class="btn tabla_actividades btn-sm p-0 mx-3 color_primary" href="{% url 'index_admin' %}">
+                            <i class="fa fa-arrow-left m-0"><span class="mx-2 fw-bold">Regresar</span></i>
+                            <!-- Icono de Font Awesome -->
+                        </a>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("formNuevoMaterial").addEventListener("submit", function (event) {
+        event.preventDefault(); // Evita la recarga
+
+        let formData = new FormData(this);
+
+        fetch("{% url 'nueva_material_form' %}", {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: "¡Éxito!",
+                        text: data.message,
+                        icon: "success",
+                        confirmButtonText: "OK"
+                    }).then(() => {
+                        location.reload(); // Recargar la página para ver los cambios
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Error",
+                        text: data.message,
+                        icon: "error",
+                        confirmButtonText: "Cerrar"
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: "Error",
+                    text: "No fue posible guardar la información. Revisar si material ya existe.",
+                    icon: "error",
+                    confirmButtonText: "Cerrar"
+                });
+            });
+    });
+</script>
+
+{% endblock content %}

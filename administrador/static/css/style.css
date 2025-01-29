@@ -106,3 +106,8 @@ body {
     border: 1px solid #ccc;
     padding: 5px;
 }
+
+.dataTables_wrapper .col-sm-12 .col-md-5{
+    background-color: red !important;
+    height: 30px !important;
+}

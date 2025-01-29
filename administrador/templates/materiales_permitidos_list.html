@@ -14,7 +14,7 @@
     <!-- Campo de búsqueda -->
     <div class="p-2">
         <input type="text" id="buscarMaterial" class="form-control form-control-sm" placeholder="Buscar material...">
-    </div>    
+    </div>
 
     <div class="">
         <table class="table text-center mx-2">
@@ -27,10 +27,21 @@
             </thead>
             <tbody id="tablaMateriales">
                 {% for material in materiales_permitidos %}
-                <tr style="font-size: 10px !important;">
+                <tr style="font-size: 10px !important;" class="text-center align-middle">
                     <td>{{ material.id }}</td>
                     <td class="material-nombre">{{ material.material }}</td>
-                    <td>Editar Eliminar</td>
+                    <td class="d-flex justify-content-center align-items-center gap-2 p-1">
+                        <!-- Botón Editar -->
+                        <a href="#" class="btn btn-outline-primary btn-sm p-0 " data-bs-toggle="tooltip" title="Editar">
+                            <i class="fa-regular fa-pen-to-square fa-xs p-1"></i> <!-- fa-xs o fa-sm -->
+                        </a>
+                    
+                        <!-- Botón Eliminar -->
+                        <a href="#" class="btn btn-outline-danger btn-sm p-0" data-bs-toggle="tooltip" title="Eliminar">
+                            <i class="fa-solid fa-trash-can fa-xs p-1"></i> <!-- fa-xs o fa-sm -->
+                        </a>
+                    </td>
+                    
                 </tr>
                 {% empty %}
                 <tr>
@@ -44,7 +55,7 @@
 
 <!-- Script para buscar dinámicamente -->
 <script>
-    document.getElementById("buscarMaterial").addEventListener("keyup", function() {
+    document.getElementById("buscarMaterial").addEventListener("keyup", function () {
         let filtro = this.value.toLowerCase();
         let filas = document.querySelectorAll("#tablaMateriales tr");
 
@@ -54,4 +65,3 @@
         });
     });
 </script>
-

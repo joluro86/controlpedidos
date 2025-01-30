@@ -47,13 +47,20 @@
   <div class="header" id="sub-header">
     <ul class="nav box-index">
       <li class="nav-item" id="inicio">
+        <a class="nav-link" href="{% url 'home' %}">
+          <div class="d-flex align-items-center">
+            {% if user.userprofile.avatar %}
+            <img src="{{ user.userprofile.avatar.url }}" alt="Foto de perfil" class="rounded-circle" width="30"
+              height="30">
+            {% endif %}
+          </div>
+        </a>
+      </li>
+      <li class="nav-item" id="inicio">
         <a class="nav-link" href="{% url 'home' %}">Inicio</a>
       </li>
       <li class="nav-item" id="inicio">
-        <a class="nav-link" href="{% url 'index_admin' %}">New admin</a>
-      </li>
-      <li class="nav-item" id="inicio">
-        <a class="nav-link" href="/admin" target="blank">Admin</a>
+        <a class="nav-link" href="{% url 'index_admin' %}">Ajustes</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
@@ -255,10 +262,30 @@
   </div>
 
   {% block content %}
-  <div class="main bug">
-    <p class="text-center py-4 text-primary fw-bold fs-2">Bienvenido {{ user.username }} a la app para la gestión de ANS
-      pendientes.</p>
+  <div class="main">
+    <div class="container py-5">
+      <!-- Alerta de bienvenida -->
+      <div class="alert alert-primary text-center py-4 my-4 rounded-3 shadow-sm">
+        <h2 class="fw-bold mb-0">👋 ¡Bienvenido(a), {{ user.username }}!</h2>
+        <p class="fs-5 mt-2">Gestiona fácilmente los ANS de las actividades del contrato y mantén el control de tus procesos.</p>
+      </div>
+
+      <!-- Sección de foto de perfil -->
+      <div class="text-center">
+        {% if user.userprofile.avatar %}
+        <div class="d-flex justify-content-center mb-4">
+          <img src="{{ user.userprofile.avatar.url }}" alt="Foto de perfil" class="rounded-circle" width="120"
+            height="120">
+        </div>
+        <p class="fs-6 text-muted">¡Tu foto de perfil está lista!</p>
+        {% else %}
+        <h2 class="fs-3 text-muted mb-4">Ahora podrás subir tu foto aquí</h2>
+        <a href="#" class="btn btn-primary btn-lg">Subir foto</a>
+        {% endif %}
+      </div>
+    </div>
   </div>
+
 
   {% endblock %}
 

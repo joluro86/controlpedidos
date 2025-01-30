@@ -1,0 +1,12 @@
+<!-- upload_avatar.html -->
+{% extends 'index.html' %}
+
+{% block content %}
+  <h2>Subir Foto de Perfil</h2>
+  
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Subir Foto</button>
+  </form>
+{% endblock %}

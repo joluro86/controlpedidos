@@ -1,8 +1,10 @@
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from administrador.query.actividades.actividades_contrato import actualizar_actividad,actividades_contrato, encargados, crear_nueva_actividad, eliminar_actividad, actividades_epm, materiales
 from gestionvencimientos.models import Actividad, Encargado
 
+@login_required
 def index(request):
     
     context = {
@@ -14,6 +16,7 @@ def index(request):
     
     return render(request, "admin.html", context)
 
+@login_required
 def actividades_view(request): 
     context = {
     'encargados':encargados(request),
@@ -21,6 +24,7 @@ def actividades_view(request):
     }
     return render(request, 'administrador/actividades_list.html', context)
 
+@login_required
 def nueva_actividad(request):
     if request.method == 'POST':
         try:
@@ -33,7 +37,7 @@ def nueva_actividad(request):
      }
     return render(request, "nueva_actividad.html", context)
 
-
+@login_required
 def editar_actividad(request, actividad_id):
     if request.method == 'POST':
         try:
@@ -45,6 +49,7 @@ def editar_actividad(request, actividad_id):
             return JsonResponse({'success': False, 'error': 'Encargado no encontrado'})
     return JsonResponse({'success': False, 'error': 'Método no permitido'})
 
+@login_required
 def eliminar_actividad_por_id(request,id):
     eliminar_actividad(id)
     return redirect('index_admin')

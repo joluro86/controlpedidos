@@ -4,8 +4,11 @@ from administrador.views_epm import nueva_actividad_epm, editar_actividad_epm, e
 from administrador.views_encargado import editar_encargado, nuevo_encargado, eliminar_encargado
 from administrador.views_masivo import subir_masivo_actividad_contrato, subir_masivo_actividad_epm, subir_masivo_encargados
 from administrador.views_materiales import materiales_permitidos_list, nuevo_material, subir_masivo_materiales_contrato, eliminar_material_contrato, editar_material_id
+from administrador.views_perfil import upload_avatar
 
 urlpatterns = [
+    path("upload-avatar/", upload_avatar, name="upload_avatar"),
+    
     path('new_admin/', index, name="index_admin"),
     path('editar-actividad/<int:actividad_id>/', editar_actividad, name='editar_actividad'), 
     path('nueva_actividad_contrato/', nueva_actividad, name='nueva_actividad_form'),

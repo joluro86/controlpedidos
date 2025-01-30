@@ -1,0 +1,42 @@
+<div class="card shadow-sm mx-auto p-3 card-materiales-permitidos" id="logica_revision_acta">
+    <h1 class="title text-success" id="title_logica">Lógica en desarrollo...</h1>
+</div>
+
+
+<!-- Script para buscar dinámicamente -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let intervalo;
+
+        // Selecciona el tab que activa la vista donde está el div con id "logica_revision_acta"
+        document.querySelector('a[href="#list-logica-revision"]').addEventListener("shown.bs.tab", function () {
+            console.log("La pestaña de lógica de revisión ha sido activada.");
+
+            // Ejecutar inmediatamente al abrir la pestaña
+            ejecutarFuncion();
+
+            // Iniciar la ejecución cada segundo mientras la pestaña esté activa
+            intervalo = setInterval(ejecutarFuncion, 1000);
+        });
+
+        // Detener la ejecución cuando el usuario cambie de pestaña
+        document.querySelector('a[href="#list-logica-revision"]').addEventListener("hidden.bs.tab", function () {
+            console.log("La pestaña de lógica de revisión ha sido cerrada.");
+            clearInterval(intervalo);
+        });
+    });
+
+    function ejecutarFuncion() {
+        let titleElement = document.getElementById("title_logica");
+
+        if (titleElement) {
+            // Alternar visibilidad del texto
+            if (titleElement.style.visibility === "hidden") {
+                titleElement.style.visibility = "visible";
+            } else {
+                titleElement.style.visibility = "hidden";
+            }
+        }
+    }
+
+</script>

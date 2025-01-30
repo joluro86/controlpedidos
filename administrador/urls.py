@@ -7,8 +7,8 @@ from administrador.views_materiales import materiales_permitidos_list, nuevo_mat
 from administrador.views_perfil import upload_avatar
 
 urlpatterns = [
-    path("upload-avatar/", upload_avatar, name="upload_avatar"),
-    
+    path('subir-avatar/', upload_avatar, name='upload_avatar'),
+        
     path('new_admin/', index, name="index_admin"),
     path('editar-actividad/<int:actividad_id>/', editar_actividad, name='editar_actividad'), 
     path('nueva_actividad_contrato/', nueva_actividad, name='nueva_actividad_form'),

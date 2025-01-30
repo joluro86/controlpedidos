@@ -45,7 +45,7 @@
 <body class="body">
   {% if request.user.is_authenticated %}
   <div class="header" id="sub-header">
-    <ul class="nav box-index">
+    <ul class="nav box-index" style="height: 45px; align-items: center;">
       <li class="nav-item" id="inicio">
         <a class="nav-link" href="{% url 'home' %}">
           <div class="d-flex align-items-center">

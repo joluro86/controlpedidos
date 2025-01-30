@@ -31,7 +31,6 @@
   color:#7d736c;
   box-shadow: 1px -3px 14px rgb(0 0 0 / 40%);
   width: 100%;
-  height: auto;
   padding-bottom: 0px;
 }
 
@@ -122,6 +121,13 @@ table thead tr{
   color: rgb(59, 53, 53);
 }
 
+.header .nav a {
+  display: flex;
+  justify-content: center; /* Centrado horizontal */
+  align-items: center; /* Centrado vertical */
+  height: 100% !important; /* Asegura que la altura del item ocupe el 100% */
+}
+
 .header .nav a:hover {
   background-color: #9479f5;
   color: #eee;
@@ -165,6 +171,12 @@ height: calc(100% - 73px);
 .h-custom {
 height: 100%;
 }
+}
+.nav-item {
+  display: flex;
+  justify-content: center; /* Centrado horizontal */
+  align-items: center; /* Centrado vertical */
+  height: 100% !important; /* Asegura que la altura del item ocupe el 100% */
 }
 
 .header-menu .nav .nav-item a:hover {

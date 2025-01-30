@@ -197,7 +197,6 @@
           </li>
         </ul>
       </li>
-
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
           aria-expanded="true">Nomina</a>
@@ -216,13 +215,12 @@
           </li>
         </ul>
       </li>
-
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
           aria-expanded="true">Opciones</a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}?next=/">Foto</a>
+            <a class="nav-link" href="{% url 'upload_avatar' %}?next=/">Foto</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'logout' %}?next=/">Cerrar sesión</a>
@@ -281,7 +279,7 @@
       <div class="text-center">
         {% if user.userprofile.avatar %}
         {% else %}
-        <h2 class="fs-3 text-muted mb-4">Ahora podrás subir tu foto aquí</h2>
+        <h2 class="fs-3 text-muted my-4">Ahora podrás subir tu foto aquí</h2>
         <a href="{% url 'upload_avatar' %}" class="btn btn-primary btn-lg">Subir foto</a>
         {% endif %}
       </div>

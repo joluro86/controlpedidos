@@ -17,4 +17,13 @@ def upload_avatar(request):
 
     return render(request, 'subir_foto.html', {'form': form})
 
+@login_required
+def eliminar_foto(request):
+    print("llegue")
+    user = request.user
+    if user.userprofile.avatar:
+        user.userprofile.avatar.delete()  # Elimina la imagen del sistema de archivos
+        user.userprofile.avatar = None  # Remueve la referencia en la base de datos
+        user.userprofile.save()
+    return redirect('upload_avatar')  # Redirige a la página de perfil
 

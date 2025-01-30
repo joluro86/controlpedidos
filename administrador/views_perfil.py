@@ -12,7 +12,7 @@ def upload_avatar(request):
             user_profile = form.save(commit=False)
             user_profile.user = request.user
             user_profile.save()
-            return redirect('profile')  # Redirige a la página de perfil
+            return redirect('home')  # Redirige a la página de perfil
     else:
         form = UserProfileForm()
 

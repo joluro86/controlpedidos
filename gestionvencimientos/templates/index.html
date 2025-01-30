@@ -273,14 +273,9 @@
       <!-- Sección de foto de perfil -->
       <div class="text-center">
         {% if user.userprofile.avatar %}
-        <div class="d-flex justify-content-center mb-4">
-          <img src="{{ user.userprofile.avatar.url }}" alt="Foto de perfil" class="rounded-circle" width="120"
-            height="120">
-        </div>
-        <p class="fs-6 text-muted">¡Tu foto de perfil está lista!</p>
         {% else %}
         <h2 class="fs-3 text-muted mb-4">Ahora podrás subir tu foto aquí</h2>
-        <a href="#" class="btn btn-primary btn-lg">Subir foto</a>
+        <a href="{% url 'upload_avatar' %}" class="btn btn-primary btn-lg">Subir foto</a>
         {% endif %}
       </div>
     </div>

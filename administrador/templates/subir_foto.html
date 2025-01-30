@@ -2,11 +2,35 @@
 {% extends 'index.html' %}
 
 {% block content %}
-  <h2>Subir Foto de Perfil</h2>
-  
-  <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Subir Foto</button>
-  </form>
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-4">
+        <!-- Título -->
+        <h2 class="text-center mb-4">Subir Foto de Perfil</h2>
+        
+        <!-- Formulario -->
+        <form method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm">
+          {% csrf_token %}
+          
+          <!-- Campos del formulario -->
+          <div class="mb-3">
+            <label for="avatar" class="form-label">Selecciona una imagen</label>
+            {{ form.avatar }}
+            <!-- Agregar feedback de validación -->
+            {% if form.avatar.errors %}
+              <div class="text-danger">
+                {% for error in form.avatar.errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          
+          <!-- Botón de envío -->
+          <button type="submit" class="btn btn-primary w-100">Subir Foto</button>
+        </form>
+      </div>
+    </div>
+  </div>
 {% endblock %}
+

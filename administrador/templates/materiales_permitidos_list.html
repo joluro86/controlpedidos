@@ -32,10 +32,10 @@
                     <td class="material-nombre" title="Material: {{ material.material }}">{{ material.material }}</td>
                     <td class="d-flex justify-content-center align-items-center gap-2 p-1">
                         <!-- Botón Editar -->
-                        <a href="#" class="btn btn-outline-primary btn-sm p-0" data-bs-toggle="tooltip" title="Editar material">
-                            <i class="fa-regular fa-pen-to-square fa-xs p-1"></i> <!-- fa-xs o fa-sm -->
-                        </a>
-                    
+                        <a href="#" class="btn btn-outline-success btn-sm p-0" data-bs-toggle="modal"
+                                data-bs-target="#editarMaterialModal{{material.id}}" title="Pulse para editar">
+                                <i class="fa-solid fa-pen-to-square fa-xs p-1"></i> <!-- Icono de edición -->
+                        </a>                    
                         <!-- Botón Eliminar -->
                         <a href="#" class="btn btn-outline-danger btn-sm p-0" data-bs-toggle="tooltip" title="Eliminar material" data-id="{{ material.id }}"
                         onclick="eliminarMaterialContrato(this)">
@@ -43,6 +43,7 @@
                         </a>
                     </td>
                 </tr>
+                {% include 'forms/form_editar_material_contrato.html' %}
                 {% empty %}
                 <tr>
                     <td colspan="3" class="text-muted" title="No hay materiales registrados">No hay actividades registradas.</td>
@@ -63,6 +64,62 @@
         filas.forEach(fila => {
             let material = fila.querySelector(".material-nombre").textContent.toLowerCase();
             fila.style.display = material.includes(filtro) ? "" : "none";
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.btn-guardar-material').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                let materialId = this.getAttribute('data-id');
+                let form = document.querySelector(`#form-editar-material-${materialId}`);
+                let formData = new FormData(form);
+
+                let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                fetch(`/administrador/editar-material/${materialId}/`, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Cerrar el modal antes de mostrar la alerta
+                            let modalElement = document.querySelector(`#editarMaterialModal${materialId}`);
+                            let modalInstance = bootstrap.Modal.getInstance(modalElement);
+                            modalInstance.hide();
+
+                            Swal.fire({
+                                title: 'Éxito',
+                                text: 'Material actualizado correctamente',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                location.reload();  // Recargar la página para reflejar los cambios
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: data.error || 'Hubo un problema al actualizar.',
+                                icon: 'error',
+                                confirmButtonText: 'Cerrar'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'No se pudo actualizar...',
+                            icon: 'error',
+                            confirmButtonText: 'Cerrar'
+                        });
+                    });
+            });
         });
     });
 </script>

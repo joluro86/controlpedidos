@@ -100,3 +100,29 @@ def crear_nuevo_material(request):
 def eliminar_material(id):
     material = get_object_or_404(Materiales, id=id)
     material.delete()
+    
+def actualizar_material(request, material_id):
+    if request.method == "POST":
+        material = get_object_or_404(Materiales, id=material_id)
+        
+        nuevo_nombre = request.POST.get('material', material.material)
+        
+        # Verificar si el nuevo nombre ya existe en otro registro
+        if verificar_material_existente(nuevo_nombre):
+            return JsonResponse({'success': False, 'error': 'El material ya existe en la base de datos.'})
+
+        # Actualizar solo si el nombre no existe en otro registro
+        material.material = nuevo_nombre
+        material.save()
+        return JsonResponse({'success': True, 'message': 'Material actualizado correctamente.'})
+
+    return JsonResponse({'success': False, 'error': 'Método no permitido'})
+
+        
+def verificar_material_existente(nombre):
+    """
+    Verifica si ya existe un material con el mismo nombre en la base de datos.
+    Retorna True si existe, False si no.
+    """
+    return Materiales.objects.filter(material=nombre).exists()
+    

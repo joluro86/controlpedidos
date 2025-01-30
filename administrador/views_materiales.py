@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from openpyxl import load_workbook
 from gestionvencimientos.models import Actividad, Encargado
 from analisis_acta.models import Materiales
-from administrador.query.actividades.actividades_contrato import crear_nuevo_material, eliminar_material
+from administrador.query.actividades.actividades_contrato import crear_nuevo_material, eliminar_material, actualizar_material
 
 def materiales_permitidos_list(request):
     context={
@@ -51,3 +51,13 @@ def process_excel_materiales_contrato(file):
 def eliminar_material_contrato(request, id):
     eliminar_material(id)
     return redirect('index_admin')
+
+def editar_material_id(request, material_id):
+    if request.method == 'POST':
+        try:
+            return actualizar_material(request, material_id)
+        except Materiales.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Material no encontrado'})
+    
+    return JsonResponse({'success': False, 'error': 'Método no permitido'})
+

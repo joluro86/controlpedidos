@@ -3,9 +3,12 @@ from django.urls import path
 from django.urls.conf import include
 from django.conf import settings
 from django.conf.urls.static import static 
+from django.contrib.auth import views as auth_views
+
 
 from gestionvencimientos.views import registrar_acta, calculo_inventario_por_oficial, reiniciar_medidores, reiniciar_bd_oficiales, gestion_medidores, reiniciar_medidores, gestionar_acta_perseo_inventario, pedidos_week, otros_pedidos, vencimientos_contrato, vencimientos_epm,  index, fechas, vencidos, busqueda_pendientes, busqueda_vencidos, gestion_bd, cerrar_pedido,  limpiar_base, eliminar_bd, subir_acta_ans, calculo_pendientes, calculo_next_week, calculo_last_week, menu_pendientes
 urlpatterns = [
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('subir_acta_ans/', subir_acta_ans, name="subir_acta_ans"),
     path('admin/', admin.site.urls, name="administrador"),
     path('', index, name="home"),

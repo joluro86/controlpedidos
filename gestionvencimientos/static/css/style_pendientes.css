@@ -9,6 +9,7 @@
   color: rgb(63, 49, 49) !important;
   border-bottom: solid white 1px;
 }
+
 .table.tabla_actividades thead tr {
   background-color: #3498db !important;
   border-color: #3498db !important;
@@ -28,41 +29,43 @@
   font-family: Arial, "Arial Unicode MS", sans-serif;
   font-weight: bold;
   font-size: 0.8em !important;
-  color:#7d736c;
+  color: #7d736c;
   box-shadow: 1px -3px 14px rgb(0 0 0 / 40%);
   width: 100%;
   padding-bottom: 0px;
 }
 
-.box-index{
-  display:flex;
+.box-index {
+  display: flex;
   align-self: center;
   justify-content: space-evenly;
 }
 
 
 
-table tbody tr{
+table tbody tr {
   font-size: 0.8em !important;
-  
+
 }
-table tbody tr th{
-  padding: 0px 0px !important;
-  margin: 0px 0px !important;
-}
-table tbody tr td{
+
+table tbody tr th {
   padding: 0px 0px !important;
   margin: 0px 0px !important;
 }
 
-table tbody tr td i{
+table tbody tr td {
+  padding: 0px 0px !important;
+  margin: 0px 0px !important;
+}
+
+table tbody tr td i {
   padding: 0px 0px !important;
   margin: 0px 0px !important;
   margin-top: 0px !important;
   margin-bottom: 0px !important;
 }
 
-table thead tr{
+table thead tr {
   background-color: rgb(41, 40, 38) !important;
   color: #eee;
 }
@@ -87,31 +90,34 @@ table thead tr{
   margin-top: 0px;
   padding-bottom: 0px;
 }
-.dataTables_length{
+
+.dataTables_length {
   width: 200px;
   margin-top: 5px;
-  float:left;
+  float: left;
 }
 
-.body .header .reiniciarBd :hover{
+.body .header .reiniciarBd :hover {
   color: white !important;
 }
+
 .dataTables_filter {
   width: 30%;
   float: right;
   margin-bottom: 10px;
 }
+
 .card .dt-buttons .dt-button {
   background-color: #3498db !important;
   border-radius: 3px;
   padding: 2px !important;
   font-size: 0.7em;
   border: solid 1px #3498db !important;
-  color:#eee;
+  color: #eee;
   font-weight: bold;
 }
 
-.card .dt-buttons :hover{
+.card .dt-buttons :hover {
   background-color: #212529;
   color: #eee;
   font-weight: bold;
@@ -123,14 +129,26 @@ table thead tr{
 
 .header .nav a {
   display: flex;
-  justify-content: center; /* Centrado horizontal */
-  align-items: center; /* Centrado vertical */
-  height: 100% !important; /* Asegura que la altura del item ocupe el 100% */
+  justify-content: center;
+  /* Centrado horizontal */
+  align-items: center;
+  /* Centrado vertical */
+  height: 100% !important;
+  /* Asegura que la altura del item ocupe el 100% */
 }
 
 .header .nav a:hover {
   background-color: #3498db !important;
   color: #eee;
+}
+
+.header .nav form button:hover {
+  background-color: #3498db !important;
+  color: #eee;
+}
+
+.header .nav form button {
+  width: 100%;
 }
 
 .header-menu {
@@ -140,10 +158,11 @@ table thead tr{
 .header .nav-item li a {
   display: block !important;
   text-align: left !important;
-  padding-left: 10px; /* Ajusta según sea necesario */
+  padding-left: 10px;
+  /* Ajusta según sea necesario */
 }
 
-.bg-dias-week{
+.bg-dias-week {
   background-color: #3498db !important;
   font-weight: bold;
 }
@@ -160,24 +179,30 @@ table thead tr{
 
 .divider:after,
 .divider:before {
-content: "";
-flex: 1;
-height: 1px;
-background: #eee;
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
 }
+
 .h-custom {
-height: calc(100% - 73px);
+  height: calc(100% - 73px);
 }
+
 @media (max-width: 450px) {
-.h-custom {
-height: 100%;
+  .h-custom {
+    height: 100%;
+  }
 }
-}
+
 .nav-item {
   display: flex;
-  justify-content: center; /* Centrado horizontal */
-  align-items: center; /* Centrado vertical */
-  height: 100% !important; /* Asegura que la altura del item ocupe el 100% */
+  justify-content: center;
+  /* Centrado horizontal */
+  align-items: center;
+  /* Centrado vertical */
+  height: 100% !important;
+  /* Asegura que la altura del item ocupe el 100% */
 }
 
 .header-menu .nav .nav-item a:hover {
@@ -186,7 +211,7 @@ height: 100%;
   font-weight: bold;
 }
 
-.header .dropdown-item{
+.header .dropdown-item {
   font-size: 0.9em;
 }
 
@@ -198,10 +223,11 @@ height: 100%;
   background-color: #f87a7a !important;
 }
 
-.person.bg-boniprod{
+.person.bg-boniprod {
   background-color: #99F9BE !important;
 }
 
-.formulario_subir_excell{
-  background-color: #3498db !important;;
+.formulario_subir_excell {
+  background-color: #3498db !important;
+  ;
 }

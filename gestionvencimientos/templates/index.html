@@ -7,6 +7,8 @@
     content="width=device-width, initial-scale=1.0" />
 
   <title>Gestión pedidos</title>
+  <link rel="icon" type="image/svg+xml" href="{% static 'logo_joluro_software.png' %}">
+
   <script src="{% static 'sweetalert/sweetalert2.all.min.js' %} "></script>
   <link href="{% static 'css/style_pendientes.css' %}" rel="stylesheet" />
   <link href="{% static 'css/style.css' %}" rel="stylesheet" />
@@ -223,16 +225,20 @@
             <a class="dropdown-item w-100" href="{% url 'upload_avatar' %}?next=/">Foto</a>
           </li>
           <li class="nav-item dropdown">
-            <a class="dropdown-item w-100" href="{% url 'logout' %}?next=/">Cerrar sesión</a>
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="dropdown-item w-100">Cerrar sesión</button>
+            </form>
           </li>
         </ul>
       </li>
     </ul>
   </div>
   <div class="mx-2 fw-bold" style="color: #3498db !important;">
-    <small >
+    <small>
       {% if numero_acta_actual %}
-      <a href="#" data-bs-toggle="modal" data-bs-target="#actaModal" style="color: #3498db !important;">{{ numero_acta_actual }}</a> -
+      <a href="#" data-bs-toggle="modal" data-bs-target="#actaModal" style="color: #3498db !important;">
+        {{numero_acta_actual }}</a> -
       {% else %}
       <span>
         <a class="text-danger" href="#" data-bs-toggle="modal" data-bs-target="#actaModal">Registrar acta actual</a> -
@@ -272,7 +278,8 @@
       <!-- Alerta de bienvenida -->
       <div class="alert alert-primary text-center py-4 my-2 rounded-3 shadow-sm">
         <h2 class="fw-bold mb-0">👋 ¡Bienvenido(a), {{ user.username }}!</h2>
-        <p class="fs-5 mt-2">Gestiona fácilmente los ANS de las actividades del contrato y mantén el control de tus procesos.</p>
+        <p class="fs-5 mt-2">Gestiona fácilmente los ANS de las actividades del contrato y mantén el control de tus
+          procesos.</p>
       </div>
 
       <!-- Sección de foto de perfil -->
@@ -285,14 +292,13 @@
       </div>
     </div>
   </div>
-
-
   {% endblock %}
 
   {% block js %}
   <script src="{% static 'js/js_pendientes.js' %}"></script>
   <script src="{% static 'js/actividades.js' %}"></script>
   {% endblock %}
+  <img src="{% static 'logo_joluro_software.png' %}" alt="Logo Joluro Software" class="logo-flotante">
 </body>
 
 </html>

@@ -74,15 +74,6 @@ body {
     color: red !important;
 }
 
-.bug-2{
-    background-color: rgb(88, 36, 209) !important; 
-    color: red !important;
-}
-
-.bug-3{
-    background-color: rgb(220, 210, 27) !important; 
-    color: red !important;
-}
 
 .list-group a{
     padding: 2px;

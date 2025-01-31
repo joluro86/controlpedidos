@@ -147,8 +147,14 @@ table thead tr {
   color: #eee;
 }
 
+.header .nav form {
+  width: 100%; 
+}
+
 .header .nav form button {
-  width: 100%;
+  width: 100%; 
+  margin: 0px;
+  padding: 10px;
 }
 
 .header-menu {

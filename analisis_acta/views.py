@@ -3,12 +3,10 @@ from email.policy import HTTP
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from analisis_acta.models import Acta, Materiales, Novedad_acta
-from django.db.models import Sum, Q
+from django.db.models import Sum, Q, Count
 from django.http import JsonResponse, HttpResponseRedirect
 from openpyxl import load_workbook
 from io import BytesIO
-
-# codigo subir acta para revisar
 
 def subir_acta_revision(request):
     try:
@@ -78,8 +76,6 @@ def process_excel_acta(file):
 
     except Exception as e:
         print(f"Error al procesar el archivo: {e}")
-
-# fin codigo para subir acta a rEVISAR
 
 def calculo_novedades_acta(request):
     pedidos_LEGA = Acta.objects.filter(actividad__in=["ALEGA", "ALECA", "ACAMN", "ALEGN"]).exclude(suminis__exact='0').exclude(suminis__exact='CALE1F')
@@ -516,7 +512,6 @@ def validar_pedido_A06(pedido):
         # Crear la novedad si no cumple la condición
         crear_novedad(pedido, "A 06 no tiene asociado A 10 o A 11")
 
-from django.db.models import Count
 def verificar_y_crear_novedades_duplicadas():
     # Obtener todos los registros con duplicados
     registros_duplicados = Acta.objects.values('pedido', 'item_cont').annotate(count=Count('id')).filter(count__gt=1)
@@ -537,7 +532,6 @@ def verificar_y_crear_novedades_duplicadas():
             novedades_creadas.add(novedad)
 
 def pagina_legalizaciones():
-    from django.db.models import F, Q
 
     # Obtener registros con item_cont igual a C01
     registros_C01 = Acta.objects.filter(item_cont='C 01')
@@ -869,7 +863,6 @@ def calculo_incompatible_A27(pedido, novedad):
     except:
         pass
 
-
 def calculo_incompatible_A44(pedido, novedad):
     try:
         pedidos = Acta.objects.filter(pedido=pedido.pedido)
@@ -882,7 +875,6 @@ def calculo_incompatible_A44(pedido, novedad):
                     crear_novedad(p, nov)
     except:
         pass
-
 
 def calculo_incompatible_A03(pedido, novedad):
     try:
@@ -897,7 +889,6 @@ def calculo_incompatible_A03(pedido, novedad):
     except:
         pass
 
-
 def calculo_otros_incompatibles(pedido, item_comparar, comparado):
     try:
         pedidos = Acta.objects.filter(pedido=pedido.pedido)
@@ -907,7 +898,6 @@ def calculo_otros_incompatibles(pedido, item_comparar, comparado):
                 crear_novedad(p, nov)
     except:
         pass
-
 
 def crear_novedad(pedido, nov):
     novedad = Novedad_acta()
@@ -919,17 +909,14 @@ def crear_novedad(pedido, nov):
     novedad.novedad = nov
     novedad.save()
 
-
 def limpiar_novedades(request):
     Novedad_acta.objects.all().delete()
     return redirect('novedades_acta')
-
 
 def limpiar_acta(request):
     Acta.objects.all().delete()
     Novedad_acta.objects.all().delete()
     return redirect('home')
-
 
 def calculo_enepre(pedido):
     if pedido.item_cont == 'A 03':
@@ -993,7 +980,6 @@ def calculo_enepre(pedido):
         except:
             pass
 
-
 def novedades_acta(request):
     novedades = {}
     try:
@@ -1001,7 +987,6 @@ def novedades_acta(request):
     except:
         pass
     return render(request, "analisis.html", {'novedades': novedades})
-
 
 def verificar_cable_acta(pedido, cable1, cable2, medidor):
 
@@ -1025,9 +1010,6 @@ def verificar_cable_acta(pedido, cable1, cable2, medidor):
 
                 crear_novedad(p, novedad)
 
-
-from django.db.models import Q
-
 def verificar_A03_MEDIDOR():
     # Obtén todos los registros donde item_cont es "A 03"
     actas_a03 = Acta.objects.filter(item_cont="A 03")
@@ -1045,8 +1027,6 @@ def verificar_A03_MEDIDOR():
         if not otros_actas.exists():
             crear_novedad(acta, "A 03 sin medidor")
             
-
-
 def filtrar_aejdo_sin_interna():
     # Filtrar pedidos con actividad AEJDO y item_cont que comience con B (incluir repetidos)
     pedidos_filtrados = Acta.objects.filter(

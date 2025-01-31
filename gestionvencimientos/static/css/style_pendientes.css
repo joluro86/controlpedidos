@@ -69,8 +69,8 @@ table thead tr{
 
 
 .page-item.active .page-link {
-  background-color: #9479f5 !important;
-  border-color: #9479f5 !important;
+  background-color: #3498db !important;
+  border-color: #3498db !important;
 }
 
 .page-link {
@@ -102,11 +102,11 @@ table thead tr{
   margin-bottom: 10px;
 }
 .card .dt-buttons .dt-button {
-  background-color: #9479f5;
+  background-color: #3498db !important;
   border-radius: 3px;
   padding: 2px !important;
   font-size: 0.7em;
-  border: solid 1px rgb(66, 150, 247);
+  border: solid 1px #3498db !important;
   color:#eee;
   font-weight: bold;
 }
@@ -137,9 +137,10 @@ table thead tr{
   margin-top: 2px;
 }
 
-.header-menu .nav .nav-item a {
-  border-radius: 5px;
-  color: rgb(22, 19, 19);
+.header .nav-item li a {
+  display: block !important;
+  text-align: left !important;
+  padding-left: 10px; /* Ajusta según sea necesario */
 }
 
 .bg-dias-week{
@@ -199,4 +200,8 @@ height: 100%;
 
 .person.bg-boniprod{
   background-color: #99F9BE !important;
+}
+
+.formulario_subir_excell{
+  background-color: #3498db !important;;
 }

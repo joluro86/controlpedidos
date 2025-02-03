@@ -6,7 +6,7 @@ from administrador.views_masivo import subir_masivo_actividad_contrato, subir_ma
 from administrador.views_materiales import materiales_permitidos_list, nuevo_material, subir_masivo_materiales_contrato, eliminar_material_contrato, editar_material_id
 from administrador.views_perfil import upload_avatar, eliminar_foto
 from administrador.views_variables_contrato import agregar_variable_contrato, editar_variable
-
+from administrador.views_actividad_legalizacion import crear_actividad_legalizacion
 urlpatterns = [
     path('subir-avatar/', upload_avatar, name='upload_avatar'),
     path('eliminar-foto/', eliminar_foto, name='eliminar_foto'),
@@ -35,7 +35,10 @@ urlpatterns = [
     path('editar-material/<int:material_id>/', editar_material_id, name='editar_material'),
     
     path('agregar-variables/', agregar_variable_contrato, name='agregar_variable_contrato_form'), 
-    path('editar-variable/<int:variable_id>/', editar_variable, name='editar_variable'),    
+    path('editar-variable/<int:variable_id>/', editar_variable, name='editar_variable'),  
+    
+    path('editar-actividad-legalizacion/<int:actividad_id>/', editar_actividad, name='editar_actividad_legalizacion'), 
+    path('nueva_actividad_legalizacion/', crear_actividad_legalizacion, name='nueva_actividad_legalizacion_form'),
     
     ]
 

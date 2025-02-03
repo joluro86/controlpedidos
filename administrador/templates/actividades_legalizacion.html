@@ -1,69 +1,56 @@
 <div class="d-flex justify-content-center align-items-center admin_actividades">
     <div class="card shadow-sm actividades_contrato" style="width: 400px;">
-        <div class="card-header bg-primary text-white text-center py-2">
-            <h6 class="m-0">Variables del contrato</h6>
+        <div class="title_contrato">
+            <h6 class="text-center m-2">Legalización</h6>
         </div>
 
         <div class="table-responsive">
             <table class="table tabla_actividades m-0 text-center">
-                <thead class="table-light">
+                <thead>
                     <tr style="font-size: 13px;">
-                        <th>Descripción</th>
-                        <th>Valor</th>
+                        <th>Nombre</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for variable in variables_contrato %}
+                    {% for actividad in actividades_legalizacion %}
                     <tr>
-                        <td>Región</td>
                         <td style="font-size: 11px;">
                             <a href="#" class="text-decoration-none text-primary" data-bs-toggle="modal"
-                                data-bs-target="#editarVariableModal{{ variable.id }}" title="Editar Variable">
-                                {{ variable.region }}
+                                data-bs-target="#editarActividadLegalizacionModal{{ actividad.id }}" title="Pulse para editar">
+                                {{ actividad.nombre }}
                             </a>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            Contrato
-                        </td>
-                        <td>
-                            <a href="#" class="text-decoration-none text-primary" data-bs-toggle="modal"
-                                data-bs-target="#editarVariableModal{{ variable.id }}" title="Editar Variable">
-                                {{ variable.contrato }}
-                            </a>
-                        </td>
-                    </tr>
-                    {% include 'forms/form_editar_variable.html' %}
+                    <!-- Modal de edición dentro de la fila correspondiente -->
+                    {% include 'forms/form_editar_actividad_legalizacion.html' %}
                     {% empty %}
                     <tr>
-                        <td colspan="3" class="text-muted">No hay variables registradas.</td>
+                        <td colspan="4" class="text-muted">No hay actividades registradas.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-        <div class="card-footer p-0">
-            <a class="btn tabla_actividades btn-sm p-0 px-3" href="{% url 'agregar_variable_contrato_form' %}" title="Crear nueva variable">
+        <div class="card-footer d-flex list-masivo-actividad-contrato px-3 py-1">
+            <a class="btn tabla_actividades btn-sm" href="{% url 'nueva_actividad_legalizacion_form' %}" title="Crear nueva actividad de legalización">
                 <i class="fa fa-plus m-0 icon-masivo-crear"></i> <!-- Icono de Font Awesome -->
-            </a>
+            </a>            
         </div>
     </div>
 </div>
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll('.btn-guardar-variable').forEach(button => {
+        document.querySelectorAll('.btn-guardar-actividad-legalizacion').forEach(button => {
             button.addEventListener('click', function (e) {
                 e.preventDefault();
-                let variableId = this.getAttribute('data-id');
-                let form = document.querySelector(`#form-editar-variable-${variableId}`);
+                let actividadId = this.getAttribute('data-id');
+                let form = document.querySelector(`#form-editar-actividad-legalizacion-${actividadId}`);
 
                 let formData = new FormData(form);
 
                 let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-                fetch(`/administrador/editar-variable/${variableId}/`, {
+                fetch(`/administrador/editar-actividad-legalizacion/${actividadId}/`, {
                     method: 'POST',
                     body: formData,
                     headers: {
@@ -74,13 +61,13 @@
                     .then(data => {
                         if (data.success) {
                             // Cerrar el modal antes de mostrar la alerta
-                            let modalElement = document.querySelector(`#editarVariableModal${variableId}`);
+                            let modalElement = document.querySelector(`#editarActividadLegalizacionModal${actividadId}`);
                             let modalInstance = bootstrap.Modal.getInstance(modalElement);
                             modalInstance.hide();
 
                             Swal.fire({
                                 title: 'Éxito',
-                                text: 'Variable actualizada correctamente',
+                                text: 'Actividad actualizada correctamente',
                                 icon: 'success',
                                 confirmButtonText: 'OK'
                             }).then(() => {
@@ -98,7 +85,7 @@
                     .catch(error => {
                         Swal.fire({
                             title: 'Error',
-                            text: 'No se pudo actualizar la variable',
+                            text: 'No se pudo actualizar la actividad',
                             icon: 'error',
                             confirmButtonText: 'Cerrar'
                         });

@@ -1,6 +1,16 @@
 from tkinter import CASCADE
 from django.db import models
 
+class ActividadLegalizacion(models.Model):
+    nombre= models.CharField(max_length=200, null=True)    
+    class Meta:
+        ordering = ["nombre"]
+        verbose_name = "Actividades legalización"
+        verbose_name_plural = "Actividades legalización"
+        
+    def __str__(self):
+        return str(self.nombre)
+    
 class VariableAnalisis(models.Model):
     region= models.CharField(max_length=200, null=True)
     contrato= models.CharField(max_length=200, null=True)

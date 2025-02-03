@@ -2,7 +2,7 @@ from asyncio.windows_events import NULL
 from email.policy import HTTP
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from analisis_acta.models import Acta, Materiales, Novedad_acta
+from analisis_acta.models import Acta, Materiales, Novedad_acta, VariableAnalisis
 from django.db.models import Sum, Q, Count
 from django.http import JsonResponse, HttpResponseRedirect
 from openpyxl import load_workbook
@@ -1046,6 +1046,16 @@ def filtrar_aejdo_sin_interna():
 
 """Nuevo analisis revision acta"""
 
+from django.shortcuts import render
+from django.contrib import messages
+from analisis_acta.models import Acta, VariableAnalisis
+
 def analisis_revision_acta(request):
-    print("hola")
+    variable_region = VariableAnalisis.objects.first()  # Obtener la primera variable
+    
+    if variable_region:  # Si existe una variable, eliminar registros en Acta
+        Acta.objects.exclude(subz=variable_region.region).delete()
+    else:  
+        messages.warning(request, "No existen variables de contrato registradas.")
+        return redirect("index_admin")  # Ajusta el template
     

@@ -1,6 +1,18 @@
 from tkinter import CASCADE
 from django.db import models
 
+class VariableAnalisis(models.Model):
+    region= models.CharField(max_length=200, null=True)
+    contrato= models.CharField(max_length=200, null=True)
+    
+    class Meta:
+        ordering = ["region"]
+        verbose_name = "Variables contrato"
+        verbose_name_plural = "Variables contrato"
+        
+    def __str__(self):
+        return str(self.region)+ " " + str(self.contrato)
+    
 class Novedad_acta(models.Model):    
     pedido = models.CharField(max_length=200, default=0, null=True)
     actividad = models.CharField(max_length=200, default=0, null=True)

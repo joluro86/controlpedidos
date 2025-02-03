@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from administrador.query.actividades.actividades_contrato import actualizar_actividad,actividades_contrato, encargados, crear_nueva_actividad, eliminar_actividad, actividades_epm, materiales
 from gestionvencimientos.models import Actividad, Encargado
+from administrador.query.actividades.variables_contrato import variables_contrato
 
 @login_required
 def index(request):
@@ -12,6 +13,7 @@ def index(request):
         'actividades_epm': actividades_epm(request),
         'encargados': encargados(request),
         'materiales_permitidos': materiales(request), 
+        'variables_contrato': variables_contrato(request),
     }
     
     return render(request, "admin.html", context)

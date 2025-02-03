@@ -1044,5 +1044,8 @@ def filtrar_aejdo_sin_interna():
     
 
 
+"""Nuevo analisis revision acta"""
 
+def analisis_revision_acta(request):
+    print("hola")
     

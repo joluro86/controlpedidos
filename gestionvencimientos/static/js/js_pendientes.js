@@ -422,6 +422,37 @@ function reiniciar_bonificaciones() {
     });
 }
 
+//Nuevo analisis
+
+function analisis_revision_acta() {
+  url = "/analisis/revision_acta/";
+  swal
+    .fire({
+      title: "¿Esta seguro de gestionar el Acta?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Si, gestionar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        Swal.fire({
+          title: 'Analizando acta...',
+          html: 'Por favor, espere...',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading()
+          }
+        });
+        window.location.href = url;
+      }
+    });
+}
+
+//fin nuevo analisis acta
 function calculo_novedades() {
   url = "/analisis/calculo_novedades/";
   swal

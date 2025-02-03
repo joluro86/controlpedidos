@@ -1,0 +1,29 @@
+<div class="modal fade" id="editarVariableModal{{ variable.id }}" tabindex="-1"
+    aria-labelledby="editarVariableLabel{{ variable.id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarVariableLabel{{ variable.id }}">Actualizar Variables</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-editar-variable-{{ variable.id }}" method="post">
+                    {% csrf_token %}
+                    <div class="mb-2 input-group-sm">
+                        <label class="form-label">Región</label>
+                        <input type="text" class="form-control" name="region" value="{{ variable.region }}">
+                    </div>
+                    <div class="mb-3 input-group-sm">
+                        <label class="form-label">Contrato</label>
+                        <input type="text" class="form-control" name="contrato" value="{{ variable.contrato }}">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="submit" class="btn btn-success btn-guardar-variable" data-id="{{ variable.id }}">
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -5,6 +5,7 @@ from administrador.views_encargado import editar_encargado, nuevo_encargado, eli
 from administrador.views_masivo import subir_masivo_actividad_contrato, subir_masivo_actividad_epm, subir_masivo_encargados
 from administrador.views_materiales import materiales_permitidos_list, nuevo_material, subir_masivo_materiales_contrato, eliminar_material_contrato, editar_material_id
 from administrador.views_perfil import upload_avatar, eliminar_foto
+from administrador.views_variables_contrato import agregar_variable_contrato, editar_variable
 
 urlpatterns = [
     path('subir-avatar/', upload_avatar, name='upload_avatar'),
@@ -32,5 +33,9 @@ urlpatterns = [
     path('masivo-materiales/', subir_masivo_materiales_contrato, name='subir_masivo_materiales'),  
     path('eliminar-material-contrato/<int:id>/', eliminar_material_contrato, name='eliminar-material-contrato'),
     path('editar-material/<int:material_id>/', editar_material_id, name='editar_material'),
+    
+    path('agregar-variables/', agregar_variable_contrato, name='agregar_variable_contrato_form'), 
+    path('editar-variable/<int:variable_id>/', editar_variable, name='editar_variable'),    
+    
     ]
 

@@ -5,6 +5,16 @@
 <div class="card mt-3 container container-admin py-0 py-4 px-4">
     <div class="row">
         <div class="col-3">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show"
+                role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+
             <div class="">
                 <div class="list-group" id="list-tab" role="tablist">
                     <h6>Control Ans</h6>
@@ -14,13 +24,13 @@
                         href="#list-profile" role="tab" aria-controls="profile">Encargados</a>
 
                     <h6 class="mb-2 mt-3 ">Revisión Acta</h6>
-                    <a class="list-group-item list-group-item-action" id="list-materiales-permitidos-list" data-toggle="list"
-                        href="#list-materiales-permitidos" role="tab" aria-controls="home">
+                    <a class="list-group-item list-group-item-action" id="list-materiales-permitidos-list"
+                        data-toggle="list" href="#list-materiales-permitidos" role="tab" aria-controls="home">
                         Materiales permitidos
                     </a>
 
                     <a class="list-group-item list-group-item-action" id="list-logica-revision-list" data-toggle="list"
-                        href="#list-logica-revision" role="tab" aria-controls="logica-revision">Lógica de revisión</a>
+                        href="#list-logica-revision" role="tab" aria-controls="logica-revision">Variables contrato</a>
                     <!--
                     <h6 class="mb-2 mt-3 ">Menu 3</h6>
                     
@@ -53,6 +63,10 @@
                 <div class="tab-pane fade gap-4 mx-4" id="list-materiales-permitidos" role="tabpanel"
                     aria-labelledby="list-materiales-permitidos-list">
                     {% include 'materiales_permitidos_list.html' %}
+                </div>
+                <div class="tab-pane fade gap-4 mx-4" id="list-logica-revision" role="tabpanel"
+                    aria-labelledby="list-logica-revision-list">
+                    {% include 'variables_contrato.html' %}
                 </div>
                 <div class="tab-pane fade gap-4 mx-4" id="list-logica-revision" role="tabpanel"
                     aria-labelledby="list-logica-revision-list">

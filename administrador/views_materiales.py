@@ -1,7 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from openpyxl import load_workbook
-from gestionvencimientos.models import Actividad, Encargado
 from analisis_acta.models import Materiales
 from administrador.query.actividades.actividades_contrato import crear_nuevo_material, eliminar_material, actualizar_material
 

@@ -44,6 +44,7 @@
             button.addEventListener('click', function (e) {
                 e.preventDefault();
                 let actividadId = this.getAttribute('data-id');
+                console.log(actividadId)
                 let form = document.querySelector(`#form-editar-actividad-legalizacion-${actividadId}`);
 
                 let formData = new FormData(form);

@@ -26,6 +26,7 @@ class MatPerseoResource(resources.ModelResource):
 
 class MatPerseo_Admin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('pedido','actividad', 'fecha', 'codigo', 'cantidad', 'acta', 'concatenacion')
+    search_fields = ('pedido', 'actividad') 
     class Meta:
         model = matperseo
 
@@ -39,6 +40,7 @@ class MatFenixResource(resources.ModelResource):
 
 class MatFenix_Admin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('pedido','actividad', 'fecha', 'codigo', 'cantidad', 'concatenacion')
+    search_fields = ('pedido', 'actividad') 
     class Meta:
         model = matfenix
 

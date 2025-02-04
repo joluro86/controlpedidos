@@ -1,6 +1,6 @@
 from analisis_acta.models import ActividadLegalizacion
 from django.db.models import Q
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404
 
 
 def actividades_legalizacion(request):
@@ -19,5 +19,18 @@ def crear_nueva_actividad_legalizacion(request):
     nueva_actividad.save()
     
     return True
+
+def actividad_por_id(id):
+    return ActividadLegalizacion.objects.get(id=id)
+    
+def actualizar_legalizacion(request, actividad_id):
+            print("aqui")
+            actividad = actividad_por_id(actividad_id)
+            actividad.nombre = request.POST.get('nombre', actividad.nombre)         
+            actividad.save() 
+
+def eliminar_actividad_legalizacion(id):
+    actividad_lega = get_object_or_404(ActividadLegalizacion, id=id)
+    actividad_lega.delete()
 
 

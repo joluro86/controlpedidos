@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from io import BytesIO
 from .models import Guia, NovedadPerseoVsFenix, NumeroActa, matfenix, matperseo
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
 
 def subir_pvf_matfenix(request):
     try:
@@ -52,7 +53,11 @@ def subir_pvf_matfenix(request):
                     cantidad=cantidad,
                     concatenacion=concatenacion
                 )
-            return redirect('home')
+            messages.error(
+                request,
+                "Acta subida con exito."
+            )
+            return redirect('index_admin')
         # Si no es un POST, solo renderizamos la página
         return render(request, 'subir_pvf_matfenix.html')
 
@@ -109,7 +114,12 @@ def subir_pvf_matperseo(request):
                     concatenacion=concatenacion,
                     acta=acta
                 )
-            return redirect('home')        
+                
+            messages.error(
+                request,
+                "Extracción de Perseo subida con exito."
+            )
+            return redirect('index_admin')        
         # Si no es un POST, solo renderizamos la página
         return render(request, 'subir_pvf_matperseo.html')
 

@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from perseovsfenix.logica_analisis import obtener_diferencias_entre_items_pvf
+from perseovsfenix.logica_analisis import comparar_cantidades_concatenacion, obtener_diferencias_entre_items_pvf
 import openpyxl
 from django.http import JsonResponse
 from io import BytesIO
@@ -128,6 +128,7 @@ def index(request):
  
 def calculo_novedades_perseo_vs_fenix(request):
     obtener_diferencias_entre_items_pvf(request)
+    comparar_cantidades_concatenacion()
     novedades = NovedadPerseoVsFenix.objects.all()
     return render(request, 'novedades_perseo_fenix.html', {'novedades': novedades})
 

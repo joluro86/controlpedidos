@@ -187,3 +187,35 @@ function eliminarActividadLegalizacion(element) {
     });
     
 }
+
+// Confirmación para eliminar equivalencias
+function eliminarEquivalencia(element) {
+  let equivalenciaId = element.getAttribute("data-id");
+  let url = `/administrador/eliminar-equivalencia/${equivalenciaId}/`;
+  console.log(equivalenciaId)
+  swal
+    .fire({
+      title: "¿Desea eliminar esta equivalencia? Esta acción no es revertible",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Sí, continuar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        Swal.fire({
+          title: 'Procesando...',
+          html: 'Por favor, espere...',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        window.location.href = url;
+      }
+    });
+    
+}

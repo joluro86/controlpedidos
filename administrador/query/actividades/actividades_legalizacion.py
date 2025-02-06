@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 
 
 def actividades_legalizacion(request):
-    return ActividadLegalizacion.objects.all()
+    return ActividadLegalizacion.objects.all().order_by('nombre')
 
 def crear_nueva_actividad_legalizacion(request):
     nombre_actividad = request.POST.get('nombre', '')
@@ -24,7 +24,6 @@ def actividad_por_id(id):
     return ActividadLegalizacion.objects.get(id=id)
     
 def actualizar_legalizacion(request, actividad_id):
-            print("aqui")
             actividad = actividad_por_id(actividad_id)
             actividad.nombre = request.POST.get('nombre', actividad.nombre)         
             actividad.save() 

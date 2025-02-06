@@ -1,7 +1,6 @@
 
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-
 from administrador.query.actividades.actividades_contrato import encargados, crear_nuevo_encargado, actualizar_encargado, eliminar_encargado_query
 from gestionvencimientos.models import Encargado
 

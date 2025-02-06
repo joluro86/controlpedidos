@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from administrador.query.actividades.actividades_contrato import actualizar_actividad,actividades_contrato, encargados, crear_nueva_actividad, eliminar_actividad, actividades_epm, materiales
 from administrador.query.actividades.actividades_legalizacion import actividades_legalizacion
+from administrador.query.actividades.guias import guia_interna_list
 from gestionvencimientos.models import Actividad, Encargado
 from administrador.query.actividades.variables_contrato import variables_contrato
 
@@ -16,6 +17,7 @@ def index(request):
         'materiales_permitidos': materiales(request), 
         'variables_contrato': variables_contrato(request),
         'actividades_legalizacion': actividades_legalizacion(request),
+        'guias': guia_interna_list(request),
     }
     
     return render(request, "admin.html", context)

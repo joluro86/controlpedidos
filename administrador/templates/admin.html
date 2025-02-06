@@ -31,8 +31,11 @@
 
                     <a class="list-group-item list-group-item-action" id="list-variables-list" data-toggle="list"
                         href="#list-variables" role="tab" aria-controls="variables">Variables contrato</a>
-                    <a class="list-group-item list-group-item-action" id="list-actividades-legalizacion-list" data-toggle="list"
-                        href="#list-actividades-legalizacion" role="tab" aria-controls="actividades-legalizacion">Actividades legalización</a>
+                    <a class="list-group-item list-group-item-action" id="list-actividades-legalizacion-list"
+                        data-toggle="list" href="#list-actividades-legalizacion" role="tab"
+                        aria-controls="actividades-legalizacion">Actividades legalización</a>
+                    <a class="list-group-item list-group-item-action" id="list-guias-list" data-toggle="list"
+                        href="#list-guias" role="tab" aria-controls="guias">Equivalencia de materiales</a>
                 </div>
             </div>
         </div>
@@ -60,6 +63,9 @@
                 <div class="tab-pane fade gap-4 mx-4" id="list-actividades-legalizacion" role="tabpanel"
                     aria-labelledby="list-actividades-legalizacion-list">
                     {% include 'actividades_legalizacion.html' %}
+                </div>
+                <div class="tab-pane fade gap-4 mx-4" id="list-guias" role="tabpanel" aria-labelledby="list-guias-list">
+                    {% include 'guia_list.html' %}
                 </div>
             </div>
         </div>

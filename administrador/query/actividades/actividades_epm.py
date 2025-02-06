@@ -9,7 +9,6 @@ def crear_nueva_actividad_epm(request):
             actividad.save()
 
 def actualizar_actividad_epm(request, actividad_id):
-            print("aqui")
             actividad = actividad_por_id_epm(actividad_id)
             actividad.nombre = request.POST.get('nombre', actividad.nombre)
             actividad.dias_urbano = request.POST.get('dias_urbano', actividad.dias_urbano)

@@ -1,0 +1,99 @@
+<div class="d-flex justify-content-center align-items-center admin_actividades">
+    <div class="card shadow-sm actividades_contrato" style="max-width: 500px;">
+        <div class="title_contrato">
+            <h6 class="text-center m-2">Tabla de equivalencia</h6>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table tabla_actividades m-0 text-center">
+                <thead>
+                    <tr style="font-size: 13px;">
+                        <th>Nombre Perseo</th>
+                        <th>Nombre Fénix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for guia in guias %}
+                    <tr>
+                        <td style="font-size: 11px;">
+                            <a href="#" class="text-decoration-none text-primary" data-bs-toggle="modal"
+                                data-bs-target="#editarGuiaModal{{ guia.id }}" title="Pulse para editar">
+                                {{ guia.nombre_perseo }}
+                            </a>
+                        </td>
+                        <td>{{ guia.nombre_fenix }}</td>
+                        </tr>
+                    <!-- Modal de edición dentro de la fila correspondiente -->
+                    {% include 'forms/form_editar_guia.html' %}
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-muted">No hay equivalencia registradas.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer p-0 d-flex list-masivo-actividad-contrato">
+            <a class="btn tabla_actividades btn-sm p-0 my-1 mx-3" href="{% url 'nueva_guia_form' %}"
+                title="Crear nueva actividad del contrato">
+                <i class="fa fa-plus m-0 icon-masivo-crear"></i> <!-- Icono de Font Awesome -->
+            </a>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.btn-guardar-guia').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                let guiaId = this.getAttribute('data-id');
+                let form = document.querySelector(`#form-editar-guia-${guiaId}`);
+                console.log(guiaId)
+                let formData = new FormData(form);
+
+                let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                fetch(`/administrador/editar-equivalencia/${guiaId}/`, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Cerrar el modal antes de mostrar la alerta
+                            let modalElement = document.querySelector(`#editarGuiaModal${guiaId}`);
+                            let modalInstance = bootstrap.Modal.getInstance(modalElement);
+                            modalInstance.hide();
+
+                            Swal.fire({
+                                title: 'Éxito',
+                                text: 'Equivalencia actualizada correctamente',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                location.reload();  // Recargar la página para reflejar los cambios
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: data.error || 'Hubo un problema al actualizar.',
+                                icon: 'error',
+                                confirmButtonText: 'Cerrar'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'No se pudo actualizar la equivalencia',
+                            icon: 'error',
+                            confirmButtonText: 'Cerrar'
+                        });
+                    });
+            });
+        });
+    });
+</script>

@@ -1,0 +1,58 @@
+{% extends 'admin.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center mt-4">
+    <div class="card shadow-sm actividades_contrato" style="width: 400px;">
+        <div class="card-header text-center">
+            <h5>{% if form.instance.pk %}Editar Guía{% else %}Nueva Guía{% endif %}</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <!-- Mostrar mensajes de error -->
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <strong>Corrige los siguientes errores:</strong>
+                        <ul>
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                
+                <!-- Formulario con estilos -->
+                <div class="mb-3">
+                    {{ form.nombre_perseo.label_tag }}
+                    {{ form.nombre_perseo }}
+                </div>
+                <div class="mb-3">
+                    {{ form.nombre_fenix.label_tag }}
+                    {{ form.nombre_fenix }}
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <div class="text-start boton-guardar mt-2">
+                        <button type="submit" class="btn btn-success btn-guardar_encargado" data-id-epm="{{ encargado.id }}">
+                            {% if form.instance.pk %}Actualizar{% else %}Guardar{% endif %}
+                        </button>
+                    </div>
+                    <div class="text-end mt-2">
+                        <a class="btn tabla_actividades btn-sm p-0 mx-3 color_primary" href="{% url 'index_admin' %}">
+                            <i class="fa fa-arrow-left m-0"><span class="mx-2 fw-bold">Regresar</span></i>
+                            <!-- Icono de Font Awesome -->
+                        </a>
+                    </div>
+
+                </div>
+
+                
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

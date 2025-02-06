@@ -9,7 +9,7 @@
             <div class="modal-body">
                 <form id="form-editar-material-{{ material.id }}" method="post">
                     {% csrf_token %}
-                    <div class="mb-2 input-group-sm">
+                    <div class="input-group-sm">
                         <label class="form-label">Descripción</label>
                         <input type="text" class="form-control nombre_encargado" name="material" value="{{ material.material }}">
                     </div>

@@ -1,0 +1,35 @@
+<div class="modal fade" id="editarGuiaModal{{ guia.id }}" tabindex="-1" aria-labelledby="editarGuiaLabel{{ guia.id }}"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarGuiaLabel{{ guia.id }}">Actualizar Equivalencia</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-editar-guia-{{ guia.id }}" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-2 input-group-sm">
+                        <label class="form-label">Nombre Perseo</label>
+                        <input type="text" class="form-control nombre_encargado" name="nombre_perseo"
+                            value="{{ guia.nombre_perseo }}">
+                    </div>
+                    <div class="mb-2 input-group-sm">
+                        <label class="form-label">Nombre Fénix</label>
+                        <input type="text" class="form-control nombre_encargado" name="nombre_fenix"
+                            value="{{ guia.nombre_fenix }}">
+                    </div>
+                    <div class="d-flex justify-content-between mt-3">
+                        <button type="submit" class="btn btn-success btn-guardar-guia"
+                            data-id="{{ guia.id }}">Guardar</button>
+                        <a class="btn tabla_actividades btn-sm p-0 mx-1 text-danger btn-eliminar"
+                            data-id="{{ guia.id }}" onclick="eliminarEquivalencia(this)">
+                            <i class="fa fa-arrow-left mt-2"></i>
+                            <span class="fw-bold mx-2">Eliminar</span>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

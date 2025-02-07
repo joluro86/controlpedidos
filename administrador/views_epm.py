@@ -5,11 +5,8 @@ from gestionvencimientos.models import Actividad_epm
 
 def nueva_actividad_epm(request):
     if request.method == 'POST':
-        try:
-            crear_nueva_actividad_epm(request)
-            return redirect('index_admin')
-        except:
-            return JsonResponse({'success': False, 'error': 'error al crear actividad epm'})
+        response = crear_nueva_actividad_epm(request)
+        return response
     return render(request, "nueva_actividad_epm.html")
 
 

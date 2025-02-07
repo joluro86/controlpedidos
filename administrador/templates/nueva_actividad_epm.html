@@ -7,7 +7,7 @@
             <h5 class="card-title text-center">Nueva Actividad Epm</h5>
         </div>
         <div class="card-body">
-            <form id="form-editar-actividad-epm-{{ actividad.id }}" method="post">
+            <form id="actividadEpmForm" method="post">
                 {% csrf_token %}
                 <div class="mb-2 input-group-sm">
                     <label class="form-label m-1">Nombre</label>
@@ -22,7 +22,7 @@
                     <input type="number" class="form-control m-0" name="dias_rural" required>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <div class="text-start boton-guardar mt-2">
+                    <div class="text-start boton-guardar-epm mt-2">
                         <button type="submit" class="btn btn-success btn-guardar_epm" data-id-epm="{{ actividad.id }}">
                             Guardar
                         </button>
@@ -39,4 +39,46 @@
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('actividadEpmForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Evitar recarga de la página
+    
+        let formData = new FormData(this);
+    
+        fetch("{% url 'nueva_actividad_epm_form' %}", {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    title: "¡Éxito!",
+                    text: "La actividad fue creada exitosamente.",
+                    icon: "success",
+                    confirmButtonText: "OK"
+                }).then(() => {
+                    window.location.href = "{% url 'index_admin' %}";  // Redirigir después de crear
+                });
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: data.error,
+                    icon: "error",
+                    confirmButtonText: "Entendido"
+                });
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                title: "Error",
+                text: "Hubo un problema al procesar la solicitud.",
+                icon: "error",
+                confirmButtonText: "Entendido"
+            });
+            console.error('Error:', error);
+        });
+    });
+</script>
+
 {% endblock content %}

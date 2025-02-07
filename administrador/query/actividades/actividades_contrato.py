@@ -61,21 +61,18 @@ def encargados(request):
 
 def crear_nuevo_encargado(request):
     if request.method == "POST":
-        print("enca")
+        
+        nombre_nuevo_encargado = request.POST.get('nombre', None)
+        
+        if verificar_encargado_existente(nombre_nuevo_encargado):
+            return JsonResponse({'success': False, 'error': 'Encargado ya existe en la base de datos.'})
 
-        # Obtener el valor de 'nombre' del formulario
-        nombre = request.POST.get('nombre', None)
+        
+        encargado = Encargado()  # Crear una nueva instancia del modelo
+        encargado.nombre = nombre_nuevo_encargado  # Asignar el valor al atributo del modelo
 
-        if nombre:  # Verificar si se recibió un nombre válido
-            encargado = Encargado()  # Crear una nueva instancia del modelo
-            encargado.nombre = nombre  # Asignar el valor al atributo del modelo
-
-            encargado.save()  # Guardar en la base de datos
-            print(f"Encargado '{encargado.nombre}' guardado exitosamente.")
-        else:
-            print("Error: No se proporcionó un nombre válido.")
-    else:
-        print("Error: La solicitud no es de tipo POST.")
+        encargado.save()  # Guardar en la base de datos
+        return JsonResponse({'success': True})
 
 
 def actividades_epm(request):
@@ -163,3 +160,7 @@ def verificar_actividad_existente(nombre_actividad):
     Retorna True si existe, False si no.
     """
     return Actividad.objects.filter(nombre=nombre_actividad).exists()
+
+
+def verificar_encargado_existente(nombre_encargado):
+    return Encargado.objects.filter(nombre=nombre_encargado).exists()

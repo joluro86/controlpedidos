@@ -33,27 +33,27 @@ def actividades_view(request):
 @login_required
 def nueva_actividad(request):
     if request.method == 'POST':
-        try:
-            crear_nueva_actividad(request)
-            return redirect('index_admin')
-        except Encargado.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Encargado no encontrado'})
+        response = crear_nueva_actividad(request)
+        return response
+
     context = {
-    'encargados':encargados(request),
-     }
+        'encargados': Encargado.objects.all()  # Asegurar que se pase la lista de encargados
+    }
     return render(request, "nueva_actividad.html", context)
+
 
 @login_required
 def editar_actividad(request, actividad_id):
     if request.method == 'POST':
         try:
-            actualizar_actividad(request, actividad_id)
-            return JsonResponse({'success': True})
+            return actualizar_actividad(request, actividad_id)
         except Actividad.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Actividad no encontrada'})
         except Encargado.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Encargado no encontrado'})
-    return JsonResponse({'success': False, 'error': 'Método no permitido'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
 
 @login_required
 def eliminar_actividad_por_id(request,id):

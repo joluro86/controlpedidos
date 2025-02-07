@@ -11,7 +11,7 @@
                     {% csrf_token %}
                     <div class="mb-2 input-group-sm">
                         <label class="form-label">Nombre</label>
-                        <input type="text" class="form-control nombre_encargado" name="nombre" value="{{ actividad.nombre }}">
+                        <input readonly type="text" class="form-control nombre_encargado" name="nombre" value="{{ actividad.nombre }}">
                     </div>
                     <div class="mb-3 input-group-sm">
                         <label class="form-label">Días Urbano</label>

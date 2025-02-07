@@ -84,14 +84,19 @@ def encargado_por_id(id):
 
 
 def actualizar_encargado(request, encargado_id):
+    
     if request.method == "POST":
+        
         encargado = get_object_or_404(Encargado, id=encargado_id)
-
+        nuevo_nombre= request.POST.get('nombre')
+        
+        if verificar_encargado_existente(nuevo_nombre):
+            return JsonResponse({'success': False, 'error': 'Encargado ya existe en la base de datos.'})
+            
         # Obtener el nombre del POST, si no se envía se mantiene el valor actual
-        encargado.nombre = request.POST.get('nombre', encargado.nombre)
-
+        encargado.nombre = nuevo_nombre
         encargado.save()
-        print(f"Encargado con ID {encargado_id} actualizado correctamente.")
+        return JsonResponse({'success': True})
 
 
 def eliminar_encargado_query(id):

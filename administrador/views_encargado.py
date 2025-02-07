@@ -18,12 +18,9 @@ def nuevo_encargado(request):
 def editar_encargado(request, encargado_id):
     if request.method == 'POST':
         try:
-            actualizar_encargado(request, encargado_id)
-            return JsonResponse({'success': True})
+            return actualizar_encargado(request, encargado_id)
         except Encargado.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Encargado no encontrado'})
-
-    return JsonResponse({'success': False, 'error': 'Método no permitido'})
 
 
 def eliminar_encargado(request, id):

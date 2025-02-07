@@ -13,11 +13,9 @@ def nueva_actividad_epm(request):
 def editar_actividad_epm(request, actividad_id):
     if request.method == 'POST':
         try:
-            actualizar_actividad_epm(request, actividad_id)
-            return JsonResponse({'success': True})
+            return actualizar_actividad_epm(request, actividad_id)
         except Actividad_epm.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Actividad no encontrada'})
-    return JsonResponse({'success': False, 'error': 'Método no permitido'})
 
 def eliminar_actividad_por_id_epm(request,id):
     eliminar_actividad_epm(id)

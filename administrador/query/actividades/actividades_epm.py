@@ -32,8 +32,7 @@ def actualizar_actividad_epm(request, actividad_id):
             actividad_epm.dias_urbano = request.POST.get('dias_urbano', actividad_epm.dias_urbano)
             actividad_epm.dias_rural = request.POST.get('dias_rural', actividad_epm.dias_rural)
           
-            actividad_epm.save()
-            
+            actividad_epm.save()            
             return JsonResponse({'success': True})
 
 def eliminar_actividad_epm(id):

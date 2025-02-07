@@ -14,7 +14,7 @@ def crear_nueva_actividad_legalizacion(request):
     
     if verificar_nombre_legalizacion(nombre_actividad):
         return JsonResponse({'success': False, 'error': 'Actividad ya existe en la base de datos.'})
-    actividad = Actividad_epm(
+    actividad = ActividadLegalizacion(
             nombre=nombre_actividad,
         )
     actividad.save()
@@ -29,7 +29,7 @@ def actualizar_legalizacion(request, actividad_id):
         actividad = get_object_or_404(ActividadLegalizacion, id=actividad_id)
     
         nombre_actividad = request.POST.get('nombre')
-        print(nombre_actividad  )
+
         if verificar_nombre_legalizacion(nombre_actividad):
             return JsonResponse({'success': False, 'error': 'Actividad ya existe en la base de datos.'})
         

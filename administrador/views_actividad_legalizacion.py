@@ -16,7 +16,7 @@ def crear_actividad_legalizacion(request):
 def editar_actividad_legalizacion(request, actividad_id):
     if request.method == 'POST':
         try:
-            actualizar_legalizacion(request, actividad_id)
+            return actualizar_legalizacion(request, actividad_id)
         except ActividadLegalizacion.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Actividad no encontrada'})
 

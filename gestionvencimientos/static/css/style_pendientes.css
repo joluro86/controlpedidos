@@ -4,7 +4,7 @@
 }
 
 /*  Inicio Codigo modal admin control ans */
-.admin_actividades .actividades_contrato .title_contrato {
+.admin_actividades .actividades_contrato .title_contrato, .title_contrato{
   background-color: #a4edcb !important;
   color: rgb(63, 49, 49) !important;
   border-bottom: solid white 1px;

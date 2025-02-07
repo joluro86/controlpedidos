@@ -6,13 +6,12 @@ from django.contrib import messages
 def guia_interna_list(request):
     return Guia.objects.all().order_by('nombre_perseo')
 
-def existencia_equivalencia(nombre_per):
-    return Guia.objects.filter(nombre_perseo=nombre_per).exists()
-
+def existencia_equivalencia(nombre_per, nombre_fen):
+    return Guia.objects.filter(nombre_perseo=nombre_per, nombre_fenix=nombre_fen).exists()
 
 def actualizar_guia_id(request, id):
     
-    if existencia_equivalencia(request.POST.get('nombre_perseo')):
+    if existencia_equivalencia(request.POST.get('nombre_perseo'), request.POST.get('nombre_fenix')):
         return False
     else:
         guia = Guia.objects.get(id=id)

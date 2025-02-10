@@ -180,4 +180,6 @@ def novedades_sellos(request):
 
 def reiniciar_extracciones(request):
     MaterialInstalado.objects.all().delete
+    ActaSello.objects.all().delete
+    SerieSello.objects.all().delete
     return redirect('home')

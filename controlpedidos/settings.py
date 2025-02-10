@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'produccion',
     'material_mejia',
     'administrador',
-]
+    'sellos',
+    ]
 
 
 MIDDLEWARE = [

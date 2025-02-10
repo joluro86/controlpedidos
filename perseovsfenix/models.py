@@ -8,7 +8,7 @@ class NumeroActa(models.Model):
         verbose_name_plural = 'Acta actual'
 
     def __str__(self):
-        return str('Acta # ' + str(self.numero))
+        return str(self.numero)
 
 class Guia(models.Model):
     nombre_perseo = models.CharField(verbose_name='Nombre Perseo', max_length=100)

@@ -14,6 +14,7 @@ class ActividadLegalizacion(models.Model):
 class VariableAnalisis(models.Model):
     region= models.CharField(max_length=200, null=True)
     contrato= models.CharField(max_length=200, null=True)
+    codigo_sellos= models.CharField(max_length=200, null=True)
     
     class Meta:
         ordering = ["region"]

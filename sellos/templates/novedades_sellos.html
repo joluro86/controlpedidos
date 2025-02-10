@@ -1,0 +1,73 @@
+{% extends 'index.html' %} {% load static %} {% block head %} {% endblock head %} 
+{% block content %}
+
+<div class="table-id card mt-1" style="width: 850px; margin: auto">
+  <div class="card-body">
+    <table
+      class="table table-sm table-hover"
+      class="display nowrap"
+      id="table_id"
+    >
+      <thead class="p-0">
+        <tr class="text-center m-0 p-0" style="font-size:10px;">
+          <th scope="col" class="p-0">Pedido</th>
+          <th scope="col" class="p-0">Cantidad Acta</th>
+          <th scope="col" class="p-0">Cantidad Perseo</th>
+          <th scope="col" class="p-0">Novedad</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for nov in novedades_sellos %}
+
+        <tr class="text-start m-0 pb-0">
+          <th class="m-0 pb-0 text-center">{{ nov.pedido }}</th>
+          <td class="m-0 pb-0 text-center">{{nov.cantidad_acta}}</td>
+          <td class="m-0 pb-0">{{nov.cantidad_series}}</td>
+          <td class="m-0 pb-0">{{nov.novedad}}</td>
+          </td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock content %} {% block js %}
+
+<script src="{% static 'js/js_pendientes.js' %}"></script>
+
+<script>
+
+  fecha = document.getElementById('fecha')
+  window.onload = function () {
+      console.log(fecha);
+    }
+
+</script>
+
+<script>
+  $(document).ready(function () {
+    $("#table_id").DataTable({
+      order: [[1, "asc"]],
+
+      dom: "Bfrtilp",
+      lengthMenu: [
+            [ 15, 30, 50, -1 ],
+            [ '15', '30', '50', 'Todos' ]
+        ],
+        
+      buttons: [
+        
+        {
+          extend: "excelHtml5",
+          title:'',
+          exportOptions: {
+            columns: [ 0, 1, 2, 3 ]
+          },
+        },    
+      ],
+    });
+  });
+</script>
+
+{% endblock js %}

@@ -151,6 +151,7 @@
           FIN PERSEO VS FENIX
           -->
 
+
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
           aria-expanded="true">Programar</a>
@@ -199,6 +200,48 @@
           </li>
         </ul>
       </li>
+      <!--  
+          FIN BONIFICACION
+          -->
+
+      <!--  
+          INICIO SELLOS
+          -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+              aria-expanded="true">Sellos</a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li class="nav-item dropdown">
+                <a class="dropdown-item w-100" href="{% url 'subir_acta_sellos' 'acta' %}">Subir Acta</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="dropdown-item w-100" href="{% url 'subir_acta_sellos' 'series' %}">Subir Series</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="dropdown-item w-100" href="{% url 'subir_acta_sellos' 'materiales' %}">Subir Materiales instalados</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="dropdown-item w-100" href="{% url 'generar_informe_sellos' %}">Generar informe</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="dropdown-item w-100" href="{% url 'ver_informe_sellos' %}">Ver informe</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="dropdown-item w-100" href="{% url 'ver_novedades_sellos' %}">Novedades</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="dropdown-item w-100" href="{% url 'upload_avatar' %}?next=/">Reiniciar informe</a>
+              </li>
+              
+              <li class="nav-item dropdown">
+                <a class="dropdown-item w-100" href="{% url 'reiniciar_extracciones_sellos' %}">Reiniciar extracciones</a>
+              </li>
+            </ul>
+          </li>
+      <!--  
+          FIN SELLOS
+          -->
+
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
           aria-expanded="true">Nomina</a>
@@ -275,6 +318,16 @@
   {% block content %}
   <div class="main">
     <div class="container py-5">
+      {% if messages %}
+            {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show"
+                role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+      {% else %}
+      
       <!-- Alerta de bienvenida -->
       <div class="alert alert-primary text-center py-4 my-2 rounded-3 shadow-sm">
         <h2 class="fw-bold mb-0">👋 ¡Bienvenido(a), {{ user.username }}!</h2>
@@ -290,6 +343,7 @@
         <a href="{% url 'upload_avatar' %}" class="btn btn-primary btn-lg">Subir foto</a>
         {% endif %}
       </div>
+      {% endif %}
     </div>
   </div>
   {% endblock %}

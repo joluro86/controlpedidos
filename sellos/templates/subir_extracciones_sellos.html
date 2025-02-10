@@ -1,0 +1,22 @@
+{% extends 'index.html' %} {% load static %}{% load humanize %} {% block content %}
+<div class="table-id card formulario_subir_excell" style="max-width: 450px; margin: 60px auto;">
+  <div class="card-body text-white">
+    <h4 class="m-0 text-center">
+      {% if extraccion != "0" %}
+        Subir {{ extraccion }} sellos
+      {% endif %}
+    </h4>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-group mt-3">
+        <input type="file" id="file" name="file" class="form-control">
+        <input type="text" id="archivo" name="archivo" class="form-control" value={{input_var}}>
+      </div>
+      <div class="d-flex justify-content-center mt-3">
+        <input type="submit" class="btn btn-light" value="Subir archivo">
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endblock content %}

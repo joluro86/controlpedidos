@@ -88,6 +88,7 @@ def gestionar_prenomina(request):
 
             empleados = prenomina.objects.values_list('empleado').distinct()
             nit= Mejia.objects.all().first()
+            
 
             for e in empleados.order_by('empleado'):
 
@@ -417,7 +418,9 @@ def export_excel(request):
     # Escribir el resto de los datos en la hoja de cálculo
     for row_num, row_data in enumerate(df.values):
         for col_num, value in enumerate(row_data):
-            worksheet.write(row_num + 1, col_num, value)
+            if value == 0.0000:
+                print(value)
+            worksheet.write(row_num + 1, col_num, None if value == 0.0000 else value)
 
     # Cerrar objeto ExcelWriter
     writer.close()

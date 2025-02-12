@@ -89,6 +89,9 @@ def gestionar_prenomina(request):
             empleados = prenomina.objects.values_list('empleado').distinct()
             nit= Mejia.objects.all().first()
             
+            total_rows = len(empleados)
+            processed_rows = 0
+            
 
             for e in empleados.order_by('empleado'):
 
@@ -174,6 +177,17 @@ def gestionar_prenomina(request):
                 nomina_empleado.definir_salario()
 
                 nomina_empleado.save()
+                
+                processed_rows += 1
+                
+                
+                    
+                request.session['progress'] = "Progreso: " + str(processed_rows) +" empleados de " + str(total_rows)
+                if processed_rows>=total_rows:
+                    request.session['progress'] = "Procesando..."
+                request.session.modified = True
+                request.session.save()  # 🔥 Esto fuerza a guardar la sesión 
+                print(request.session['progress']) 
 
             calculo_nombre_apellido()
 

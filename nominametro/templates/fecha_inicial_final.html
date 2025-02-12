@@ -2,7 +2,7 @@
 <div class="table-id card formulario_subir_excell text-white" style="max-width: 400px; margin: 50px auto">
   <div class="card-body">
 
-    <form action="{% url 'gestionar_prenomina' %}" method="post" enctype="multipart/form-data">
+    <form id="uploadForm" action="{% url 'gestionar_prenomina' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <h5 class="text-center">Selecciona el rango de fechas</h5>
         <div class="form-group mt-3">
@@ -20,4 +20,71 @@
     
   </div>
 </div>
+
+<!-- SweetAlert & jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#uploadForm").submit(function (event) {
+            event.preventDefault(); // Evita el envío tradicional del formulario
+            
+            let formData = new FormData();
+            formData.append("csrfmiddlewaretoken", $("input[name=csrfmiddlewaretoken]").val());
+
+            // Capturar valores de los campos de fecha y agregarlos a formData
+            formData.append("fecha_inicial", $("#fecha_inicial").val());
+            formData.append("fecha_final", $("#fecha_final").val());
+
+
+            Swal.fire({
+                title: "Gestionando nómina...",
+                html: "<span id='progress-text'>0%</span>",
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                    checkProgress();
+                }
+            });
+
+            $.ajax({
+              url: "{% url 'gestionar_prenomina' %}",
+              type: "POST",
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function () {
+                  Swal.fire({
+                      title: "Muy bien!",
+                      text: "La nómina se ha gestionado correctamente.",
+                      icon: "success",
+                      confirmButtonText: "Aceptar"
+                  }).then((result) => {
+                      if (result.isConfirmed) {
+                          window.location.href = "{% url 'informe' %}";  // Cambia 'informe' por la vista correcta a la que quieres redirigir
+                      }
+                  });
+              },
+              error: function () {
+                  Swal.fire("Error", "Hubo un problema al gestionar la nómina.", "error");
+              }
+          });
+       
+        });
+    });
+
+    function checkProgress() {
+        let interval = setInterval(() => {
+            $.get("{% url 'get_progress' %}", function (data) {
+                $("#progress-text").text(data.progress);
+                if (data.progress >= 100) {
+                    clearInterval(interval);
+                    Swal.fire("¡Completado!", "La nómina se ha procesado exitosamente.", "success");
+                }
+            });
+        }, 1000);
+    }
+</script>
+
 {% endblock content %} 

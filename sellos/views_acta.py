@@ -179,7 +179,6 @@ def novedades_sellos(request):
     return render(request, 'novedades_sellos.html',{'novedades_sellos': novedades_sellos})
 
 def reiniciar_extracciones(request):
-    print("aqui")
     MaterialInstalado.objects.all().delete()
     ActaSello.objects.all().delete()
     SerieSello.objects.all().delete()

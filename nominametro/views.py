@@ -1,63 +1,72 @@
 import pandas as pd
 import io
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from openpyxl import load_workbook
 from django.db.models import Sum
 from nominametro.models import Mejia, Novedad_nomina, plantilla, prenomina, Concepto
 
+from django.http import JsonResponse
+from openpyxl import load_workbook
 
 def subirnominametro(request):
     try:
         if request.method == 'POST':
             file = request.FILES['file']
-            process_excel(file)
-            return render(request, 'fecha_inicial_final.html')
+            request.session['progress'] = 0  # Inicializa progreso
+            process_excel(file, request)
+            return JsonResponse({"message": "Archivo subido exitosamente"}, status=200)
+        return render(request, 'subirarchivo.html')    
     except Exception as e:
         print(e)
-    return render(request, 'subirarchivo.html')
+        return JsonResponse({"error": str(e)}, status=500)
 
-
-def process_excel(file):
-    try:        
+def process_excel(file, request):
+    try:
         wb = load_workbook(file)
         ws = wb[wb.sheetnames[0]]
-        row_count = 0
-        for row in ws.iter_rows():
-            if row_count == 0:
-                row_count += 1
-                continue
+        total_rows = sum(1 for _ in ws.iter_rows()) - 1  # Ignorar encabezado
+        processed_rows = 1
+        
+        for row in ws.iter_rows(min_row=2):
             nomina_empleado = prenomina()
-            nomina_empleado. centro_de_costos = row[0].value
-            nomina_empleado. nombre_del_centro_de_costos = row[1].value
-            nomina_empleado. empleado = row[2].value
-            nomina_empleado. nombre_del_empleado = row[3].value
-            nomina_empleado. turno = row[4].value
-            nomina_empleado. descripción_del_turno = row[5].value
-            nomina_empleado. concepto = row[6].value
+            nomina_empleado.centro_de_costos = row[0].value
+            nomina_empleado.nombre_del_centro_de_costos = row[1].value
+            nomina_empleado.empleado = row[2].value
+            nomina_empleado.nombre_del_empleado = row[3].value
+            nomina_empleado.turno = row[4].value
+            nomina_empleado.descripción_del_turno = row[5].value
+            nomina_empleado.concepto = row[6].value
+            
             try:
                 nomina_empleado.conversor = buscar_conversor(row[6].value)
-                tipo_ingreso = Concepto.objects.filter(
-                    concepto=row[6].value).first()
-                nomina_empleado. tipo = tipo_ingreso.tipo
-                nomina_empleado. factor = tipo_ingreso.factor
+                tipo_ingreso = Concepto.objects.filter(concepto=row[6].value).first()
+                nomina_empleado.tipo = tipo_ingreso.tipo
+                nomina_empleado.factor = tipo_ingreso.factor
             except Exception as e:
-                novedad = Novedad_nomina()
-                novedad.empleado = nomina_empleado.empleado
-                novedad.novedad = str(e)
+                novedad = Novedad_nomina(empleado=nomina_empleado.empleado, novedad=str(e))
                 novedad.save()
 
-            nomina_empleado. nombre_del_concepto = row[7].value
-            nomina_empleado. vinculación = row[8].value
-            nomina_empleado. préstamo = row[9].value
-            nomina_empleado. salario_básico_hora = row[10].value
-            nomina_empleado. tiempo = row[11].value
-            nomina_empleado. valor = row[12].value
-
+            nomina_empleado.nombre_del_concepto = row[7].value
+            nomina_empleado.vinculación = row[8].value
+            nomina_empleado.préstamo = row[9].value
+            nomina_empleado.salario_básico_hora = row[10].value
+            nomina_empleado.tiempo = row[11].value
+            nomina_empleado.valor = row[12].value
             nomina_empleado.save()
+            
+            # Actualizar progreso
+            processed_rows += 1
+            request.session['progress'] = str(processed_rows) +" filas de " + str(total_rows)
+            request.session.modified = True
+            request.session.save()  # 🔥 Esto fuerza a guardar la sesión    
+                    
     except Exception as e:
         print(e)
 
+def get_progress(request):
+    progress = request.session.get('progress', 0)
+    return JsonResponse({'progress': progress})
 
 def buscar_conversor(concepto):
     conversor = Concepto.objects.filter(concepto=concepto).first()
@@ -79,16 +88,12 @@ def gestionar_prenomina(request):
 
             empleados = prenomina.objects.values_list('empleado').distinct()
             nit= Mejia.objects.all().first()
-            cont = 1
 
-            valorhoras = 0
             for e in empleados.order_by('empleado'):
-                cont += 1
 
                 empleado = prenomina.objects.filter(empleado=e[0]).first()
 
                 emplea = e[0]
-                print(nit)
 
                 nomina_empleado = plantilla()
                 nomina_empleado.nit=str(nit)
@@ -296,7 +301,6 @@ def calculo_nombre_apellido():
                 if cont >= 3:
                     nombre += inf + " "
                 cont += 1
-                print(inf)
             i.nombre = nombre
             i.apellido = apellido
 

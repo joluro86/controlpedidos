@@ -418,8 +418,6 @@ def export_excel(request):
     # Escribir el resto de los datos en la hoja de cálculo
     for row_num, row_data in enumerate(df.values):
         for col_num, value in enumerate(row_data):
-            if value == 0.0000:
-                print(value)
             worksheet.write(row_num + 1, col_num, None if value == 0.0000 else value)
 
     # Cerrar objeto ExcelWriter

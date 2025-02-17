@@ -2,7 +2,7 @@ from asyncio.windows_events import NULL
 from email.policy import HTTP
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from analisis_acta.models import Acta, Materiales, Novedad_acta, VariableAnalisis
+from analisis_acta.models import Acta, CantidadItem, Materiales, Novedad_acta, VariableAnalisis
 from django.db.models import Sum, Q, Count
 from django.http import JsonResponse, HttpResponseRedirect
 from openpyxl import load_workbook
@@ -62,7 +62,7 @@ def process_excel_acta(file):
             acta.tipo = row[15]
             acta.cobro = row[16]
             acta.suminis = row[17] if row[17] is not None else '0'
-            acta.item_cont = row[18] if row[18] is not None else '0'
+            acta.item_cont = row[18] if row[18] is not None else row[17]
             acta.item_res = row[19]
             acta.cantidad = row[20] if row[20] is not None else '0'
             acta.vlr_cliente = row[21]
@@ -91,8 +91,7 @@ def calculo_novedades_acta(request):
         if pedido.suminis.endswith("P"):
             crear_novedad(pedido, "AEJDO: con suministro " + pedido.suminis)
 
-    gestionar_nomnbre_utem_con_a_o_con_p(request)
-
+ 
     pedidos = Acta.objects.all()
 
     for pedido in pedidos:
@@ -100,10 +99,6 @@ def calculo_novedades_acta(request):
         material = Materiales.objects.filter(material=pedido.suminis).exists()
         
         if pedido.suminis != '0' and material == False and pedido.suminis[0]!="C" and pedido.suminis[0]!="R":
-            print(material)
-            print(pedido.pedido)
-            print(pedido.item_cont)
-            print(pedido.suminis)
             novedad = "Material no permitido " + str(pedido.suminis)
             crear_novedad(pedido, novedad)
         else:            
@@ -605,22 +600,6 @@ def comprobar_cobro_calibracion(pedido):
             calibracion = 0
         crear_novedad(pedido, 'Calibración con cantidad= ' + str(calibracion))
 
-def gestionar_nomnbre_utem_con_a_o_con_p(request):
-
-    pedidos = Acta.objects.all()
-    cont = 0
-    for p in pedidos:
-        if p.item_cont is not None and p.item_cont == "0":
-            cont += 1
-            p.item_cont = p.suminis
-            p.save()
-        if p.item_cont is not None and (p.item_cont[-1] == 'A' or p.item_cont[-1] == 'P'):
-            p.item_cont = p.item_cont[:-1]
-            p.save()
-        if p.suminis is not None and (p.suminis[-1] == 'A' or p.suminis[-1] == 'P'):
-            p.item_cont = p.suminis[:-1]
-            p.save()
-
 def busqueda_insumo_por_item(pedido, insumo, item):
     try:
         pedidos = Acta.objects.filter(pedido=pedido)
@@ -910,6 +889,7 @@ def crear_novedad(pedido, nov):
     novedad.save()
 
 def limpiar_novedades(request):
+    CantidadItem.objects.all().delete()
     Novedad_acta.objects.all().delete()
     return redirect('novedades_acta')
 

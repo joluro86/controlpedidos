@@ -8,7 +8,7 @@ from administrador.views_perfil import upload_avatar, eliminar_foto
 from administrador.views_variables_contrato import agregar_variable_contrato, editar_variable
 from administrador.views_actividad_legalizacion import crear_actividad_legalizacion, editar_actividad_legalizacion, eliminar_actividad_legalizacion_id
 from administrador.views_guia import GuiaCreateView, GuiaListView, actualizar_guia, eliminar_guia
-
+from administrador.views_cantidades_items import crear_nueva_cantidad_item
 
 urlpatterns = [
     path('subir-avatar/', upload_avatar, name='upload_avatar'),
@@ -69,4 +69,6 @@ urlpatterns = [
          name='nueva_guia_form'),
     path('editar-equivalencia/<int:id>/', actualizar_guia, name='update_guia'),
     path('eliminar-equivalencia/<int:id>/', eliminar_guia, name='eliminar_guia'),
+    
+    path('nueva-cantidad-item', crear_nueva_cantidad_item, name="crear_nueva_cantidad_item" )
 ]

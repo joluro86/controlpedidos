@@ -1,13 +1,13 @@
 {% extends 'index.html' %} {% load static %} {% block head %} {% endblock head %}
 {% block content %}
 
-<h5 style="color: blue; text-align: center; margin: 20px;">Novedades Acta</h5>
+<h5 class="text-secondary" style="text-align: center; margin: 0px 0px 5px 0px;">Novedades Acta</h5>
 
 <div class="table-id card mt-1" style="width: 90%; margin: auto">
   <div class="card-body">
     <table class="table table-sm table-hover" class="display nowrap" id="table_id">
       <thead class="p-0">
-        <tr class="text-center m-0 p-0" style="background-color: #414141; color:white; border-radius: 2px;">
+        <tr class="text-start m-0 p-0" style="font-size:12px !important;">
           <th scope="col" class="p-0">Id novedad</th>
           <th scope="col" class="p-0">Pedidos</th>
           <th scope="col" class="p-0">Actividad</th>
@@ -22,14 +22,14 @@
       <tbody>
         {% for a in novedades %}
 
-        <tr class="text-center p-0 tr">
-          <td class="m-0 pb-0 text-start w-25">{{ a.pedido }}-{{a.novedad}}</td>
+        <tr class="text-start p-0 tr" style="font-size:12px !important">
+          <td class="m-0 pb-0 w-25 text-start">{{ a.pedido }}-{{a.novedad}}</td>
           <th class="pt-1">{{ a.pedido }}</th>
           <td class="m-0 pb-0">{{ a.actividad }}</td>
           <td class="m-0 pb-0">{{ a.municipio }}</td>
           <td class="m-0 pb-0">{{ a.item }}</td>
           <td class="m-0 pb-0">{{ a.pagina }}</td>
-          <td class="m-0 pb-0">{{ a.novedad }}</td>
+          <td class="m-0 pb-0 text-start">{{ a.novedad }}</td>
           <td class="m-0 pb-0"></td>
           <td class="m-0 pb-0"></td>
 

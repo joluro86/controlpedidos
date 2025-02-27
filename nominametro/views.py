@@ -91,14 +91,14 @@ def gestionar_prenomina(request):
             
             total_rows = len(empleados)
             processed_rows = 0
-            
+            error=""
 
             for e in empleados.order_by('empleado'):
 
                 empleado = prenomina.objects.filter(empleado=e[0]).first()
 
                 emplea = e[0]
-
+                error=emplea
                 nomina_empleado = plantilla()
                 nomina_empleado.nit=str(nit)
                 nomina_empleado.cedula = empleado.empleado
@@ -193,6 +193,7 @@ def gestionar_prenomina(request):
 
     except Exception as e:
         print(e)
+        print("cedula :" + error)
 
     return redirect('informe')
 

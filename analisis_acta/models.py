@@ -88,20 +88,7 @@ class Materiales(models.Model):
     def __str__(self):
         return str(self.material)
     
-class CantidadItem(models.Model):
-    item = models.ForeignKey(Acta, on_delete=models.CASCADE)
-    cantidad_cobro = models.IntegerField() 
-    
-    class Meta:
-        verbose_name = 'Cantidades Items'
-        verbose_name_plural = 'Cantidades Items'
-        
-    def verificar_cantidad(self, pedido):
-        suma_cantidad= Acta.objects.filter(pedido=pedido, 
-                            item_cont=self.item).aggregate(suma=Sum('cantidad'))
-        return self.cantidad_cobro != suma_cantidad
-    
-    from django.db import models
+
 from django.db.models import Sum
 
 from django.db import models

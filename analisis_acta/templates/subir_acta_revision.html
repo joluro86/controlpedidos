@@ -1,18 +1,25 @@
-{% extends 'index.html' %} {% load static %}{% load humanize %} {% block content %}
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
 <div class="table-id card formulario_subir_excell" style="max-width: 450px; margin: 60px auto;">
   <div class="card-body text-white">
-    <h4 class="m-0 text-center">Subir Acta Sellos</h4>
+    <h4 class="m-0 text-center">Subir Cantidad Items</h4>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
 
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="form-group mt-3">
-        <input type="file" id="file" name="file" class="form-control">
+        <input type="file" id="file" name="file" accept=".xls, .xlsx" class="form-control">
       </div>
       <div class="d-flex justify-content-center mt-3">
         <input type="submit" class="btn btn-light" value="Subir archivo">
       </div>
     </form>
-
   </div>
 </div>
 {% endblock content %}

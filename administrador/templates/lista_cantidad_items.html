@@ -1,5 +1,5 @@
-<div class="d-flex admin_actividades">
-    <div class="card shadow-sm actividades_contrato" style="max-width: 400px;">
+<div class="d-flex justify-content-center align-items-center admin_actividades">
+    <div class="card shadow-sm actividades_contrato" style="max-width: 500px;">
         <div class="title_contrato">
             <h6 class="text-center m-2">Lista de Cantidad Items</h6>
         </div>
@@ -10,67 +10,30 @@
                     <tr style="font-size: 13px;">
                         <th>Ítem</th>
                         <th>Cantidad Cobro</th>
-                        <th>Restricción</th> <!-- Nueva columna para el tipo de restricción -->
+                        <th>Restricción</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for cantidad in cantidades_items %}
-                    <tr>
-                        <td style="font-size: 11px;">
+                    <tr style="font-size: 11px;">
+                        <td>
                             <a href="#" class="text-decoration-none text-primary" data-bs-toggle="modal"
                                 data-bs-target="#editarCantidadModal{{ cantidad.id }}" title="Pulse para editar">
                                 {{ cantidad.item }}
                             </a>
                         </td>
-                        <td>{{ cantidad.cantidad_cobro }}</td>
-                        <td>{{ cantidad.get_tipo_restriccion_display }}</td> <!-- Mostrar tipo de restricción -->
-                        <td>
-                            <button class="btn btn-danger btn-sm btn-eliminar-cantidad" data-id="{{ cantidad.id }}">
-                                🗑️
-                            </button>
+                        <td class="px-2">{{ cantidad.cantidad_cobro }}</td>
+                        <td class="px-2">{{ cantidad.get_tipo_restriccion_display }}</td> 
+                        <td class="px-2">
+                            <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" 
+                                title="Eliminar cantidad item" data-id="{{ cantidad.id }}"
+                                onclick="eliminarCantidadItem(this)">
+                                <i class="fa-solid fa-trash-can fa-sm p-1"></i> 
+                            </a>
                         </td>
                     </tr>
-
-                    <!-- Modal para editar cantidad -->
-                    <div class="modal fade" id="editarCantidadModal{{ cantidad.id }}" tabindex="-1"
-                        aria-labelledby="editarCantidadModalLabel{{ cantidad.id }}" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editarCantidadModalLabel{{ cantidad.id }}">Editar Cantidad</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form method="POST" action="·">
-                                        {% csrf_token %}
-                                        <div class="mb-3">
-                                            <label for="cantidad_cobro" class="form-label">Cantidad Cobro</label>
-                                            <input type="number" class="form-control" id="cantidad_cobro"
-                                                name="cantidad_cobro" value="{{ cantidad.cantidad_cobro }}" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="item" class="form-label">Ítem</label>
-                                            <input type="text" class="form-control" id="item" name="item"
-                                                value="{{ cantidad.item }}" required>
-                                        </div>
-                                        <!-- Verificar valor en el template -->
-                                        <p>{{ cantidad.restriccion_tipo }}</p>
-
-                                        <div class="mb-3">
-                                            <label for="restriccion_tipo" class="form-label">Tipo de Restricción</label>
-                                            <select class="form-select" id="restriccion_tipo" name="restriccion_tipo" required>
-                                                <option value="max" {% if cantidad.restriccion_tipo == 'max' %}selected{% endif %}>Máximo</option>
-                                                <option value="exacto" {% if cantidad.restriccion_tipo == 'exacto' %}selected{% endif %}>Exacto</option>
-                                                <option value="min" {% if cantidad.restriccion_tipo == 'min' %}selected{% endif %}>Mínimo</option>
-                                            </select>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   
                     {% empty %}
                     <tr>
                         <td colspan="4" class="text-muted">No hay cantidades registradas.</td>
@@ -81,13 +44,14 @@
         </div>
 
         <div class="card-footer p-0 d-flex list-masivo-actividad-contrato">
-            <a class="btn tabla_actividades btn-sm p-0 my-1 mx-3" href="{% url 'crear_nueva_cantidad_item' %}"
+            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'crear_nueva_cantidad_item' %}"
                 title="Crear nuevo ítem">
                 <i class="fa fa-plus m-0 icon-masivo-crear"></i>
             </a>
         </div>
     </div>
 </div>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

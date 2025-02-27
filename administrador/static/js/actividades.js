@@ -219,3 +219,35 @@ function eliminarEquivalencia(element) {
     });
     
 }
+
+// Confirmación para eliminar equivalencias
+function eliminarCantidadItem(element) {
+  let cantidadItemId = element.getAttribute("data-id");
+  let url = `/analisis/eliminar-cantidad-items/${cantidadItemId}/`;
+  console.log(cantidadItemId)
+  swal
+    .fire({
+      title: "¿Desea eliminar esta relación? Esta acción no es revertible",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Sí, continuar!",
+    })
+    .then(function (result) {
+      if (result.value) {
+        Swal.fire({
+          title: 'Eliminando...',
+          html: 'Por favor, espere...',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        window.location.href = url;
+      }
+    });
+    
+}

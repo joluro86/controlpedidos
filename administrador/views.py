@@ -21,7 +21,6 @@ def index(request):
         'guias': guia_interna_list(request),
         'cantidades_items': CantidadItem.objects.all()
     }
-    print(len(CantidadItem.objects.all()))
     return render(request, "admin.html", context)
 
 @login_required

@@ -367,14 +367,24 @@ def calculo_novedades_acta(request):
             if pedido.item_cont == 'A 23':
                 nov = "A 23=1,"
                 busqueda_item(pedido, '211673', '210947', nov)
+                busqueda_item(pedido, '335931', '210947', nov)
 
             if pedido.item_cont == "A 23":
                     if Acta.objects.filter(pedido=pedido.pedido).filter(
-                            item_cont='211673').aggregate(suma=Sum('cantidad'))['suma']==None:
+                            item_cont='211673').aggregate(suma=Sum('cantidad'))['suma']==None and Acta.objects.filter(pedido=pedido.pedido).filter(
+                            item_cont='335931').aggregate(suma=Sum('cantidad'))['suma']==None:
                         crear_novedad(
-                                    pedido, pedido.item_cont + ' No cobró 211673')  
+                                    pedido, pedido.item_cont + ' No cobró tablero')  
 
             if pedido.item_cont == '211673':
+                insumo = str(pedido.item_cont)
+                busqueda_insumo(pedido, insumo)
+
+                if int(pedido.cantidad) > 1:
+                    crear_novedad(pedido, str(pedido.item_cont) +
+                                  ". Cantidad mayor a 1.")
+                    
+            if pedido.item_cont == '335931':
                 insumo = str(pedido.item_cont)
                 busqueda_insumo(pedido, insumo)
 
@@ -663,6 +673,19 @@ def busqueda_insumo(pedido, insumo):
                 crear_novedad(pedido, nov)
 
         if insumo == '211673':
+            encontreinsumo = 0
+            for p in pedidos:
+                letra = p.item_cont[0]
+                if letra == 'A':
+
+                    if p.item_cont == 'A 23':
+                        encontreinsumo = 1
+
+            if encontreinsumo == 0:
+                nov = insumo + ', insumo sin actividad'
+                crear_novedad(pedido, nov)
+                
+        if insumo == '335931':
             encontreinsumo = 0
             for p in pedidos:
                 letra = p.item_cont[0]

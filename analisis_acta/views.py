@@ -81,13 +81,14 @@ def calculo_novedades_acta(request):
     pedidos_LEGA = Acta.objects.filter(actividad__in=["ALEGA", "ALECA", "ACAMN", "ALEGN"]).exclude(suminis__exact='0').exclude(suminis__exact='CALE1F')
 
     for pedido in pedidos_LEGA:
-        if pedido.suminis and pedido.suminis not in ["215887A", "219404A"]:
+        if pedido.suminis not in ["215887A", "219404A"]:
             crear_novedad(pedido, "Legalización: Suministro " + pedido.suminis)
             
     pedidos_aejdo = Acta.objects.filter(actividad__in=["AEJDO"]).exclude(suminis__exact='0').exclude(
     suminis__exact='CALE1F').exclude(suminis__isnull=True)
     
     for pedido in pedidos_aejdo: 
+
         if pedido.suminis.endswith("P"):
             crear_novedad(pedido, "AEJDO: con suministro " + pedido.suminis)
 
@@ -101,8 +102,13 @@ def calculo_novedades_acta(request):
         if pedido.suminis != '0' and material == False and pedido.suminis[0]!="C" and pedido.suminis[0]!="R":
             novedad = "Material no permitido " + str(pedido.suminis)
             crear_novedad(pedido, novedad)
-        else:            
+        else:   
+            if pedido.item_cont is None:
+                continue
+
             cod = pedido.item_cont
+            print(cod)
+                
             primera_letra = cod[0]
             if primera_letra == 'A':
 
@@ -902,6 +908,13 @@ def calculo_otros_incompatibles(pedido, item_comparar, comparado):
         pass
 
 def crear_novedad(pedido, nov):
+    # Validar si ya existe una novedad con ese pedido y novedad
+    existe = Novedad_acta.objects.filter(pedido=pedido.pedido, novedad=nov).exists()
+    if existe:
+        print("❌ Ya existe una novedad con ese pedido y tipo de novedad.")
+        return  # O puedes lanzar una excepción, según lo necesites
+
+    # Si no existe, crear la novedad
     novedad = Novedad_acta()
     novedad.pedido = pedido.pedido
     novedad.actividad = pedido.actividad
@@ -909,7 +922,10 @@ def crear_novedad(pedido, nov):
     novedad.pagina = pedido.pagina
     novedad.item = pedido.item_cont
     novedad.novedad = nov
+    novedad.fecha = pedido.fecha_estado
     novedad.save()
+    print("✅ Novedad creada correctamente.")
+
 
 def limpiar_novedades(request):
     CantidadItem.objects.all().delete()

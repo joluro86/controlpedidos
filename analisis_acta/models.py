@@ -33,12 +33,13 @@ class Novedad_acta(models.Model):
     item = models.CharField(max_length=200, default=0, null=True)
     novedad = models.CharField(max_length=200, default=0, null=True)
     estado = models.CharField(max_length=100, default="Aplica", null=True)
-
+    fecha = models.CharField(max_length=100, default="Sin fecha", null=True)
 
     class Meta:
         ordering = ["actividad"]
         verbose_name = "Novedades Acta"
         verbose_name_plural = "Novedades Acta"
+        unique_together = ('pedido', 'novedad')
         
     def __str__(self):
         return str(self.pedido)+ " " + str(self.novedad)

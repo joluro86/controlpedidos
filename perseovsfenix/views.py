@@ -139,16 +139,14 @@ def index(request):
 def calculo_novedades_perseo_vs_fenix(request):
     obtener_diferencias_entre_items_pvf(request)
     comparar_cantidades_concatenacion()
+    calculo_numero_acta()
     novedades = NovedadPerseoVsFenix.objects.all()
     return render(request, 'novedades_perseo_fenix.html', {'novedades': novedades})
 
 
 def calculo_numero_acta():
     acta = NumeroActa.objects.first()
-    print("acta")
-    print(acta)
     pedidos_perseo = matperseo.objects.all()
-    
     for pedido_perseo in pedidos_perseo:
         try:
             if str(pedido_perseo.acta) != str(acta.numero):

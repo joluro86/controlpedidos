@@ -944,7 +944,7 @@ def calculo_enepre(pedido):
             busqueda_item(pedido, 'A 28', 0, novedad)
             busqueda_item(pedido, 'A 29', 0, novedad)
             busqueda_item(pedido, '219404', 0, novedad)
-            busqueda_item(pedido, '220683',  0, novedad)
+            busqueda_item(pedido, '325998',  0, novedad)
             calculo_incompatible_A03(pedido, novedad)
         except:
             pass

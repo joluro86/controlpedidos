@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'material_mejia',
     'administrador',
     'sellos',
+    'nuevo_analisis',
     ]
 
 

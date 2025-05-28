@@ -69,3 +69,7 @@ def eliminar_cantidad_items(request, id):
         messages.warning(request, "El ítem no existe o ya ha sido eliminado.")
     
     return redirect('index_admin')
+
+
+    
+    

@@ -54,6 +54,7 @@ urlpatterns = [
     path('registrar-acta/', registrar_acta, name='registrar_acta'),
     path('administrador/', include('administrador.urls')),
     path('sellos/', include('sellos.urls')),
+    path('nuevo_analisis/', include('nuevo_analisis.urls')),
     
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -116,20 +116,22 @@ def calculo_novedades_acta(request):
                     if int(pedido.cantidad) > 1:
                         crear_novedad(
                             pedido, 'A 05 mayor a 1')
+                    
                     try:
+                        # ya en la nueva logica
                         BREAKER_210954 = Acta.objects.filter(pedido=pedido).filter(
                             item_cont='210954').aggregate(suma=Sum('cantidad'))
                         
-                        if BREAKER_210954['suma'] == None:
+                        if BREAKER_210954['suma'] == None: #YA EN NUEVA LOGICA
                             crear_novedad(
                                 pedido, 'A 05 sin 210954.')
                             
-                        if BREAKER_210954['suma'] < 1:
+                        if BREAKER_210954['suma'] < 1: #YA EN NUEVA LOGICA
                             crear_novedad(
                                 pedido, 'A 05 con 210954 menor a 1')
                     except Exception as e:
                         print(e)
-
+                    
                     if pedido.item_cont == '210954':
 
                         A05 = Acta.objects.filter(pedido=pedido).filter(
@@ -924,7 +926,6 @@ def crear_novedad(pedido, nov):
     novedad.novedad = nov
     novedad.fecha = pedido.fecha_estado
     novedad.save()
-    print("✅ Novedad creada correctamente.")
 
 
 def limpiar_novedades(request):

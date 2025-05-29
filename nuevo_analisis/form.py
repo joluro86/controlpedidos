@@ -13,7 +13,7 @@ class RelacionItemReglaForm(forms.ModelForm):
         fields = [
             'item',
             'requiere_cantidad',
-            'cantidad_requeridad',
+            'cantidad_requerida',
             'item_requerido_nombre',
             'tipo_requerido',            
             'cantidad',

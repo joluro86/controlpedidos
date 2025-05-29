@@ -33,7 +33,7 @@ class RelacionItemRegla(models.Model):
     ]  
     item = models.ForeignKey(ItemRegla, on_delete=models.CASCADE, related_name='relaciones')
     requiere_cantidad = models.BooleanField(default=False)
-    cantidad_requeridad = models.PositiveIntegerField(default=1)
+    cantidad_requerida = models.PositiveIntegerField(default=1)
     tipo_requerido = models.CharField(max_length=30, choices=TIPO_REQUERIDO, default="suministro")
     item_requerido = models.ForeignKey(ItemRegla, on_delete=models.CASCADE, related_name='es_requerido_por')
     comparador = models.CharField(max_length=30, choices=COMPARADORES)

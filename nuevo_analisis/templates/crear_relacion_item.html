@@ -1,33 +1,109 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<div class="container mt-5 d-flex justify-content-center">
-  <div class="card shadow border-0 w-100" style="max-width: 600px; background-color: #f0f7ff;">
-    <div class="card-header text-white" style="background-color: #007bff;">
-      <h5 class="mb-0">
-        <i class="bi bi-plus-circle me-2"></i>Crear relación de ítems
-      </h5>
-    </div>
-    <div class="card-body">
-      <form method="post" novalidate>
-        {% csrf_token %}
-        {% for field in form %}
-          <div class="mb-3">
-            <label class="form-label fw-semibold">{{ field.label }}</label>
-            {{ field }}
-            {% if field.help_text %}
-              <div class="form-text">{{ field.help_text }}</div>
-            {% endif %}
-            {% for error in field.errors %}
-              <div class="text-danger">{{ error }}</div>
-            {% endfor %}
+  <div class="container mt-2 d-flex justify-content-center">
+    <div class="card shadow border-0 w-100" style="max-width: 700px; background-color: #f0f7ff;">
+      <div class="card-header text-white" style="background-color: #007bff;">
+        <h5 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Crear relación de ítems</h5>
+      </div>
+      <div class="card-body">
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="row">
+            <!-- Columna 1 -->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label fw-semibold">{{ form.item.label }}</label>
+                {{ form.item }}
+                {% for error in form.item.errors %}
+                  <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">{{ form.requiere_cantidad.label }}</label>
+                {{ form.requiere_cantidad }}
+                {% for error in form.requiere_cantidad.errors %}
+                  <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+              </div>
+              <div class="mb-3" id="div_cantidad_requerida">
+                <label class="form-label fw-semibold">{{ form.cantidad_requeridad.label }}</label>
+                {{ form.cantidad_requeridad }}
+                {% for error in form.cantidad_requeridad.errors %}
+                  <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Columna 2 -->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label fw-semibold">{{ form.item_requerido_nombre.label }}</label>
+                {{ form.item_requerido_nombre }}
+                {% if form.item_requerido_nombre.help_text %}
+                  <div class="form-text">{{ form.item_requerido_nombre.help_text }}</div>
+                {% endif %}
+                {% for error in form.item_requerido_nombre.errors %}
+                  <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">{{ form.tipo_requerido.label }}</label>
+                {{ form.tipo_requerido }}
+                {% for error in form.tipo_requerido.errors %}
+                  <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">{{ form.cantidad.label }}</label>
+                {{ form.cantidad }}
+                {% for error in form.cantidad.errors %}
+                  <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">{{ form.comparador.label }}</label>
+                {{ form.comparador }}
+                {% for error in form.comparador.errors %}
+                  <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">{{ form.factor.label }}</label>
+                {{ form.factor }}
+                {% for error in form.factor.errors %}
+                  <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+              </div>
+            </div>
           </div>
-        {% endfor %}
-        <div class="text-end">
-          <button type="submit" class="btn btn-primary">Guardar relación</button>
-        </div>
-      </form>
+
+          <div class="text-end">
+            <button type="submit" class="btn btn-primary">Guardar relación</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-</div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const requiereCantidadCheckbox = document.getElementById('id_requiere_cantidad')
+      const divCantidad = document.getElementById('div_cantidad_requerida')
+    
+      function toggleCantidad() {
+        if (requiereCantidadCheckbox.checked) {
+          divCantidad.style.display = 'block'
+        } else {
+          divCantidad.style.display = 'none'
+        }
+      }
+    
+      // Inicializar al cargar
+      toggleCantidad()
+    
+      // Escuchar cambios
+      requiereCantidadCheckbox.addEventListener('change', toggleCantidad)
+    })
+  </script>
 {% endblock %}

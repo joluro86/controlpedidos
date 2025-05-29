@@ -11,88 +11,42 @@
 
   <h5 class="text-secondary mt-4">🔧 Reglas por Actividad</h5>
   <div class="table-responsive mb-5">
-    <table class="table table-bordered table-striped table-sm align-middle">
+    <table class="table table-bordered table-striped table-sm align-middle text-center">
       <thead class="table-light">
         <tr>
-          <th>#</th>
+          <th>Tipo regla</th>
+          <th>Id</th>
           <th>Item</th>
+          <th>Requiere cantidad</th>
+          <th>Cantidad requerida</th>
           <th>Requiere</th>
           <th>Comparador</th>
+          <th>Factor</th>
           <th>Cantidad</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
-        {% for regla in relaciones_actividad %}
+        {% for regla in relaciones %}
         <tr>
+          <td>{{regla.item.tipo}}</td>
           <td>{{ regla.id }}</td>
           <td>{{ regla.item.nombre }}</td>
+          {% if regla.requiere_cantidad %}
+            <td>Si</td>
+            {% else %}
+            <td>No</td>
+          {% endif %}
+          <td>{{ regla.cantidad_requeridad }}</td>
           <td>{{ regla.item_requerido.nombre }}</td>
           <td>{{ regla.get_comparador_display }}</td>
+          <td>{{ regla.factor }}</td>
           <td>{{ regla.cantidad }}</td>
+          <td><a href="{% url 'eliminar_regla' regla.id %}">Eliminar</a></td>
         </tr>
         {% empty %}
         <tr>
           <td colspan="5" class="text-center text-muted">No hay reglas de actividad registradas.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  <h5 class="text-secondary">🔧 Reglas por Suministro</h5>
-  <div class="table-responsive">
-    <table class="table table-bordered table-striped table-sm align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>#</th>
-          <th>Item</th>
-          <th>Requiere</th>
-          <th>Comparador</th>
-          <th>Cantidad</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for regla in relaciones_suministro %}
-        <tr>
-          <td>{{ regla.id }}</td>
-          <td>{{ regla.item.nombre }}</td>
-          <td>{{ regla.item_requerido.nombre }}</td>
-          <td>{{ regla.get_comparador_display }}</td>
-          <td>{{ regla.cantidad }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="5" class="text-center text-muted">No hay reglas de suministro registradas.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-    <h5 class="text-secondary mt-4">🔧 Reglas por Obra</h5>
-  <div class="table-responsive mb-5">
-    <table class="table table-bordered table-striped table-sm align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>#</th>
-          <th>Item</th>
-          <th>Requiere</th>
-          <th>Comparador</th>
-          <th>Cantidad</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for regla in relaciones_obras %}
-        <tr>
-          <td>{{ regla.id }}</td>
-          <td>{{ regla.item.nombre }}</td>
-          <td>{{ regla.item_requerido.nombre }}</td>
-          <td>{{ regla.get_comparador_display }}</td>
-          <td>{{ regla.cantidad }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="5" class="text-center text-muted">No hay reglas de obra registradas.</td>
         </tr>
         {% endfor %}
       </tbody>

@@ -50,12 +50,6 @@ from .models import RelacionItemRegla
 def listado_relaciones(request):
     relaciones = RelacionItemRegla.objects.select_related('item', 'item_requerido').all().order_by('item__tipo', 'item__nombre')
     
-    relaciones_actividad = [r for r in relaciones if r.item.tipo == 'actividad']
-    relaciones_suministro = [r for r in relaciones if r.item.tipo == 'suministro']
-    relaciones_obra = [r for r in relaciones if r.item.tipo == 'obra']
-
     return render(request, 'listado_relaciones.html', {
-        'relaciones_actividad': relaciones_actividad,
-        'relaciones_suministro': relaciones_suministro,
-        'relaciones_obras': relaciones_obra
+        'relaciones': relaciones
     })

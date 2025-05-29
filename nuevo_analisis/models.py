@@ -19,19 +19,21 @@ class RelacionItemRegla(models.Model):
         ('igual_a', 'Igual a'),
         ('mayor_igual_a', 'Mayor o igual a'),
         ('mayor_que', 'Mayor que'),
-        ('menor_igual_que', 'Menor o igual a'),
+        ('menor_igual_a', 'Menor o igual a'),
         ('menor_que', 'Menor que'),
         ('diferente_de', 'Diferente de'),
     ]
     FACTOR=[
         ('unico','Unico'),
-        ('Multiple','Multiple')
+        ('multiple','Multiple')
     ]   
     TIPO_REQUERIDO = [
         ('suministro','Suministro'),
         ('actividad','Actividad')
     ]  
     item = models.ForeignKey(ItemRegla, on_delete=models.CASCADE, related_name='relaciones')
+    requiere_cantidad = models.BooleanField(default=False)
+    cantidad_requeridad = models.PositiveIntegerField(default=1)
     tipo_requerido = models.CharField(max_length=30, choices=TIPO_REQUERIDO, default="suministro")
     item_requerido = models.ForeignKey(ItemRegla, on_delete=models.CASCADE, related_name='es_requerido_por')
     comparador = models.CharField(max_length=30, choices=COMPARADORES)

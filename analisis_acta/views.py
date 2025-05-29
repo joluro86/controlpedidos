@@ -132,7 +132,7 @@ def calculo_novedades_acta(request):
                     except Exception as e:
                         print(e)
                     
-                    if pedido.item_cont == '210954':
+                    if pedido.item_cont == '210954': #YA EN NUEVA LOGICA
 
                         A05 = Acta.objects.filter(pedido=pedido).filter(
                             item_cont='A 05').aggregate(suma=Sum('cantidad'))

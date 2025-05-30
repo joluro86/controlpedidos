@@ -1,0 +1,50 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container mt-3">
+  <div class="card shadow border-0" style="max-width: 720px; margin: auto;">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Editar relación de ítems</h5>
+    </div>
+    <div class="card-body">
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-6">
+            {{ form.item.label_tag }} {{ form.item }}
+            {{ form.requiere_cantidad.label_tag }} {{ form.requiere_cantidad }}
+            <div id="div_cantidad_requerida">
+              {{ form.cantidad_requerida.label_tag }} {{ form.cantidad_requerida }}
+            </div>
+          </div>
+          <div class="col-md-6">
+            {{ form.item_requerido_nombre.label_tag }} {{ form.item_requerido_nombre }}
+            {{ form.tipo_requerido.label_tag }} {{ form.tipo_requerido }}
+            {{ form.cantidad.label_tag }} {{ form.cantidad }}
+            {{ form.comparador.label_tag }} {{ form.comparador }}
+            {{ form.factor.label_tag }} {{ form.factor }}
+          </div>
+        </div>
+        <div class="text-end mt-3">
+          <button type="submit" class="btn btn-success">Guardar cambios</button>
+          <a href="{% url 'listado_relaciones' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const requiereCantidadCheckbox = document.getElementById('id_requiere_cantidad')
+    const divCantidad = document.getElementById('div_cantidad_requerida')
+
+    function toggleCantidad() {
+      divCantidad.style.display = requiereCantidadCheckbox.checked ? 'block' : 'none'
+    }
+
+    toggleCantidad()
+    requiereCantidadCheckbox.addEventListener('change', toggleCantidad)
+  })
+</script>
+{% endblock %}

@@ -53,3 +53,31 @@ def listado_relaciones(request):
     return render(request, 'listado_relaciones.html', {
         'relaciones': relaciones
     })
+
+
+# views.py
+from django.shortcuts import get_object_or_404, render, redirect
+from nuevo_analisis.models import RelacionItemRegla
+from nuevo_analisis.form import RelacionItemReglaForm
+from django.contrib import messages
+
+def editar_regla(request, pk):
+    regla = get_object_or_404(RelacionItemRegla, pk=pk)
+    initial = {'item_requerido_nombre': regla.item_requerido.nombre}
+
+    if request.method == 'POST':
+        form = RelacionItemReglaForm(request.POST, instance=regla)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Regla actualizada correctamente.")
+            return redirect('listado_relaciones')  # Cambia esta ruta si es diferente
+        else:
+            messages.error(request, "Revisa los errores en el formulario.")
+    else:
+        form = RelacionItemReglaForm(instance=regla, initial=initial)
+
+    return render(request, 'editar_regla.html', {
+        'form': form,
+        'regla': regla,
+        'breadcrumb_items': [('Relaciones', 'Editar regla')],
+    })

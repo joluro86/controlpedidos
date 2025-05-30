@@ -1,5 +1,6 @@
 from django.urls import path
 from nuevo_analisis import views 
+from nuevo_analisis.views import editar_regla
 from nuevo_analisis.logica import validar_reglas, eliminar_regla
 
 urlpatterns = [       
@@ -14,5 +15,7 @@ urlpatterns = [
     
     path('validar_relaciones/', validar_reglas, name="validar_reglas_link"),
     path('eliminar/<int:id>/', eliminar_regla, name="eliminar_regla"),
+    
+    path('reglas/editar/<int:pk>/', editar_regla, name='editar_regla'),
 
 ]

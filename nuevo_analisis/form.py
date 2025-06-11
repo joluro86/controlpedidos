@@ -33,6 +33,7 @@ class RelacionItemReglaForm(forms.ModelForm):
             'requiere_cantidad',
             'cantidad_condicion',
             'factor',
+            'tipo_item_busqueda',
             'Item_busqueda',
             'conjuncion', # Asegurarse de que esté aquí
             'comparador',
@@ -51,6 +52,9 @@ class RelacionItemReglaForm(forms.ModelForm):
                 'min': '1'
             }),
             'factor': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+             'tipo_item_busqueda': forms.Select(attrs={
                 'class': 'form-select'
             }),
             'Item_busqueda': forms.TextInput(attrs={

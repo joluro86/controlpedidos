@@ -24,6 +24,7 @@
             <th scope="col">Requiere Cantidad</th>
             <th scope="col">Cantidad Condición</th> {# Renombrado a Cantidad Condición #}
             <th scope="col">Factor</th> {# Nuevo campo agregado #}
+            <th scope="col">Tipo Ítem</th>
             <th scope="col">Ítem Búsqueda</th> {# Nombre más claro para item_requerido #}
             <th scope="col">Comparador</th>
             <th scope="col">Cantidad</th>
@@ -54,6 +55,9 @@
               <td>
                 <span class="badge bg-dark">{{ regla.get_factor_display }}</span>
               </td> {# Badge para Factor #}
+              <td>
+                <span class="badge bg-warning text-dark">{{ regla.get_tipo_item_busqueda_display }}</span>
+              </td>
               <td>
                 <span class="badge bg-warning text-dark me-1">{{ regla.Item_busqueda }}</span> {{ regla.Item_busqueda.nombre }}
               </td> {# Item_busqueda con badge de tipo #}

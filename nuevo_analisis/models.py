@@ -34,6 +34,12 @@ class RelacionItemRegla(models.Model):
         ('todos', 'Todos'),
         ('uno', 'Uno')
     ]
+    
+    TIPO_ITEM=[ 
+        ('suministro', 'Suministro'),
+        ('actividad', 'Actividad'),
+        ('obra', 'Obra'),
+        ]
 
     objeto = models.ForeignKey(
         ItemRegla, on_delete=models.CASCADE, related_name='relaciones',
@@ -46,7 +52,7 @@ class RelacionItemRegla(models.Model):
     # ¡IMPORTANTE! Asegúrate de que el max_length sea suficiente
     # para el formato "200410,200411". 30 es muy corto para esto.
     Item_busqueda = models.CharField(max_length=255, verbose_name="Ítem(s) de Búsqueda")
-    
+    tipo_item_busqueda = models.CharField(max_length=30, choices=TIPO_ITEM, default="suministro", verbose_name="Tipo Item busqueda") # Añadido verbose_name
     conjuncion = models.CharField(max_length=30, choices=CONJUNTO, default="todos", verbose_name="Condición Lógica") # Añadido verbose_name
     comparador = models.CharField(max_length=30, choices=COMPARADORES, verbose_name="Comparador")
     cantidad = models.PositiveIntegerField(default=1, verbose_name="Cantidad Requerida")

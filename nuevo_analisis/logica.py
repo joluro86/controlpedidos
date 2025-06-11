@@ -15,6 +15,12 @@ def analisis_reglas(request):
         
         if tipo_objeto_regla=="actividad":
             campo_busqueda ="actividad"
+            
+            print(regla.objeto.nombre)
+            print(regla.Item_busqueda)
+            print(regla.tipo_item_busqueda)
+            
+            print("llegue")
         if tipo_objeto_regla=="suministro":
             campo_busqueda ="suminis"
         if tipo_objeto_regla=="obra":
@@ -25,7 +31,7 @@ def analisis_reglas(request):
         
             
         if regla.factor=="unico":
-            evaluacion_factor_unico(pedidos_a_evaluar_regla, regla.requiere_cantidad, regla.cantidad_condicion, regla.Item_busqueda, regla.comparador, regla.cantidad, campo_busqueda, regla.objeto.nombre)
+            evaluacion_factor_unico(pedidos_a_evaluar_regla, regla.requiere_cantidad, regla.cantidad_condicion, regla.Item_busqueda, regla.comparador, regla.cantidad, regla.Item_busqueda, regla.objeto.nombre)
         
         cont=0
         
@@ -37,7 +43,7 @@ def analisis_reglas(request):
         
     return redirect('listado_relaciones')
 
-def evaluacion_factor_unico(pedidos, requiere_cantidad, cantidad_requerida_condicion, item_busqueda, comparador, cantidad_comparar, campo_busqueda, objeto):
+def evaluacion_factor_unico(pedidos, requiere_cantidad, cantidad_requerida_condicion, item_busqueda2, comparador, cantidad_comparar, campo_busqueda, objeto):
     cont=0
     for pedido in pedidos:
         
@@ -48,13 +54,11 @@ def evaluacion_factor_unico(pedidos, requiere_cantidad, cantidad_requerida_condi
         
         if not Acta.objects.filter(**filtro).exists():
             cont+=1
-            print(pedido)
-            print(campo_busqueda)
-            print(item_busqueda)
-            print(comparador)
-            print(cantidad_comparar)
-            print(f"contador {cont}")
-            crear_novedad(pedido, f"{objeto} sin {item_busqueda}")
+            if pedido.actividad=="ALECA":
+                print(pedido)
+                print(campo_busqueda)
+                print(item_busqueda)
+                crear_novedad(pedido, f"{objeto} sin {item_busqueda}")
         elif requiere_cantidad:
             print("requiere")
         else: 

@@ -85,6 +85,20 @@
                 {% endif %}
               </div>
               <div class="mb-2 mt-3 mt-md-0">
+                <label for="{{ form.tipo_item_busqueda.id_for_label }}" class="form-label fw-semibold mb-0">Tipo Ítem:</label>
+                {{ form.tipo_item_busqueda }}
+                {% for error in form.tipo_item_busqueda.errors %}
+                  <div class="text-danger mt-1">
+                    <small>{{ error }}</small>
+                  </div>
+                {% endfor %}
+                {% if form.tipo_item_busqueda.help_text %}
+                  <div class="form-text text-muted mt-0">
+                    <small>{{ form.tipo_item_busqueda.help_text }}</small>
+                  </div>
+                {% endif %}
+              </div>
+              <div class="mb-2 mt-3 mt-md-0">
                 <label for="{{ form.Item_busqueda.id_for_label }}" class="form-label fw-semibold mb-0">Ítem Búsqueda:</label>
                 {{ form.Item_busqueda }}
                 {% for error in form.Item_busqueda.errors %}

@@ -913,7 +913,6 @@ def crear_novedad(pedido, nov):
     # Validar si ya existe una novedad con ese pedido y novedad
     existe = Novedad_acta.objects.filter(pedido=pedido.pedido, novedad=nov).exists()
     if existe:
-        print("❌ Ya existe una novedad con ese pedido y tipo de novedad.")
         return  # O puedes lanzar una excepción, según lo necesites
 
     # Si no existe, crear la novedad

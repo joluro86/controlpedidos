@@ -1,49 +1,6 @@
+# your_app_name/forms.py
 from django import forms
-from .models import RelacionItemRegla, ItemRegla
-
-
-class RelacionItemReglaForm(forms.ModelForm):
-    item_requerido_nombre = forms.CharField(
-        label='Item requerido',
-        widget=forms.TextInput(attrs={'class': 'form-control'})
-    )
-
-    class Meta:
-        model = RelacionItemRegla
-        fields = [
-            'item',
-            'requiere_cantidad',
-            'cantidad_requerida',
-            'item_requerido_nombre',
-            'tipo_requerido',            
-            'cantidad',
-            'comparador',
-            'factor',
-        ]
-        widgets = {
-            'item': forms.Select(attrs={'class': 'form-select'}),
-            'requiere_cantidad': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'cantidad_requeridad': forms.NumberInput(attrs={'class': 'form-control'}),
-            'item_requerido': forms.Select(attrs={'class': 'form-select'}),
-            'cantidad': forms.NumberInput(attrs={'class': 'form-control'}),            
-            'comparador': forms.Select(attrs={'class': 'form-select'}),
-            'factor': forms.Select(attrs={'class': 'form-select'}),
-        }
-
-    def save(self, commit=True):
-        relacion = super().save(commit=False)
-        nombre_requerido = self.cleaned_data['item_requerido_nombre'].strip()
-
-        item_requerido, _ = ItemRegla.objects.get_or_create(
-            nombre=nombre_requerido,
-            defaults={'tipo': relacion.item.tipo}
-        )
-        relacion.item_requerido = item_requerido
-
-        if commit:
-            relacion.save()
-        return relacion
-
+from nuevo_analisis.models import ItemRegla, RelacionItemRegla # Asegúrate de que 'nuevo_analisis' sea la ruta correcta o usa '.'
 
 class ItemReglaForm(forms.ModelForm):
     class Meta:
@@ -51,10 +8,79 @@ class ItemReglaForm(forms.ModelForm):
         fields = ['nombre', 'tipo']
         widgets = {
             'nombre': forms.TextInput(attrs={
-                'class': 'form-control'
+                'class': 'form-control',
+                'placeholder': '200410'
             }),
             'tipo': forms.Select(attrs={
+                'class': 'form-select',
+            }),
+        }
+        labels = {
+            'nombre': 'Nombre del Ítem',
+            'tipo': 'Tipo de Ítem',
+        }
+        help_texts = {
+            'nombre': 'Ingrese el nombre del ítem de regla.', # Pequeño ajuste en texto
+            'tipo': 'Seleccione la categoría principal del ítem (Suministro, Actividad, Obra).', # Más descriptivo
+        }
+
+
+class RelacionItemReglaForm(forms.ModelForm):
+    class Meta:
+        model = RelacionItemRegla
+        fields = [
+            'objeto',
+            'requiere_cantidad',
+            'cantidad_condicion',
+            'factor',
+            'Item_busqueda',
+            'conjuncion', # Asegurarse de que esté aquí
+            'comparador',
+            'cantidad'
+        ]
+        widgets = {
+            'objeto': forms.Select(attrs={
                 'class': 'form-select'
             }),
-
+            'requiere_cantidad': forms.CheckboxInput(attrs={
+                'class': 'form-check-input',
+            }),
+            'cantidad_condicion': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Cantidad necesaria para la condición',
+                'min': '1'
+            }),
+            'factor': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'Item_busqueda': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+            'conjuncion': forms.Select(attrs={ # Asegurarse de que esté aquí
+                'class': 'form-select'
+            }),
+            'comparador': forms.Select(attrs={
+                'class': 'form-control' # Aunque es un select, a veces 'form-control' funciona para select en Bootstrap 5, pero 'form-select' es más específico. Me mantengo con 'form-select' para consistencia.
+            }),
+            'cantidad': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Cantidad',
+                'min': '1'
+            }),
+        }
+        labels = {
+            'objeto': 'Item a relacionar',
+            'requiere_cantidad': '¿Depende de una Cantidad Específica del Objeto?',
+            'cantidad_condicion': 'Cantidad del Objeto para Aplicar la Regla',
+            'factor': 'Factor de la Relación',
+            'Item_busqueda': 'Código(s) Ítem(s) Asociado(s)', # Ajuste de label para ser más preciso
+            'conjuncion': 'Relación de Búsqueda', # Label más descriptivo
+            'comparador': 'Condición de Comparación',
+            'cantidad': 'Cantidad del Ítem Asociado Requerida',
+        }
+        help_texts = {
+            'Item_busqueda': 'Separe con comas si es multiple (ej. 200410,200411).',
+            'conjuncion': 'Indica si se deben cumplir "Todos" los ítems o "Uno".', # Help text para conjuncion
+            'comparador': 'Establece cómo se compara la cantidad',
+            'cantidad': 'Ingrese la cantidad para cumplir la condición.',
         }

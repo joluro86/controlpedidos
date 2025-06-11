@@ -1,83 +1,88 @@
-from django.shortcuts import render, redirect
-from nuevo_analisis.form import RelacionItemReglaForm, ItemReglaForm
+# your_app_name/views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy # Para redirigir con un nombre de URL, útil en clases pero también aplicable aquí
+from .models import ItemRegla, RelacionItemRegla
+from nuevo_analisis.form import ItemReglaForm, RelacionItemReglaForm # Asegúrate de que estos formularios estén definidos
 
-def crear_relacion_item(request):
-    form = RelacionItemReglaForm(request.POST or None)
+# --- Vistas para ItemRegla ---
 
-    if form.is_valid():
-        form.save()
-        return redirect('listado_relaciones')  # Ajusta esto al nombre de tu vista/listado
-
-    return render(request, 'crear_relacion_item.html', {
-        'form': form
-    })
-
-def crear_item_regla(request):
-    form = ItemReglaForm(request.POST or None)
-
-    if form.is_valid():
-        form.save()
-        return redirect('listado_items_regla')  # Asegúrate de tener esta vista/listado
-
-    return render(request, 'crear_item_regla.html', {
-        'form': form
-    })
-
-from django.shortcuts import render, get_object_or_404, redirect
-from nuevo_analisis.models import ItemRegla
-
-def listado_items_regla(request):
-    items = ItemRegla.objects.all().order_by('nombre')
+def lista_item_regla(request):
+    """
+    Vista para listar todos los ItemRegla.
+    """
+    items = ItemRegla.objects.all()
     return render(request, 'listado_items_regla.html', {'items': items})
 
-def editar_item_regla(request, pk):
-    item = get_object_or_404(ItemRegla, pk=pk)
-    form = ItemReglaForm(request.POST or None, instance=item)
+def crear_editar_item_regla(request, pk=None):
+    """
+    Vista para crear un nuevo ItemRegla o editar uno existente.
+    """
+    item = None
+    if pk: # Si se proporciona una PK, estamos editando
+        item = get_object_or_404(ItemRegla, pk=pk)
 
-    if form.is_valid():
-        form.save()
-        return redirect('listado_items_regla')
+    if request.method == 'POST':
+        form = ItemReglaForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            # Redirigir a la lista de ítems o a una página de éxito
+            return redirect('listado_items_regla') # Asume que tienes una URL llamada 'lista_item_regla'
+    else:
+        form = ItemReglaForm(instance=item) # Crea el formulario vacío o precargado
 
-    return render(request, 'crear_item_regla.html', {'form': form})
+    context = {
+        'form': form,
+        'is_editing': pk is not None # Pasa una bandera para que el template sepa si es edición
+    }
+    return render(request, 'crear_relacion_item.html', context)
+
 def eliminar_item_regla(request, pk):
+    """
+    Vista para eliminar un ItemRegla.
+    """
     item = get_object_or_404(ItemRegla, pk=pk)
     item.delete()
     return redirect('listado_items_regla')
-
-from django.shortcuts import render
-from .models import RelacionItemRegla
-
-def listado_relaciones(request):
-    relaciones = RelacionItemRegla.objects.select_related('item', 'item_requerido').all().order_by('item__tipo', 'item__nombre')
     
-    return render(request, 'listado_relaciones.html', {
-        'relaciones': relaciones
-    })
+# --- Vistas para RelacionItemRegla ---
+
+def lista_relacion_item_regla(request):
+    """
+    Vista para listar todas las RelacionItemRegla.
+    """
+    relaciones = RelacionItemRegla.objects.all()
+    
+    return render(request, 'listado_relaciones.html', {'relaciones': relaciones})
 
 
-# views.py
-from django.shortcuts import get_object_or_404, render, redirect
-from nuevo_analisis.models import RelacionItemRegla
-from nuevo_analisis.form import RelacionItemReglaForm
-from django.contrib import messages
-
-def editar_regla(request, pk):
-    regla = get_object_or_404(RelacionItemRegla, pk=pk)
-    initial = {'item_requerido_nombre': regla.item_requerido.nombre}
+def crear_editar_relacion_item_regla(request, pk=None):
+    """
+    Vista para crear una nueva RelacionItemRegla o editar una existente.
+    """
+    relacion = None
+    if pk:
+        relacion = get_object_or_404(RelacionItemRegla, pk=pk)
 
     if request.method == 'POST':
-        form = RelacionItemReglaForm(request.POST, instance=regla)
+        form = RelacionItemReglaForm(request.POST, instance=relacion)
         if form.is_valid():
             form.save()
-            messages.success(request, "Regla actualizada correctamente.")
-            return redirect('listado_relaciones')  # Cambia esta ruta si es diferente
-        else:
-            messages.error(request, "Revisa los errores en el formulario.")
+            # Redirigir a la lista de relaciones o a una página de éxito
+            return redirect('listado_relaciones') # Asume que tienes una URL llamada 'lista_relacion_item_regla'
     else:
-        form = RelacionItemReglaForm(instance=regla, initial=initial)
+        form = RelacionItemReglaForm(instance=relacion)
 
-    return render(request, 'editar_regla.html', {
+    context = {
         'form': form,
-        'regla': regla,
-        'breadcrumb_items': [('Relaciones', 'Editar regla')],
-    })
+        'is_editing': pk is not None
+    }
+    return render(request, 'crear_relacion_item.html', context)
+
+def eliminar_relacion_item_regla(request, pk):
+    """
+    Vista para eliminar una RelacionItemRegla.
+    """
+    relacion = get_object_or_404(RelacionItemRegla, pk=pk)
+    relacion.delete()
+    return redirect('listado_relaciones')
+    

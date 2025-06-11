@@ -1,109 +1,201 @@
 {% extends 'index.html' %}
 
+{% block title %}
+  Crear/Editar Relación de Ítems
+{% endblock %}
+
 {% block content %}
-  <div class="container mt-2 d-flex justify-content-center">
-    <div class="card shadow border-0 w-100" style="max-width: 700px; background-color: #f0f7ff;">
-      <div class="card-header text-white" style="background-color: #007bff;">
-        <h5 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Crear relación de ítems</h5>
+  <div class="d-flex justify-content-center">
+    {# Centra el contenido en la pantalla #}
+    <div class="card shadow-lg border-0 w-100" style="max-width: 500px; background-color: #ffffff; border-radius: 0.75rem;">
+      <div class="card-header text-white text-center py-2" style="background-color: #0d6efd; border-radius: 0.75rem 0.75rem 0 0;">
+        <h5 class="mb-0 fw-bold">
+          <i class="bi bi-link-45deg me-2"></i>
+          {% if form.instance.pk %}
+            Editar Relación
+          {% else %}
+            Nueva Relación
+          {% endif %}
+        </h5>
       </div>
-      <div class="card-body">
+      <div class="card-body p-3">
         <form method="post" novalidate>
           {% csrf_token %}
           <div class="row">
-            <!-- Columna 1 -->
+            {# Columna 1 #}
             <div class="col-md-6">
-              <div class="mb-3">
-                <label class="form-label fw-semibold">{{ form.item.label }}</label>
-                {{ form.item }}
-                {% for error in form.item.errors %}
-                  <div class="text-danger">{{ error }}</div>
+              <div class="mb-2">
+                <label for="{{ form.objeto.id_for_label }}" class="form-label fw-semibold mb-0">Objeto:</label>
+                {{ form.objeto }}
+                {% for error in form.objeto.errors %}
+                  <div class="text-danger mt-1">
+                    <small>{{ error }}</small>
+                  </div>
                 {% endfor %}
+                {% if form.objeto.help_text %}
+                  <div class="form-text text-muted mt-0">
+                    <small>{{ form.objeto.help_text }}</small>
+                  </div>
+                {% endif %}
               </div>
-              <div class="mb-3">
-                <label class="form-label fw-semibold">{{ form.requiere_cantidad.label }}</label>
+
+              <div class="mb-2 form-check">
                 {{ form.requiere_cantidad }}
+                <label class="form-check-label fw-semibold" for="{{ form.requiere_cantidad.id_for_label }}">Req. Cantidad</label>
                 {% for error in form.requiere_cantidad.errors %}
-                  <div class="text-danger">{{ error }}</div>
+                  <div class="text-danger mt-1">
+                    <small>{{ error }}</small>
+                  </div>
                 {% endfor %}
+                {% if form.requiere_cantidad.help_text %}
+                  <div class="form-text text-muted mt-0">
+                    <small>{{ form.requiere_cantidad.help_text }}</small>
+                  </div>
+                {% endif %}
               </div>
-              <div class="mb-3" id="div_cantidad_requerida">
-                <label class="form-label fw-semibold">{{ form.cantidad_requerida.label }}</label>
-                {{ form.cantidad_requerida }}
-                {% for error in form.cantidad_requerida.errors %}
-                  <div class="text-danger">{{ error }}</div>
+
+              {# Campo condicional para cantidad_condicion - ¡Asegúrate de que este div tenga el ID! #}
+              <div id="cantidad-condicion-group" class="mb-2">
+                <label for="{{ form.cantidad_condicion.id_for_label }}" class="form-label fw-semibold mb-0">Cant. Condición:</label>
+                {{ form.cantidad_condicion }}
+                {% for error in form.cantidad_condicion.errors %}
+                  <div class="text-danger mt-1">
+                    <small>{{ error }}</small>
+                  </div>
                 {% endfor %}
+                {% if form.cantidad_condicion.help_text %}
+                  <div class="form-text text-muted mt-0">
+                    <small>{{ form.cantidad_condicion.help_text }}</small>
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="mb-2">
+                <label for="{{ form.factor.id_for_label }}" class="form-label fw-semibold mb-0">Factor:</label>
+                {{ form.factor }}
+                {% for error in form.factor.errors %}
+                  <div class="text-danger mt-1">
+                    <small>{{ error }}</small>
+                  </div>
+                {% endfor %}
+                {% if form.factor.help_text %}
+                  <div class="form-text text-muted mt-0">
+                    <small>{{ form.factor.help_text }}</small>
+                  </div>
+                {% endif %}
+              </div>
+              <div class="mb-2 mt-3 mt-md-0">
+                <label for="{{ form.Item_busqueda.id_for_label }}" class="form-label fw-semibold mb-0">Ítem Búsqueda:</label>
+                {{ form.Item_busqueda }}
+                {% for error in form.Item_busqueda.errors %}
+                  <div class="text-danger mt-1">
+                    <small>{{ error }}</small>
+                  </div>
+                {% endfor %}
+                {% if form.Item_busqueda.help_text %}
+                  <div class="form-text text-muted mt-0">
+                    <small>{{ form.Item_busqueda.help_text }}</small>
+                  </div>
+                {% endif %}
               </div>
             </div>
 
-            <!-- Columna 2 -->
+            {# Columna 2 #}
             <div class="col-md-6">
-              <div class="mb-3">
-                <label class="form-label fw-semibold">{{ form.item_requerido_nombre.label }}</label>
-                {{ form.item_requerido_nombre }}
-                {% if form.item_requerido_nombre.help_text %}
-                  <div class="form-text">{{ form.item_requerido_nombre.help_text }}</div>
+              {# Campo condicional para conjuncion - ¡Asegúrate de que este div tenga el ID! #}
+              <div id="conjuncion-group" class="mb-2">
+                <label for="{{ form.conjuncion.id_for_label }}" class="form-label fw-semibold mb-0">Cond. Lógica:</label>
+                {{ form.conjuncion }}
+                {% for error in form.conjuncion.errors %}
+                  <div class="text-danger mt-1">
+                    <small>{{ error }}</small>
+                  </div>
+                {% endfor %}
+                {% if form.conjuncion.help_text %}
+                  <div class="form-text text-muted mt-0">
+                    <small>{{ form.conjuncion.help_text }}</small>
+                  </div>
                 {% endif %}
-                {% for error in form.item_requerido_nombre.errors %}
-                  <div class="text-danger">{{ error }}</div>
-                {% endfor %}
               </div>
-              <div class="mb-3">
-                <label class="form-label fw-semibold">{{ form.tipo_requerido.label }}</label>
-                {{ form.tipo_requerido }}
-                {% for error in form.tipo_requerido.errors %}
-                  <div class="text-danger">{{ error }}</div>
-                {% endfor %}
-              </div>
-              <div class="mb-3">
-                <label class="form-label fw-semibold">{{ form.cantidad.label }}</label>
-                {{ form.cantidad }}
-                {% for error in form.cantidad.errors %}
-                  <div class="text-danger">{{ error }}</div>
-                {% endfor %}
-              </div>
-              <div class="mb-3">
-                <label class="form-label fw-semibold">{{ form.comparador.label }}</label>
+
+              <div class="mb-2">
+                <label for="{{ form.comparador.id_for_label }}" class="form-label fw-semibold mb-0">Comparador:</label>
                 {{ form.comparador }}
                 {% for error in form.comparador.errors %}
-                  <div class="text-danger">{{ error }}</div>
+                  <div class="text-danger mt-1">
+                    <small>{{ error }}</small>
+                  </div>
                 {% endfor %}
+                {% if form.comparador.help_text %}
+                  <div class="form-text text-muted mt-0">
+                    <small>{{ form.comparador.help_text }}</small>
+                  </div>
+                {% endif %}
               </div>
-              <div class="mb-3">
-                <label class="form-label fw-semibold">{{ form.factor.label }}</label>
-                {{ form.factor }}
-                {% for error in form.factor.errors %}
-                  <div class="text-danger">{{ error }}</div>
+
+              <div class="mb-2">
+                <label for="{{ form.cantidad.id_for_label }}" class="form-label fw-semibold mb-0">Cantidad:</label>
+                {{ form.cantidad }}
+                {% for error in form.cantidad.errors %}
+                  <div class="text-danger mt-1">
+                    <small>{{ error }}</small>
+                  </div>
                 {% endfor %}
+                {% if form.cantidad.help_text %}
+                  <div class="form-text text-muted mt-0">
+                    <small>{{ form.cantidad.help_text }}</small>
+                  </div>
+                {% endif %}
               </div>
             </div>
           </div>
 
-          <div class="text-end">
-            <button type="submit" class="btn btn-primary">Guardar relación</button>
+          <hr class="my-3" />
+
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-save me-1"></i>Guardar</button>
+            <a href="{% url 'listado_relaciones' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-x-circle me-1"></i>Cancelar</a>
           </div>
         </form>
       </div>
     </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const requiereCantidadCheckbox = document.getElementById('id_requiere_cantidad')
-      const divCantidad = document.getElementById('div_cantidad_requerida')
-    
-      function toggleCantidad() {
-        if (requiereCantidadCheckbox.checked) {
-          divCantidad.style.display = 'block'
-        } else {
-          divCantidad.style.display = 'none'
+  {% block js %}
+    {# Script para manejar la visibilidad condicional de los campos #}
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // --- Control de 'cantidad_condicion' basado en 'requiere_cantidad' ---
+        const requiereCantidadCheckbox = document.getElementById('id_requiere_cantidad')
+        const cantidadCondicionGroup = document.getElementById('cantidad-condicion-group')
+      
+        function toggleCantidadCondicion() {
+          if (requiereCantidadCheckbox.checked) {
+            cantidadCondicionGroup.style.display = 'block'
+          } else {
+            cantidadCondicionGroup.style.display = 'none'
+          }
         }
-      }
-    
-      // Inicializar al cargar
-      toggleCantidad()
-    
-      // Escuchar cambios
-      requiereCantidadCheckbox.addEventListener('change', toggleCantidad)
-    })
-  </script>
+      
+        requiereCantidadCheckbox.addEventListener('change', toggleCantidadCondicion)
+        toggleCantidadCondicion() // Establecer el estado inicial al cargar la página
+      
+        // --- Control de 'conjuncion' basado en 'factor' ---
+        const factorSelect = document.getElementById('id_factor') // ID del select 'factor'
+        const conjuncionGroup = document.getElementById('conjuncion-group') // ID del div de 'conjuncion'
+      
+        function toggleConjuncion() {
+          // Si el valor seleccionado de 'factor' es 'multiple'
+          if (factorSelect.value === 'multiple') {
+            conjuncionGroup.style.display = 'block'
+          } else {
+            conjuncionGroup.style.display = 'none'
+          }
+        }
+      
+        factorSelect.addEventListener('change', toggleConjuncion)
+        toggleConjuncion() // Establecer el estado inicial al cargar la página
+      })
+    </script>
+  {% endblock %}
 {% endblock %}

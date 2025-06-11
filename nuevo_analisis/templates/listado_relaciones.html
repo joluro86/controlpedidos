@@ -1,59 +1,99 @@
-{% extends 'index.html' %}
+{% extends 'index.html' %} {# Asegúrate de que 'index.html' incluye Bootstrap 5 CSS y JS #}
+
+{% block title %}
+  Reglas de Relación entre Ítems
+{% endblock %}
+
 {% block content %}
-  <div class="container mt-5">
-    <h4 class="text-primary">📋 Reglas de relación entre ítems</h4>
-
-    <div class="mb-3 d-flex justify-content-end">
-      <a href="{% url 'crear_relacion_item' %}" class="btn btn-outline-primary">➕ Nueva relación</a>
+  <div class="container py-4">
+    {# Añadimos padding vertical para mejor espaciado #}
+    {# Encabezado principal y botón "Nueva Relación" #}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="text-primary fw-bold mb-0"><i class="bi bi-diagram-3-fill me-2"></i>Reglas de Relación entre Ítems {# Ícono de diagrama para relaciones #}</h2>
+      <a href="{% url 'crear_relacion_item' %}" class="btn btn-primary btn-lg shadow-sm"><i class="bi bi-plus-circle me-2"></i>Nueva Relación</a>
     </div>
+    <h5 class="text-secondary mt-5 mb-3"><i class="bi bi-list-nested me-2"></i>Reglas de Actividad</h5> {# Ícono y título más claro #}
 
-    <h5 class="text-secondary mt-4">🔧 Reglas por Actividad</h5>
-    <div class="table-responsive mb-5">
-      <table class="table table-bordered table-striped table-sm align-middle text-center">
-        <thead class="table-light">
+    <div class="table-responsive-lg">
+      {# La tabla será responsive en pantallas grandes #}
+      <table class="table table-hover table-striped table-bordered align-middle rounded overflow-hidden">
+        <thead class="bg-primary text-white">
           <tr>
-            <th>Tipo regla</th>
-            <th>Item principal</th>
-            <th>Requiere cantidad</th>
-            <th>Cantidad requerida</th>
-            <th>Item asociado</th>
-            <th>Condición de comparación</th>
-            <th>Cantidad item asociado</th>
-            <th>Factor de busqueda</th>
-            <th>Acciones</th>
+            <th scope="col" class="text-center">#</th>
+            <th scope="col">Objeto</th> {# Nombre más claro para item #}
+            <th scope="col">Requiere Cantidad</th>
+            <th scope="col">Cantidad Condición</th> {# Renombrado a Cantidad Condición #}
+            <th scope="col">Factor</th> {# Nuevo campo agregado #}
+            <th scope="col">Ítem Búsqueda</th> {# Nombre más claro para item_requerido #}
+            <th scope="col">Comparador</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col" class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {% for regla in relaciones %}
             <tr>
-              <td>{{ regla.item.tipo }}</td>
-              <td>{{ regla.item.nombre }}</td>
-              {% if regla.requiere_cantidad %}
-                <td>Si</td>
-              {% else %}
-                <td>No</td>
-              {% endif %}
-              {% if regla.requiere_cantidad %}
-                <td>{{ regla.cantidad_requerida }}</td>
-              {% else %}
-                <td>No aplica</td>
-              {% endif %}
-              <td>{{ regla.item_requerido.nombre }}</td>
-              <td>{{ regla.get_comparador_display }}</td>
-              <td>{{ regla.cantidad }}</td>
-              <td>{{ regla.factor }}</td>
+              <td class="text-center">{{ forloop.counter }}</td>
               <td>
-                <a href="{% url 'editar_regla' regla.id %}">Editar</a>
-                <a href="{% url 'eliminar_regla' regla.id %}">Eliminar</a>
+                <span class="badge bg-info text-dark me-1">{{ regla.objeto.get_tipo_display }}</span> {{ regla.objeto.nombre }}
+              </td> {# Objeto principal con badge de tipo #}
+              <td class="text-center">
+                {% if regla.requiere_cantidad %}
+                  <i class="fas fa-check-circle text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Sí"></i> {# Ícono Font Awesome: fas fa-check-circle #}
+                {% else %}
+                  <i class="fas fa-times-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="No"></i> {# Ícono Font Awesome: fas fa-times-circle #}
+                {% endif %}
+              </td>
+              <td class="text-center">
+                {% if regla.requiere_cantidad %}
+                  <span class="badge bg-secondary">{{ regla.cantidad_condicion }}</span> {# Usamos el nombre del modelo, no 'cantidad_requerida' #}
+                {% else %}
+                  <span class="text-muted fst-italic">N/A</span> {# No aplica #}
+                {% endif %}
+              </td>
+              <td>
+                <span class="badge bg-dark">{{ regla.get_factor_display }}</span>
+              </td> {# Badge para Factor #}
+              <td>
+                <span class="badge bg-warning text-dark me-1">{{ regla.Item_busqueda }}</span> {{ regla.Item_busqueda.nombre }}
+              </td> {# Item_busqueda con badge de tipo #}
+              <td>
+                <span class="badge bg-info">{{ regla.get_comparador_display }}</span>
+              </td> {# Badge para Comparador #}
+              <td class="text-center">{{ regla.cantidad }}</td>
+              <td class="text-center">
+                <div class="btn-group" role="group" aria-label="Acciones de relación">
+                  <a href="{% url 'editar_relacion_item_regla' pk=regla.id %}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i> {# Ícono Font Awesome: fas fa-pencil-alt #}</a>
+                  {# IMPORTANTE: Para la eliminación, es más seguro y recomendable usar un formulario POST. #}
+                  {# La URL de eliminación directo vía GET puede ser un riesgo. Aquí se mantiene el enlace #}
+                  {# pero se recomienda implementar una confirmación con POST. #}
+                  <a href="{% url 'eliminar_relacion_item_regla' pk=regla.id %}" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar"><i class="fas fa-trash"></i> {# Ícono Font Awesome: fas fa-trash #}</a>
+                </div>
               </td>
             </tr>
           {% empty %}
             <tr>
-              <td colspan="5" class="text-center text-muted">No hay reglas de actividad registradas.</td>
+              {# Ajustamos colspan para el número correcto de columnas #}
+              <td colspan="9" class="text-center py-4 text-muted fst-italic">
+                <i class="bi bi-info-circle me-2"></i>No hay reglas de relación registradas para este tipo.
+                <a href="{% url 'crear_relacion_item' %}" class="btn btn-link p-0 ms-2">¿Crear una nueva?</a> {# URL corregida aquí también #}
+              </td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
   </div>
+
+  {# Script para inicializar Tooltips de Bootstrap #}
+  {% block extra_js %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+      })
+    </script>
+  {% endblock %}
 {% endblock %}

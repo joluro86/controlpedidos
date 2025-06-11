@@ -1,39 +1,69 @@
-{% extends 'index.html' %}
-{% block content %}
-<div class="container mt-5">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="text-primary">📋 Ítems de reglas</h4>
-    <a href="{% url 'crear_item_regla' %}" class="btn btn-outline-primary">➕ Nuevo ítem</a>
-  </div>
+{% extends 'index.html' %} {# Asegúrate de que 'index.html' incluye Bootstrap 5 CSS y JS #}
 
-  <div class="table-responsive">
-    <table class="table table-bordered table-striped table-sm align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>#</th>
-          <th>Nombre</th>
-          <th>Tipo</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in items %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          <td>{{ item.nombre }}</td>
-          <td>{{ item.get_tipo_display }}</td>
-          <td>
-            <a href="{% url 'editar_item_regla' item.id %}" class="btn btn-sm btn-warning">Editar</a>
-            <a href="{% url 'eliminar_item_regla' item.id %}" class="btn btn-sm btn-danger">Eliminar</a>
-          </td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="4" class="text-center text-muted">No hay ítems registrados.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+{% block title %}Ítems de Reglas{% endblock %}
+
+{% block content %}
+<div class="container py-4"> {# Añadimos padding vertical para mejor espaciado #}
+    {# Encabezado y botón "Nuevo Ítem" #}
+    <div class="d-flex justify-content-between align-items-center mb-4"> {# Margen inferior más generoso #}
+        <h2 class="text-primary fw-bold mb-0">
+            <i class="bi bi-journal-check me-2"></i>Ítems de Reglas {# Ícono más representativo y título más grande #}
+        </h2>
+        <a href="{% url 'crear_item_regla' %}" class="btn btn-primary btn-lg shadow-sm"> {# Botón principal, más grande y con sombra #}
+            <i class="bi bi-plus-circle me-2"></i>Nuevo Ítem {# Ícono para añadir #}
+        </a>
+    </div>
+
+    {# Tabla Responsive para Ítems de Reglas #}
+    <div class="table-responsive-md"> {# La tabla será responsive en pantallas medianas y grandes #}
+        <table class="table table-hover table-striped table-bordered align-middle rounded overflow-hidden"> {# Efecto hover, bordes, alineación vertical #}
+            <thead class="bg-primary text-white"> {# Fondo primario para el encabezado, texto blanco #}
+                <tr>
+                    <th scope="col" class="text-center">#</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col" class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td>{{ item.nombre }}</td>
+                    <td><span class="badge bg-secondary">{{ item.get_tipo_display }}</span></td> {# Usamos un badge para el tipo #}
+                    <td class="text-center">
+                        <div class="btn-group" role="group" aria-label="Acciones de ítem">
+                            <a href="{% url 'editar_item_regla' item.id %}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
+                                <i class="bi bi-pencil-square"></i> {# Ícono de editar #}
+                            </a>
+                            <a href="{% url 'eliminar_item_regla' item.id %}" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar">
+                                <i class="bi bi-trash"></i> {# Ícono de eliminar #}
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center py-4 text-muted fst-italic">
+                        <i class="bi bi-info-circle me-2"></i>No hay ítems de reglas registrados aún.
+                        <a href="{% url 'crear_item_regla' %}" class="btn btn-link p-0 ms-2">¿Crear uno nuevo?</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
+{# Script para inicializar Tooltips de Bootstrap #}
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
+{% endblock %}
 {% endblock %}

@@ -1,21 +1,20 @@
 from django.urls import path
 from nuevo_analisis import views 
-from nuevo_analisis.views import editar_regla
-from nuevo_analisis.logica import validar_reglas, eliminar_regla
+from nuevo_analisis.logica import analisis_reglas
 
-urlpatterns = [       
-    path('relacion/nueva/', views.crear_relacion_item, name='crear_relacion_item'),
-    path('item/nuevo/', views.crear_item_regla, name='crear_item_regla'),
+urlpatterns = [
+    # URLs para ItemRegla
+    path('analisis_reglas/', analisis_reglas, name="analisis_reglas"),
+    #path('eliminar/<int:id>/', eliminar_regla, name="eliminar_regla"),
     
-    path('items/', views.listado_items_regla, name='listado_items_regla'),
-    path('item/nuevo/', views.crear_item_regla, name='crear_item_regla'),
-    path('item/<int:pk>/editar/', views.editar_item_regla, name='editar_item_regla'),
-    path('item/<int:pk>/eliminar/', views.eliminar_item_regla, name='eliminar_item_regla'),
-    path('relaciones/', views.listado_relaciones, name='listado_relaciones'),
-    
-    path('validar_relaciones/', validar_reglas, name="validar_reglas_link"),
-    path('eliminar/<int:id>/', eliminar_regla, name="eliminar_regla"),
-    
-    path('reglas/editar/<int:pk>/', editar_regla, name='editar_regla'),
+    path('items/', views.lista_item_regla, name='listado_items_regla'),
+    path('items/nuevo/', views.crear_editar_item_regla, name='crear_item_regla'),
+    path('items/editar/<int:pk>/', views.crear_editar_item_regla, name='editar_item_regla'),
+    path('items/eliminar/<int:pk>/', views.eliminar_item_regla, name='eliminar_item_regla'), # Considera usar POST para eliminar
 
+    # URLs para RelacionItemRegla
+    path('relaciones/', views.lista_relacion_item_regla, name='listado_relaciones'),
+    path('relaciones/nueva/', views.crear_editar_relacion_item_regla, name='crear_relacion_item'), # Cambié 'crear_relacion_item' a 'crear_relacion_item_regla'
+    path('relaciones/editar/<int:pk>/', views.crear_editar_relacion_item_regla, name='editar_relacion_item_regla'),
+    path('relaciones/eliminar/<int:pk>/', views.eliminar_relacion_item_regla, name='eliminar_relacion_item_regla'),
 ]

@@ -10,46 +10,46 @@ def analisis_reglas(request):
         
         tipo_objeto_regla = regla.objeto.tipo
         item_busqueda = regla.Item_busqueda
-        print(f"objeto {regla.objeto.nombre}")
-        #print(item_busqueda)
+        print(f"tipo objeto {tipo_objeto_regla} debe lleva {item_busqueda}")
+        
         
         if tipo_objeto_regla=="actividad":
             campo_busqueda ="actividad"
-            
-            print(regla.objeto.nombre)
-            print(regla.Item_busqueda)
-            print(regla.tipo_item_busqueda)
-            
-            print("llegue")
         if tipo_objeto_regla=="suministro":
             campo_busqueda ="suminis"
         if tipo_objeto_regla=="obra":
             campo_busqueda ="item_cont"
         
         filtro = {campo_busqueda: regla.objeto.nombre}
-        pedidos_a_evaluar_regla = Acta.objects.filter(**filtro)
+        pedidos_a_evaluar_regla = Acta.objects.filter(**filtro).values('pedido').distinct()
         
             
         if regla.factor=="unico":
-            evaluacion_factor_unico(pedidos_a_evaluar_regla, regla.requiere_cantidad, regla.cantidad_condicion, regla.Item_busqueda, regla.comparador, regla.cantidad, regla.Item_busqueda, regla.objeto.nombre)
+            evaluacion_factor_unico(pedidos_a_evaluar_regla, regla)
         
-        cont=0
-        
-        for ped in pedidos_a_evaluar_regla:
-            
-            cont+=1
-        print(cont)
-        
+        cont=0        
         
     return redirect('listado_relaciones')
 
-def evaluacion_factor_unico(pedidos, requiere_cantidad, cantidad_requerida_condicion, item_busqueda2, comparador, cantidad_comparar, campo_busqueda, objeto):
+def evaluacion_factor_unico(pedidos, regla):
     cont=0
+    
+    tipo_item_busqueda = regla.tipo_item_busqueda
+    
+    if tipo_item_busqueda=="actividad":
+        campo_busqueda ="actividad"
+    if tipo_item_busqueda=="suministro":
+        campo_busqueda ="suminis"
+    if tipo_item_busqueda=="obra":
+        campo_busqueda ="item_cont"
+
     for pedido in pedidos:
+        print(f"buscar: {regla.Item_busqueda} cant: {regla.cantidad}")
         
+    """
         filtro = {
             "pedido": pedido,
-            campo_busqueda: item_busqueda
+            campo_busqueda: tipo_item_busqueda
         }
         
         if not Acta.objects.filter(**filtro).exists():
@@ -58,9 +58,9 @@ def evaluacion_factor_unico(pedidos, requiere_cantidad, cantidad_requerida_condi
                 print(pedido)
                 print(campo_busqueda)
                 print(item_busqueda)
-                crear_novedad(pedido, f"{objeto} sin {item_busqueda}")
-        elif requiere_cantidad:
-            print("requiere")
-        else: 
-            print("no requiere")
-        
+        #        crear_novedad(pedido, f"{objeto} sin {item_busqueda}")
+        #elif requiere_cantidad:
+         #   print("requiere")
+        #else: 
+         #   print("no requiere")
+    """

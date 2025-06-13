@@ -20,11 +20,9 @@ class ItemReglaForm(forms.ModelForm):
             'tipo': 'Tipo de Ítem',
         }
         help_texts = {
-            'nombre': 'Ingrese el nombre del ítem de regla.', # Pequeño ajuste en texto
-            'tipo': 'Seleccione la categoría principal del ítem (Suministro, Actividad, Obra).', # Más descriptivo
+            'nombre': 'Ingrese el nombre del ítem de regla.',
+            'tipo': 'Seleccione la categoría principal del ítem.',
         }
-
-
 class RelacionItemReglaForm(forms.ModelForm):
     class Meta:
         model = RelacionItemRegla

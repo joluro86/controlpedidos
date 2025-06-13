@@ -34,7 +34,7 @@ def crear_editar_item_regla(request, pk=None):
         'form': form,
         'is_editing': pk is not None # Pasa una bandera para que el template sepa si es edición
     }
-    return render(request, 'crear_relacion_item.html', context)
+    return render(request, 'crear_item_regla.html', context)
 
 def eliminar_item_regla(request, pk):
     """

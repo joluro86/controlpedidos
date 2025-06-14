@@ -32,7 +32,7 @@ class RelacionItemReglaForm(forms.ModelForm):
             'cantidad_condicion',
             'factor',
             'tipo_item_busqueda',
-            'Item_busqueda',
+            'item_busqueda',
             'conjuncion', # Asegurarse de que esté aquí
             'comparador',
             'cantidad'
@@ -55,7 +55,7 @@ class RelacionItemReglaForm(forms.ModelForm):
              'tipo_item_busqueda': forms.Select(attrs={
                 'class': 'form-select'
             }),
-            'Item_busqueda': forms.TextInput(attrs={
+            'item_busqueda': forms.TextInput(attrs={
                 'class': 'form-control'
             }),
             'conjuncion': forms.Select(attrs={ # Asegurarse de que esté aquí
@@ -75,13 +75,13 @@ class RelacionItemReglaForm(forms.ModelForm):
             'requiere_cantidad': '¿Depende de una Cantidad Específica del Objeto?',
             'cantidad_condicion': 'Cantidad del Objeto para Aplicar la Regla',
             'factor': 'Factor de la Relación',
-            'Item_busqueda': 'Código(s) Ítem(s) Asociado(s)', # Ajuste de label para ser más preciso
+            'item_busqueda': 'Código(s) Ítem(s) Asociado(s)', # Ajuste de label para ser más preciso
             'conjuncion': 'Relación de Búsqueda', # Label más descriptivo
             'comparador': 'Condición de Comparación',
             'cantidad': 'Cantidad del Ítem Asociado Requerida',
         }
         help_texts = {
-            'Item_busqueda': 'Separe con comas si es multiple (ej. 200410,200411).',
+            'item_busqueda': 'Separe con comas si es multiple (ej. 200410,200411).',
             'conjuncion': 'Indica si se deben cumplir "Todos" los ítems o "Uno".', # Help text para conjuncion
             'comparador': 'Establece cómo se compara la cantidad',
             'cantidad': 'Ingrese la cantidad para cumplir la condición.',

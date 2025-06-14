@@ -3,9 +3,9 @@ from django.db import models
 
 class ItemRegla(models.Model):
     TIPO = [
-        ('suministro', 'Suministro'),
+        ('suminis', 'Suministro'),
         ('actividad', 'Actividad'),
-        ('obra', 'Obra'),
+        ('item_cont', 'Obra'),
     ]
 
     nombre = models.CharField(max_length=100, unique=True)
@@ -36,9 +36,9 @@ class RelacionItemRegla(models.Model):
     ]
     
     TIPO_ITEM=[ 
-        ('suministro', 'Suministro'),
+        ('suminis', 'Suministro'),
         ('actividad', 'Actividad'),
-        ('obra', 'Obra'),
+        ('item_cont', 'Obra'),
         ]
 
     objeto = models.ForeignKey(
@@ -51,7 +51,7 @@ class RelacionItemRegla(models.Model):
     
     # ¡IMPORTANTE! Asegúrate de que el max_length sea suficiente
     # para el formato "200410,200411". 30 es muy corto para esto.
-    Item_busqueda = models.CharField(max_length=255, verbose_name="Ítem(s) de Búsqueda")
+    item_busqueda = models.CharField(max_length=255, verbose_name="Ítem(s) de Búsqueda")
     tipo_item_busqueda = models.CharField(max_length=30, choices=TIPO_ITEM, default="suministro", verbose_name="Tipo Item busqueda") # Añadido verbose_name
     conjuncion = models.CharField(max_length=30, choices=CONJUNTO, default="todos", verbose_name="Condición Lógica") # Añadido verbose_name
     comparador = models.CharField(max_length=30, choices=COMPARADORES, verbose_name="Comparador")

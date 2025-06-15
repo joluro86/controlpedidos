@@ -62,7 +62,7 @@ class RelacionItemRegla(models.Model):
         # en el momento de llamar a __str__.
         # Si 'item' o 'item_requerido' no son atributos de este modelo,
         # usa 'objeto' y 'Item_busqueda' que sí lo son.
-        return f"{self.objeto.nombre} requiere {self.Item_busqueda} {self.get_comparador_display()} {self.cantidad}"
+        return f"{self.objeto.nombre} requiere {self.item_busqueda} {self.get_comparador_display()} {self.cantidad}"
 
     class Meta:
         verbose_name = "Relación de Ítem de Regla"

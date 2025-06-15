@@ -1,152 +1,15 @@
 from django.shortcuts import redirect
-from analisis_acta.models import Acta
-from analisis_acta.views import crear_novedad
-from nuevo_analisis.models import RelacionItemRegla
+from nuevo_analisis.regla_fu_con_cant_req import busqueda_pedidos_factor_unico_con_cantidad_requerida
+from nuevo_analisis.regla_fu_sin_cant_req import busqueda_pedidos_factor_unico_sin_cantidad_requerida
 
 def analisis_reglas(request):
 
     busqueda_pedidos_factor_unico_sin_cantidad_requerida()
+    busqueda_pedidos_factor_unico_con_cantidad_requerida()
 
     return redirect('novedades_acta')
 
-def busqueda_pedidos_factor_unico_sin_cantidad_requerida():
-    try:
-        reglas= RelacionItemRegla.objects.filter(requiere_cantidad=False, factor="unico")
-        print(reglas.exists())
-        
-        if reglas.exists():
-            for regla in reglas:
-                campo_busqueda=regla.objeto.tipo
-                filtro = {campo_busqueda: regla.objeto.nombre}
-                pedidos_a_evaluar_regla = Acta.objects.filter(**filtro).values('pedido').distinct()
-                evaluar_pedidos_regla_factor_unico_sin_cantidad_requerida(regla, pedidos_a_evaluar_regla)
-    except Exception as e:
-        print(e)
 
-def evaluar_pedidos_regla_factor_unico_sin_cantidad_requerida(regla, pedidos_a_evaluar):
 
-    for pedido in pedidos_a_evaluar:
-
-        campo_busqueda=regla.tipo_item_busqueda
-        filtro = crear_filtro_busqueda(pedido.get('pedido'),campo_busqueda, regla.item_busqueda, regla.cantidad, regla.comparador)
-        if not Acta.objects.filter(**filtro).exists():
-            novedad= crear_texto_novedad(regla)        
-            pedi = Acta.objects.filter(pedido=pedido.get('pedido')).first()
-            crear_novedad(pedi, novedad)
-
-def crear_filtro_busqueda(pedido,campo_busqueda,  item_busqueda, cantidad, comparador):
-
-    if comparador=="igua_a":
-        filtro = {'pedido':pedido, campo_busqueda:item_busqueda, 'cantidad':cantidad}
-    if comparador=="mayor_a":
-        filtro = {'pedido':pedido, campo_busqueda:item_busqueda, 'cantidad__gt':cantidad}
-    if comparador=="menor_a":
-        filtro = {'pedido':pedido, campo_busqueda:item_busqueda, 'cantidad__lt':cantidad}
-    
-    return filtro
-
-def crear_texto_novedad(regla):
-    if regla.comparador=="igual_a":
-        novedad= f"{regla.objeto.nombre} {regla.item_busqueda} cobro diferente de {regla.cantidad}"
-            
-    if regla.comparador=="mayor_a":
-        novedad= f"{regla.objeto.nombre} {regla.item_busqueda} menor igual a {regla.cantidad}"
-                
-    if regla.comparador=="menor_a":
-        novedad= f"{regla.objeto.nombre} {regla.item_busqueda} mayor igual a {regla.cantidad}"
-
-    return novedad        
-"""
-def evaluacion_factor_unico(pedidos, regla):
-    cont=0
-    
   
-    for pedido in pedidos:  
-              
-        filtro = crear_filtro_busqueda(regla, pedido,  campo_busqueda, regla.Item_busqueda, regla.cantidad)    
-           
-        if not Acta.objects.filter(**filtro).exists() and not regla.requiere_cantidad:
-            
-            if regla.comparador=="igual_a":
-                novedad= f"{regla.objeto.nombre} {regla.Item_busqueda} cobro diferente de {regla.cantidad}"
-            
-            if regla.comparador=="mayor_a":
-                novedad= f"{regla.objeto.nombre} {regla.Item_busqueda} menor igual a {regla.cantidad}"
-                
-            if regla.comparador=="menor_a":
-                novedad= f"{regla.objeto.nombre} {regla.Item_busqueda} mayor igual a {regla.cantidad}"
-                    
-            pedi = Acta.objects.filter(pedido=pedido.get('pedido')).first()
-            crear_novedad(pedi, novedad)
-        
-        if regla.requiere_cantidad:
-             
-            if regla.objeto.tipo=="actividad":
-                campo_busqueda ="actividad"
-            if regla.objeto.tipo=="suministro":
-                campo_busqueda ="suminis"
-            if regla.objeto.tipo=="obra":
-                campo_busqueda ="item_cont" 
-                          
-            filtro2 = crear_filtro_busqueda(regla, pedido, campo_busqueda, regla.objeto.nombre, regla.cantidad_condicion)
 
-            if Acta.objects.filter(**filtro2).exists():
-                pedi = Acta.objects.filter(pedido=pedido.get('pedido')).first()
-                cont+=1
-                print(regla.comparador)
-                print(cont)
-                print("requiere")
-                print(f"ped: {pedi}: {regla.cantidad_condicion} de {regla.objeto.nombre}" )
-                
-                if tipo_item_busqueda=="actividad":
-                    campo_busqueda ="actividad"
-                if tipo_item_busqueda=="suministro":
-                    campo_busqueda ="suminis"
-                if tipo_item_busqueda=="obra":
-                    campo_busqueda ="item_cont"
-                    
-                filtro3 = crear_filtro_busqueda(regla, pedido,  campo_busqueda, regla.Item_busqueda, regla.cantidad)
-                
-                if not Acta.objects.filter(**filtro3).exists():
-                    
-                    if regla.comparador=="igual_a":
-                        novedad= f"{regla.objeto.nombre} {regla.Item_busqueda} cobro diferente de {regla.cantidad}"
-                    
-                    if regla.comparador=="mayor_a":
-                        novedad= f"{regla.objeto.nombre} {regla.Item_busqueda} menor igual a {regla.cantidad}"
-                        
-                    if regla.comparador=="menor_a":
-                        novedad= f"{regla.objeto.nombre} {regla.Item_busqueda} mayor igual a {regla.cantidad}"
-                            
-                    pedi = Acta.objects.filter(pedido=pedido.get('pedido')).first()
-                    crear_novedad(pedi, novedad)
-        #else:  
-         #   print("no requiere")
-
-def crear_filtro_busqueda(regla, pedido, campo_busqueda, item_busqueda, cantidad):
-    
-        if regla.comparador=="igual_a":
-            filtro = {
-                "pedido": pedido.get('pedido'),
-                campo_busqueda: item_busqueda,
-                'cantidad': cantidad
-            }            
-            
-        if regla.comparador=="mayor_a":
-            
-            filtro = {
-                "pedido": pedido.get('pedido'),
-                campo_busqueda: item_busqueda,
-                "cantidad__gt": cantidad
-            }
-            
-        if regla.comparador=="menor_a":
-            
-            filtro = {
-                "pedido": pedido.get('pedido'),
-                campo_busqueda: item_busqueda,
-                "cantidad__lt": cantidad  
-            }
-            
-        return filtro
-"""

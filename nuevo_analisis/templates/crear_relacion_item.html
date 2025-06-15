@@ -161,6 +161,18 @@
                   </div>
                 {% endif %}
               </div>
+              <div id="verificar-todos-group" class="mb-2">
+                {{ form.verificar_cantidad_items }}
+                <label class="form-check-label fw-semibold" for="{{ form.verificar_cantidad_items.id_for_label }}">
+                  {{ form.verificar_cantidad_items.label }}
+                </label>
+                {% for error in form.verificar_cantidad_items.errors %}
+                  <div class="text-danger mt-1">
+                    <small>{{ error }}</small>
+                  </div>
+                {% endfor %}
+              </div>
+
             </div>
           </div>
 
@@ -206,7 +218,23 @@
             conjuncionGroup.style.display = 'none'
           }
         }
-      
+        const verificarTodosGroup = document.getElementById('verificar-todos-group')
+
+function toggleVerificarTodos() {
+  if (factorSelect.value === 'multiple') {
+    verificarTodosGroup.style.display = 'block'
+  } else {
+    verificarTodosGroup.style.display = 'none'
+  }
+}
+
+factorSelect.addEventListener('change', () => {
+  toggleConjuncion()
+  toggleVerificarTodos()
+})
+
+toggleVerificarTodos() // Establecer visibilidad inicial
+
         factorSelect.addEventListener('change', toggleConjuncion)
         toggleConjuncion() // Establecer el estado inicial al cargar la página
       })

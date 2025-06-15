@@ -1,6 +1,8 @@
 
 
 from analisis_acta.models import Acta
+from analisis_acta.views import crear_novedad
+from nuevo_analisis.crear_texto_novedades import crear_texto_novedad
 from nuevo_analisis.models import RelacionItemRegla
 
 
@@ -23,14 +25,27 @@ def busqueda_pedidos_factor_multiple_sin_cantidad_requerida():
 def evaluar_pedidos_regla_factor_multiple_sin_cantidad_requerida(regla, pedidos_a_evaluar, cantidad_requeridad):
     texto = regla.item_busqueda
     elementos = texto.split(',')
-    observacion = []
-    
+
     cont=0   
     for pedido in pedidos_a_evaluar:
         resultado = evaluar_item_por_separado(pedido, elementos, regla.tipo_item_busqueda)
-        if all(not item['item_res'] for item in resultado):
-            cont+=1
-            print(cont)
+        if regla.conjuncion=="todos":
+            if any(not item['item_res'] for item in resultado):
+                cont+=1
+                print(cont)
+                novedad= crear_texto_novedad(regla) 
+                print(novedad)       
+                pedi = Acta.objects.filter(pedido=pedido.get('pedido')).first()
+                crear_novedad(pedi, novedad)
+        if regla.conjuncion=="uno":
+            if all(not item['item_res'] for item in resultado):
+                cont += 1
+                print(cont)
+                novedad = crear_texto_novedad(regla)
+                print(novedad)
+                pedi = Acta.objects.filter(pedido=pedido.get('pedido')).first()
+                crear_novedad(pedi, novedad)
+
 
 def evaluar_item_por_separado(pedido, elementos, campo_busqueda):
     cont=0

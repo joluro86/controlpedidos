@@ -57,6 +57,8 @@ class RelacionItemRegla(models.Model):
     comparador = models.CharField(max_length=30, choices=COMPARADORES, verbose_name="Comparador")
     cantidad = models.PositiveIntegerField(default=1, verbose_name="Cantidad Requerida")
 
+    verificar_cantidad_items = models.BooleanField(default=True)
+
     def __str__(self):
         # Asegúrate de que los atributos 'objeto' y 'Item_busqueda' existan
         # en el momento de llamar a __str__.

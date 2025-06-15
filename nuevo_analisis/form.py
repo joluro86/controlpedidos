@@ -35,7 +35,8 @@ class RelacionItemReglaForm(forms.ModelForm):
             'item_busqueda',
             'conjuncion', # Asegurarse de que esté aquí
             'comparador',
-            'cantidad'
+            'cantidad',
+            'verificar_cantidad_items'
         ]
         widgets = {
             'objeto': forms.Select(attrs={
@@ -69,6 +70,9 @@ class RelacionItemReglaForm(forms.ModelForm):
                 'placeholder': 'Cantidad',
                 'min': '1'
             }),
+             'verificar_cantidad_items': forms.CheckboxInput(attrs={
+                'class': 'form-check-input',
+            }),
         }
         labels = {
             'objeto': 'Item a relacionar',
@@ -79,6 +83,7 @@ class RelacionItemReglaForm(forms.ModelForm):
             'conjuncion': 'Relación de Búsqueda', # Label más descriptivo
             'comparador': 'Condición de Comparación',
             'cantidad': 'Cantidad del Ítem Asociado Requerida',
+            'verificar_cantidad_items': 'Verificar cantidad en todos los ítems (solo si es múltiple)',
         }
         help_texts = {
             'item_busqueda': 'Separe con comas si es multiple (ej. 200410,200411).',

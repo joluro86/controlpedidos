@@ -28,6 +28,7 @@
             <th scope="col">Ítem Búsqueda</th> {# Nombre más claro para item_requerido #}
             <th scope="col">Comparador</th>
             <th scope="col">Cantidad</th>
+            <th scope="col">Verficar cantidad</th>
             <th scope="col" class="text-center">Acciones</th>
           </tr>
         </thead>
@@ -65,6 +66,13 @@
                 <span class="badge bg-info">{{ regla.get_comparador_display }}</span>
               </td> {# Badge para Comparador #}
               <td class="text-center">{{ regla.cantidad }}</td>
+              <td class="text-center">
+                {% if regla.verificar_cantidad_items %}
+                  <i class="fas fa-check-circle text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Sí"></i> {# Ícono Font Awesome: fas fa-check-circle #}
+                {% else %}
+                  <i class="fas fa-times-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="No"></i> {# Ícono Font Awesome: fas fa-times-circle #}
+                {% endif %}
+              </td>
               <td class="text-center">
                 <div class="btn-group" role="group" aria-label="Acciones de relación">
                   <a href="{% url 'editar_relacion_item_regla' pk=regla.id %}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i> {# Ícono Font Awesome: fas fa-pencil-alt #}</a>

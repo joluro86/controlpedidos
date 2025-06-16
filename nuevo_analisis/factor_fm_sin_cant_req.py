@@ -28,7 +28,7 @@ def evaluar_pedidos_regla_factor_multiple_sin_cantidad_requerida(regla, pedidos_
 
     cont=0   
     for pedido in pedidos_a_evaluar:
-        resultado = evaluar_item_por_separado(pedido, elementos, regla.tipo_item_busqueda)
+        resultado = evaluar_item_por_separado(regla, pedido, elementos, regla.tipo_item_busqueda)
         if regla.conjuncion=="todos":
             if any(not item['item_res'] for item in resultado):
                 cont+=1
@@ -47,23 +47,58 @@ def evaluar_pedidos_regla_factor_multiple_sin_cantidad_requerida(regla, pedidos_
                 crear_novedad(pedi, novedad)
 
 
-def evaluar_item_por_separado(pedido, elementos, campo_busqueda):
+def evaluar_item_por_separado(regla, pedido, elementos, campo_busqueda):
     cont=0
     resultado = []
     
     for item in elementos:
         filtro = {'pedido':pedido.get('pedido'), campo_busqueda:item}
-                       
-        resultado.append(
-            {
-                'id':cont,
-               'item_res': Acta.objects.filter(**filtro).exists()
-            }
-            )
+
+        if regla.verificar_cantidad_items:
+
+            if Acta.objects.filter(**filtro).exists():
+                verficacion=  cumplimiento_verificar_cantidad_todos_los_items(regla, pedido, campo_busqueda, item)
+                
+                resultado.append(
+                {
+                    'id':cont,
+                    'item_res': verficacion
+                }
+                ) 
+        else:                       
+            resultado.append(
+                {
+                    'id':cont,
+                'item_res': Acta.objects.filter(**filtro).exists()
+                }
+                )
 
     return resultado
 
+def cumplimiento_verificar_cantidad_todos_los_items(regla, pedido,campo_busqueda,  item_busqueda):
 
+    if regla.comparador=="igual_a":
+        filtro = {'pedido':pedido.get('pedido'), campo_busqueda:item_busqueda, 'cantidad':regla.cantidad}
+        
+        if Acta.objects.filter(**filtro).exists():
+            print("entre")
+        if not Acta.objects.filter(**filtro).exists():
+            return True
+        
+    if regla.comparador=="mayor_a":
+        
+        filtro = {'pedido':pedido, campo_busqueda:item_busqueda, 'cantidad__gt':regla.cantidad}
+        if Acta.objects.filter(**filtro).exists():
+                print("entre")
+                return True
+        
+    if regla.comparador=="menor_a":     
+
+        filtro = {'pedido':pedido, campo_busqueda:item_busqueda, 'cantidad__lt':regla.cantidad}
+        if Acta.objects.filter(**filtro).exists():
+            print("entre")
+            return True
+  
     
    
             

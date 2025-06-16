@@ -80,13 +80,14 @@ def cumplimiento_verificar_cantidad_todos_los_items(regla, pedido,campo_busqueda
         
     if regla.comparador=="mayor_a":
         
-        filtro = {'pedido':pedido, campo_busqueda:item_busqueda, 'cantidad__gt':regla.cantidad}
+        filtro = {'pedido':pedido.get('pedido'), campo_busqueda:item_busqueda, 'cantidad__gt':regla.cantidad}
+        
         if Acta.objects.filter(**filtro).exists():
-                return True
+            return True
         
     if regla.comparador=="menor_a":     
 
-        filtro = {'pedido':pedido, campo_busqueda:item_busqueda, 'cantidad__lt':regla.cantidad}
+        filtro = {'pedido':pedido.get('pedido'), campo_busqueda:item_busqueda, 'cantidad__lt':regla.cantidad}
         if Acta.objects.filter(**filtro).exists():
             return True
   

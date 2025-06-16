@@ -69,3 +69,25 @@ class RelacionItemRegla(models.Model):
     class Meta:
         verbose_name = "Relación de Ítem de Regla"
         verbose_name_plural = "Relaciones de Ítems de Regla"
+        
+class RelacionIncompatibilidad(models.Model):
+    
+    TIPO_ITEM=[ 
+        ('suminis', 'Suministro'),
+        ('actividad', 'Actividad'),
+        ('item_cont', 'Obra'),
+        ]
+
+    objeto = models.ForeignKey(
+        ItemRegla, on_delete=models.CASCADE, related_name='relacion_incompatible',
+        verbose_name="Objeto Principal"
+    )
+    item_incompatibilidad = models.CharField(max_length=255, verbose_name="Ítem(s) de incompatibilidad")
+    tipo_item_incompatibilidad = models.CharField(max_length=30, choices=TIPO_ITEM, verbose_name="Tipo Item incompatibilidad") # Añadido verbose_name
+
+    def __str__(self):
+        return f"{self.objeto.nombre} incompatible con {self.item_incompatibilidad}"
+
+    class Meta:
+        verbose_name = "Relación de incompatibilidad"
+        verbose_name_plural = "Relaciones de incompatibilidad"

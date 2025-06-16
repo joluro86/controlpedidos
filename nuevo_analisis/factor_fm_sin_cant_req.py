@@ -14,7 +14,7 @@ def busqueda_pedidos_factor_multiple_sin_cantidad_requerida():
         if reglas.exists():           
             for regla in reglas:              
                 campo_busqueda=regla.objeto.tipo
-                filtro = {campo_busqueda: regla.objeto.nombre, 'cantidad':regla.cantidad_condicion}
+                filtro = {campo_busqueda: regla.objeto.nombre}
                 pedidos_a_evaluar_regla = Acta.objects.filter(**filtro).values('pedido').distinct()
                 print(len(pedidos_a_evaluar_regla))
                 evaluar_pedidos_regla_factor_multiple_sin_cantidad_requerida(regla, pedidos_a_evaluar_regla, 0)
@@ -47,10 +47,8 @@ def evaluar_item_por_separado(regla, pedido, elementos, campo_busqueda):
     resultado = []
     
     for item in elementos:
-        filtro = {'pedido':pedido.get('pedido'), campo_busqueda:item}
-
         if regla.verificar_cantidad_items:
-
+            filtro = {'pedido':pedido.get('pedido'), campo_busqueda:item}
             if Acta.objects.filter(**filtro).exists():
                 verficacion=  cumplimiento_verificar_cantidad_todos_los_items(regla, pedido, campo_busqueda, item)
                 

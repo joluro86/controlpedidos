@@ -2,6 +2,7 @@
 from django import forms
 from nuevo_analisis.models import ItemRegla, RelacionItemRegla # Asegúrate de que 'nuevo_analisis' sea la ruta correcta o usa '.'
 from nuevo_analisis.models import RelacionIncompatibilidad
+from .models import RelacionUltimoCaracter
 
 class ItemReglaForm(forms.ModelForm):
     class Meta:
@@ -116,4 +117,30 @@ class RelacionIncompatibilidadForm(forms.ModelForm):
             'objeto': 'Ítem principal',
             'item_incompatibilidad': 'Ítem incompatible',
             'tipo_item_incompatibilidad': 'Tipo de ítem incompatible',
+        }
+
+
+class RelacionUltimoCaracterForm(forms.ModelForm):
+    class Meta:
+        model = RelacionUltimoCaracter
+        fields = ['objeto', 'aplica', 'caracter', 'item_caracter', 'tipo_item']
+        widgets = {
+            'objeto': forms.Select(attrs={'class': 'form-select'}),
+            'aplica': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'caracter': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ejemplo: P'
+            }),
+            'item_caracter': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ejemplo: 200410...'
+            }),
+            'tipo_item': forms.Select(attrs={'class': 'form-select'}),
+        }
+        labels = {
+            'objeto': 'Ítem principal',
+            'aplica': '¿Aplicar esta regla?',
+            'caracter': 'Caracter o frase',
+            'item_caracter': 'Ítems con carácter final',
+            'tipo_item': 'Tipo de ítem',
         }

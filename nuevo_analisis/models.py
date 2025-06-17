@@ -91,3 +91,27 @@ class RelacionIncompatibilidad(models.Model):
     class Meta:
         verbose_name = "Relación de incompatibilidad"
         verbose_name_plural = "Relaciones de incompatibilidad"
+
+class RelacionUltimoCaracter(models.Model):
+    
+    TIPO_ITEM=[ 
+        ('suminis', 'Suministro'),
+        ('actividad', 'Actividad'),
+        ('item_cont', 'Obra'),
+        ]
+
+    objeto = models.ForeignKey(
+        ItemRegla, on_delete=models.CASCADE, related_name='relacion_caracter',
+        verbose_name="Objeto Principal"
+    )
+    caracter = models.CharField(max_length=5, default="A")
+    aplica = models.BooleanField(default=True)
+    item_caracter = models.CharField(max_length=255, verbose_name="Ítems caracter")
+    tipo_item = models.CharField(max_length=30, choices=TIPO_ITEM, verbose_name="Tipo Item") # Añadido verbose_name
+
+    def __str__(self):
+        return f"{self.objeto.nombre} {self.item_caracter}"
+
+    class Meta:
+        verbose_name = "Relación caracter"
+        verbose_name_plural = "Relaciones caracteres"

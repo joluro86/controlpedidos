@@ -23,5 +23,12 @@ urlpatterns = [
     path('incompatibilidades/nueva/', views.crear_relacion_incompatibilidad, name='crear_relacion_incompatibilidad'),
     path('incompatibilidades/editar/<int:pk>/', views.editar_relacion_incompatibilidad, name='editar_relacion_incompatibilidad'),
     path('incompatibilidades/eliminar/<int:pk>/', views.eliminar_relacion_incompatibilidad, name='eliminar_relacion_incompatibilidad'),
+
+    # Relaciones por carácter final
+    path('caracteres/', views.lista_relaciones_caracter, name='lista_relaciones_caracter'),
+    path('caracteres/nueva/', views.crear_relacion_caracter, name='crear_relacion_caracter'),
+    path('caracteres/editar/<int:pk>/', views.editar_relacion_caracter, name='editar_relacion_caracter'),
+    path('caracteres/eliminar/<int:pk>/', views.eliminar_relacion_caracter, name='eliminar_relacion_caracter'),
+
 ]
 

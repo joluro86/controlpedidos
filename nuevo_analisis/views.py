@@ -1,8 +1,8 @@
 # your_app_name/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy # Para redirigir con un nombre de URL, útil en clases pero también aplicable aquí
-from .models import ItemRegla, RelacionIncompatibilidad, RelacionItemRegla
-from nuevo_analisis.form import ItemReglaForm, RelacionIncompatibilidadForm, RelacionItemReglaForm # Asegúrate de que estos formularios estén definidos
+from .models import ItemRegla, RelacionIncompatibilidad, RelacionItemRegla, RelacionUltimoCaracter
+from nuevo_analisis.form import ItemReglaForm, RelacionIncompatibilidadForm, RelacionItemReglaForm, RelacionUltimoCaracterForm # Asegúrate de que estos formularios estén definidos
 
 # --- Vistas para ItemRegla ---
 
@@ -85,7 +85,7 @@ def eliminar_relacion_item_regla(request, pk):
     relacion.delete()
     return redirect('listado_relaciones')
     
-# --- Vistas para RelacionItemRegla ---
+# --- Vistas para RelacionIncompatible ---
 def lista_relaciones_incompatibilidad(request):
     relaciones = RelacionIncompatibilidad.objects.all()
     return render(request, 'relaciones_incompatibilidad/lista.html', {'relaciones': relaciones})
@@ -117,3 +117,37 @@ def eliminar_relacion_incompatibilidad(request, pk):
         relacion.delete()
         return redirect('lista_relaciones_incompatibilidad')
     return render(request, 'relaciones_incompatibilidad/confirmar_eliminacion.html', {'relacion': relacion})
+
+# --- Vistas para RelacionCaracter ---
+
+def lista_relaciones_caracter(request):
+    relaciones = RelacionUltimoCaracter.objects.all()
+    return render(request, 'relacion_caracter/lista.html', {'relaciones': relaciones})
+
+def crear_relacion_caracter(request):
+    if request.method == 'POST':
+        form = RelacionUltimoCaracterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_relaciones_caracter')
+    else:
+        form = RelacionUltimoCaracterForm()
+    return render(request, 'relacion_caracter/formulario.html', {'form': form})
+
+def editar_relacion_caracter(request, pk):
+    relacion = get_object_or_404(RelacionUltimoCaracter, pk=pk)
+    if request.method == 'POST':
+        form = RelacionUltimoCaracterForm(request.POST, instance=relacion)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_relaciones_caracter')
+    else:
+        form = RelacionUltimoCaracterForm(instance=relacion)
+    return render(request, 'relacion_caracter/formulario.html', {'form': form})
+
+def eliminar_relacion_caracter(request, pk):
+    relacion = get_object_or_404(RelacionUltimoCaracter, pk=pk)
+    if request.method == 'POST':
+        relacion.delete()
+        return redirect('lista_relaciones_caracter')
+    return render(request, 'relacion_caracter/confirmar_eliminacion.html', {'relacion': relacion})

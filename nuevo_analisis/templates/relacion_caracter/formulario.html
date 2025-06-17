@@ -1,0 +1,73 @@
+{% extends 'index.html' %}
+
+{% block title %}Crear/Editar Relación de Carácter{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+  <div class="card shadow-lg border-0 w-100" style="max-width: 500px; background-color: #ffffff; border-radius: 0.75rem;">
+    <div class="card-header text-white text-center py-2" style="background-color: #0d6efd; border-radius: 0.75rem 0.75rem 0 0;">
+      <h5 class="mb-0 fw-bold">
+        <i class="bi bi-type me-2"></i>
+        {% if form.instance.pk %} Editar Relación {% else %} Nueva Relación {% endif %}
+      </h5>
+    </div>
+    <div class="card-body p-3">
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label for="{{ form.objeto.id_for_label }}" class="form-label fw-semibold">Ítem principal:</label>
+          {{ form.objeto }}
+          {% for error in form.objeto.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3 form-check">
+          {{ form.aplica }}
+          <label for="{{ form.aplica.id_for_label }}" class="form-check-label fw-semibold">
+            Aplicar esta regla
+          </label>
+          {% for error in form.aplica.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+          {% endfor %}
+        </div>
+        <div class="mb-3">
+          {{ form.caracter }}
+          <label for="{{ form.aplica.id_for_label }}" class="form-check-label fw-semibold">
+            Caracter o frase
+          </label>
+          {% for error in form.caracter.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          <label for="{{ form.item_caracter.id_for_label }}" class="form-label fw-semibold">Ítems con carácter:</label>
+          {{ form.item_caracter }}
+          {% for error in form.item_caracter.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          <label for="{{ form.tipo_item_incompatibilidad.id_for_label }}" class="form-label fw-semibold">Tipo ítem:</label>
+          {{ form.tipo_item }}
+          {% for error in form.tipo_item_incompatibilidad.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+          {% endfor %}
+        </div>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button type="submit" class="btn btn-primary btn-sm">
+            <i class="bi bi-save me-1"></i>Guardar
+          </button>
+          <a href="{% url 'lista_relaciones_caracter' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-x-circle me-1"></i>Cancelar
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

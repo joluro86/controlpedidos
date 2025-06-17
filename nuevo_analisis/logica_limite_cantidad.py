@@ -8,8 +8,7 @@ def analisis_reglas_limite_cantidad():
 
     if reglas.exists():
         for regla in reglas:
-            analizar_cumplimiento_cantidades(regla)
-            
+            analizar_cumplimiento_cantidades(regla)            
 
 
 def analizar_cumplimiento_cantidades(regla):

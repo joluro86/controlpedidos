@@ -16,7 +16,6 @@ def busqueda_pedidos_factor_multiple_sin_cantidad_requerida():
                 campo_busqueda=regla.objeto.tipo
                 filtro = {campo_busqueda: regla.objeto.nombre}
                 pedidos_a_evaluar_regla = Acta.objects.filter(**filtro).values('pedido').distinct()
-                print(len(pedidos_a_evaluar_regla))
                 evaluar_pedidos_regla_factor_multiple_sin_cantidad_requerida(regla, pedidos_a_evaluar_regla, 0)
         
     except Exception as e:

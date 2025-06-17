@@ -9,13 +9,10 @@ def analisis_reglas_caracter():
 
     if reglas.exists():
         for regla in reglas:
-            print(regla.todos_los_registros)
-            print(regla.aplica)
             campo_busqueda=regla.objeto.tipo
             filtro = {campo_busqueda: regla.objeto.nombre}
             
             pedidos_a_evaluar_regla = Acta.objects.filter(**filtro).values('pedido').distinct()
-            print(len(pedidos_a_evaluar_regla))
             
             if regla.todos_los_registros==True and regla.aplica==True:
                 analizar_cumplimiento_caracter_todos(pedidos_a_evaluar_regla, regla)
@@ -57,7 +54,6 @@ def analizar_cumplimiento_caracter_todos(pedidos_a_evaluar, regla):
                 break
 
 def analizar_cumplimiento_caracter_un_item(pedidos_a_evaluar, regla):
-    print(regla)
     for ped in pedidos_a_evaluar:
         campo_busqueda = regla.tipo_item
         inicio_caracter = regla.item_caracter
@@ -73,7 +69,6 @@ def analizar_cumplimiento_caracter_un_item(pedidos_a_evaluar, regla):
         registros = Acta.objects.filter(**filtro)
         
         for registro in registros:
-            print(registro.suminis)
             valor = str(getattr(registro, campo_busqueda, '')).strip()
             
             # Saltar si el valor es vacío, "0" o "00"
@@ -112,7 +107,6 @@ def analizar_cumplimiento_caracter_todos_no_aplica(pedidos_a_evaluar, regla):
             
 
 def analizar_cumplimiento_caracter_no_aplica_un_item(pedidos_a_evaluar, regla):
-    print(regla)
     for ped in pedidos_a_evaluar:
         campo_busqueda = regla.tipo_item
         inicio_caracter = regla.item_caracter
@@ -128,7 +122,6 @@ def analizar_cumplimiento_caracter_no_aplica_un_item(pedidos_a_evaluar, regla):
         registros = Acta.objects.filter(**filtro)
         
         for registro in registros:
-            print(registro.suminis)
             valor = str(getattr(registro, campo_busqueda, '')).strip()
             
             # Saltar si el valor es vacío, "0" o "00"

@@ -22,16 +22,26 @@
             <div class="text-danger"><small>{{ error }}</small></div>
           {% endfor %}
         </div>
-
-        <div class="mb-3 form-check">
+                <div class="mb-3 form-check">
           {{ form.aplica }}
           <label for="{{ form.aplica.id_for_label }}" class="form-check-label fw-semibold">
-            Aplicar esta regla
+            Debe incluir caractér
           </label>
           {% for error in form.aplica.errors %}
             <div class="text-danger"><small>{{ error }}</small></div>
           {% endfor %}
         </div>
+
+        <div class="mb-3 form-check">
+          {{ form.todos_los_registros }}
+          <label for="{{ form.todos_los_registros.id_for_label }}" class="form-check-label fw-semibold">
+            Verificar todos los registros
+          </label>
+          {% for error in form.todos_los_registros.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+          {% endfor %}
+        </div>       
+
         <div class="mb-3">
           {{ form.caracter }}
           <label for="{{ form.aplica.id_for_label }}" class="form-check-label fw-semibold">
@@ -43,7 +53,7 @@
         </div>
 
         <div class="mb-3">
-          <label for="{{ form.item_caracter.id_for_label }}" class="form-label fw-semibold">Ítems con carácter:</label>
+          <label for="{{ form.item_caracter.id_for_label }}" class="form-label fw-semibold">Ítem:</label>
           {{ form.item_caracter }}
           {% for error in form.item_caracter.errors %}
             <div class="text-danger"><small>{{ error }}</small></div>
@@ -51,9 +61,9 @@
         </div>
 
         <div class="mb-3">
-          <label for="{{ form.tipo_item_incompatibilidad.id_for_label }}" class="form-label fw-semibold">Tipo ítem:</label>
+          <label for="{{ form.tipo_item.id_for_label }}" class="form-label fw-semibold">Tipo ítem:</label>
           {{ form.tipo_item }}
-          {% for error in form.tipo_item_incompatibilidad.errors %}
+          {% for error in form.tipo_item.errors %}
             <div class="text-danger"><small>{{ error }}</small></div>
           {% endfor %}
         </div>
@@ -70,4 +80,27 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const checkbox = document.getElementById('{{ form.todos_los_registros.id_for_label }}');
+    const itemInput = document.getElementById('{{ form.item_caracter.id_for_label }}');
+
+    function toggleItemInput() {
+      if (checkbox.checked) {
+        itemInput.disabled = true;
+        itemInput.value = ''; // opcional: limpiar el campo
+      } else {
+        itemInput.disabled = false;
+      }
+    }
+
+    // Activar en el cambio de estado del checkbox
+    checkbox.addEventListener('change', toggleItemInput);
+
+    // Ejecutar al cargar la página
+    toggleItemInput();
+  });
+</script>
+
 {% endblock %}

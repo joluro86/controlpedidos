@@ -123,24 +123,29 @@ class RelacionIncompatibilidadForm(forms.ModelForm):
 class RelacionUltimoCaracterForm(forms.ModelForm):
     class Meta:
         model = RelacionUltimoCaracter
-        fields = ['objeto', 'aplica', 'caracter', 'item_caracter', 'tipo_item']
+        fields = ['objeto', 'aplica', 'caracter', 'item_caracter', 'tipo_item',  'todos_los_registros']
         widgets = {
             'objeto': forms.Select(attrs={'class': 'form-select'}),
             'aplica': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'caracter': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Ejemplo: P'
+                'class': 'form-control'
+            }),
+            'todos_los_registros': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'caracter': forms.TextInput(attrs={
+                'class': 'form-control'
             }),
             'item_caracter': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Ejemplo: 200410...'
             }),
             'tipo_item': forms.Select(attrs={'class': 'form-select'}),
+            
         }
         labels = {
             'objeto': 'Ítem principal',
             'aplica': '¿Aplicar esta regla?',
             'caracter': 'Caracter o frase',
-            'item_caracter': 'Ítems con carácter final',
+            'item_caracter': 'Ítem con carácter final',
             'tipo_item': 'Tipo de ítem',
+            'todos_los_registros': 'Verificar todos los registros'
         }

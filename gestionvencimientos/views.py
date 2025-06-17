@@ -2,7 +2,6 @@ from asyncio.windows_events import NULL
 from datetime import datetime, timedelta
 from email.policy import HTTP
 from django.http.response import HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render
 import holidays_co
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -14,10 +13,7 @@ from openpyxl import load_workbook
 from django.urls import reverse
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from openpyxl import load_workbook
 from .models import Ans
-from openpyxl import load_workbook
 from io import BytesIO
 
 @login_required

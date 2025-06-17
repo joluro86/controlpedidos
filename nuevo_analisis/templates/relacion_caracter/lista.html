@@ -17,9 +17,11 @@
         <tr>
           <th>#</th>
           <th>Ítem principal</th>
-          <th>Carácter</th>
+          <th>Carácter final</th>
+          <th>Item</th>
           <th>Tipo</th>
-          <th>¿Aplica?</th>
+          <th>Caracter obligatorio</th>
+          <th>Verificar todos los registros</th>
           <th class="text-center">Acciones</th>
         </tr>
       </thead>
@@ -28,9 +30,18 @@
           <tr>
             <td>{{ forloop.counter }}</td>
             <td>{{ r.objeto.nombre }}</td>
-            <td>{{ r.item_caracter }}</td>
-            <td>{{ r.get_tipo_item_incompatibilidad_display }}</td>
+            <td>{{ r.caracter }}</td>
+            
+            {% if r.item_caracter %}
+              <td>{{ r.item_caracter }}</td>
+            {% else %}
+              <td>N/A</td>
+            {% endif %}
+              
+            
+            <td>{{ r.get_tipo_item_display }}</td>
             <td>{{ r.aplica|yesno:"Sí,No" }}</td>
+            <td>{{ r.todos_los_registros|yesno:"Sí,No" }}</td>
             <td class="text-center">
               <a href="{% url 'editar_relacion_caracter' r.id %}" class="btn btn-sm btn-primary me-1">
                 <i class="bi bi-pencil"></i>

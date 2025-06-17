@@ -75,7 +75,7 @@ class RelacionIncompatibilidad(models.Model):
     TIPO_ITEM=[ 
         ('suminis', 'Suministro'),
         ('actividad', 'Actividad'),
-        ('item_cont', 'Obra'),
+        ('item_cont', 'Obra')
         ]
 
     objeto = models.ForeignKey(
@@ -106,9 +106,9 @@ class RelacionUltimoCaracter(models.Model):
     )
     caracter = models.CharField(max_length=5, default="A")
     aplica = models.BooleanField(default=True)
-    item_caracter = models.CharField(max_length=255, verbose_name="Ítems caracter")
+    item_caracter = models.CharField(max_length=255, verbose_name="Ítems caracter", blank=True, null=True)
     tipo_item = models.CharField(max_length=30, choices=TIPO_ITEM, verbose_name="Tipo Item") # Añadido verbose_name
-
+    todos_los_registros = models.BooleanField(default=True)
     def __str__(self):
         return f"{self.objeto.nombre} {self.item_caracter}"
 

@@ -115,3 +115,28 @@ class RelacionUltimoCaracter(models.Model):
     class Meta:
         verbose_name = "Relación caracter"
         verbose_name_plural = "Relaciones caracteres"
+        
+class RelacionLimiteItem(models.Model):
+    
+    COMPARADOR = [
+        ('igual_a', 'Igual a'),
+        ('mayor_a', 'Mayor a'),
+        ('menor_a', 'Menor a'),
+    ]
+    
+    TIPO_ITEM_CANTIDAD=[ 
+        ('suminis', 'Suministro'),
+        ('item_cont', 'Obra'),
+        ]
+    
+    tipo_item = models.CharField(max_length=30, choices=TIPO_ITEM_CANTIDAD, verbose_name="Tipo Item cantidad") # Añadido verbose_name
+    items = models.CharField(max_length=255, verbose_name="Ítems cantidad", blank=True, null=True)
+    comparador = models.CharField(max_length=30, choices=COMPARADOR, default="igual_a", verbose_name="Comparador Item cantidad") # Añadido verbose_name 
+    cantidad = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.items}"
+
+    class Meta:
+        verbose_name = "Relación cantidad"
+        verbose_name_plural = "Relaciones cantidades"

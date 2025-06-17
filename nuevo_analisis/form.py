@@ -1,8 +1,6 @@
 # your_app_name/forms.py
 from django import forms
-from nuevo_analisis.models import ItemRegla, RelacionItemRegla # Asegúrate de que 'nuevo_analisis' sea la ruta correcta o usa '.'
-from nuevo_analisis.models import RelacionIncompatibilidad
-from .models import RelacionUltimoCaracter
+from nuevo_analisis.models import ItemRegla, RelacionItemRegla, RelacionIncompatibilidad,  RelacionLimiteItem, RelacionUltimoCaracter # Asegúrate de que 'nuevo_analisis' sea la ruta correcta o usa '.'
 
 class ItemReglaForm(forms.ModelForm):
     class Meta:
@@ -148,4 +146,31 @@ class RelacionUltimoCaracterForm(forms.ModelForm):
             'item_caracter': 'Ítem con carácter final',
             'tipo_item': 'Tipo de ítem',
             'todos_los_registros': 'Verificar todos los registros'
+        }
+
+
+class RelacionLimiteItemForm(forms.ModelForm):
+    class Meta:
+        model = RelacionLimiteItem
+        fields = ['tipo_item', 'items', 'comparador', 'cantidad']
+        widgets = {
+            'tipo_item': forms.Select(attrs={'class': 'form-select'}),
+            'items': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ej: 200411 o múltiples separados por coma'
+            }),
+            'comparador': forms.Select(attrs={'class': 'form-select'}),
+            'cantidad': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ej: 2'
+            }),
+        }
+        labels = {
+            'tipo_item': 'Tipo de ítem',
+            'items': 'Ítems a validar (opcional)',
+            'comparador': 'Condición de comparación',
+            'cantidad': 'Cantidad esperada',
+        }
+        help_texts = {
+            'items': 'Puede ingresar un item o varios separados por coma.',
         }

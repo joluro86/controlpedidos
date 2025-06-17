@@ -1,8 +1,8 @@
 # your_app_name/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy # Para redirigir con un nombre de URL, útil en clases pero también aplicable aquí
-from .models import ItemRegla, RelacionIncompatibilidad, RelacionItemRegla, RelacionUltimoCaracter
-from nuevo_analisis.form import ItemReglaForm, RelacionIncompatibilidadForm, RelacionItemReglaForm, RelacionUltimoCaracterForm # Asegúrate de que estos formularios estén definidos
+from .models import ItemRegla, RelacionIncompatibilidad, RelacionItemRegla, RelacionLimiteItem, RelacionUltimoCaracter
+from nuevo_analisis.form import ItemReglaForm, RelacionIncompatibilidadForm, RelacionItemReglaForm, RelacionLimiteItemForm, RelacionUltimoCaracterForm # Asegúrate de que estos formularios estén definidos
 
 # --- Vistas para ItemRegla ---
 
@@ -151,3 +151,40 @@ def eliminar_relacion_caracter(request, pk):
         relacion.delete()
         return redirect('lista_relaciones_caracter')
     return render(request, 'relacion_caracter/confirmar_eliminacion.html', {'relacion': relacion})
+
+
+# --- Vistas para RelacionCaracter ---
+
+from .models import RelacionLimiteItem
+
+def lista_relaciones_cantidad(request):
+    relaciones = RelacionLimiteItem.objects.all()
+    return render(request, 'relacion_cantidad/relacion_limite_list.html', {'relaciones': relaciones})
+
+def crear_relacion_cantidad(request):
+    if request.method == 'POST':
+        form = RelacionLimiteItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_relaciones_cantidad')
+    else:
+        form = RelacionLimiteItemForm()
+    return render(request, 'relacion_cantidad/relacion_limite_form.html', {'form': form})
+
+def editar_relacion_cantidad(request, pk):
+    relacion = get_object_or_404(RelacionLimiteItem, pk=pk)
+    if request.method == 'POST':
+        form = RelacionLimiteItemForm(request.POST, instance=relacion)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_relaciones_cantidad')
+    else:
+        form = RelacionLimiteItemForm(instance=relacion)
+    return render(request, 'relacion_cantidad/relacion_limite_form.html', {'form': form, 'editar': True})
+
+def eliminar_relacion_cantidad(request, pk):
+    relacion = get_object_or_404(RelacionLimiteItem, pk=pk)
+    if request.method == 'POST':
+        relacion.delete()
+        return redirect('lista_relaciones_cantidad')
+    return render(request, 'relacion_cantidad/confirmar_eliminacion.html', {'objeto': relacion})

@@ -30,5 +30,11 @@ urlpatterns = [
     path('caracteres/editar/<int:pk>/', views.editar_relacion_caracter, name='editar_relacion_caracter'),
     path('caracteres/eliminar/<int:pk>/', views.eliminar_relacion_caracter, name='eliminar_relacion_caracter'),
 
+        # Relaciones por cantidad (limites)
+    path('cantidades/', views.lista_relaciones_cantidad, name='lista_relaciones_cantidad'),
+    path('cantidades/nueva/', views.crear_relacion_cantidad, name='crear_relacion_cantidad'),
+    path('cantidades/editar/<int:pk>/', views.editar_relacion_cantidad, name='editar_relacion_cantidad'),
+    path('cantidades/eliminar/<int:pk>/', views.eliminar_relacion_cantidad, name='eliminar_relacion_cantidad'),
+
 ]
 

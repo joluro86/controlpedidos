@@ -20,6 +20,9 @@ def analisis_reglas_incompatibilidad():
 
     return redirect('novedades_acta')
 
+"""
+    
+    
 
 def analizar_cumplimiento_regla(pedidos_a_evaluar, regla):
 
@@ -33,5 +36,24 @@ def analizar_cumplimiento_regla(pedidos_a_evaluar, regla):
             novedad= f"{regla.objeto.nombre} incompatible con {regla.item_incompatibilidad}"        
             pedi = Acta.objects.filter(pedido=pedido.get('pedido')).first()
             crear_novedad(pedi, novedad)
-  
+"""
+
+def analizar_cumplimiento_regla(pedidos_a_evaluar, regla):
+    campo_busqueda = regla.tipo_item_incompatibilidad
+    items_incompatibles = regla.item_incompatibilidad.split(',') if regla.item_incompatibilidad else []
+
+    for pedido in pedidos_a_evaluar:
+        pedido_id = pedido.get('pedido')
+
+        for item in items_incompatibles:
+            item = item.strip()
+            filtro = {'pedido': pedido_id, campo_busqueda: item}
+
+            busqueda = Acta.objects.filter(**filtro)
+
+            if busqueda.exists():
+                texto_novedad = f"{regla.objeto.nombre} incompatible con '{item}' en {campo_busqueda}"
+                acta_referencia = busqueda.first()
+                crear_novedad(acta_referencia, texto_novedad)
+                break  # si ya hay una incompatibilidad, no se necesita revisar más
 

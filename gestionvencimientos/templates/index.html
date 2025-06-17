@@ -73,21 +73,27 @@
       <a class="dropdown-item" href="#" onclick="analisis_revision_acta()">Nuevo análisis Acta</a>
     </li>
     -->
-    <li>            
+   
+    <li>
+      <a class="dropdown-item" href="#" onclick="limpiar_acta_analisis()">Reiniciar Acta Análisis</a>
+    </li>
+    <li><hr class="dropdown-divider"></li>
+     <li>            
       <a class="dropdown-item" href="#" onclick="calculo_novedades()">Cálculo Novedades Acta</a>
     </li>
     <li>
       <a class="dropdown-item" href="#" onclick="limpiar_novedades_acta()">Reiniciar Novedades</a>
     </li>
-    <li>
-      <a class="dropdown-item" href="#" onclick="limpiar_acta_analisis()">Reiniciar Acta Análisis</a>
-    </li>
     <li class="nav-item" id="pendi_index">
       <a class="dropdown-item" id="pendi_a" href="{% url 'novedades_acta' %}">Novedades</a>
     </li>
-    <li class="nav-item" id="pendi_index">
-      <a class="dropdown-item" id="pendi_a" href="#">Sin interna</a>
-    </li>
+    <li><hr class="dropdown-divider"></li>
+<li>
+  <a class="dropdown-item" href="{% url 'crear_relacion_incompatibilidad' %}">➕ Crear relación de incompatibilidad</a>
+</li>
+<li>
+  <a class="dropdown-item" href="{% url 'lista_relaciones_incompatibilidad' %}">📋 Listado de incompatibilidades</a>
+</li>
 
     <li><hr class="dropdown-divider"></li>
 
@@ -97,12 +103,14 @@
     <li>
       <a class="dropdown-item" href="{% url 'listado_items_regla' %}">📋 Listado de ítems</a>
     </li>
+    <li><hr class="dropdown-divider"></li>
     <li>
       <a class="dropdown-item" href="{% url 'crear_relacion_item' %}">➕ Crear regla actividad/suministro</a>
     </li>
     <li>
       <a class="dropdown-item" href="{% url 'listado_relaciones' %}">📋 Listado de reglas</a>
     </li>
+    <li><hr class="dropdown-divider"></li>
     <li>
       <a class="dropdown-item" href="{% url 'analisis_reglas' %}">📋 Analisis reglas</a>
     </li>

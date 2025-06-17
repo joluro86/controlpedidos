@@ -1,6 +1,7 @@
 # your_app_name/forms.py
 from django import forms
 from nuevo_analisis.models import ItemRegla, RelacionItemRegla # Asegúrate de que 'nuevo_analisis' sea la ruta correcta o usa '.'
+from nuevo_analisis.models import RelacionIncompatibilidad
 
 class ItemReglaForm(forms.ModelForm):
     class Meta:
@@ -23,6 +24,8 @@ class ItemReglaForm(forms.ModelForm):
             'nombre': 'Ingrese el nombre del ítem de regla.',
             'tipo': 'Seleccione la categoría principal del ítem.',
         }
+
+
 class RelacionItemReglaForm(forms.ModelForm):
     class Meta:
         model = RelacionItemRegla
@@ -90,4 +93,27 @@ class RelacionItemReglaForm(forms.ModelForm):
             'conjuncion': 'Indica si se deben cumplir "Todos" los ítems o "Uno".', # Help text para conjuncion
             'comparador': 'Establece cómo se compara la cantidad',
             'cantidad': 'Ingrese la cantidad para cumplir la condición.',
+        }
+
+
+class RelacionIncompatibilidadForm(forms.ModelForm):
+    class Meta:
+        model = RelacionIncompatibilidad
+        fields = ['objeto', 'item_incompatibilidad', 'tipo_item_incompatibilidad']
+        widgets = {
+            'objeto': forms.Select(attrs={
+                'class': 'form-select',
+            }),
+            'item_incompatibilidad': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ingrese el ítem incompatible'
+            }),
+            'tipo_item_incompatibilidad': forms.Select(attrs={
+                'class': 'form-select',
+            }),
+        }
+        labels = {
+            'objeto': 'Ítem principal',
+            'item_incompatibilidad': 'Ítem incompatible',
+            'tipo_item_incompatibilidad': 'Tipo de ítem incompatible',
         }

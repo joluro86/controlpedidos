@@ -140,3 +140,4 @@ class RelacionLimiteItem(models.Model):
     class Meta:
         verbose_name = "Relación cantidad"
         verbose_name_plural = "Relaciones cantidades"
+        

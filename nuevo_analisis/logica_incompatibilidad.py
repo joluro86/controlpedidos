@@ -20,23 +20,6 @@ def analisis_reglas_incompatibilidad():
 
     return redirect('novedades_acta')
 
-"""
-    
-    
-
-def analizar_cumplimiento_regla(pedidos_a_evaluar, regla):
-
-    for pedido in pedidos_a_evaluar:
-        campo_busqueda=regla.tipo_item_incompatibilidad
-        filtro = {'pedido': pedido.get('pedido'), campo_busqueda: regla.item_incompatibilidad}
-            
-        busqueda = Acta.objects.filter(**filtro)
-
-        if busqueda.exists():    
-            novedad= f"{regla.objeto.nombre} incompatible con {regla.item_incompatibilidad}"        
-            pedi = Acta.objects.filter(pedido=pedido.get('pedido')).first()
-            crear_novedad(pedi, novedad)
-"""
 
 def analizar_cumplimiento_regla(pedidos_a_evaluar, regla):
     campo_busqueda = regla.tipo_item_incompatibilidad

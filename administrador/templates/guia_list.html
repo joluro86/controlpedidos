@@ -1,46 +1,50 @@
-<div class="d-flex admin_actividades">
-    <div class="card shadow-sm actividades_contrato" style="max-width: 400px;">
-        <div class="title_contrato">
-            <h6 class="text-center m-2">Tabla de equivalencias</h6>
-        </div>
+{# This template is likely included within a larger page, e.g., in a main 'admin_actividades' page #}
+{# It does NOT extend index.html directly, but its parent page should. #}
 
+<div class="card shadow-lg border-0 rounded-3 h-100" style="max-width: 450px;"> {# Adjusted max-width for consistency, added h-100 #}
+    <div class="card-header bg-primary text-white text-center py-2 rounded-top-3">
+        <h6 class="mb-0 fw-bold"><i class="fas fa-exchange-alt me-2"></i> Tabla de Equivalencias</h6> {# Intuitive icon and title #}
+    </div>
+
+    <div class="card-body p-3"> {# Adjusted padding #}
         <div class="table-responsive">
-            <table class="table tabla_actividades m-0 text-center">
-                <thead>
-                    <tr style="font-size: 13px;">
-                        <th>Nombre Perseo</th>
-                        <th>Nombre Fénix</th>
+            <table class="table table-sm table-hover align-middle m-0 text-center"> {# Removed inline style, added align-middle #}
+                <thead class="bg-info text-white"> {# Consistent header color #}
+                    <tr>
+                        <th scope="col" class="text-nowrap" style="font-size: 13px;">Nombre Perseo</th> {# Icon and clearer name #}
+                        <th scope="col" class="text-nowrap" style="font-size: 13px;">Nombre Fénix</th> {# Icon and clearer name #}
                     </tr>
                 </thead>
                 <tbody>
                     {% for guia in guias %}
                     <tr>
                         <td style="font-size: 11px;">
-                            <a href="#" class="text-decoration-none text-primary" data-bs-toggle="modal"
+                            <a href="#" class="text-decoration-none text-primary fw-semibold" data-bs-toggle="modal"
                                 data-bs-target="#editarGuiaModal{{ guia.id }}" title="Pulse para editar">
                                 {{ guia.nombre_perseo }}
                             </a>
                         </td>
                         <td>{{ guia.nombre_fenix }}</td>
-                        </tr>
-                    <!-- Modal de edición dentro de la fila correspondiente -->
+                    </tr>
+                    {# Assuming 'forms/form_editar_guia.html' contains the modal definition #}
                     {% include 'forms/form_editar_guia.html' %}
                     {% empty %}
                     <tr>
-                        <td colspan="4" class="text-muted">No hay equivalencia registradas.</td>
+                        <td colspan="2" class="text-muted py-3 text-center">No hay equivalencias registradas.</td> {# Colspan based on 2 columns #}
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-        <div class="card-footer p-0 d-flex list-masivo-actividad-contrato">
-            <a class="btn tabla_actividades btn-sm p-0 my-1 mx-3" href="{% url 'nueva_guia_form' %}"
-                title="Crear nueva actividad del contrato">
-                <i class="fa fa-plus m-0 icon-masivo-crear"></i> <!-- Icono de Font Awesome -->
-            </a>
-        </div>
+    </div>
+    <div class="card-footer p-2 d-flex justify-content-center bg-light rounded-bottom-3"> {# Consistent footer styling, justify-content-center #}
+        <a class="btn btn-primary btn-sm" href="{% url 'nueva_guia_form' %}" title="Crear nueva equivalencia">
+            <i class="fas fa-plus me-1"></i> Nueva Equivalencia
+        </a>
     </div>
 </div>
+
+{# The JavaScript for handling modal updates with Fetch and SweetAlert2 #}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll('.btn-guardar-guia').forEach(button => {

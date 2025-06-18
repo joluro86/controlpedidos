@@ -1,24 +1,27 @@
-<div class="d-flex justify-content-center align-items-center admin_actividades">
-    <div class="card shadow-sm actividades_contrato" style="max-width: 500px;">
-        <div class="title_contrato">
-            <h6 class="text-center m-2">Lista de Cantidad Items</h6>
-        </div>
+{# This template is likely included within a larger page, e.g., in a main 'admin_actividades' page #}
+{# It does NOT extend index.html directly, but its parent page should. #}
 
+<div class="card shadow-lg border-0 rounded-3 h-100" style="max-width: 500px;"> {# Adjusted max-width for consistency, added h-100 #}
+    <div class="card-header bg-primary text-white text-center py-3 rounded-top-3">
+        <h5 class="mb-0 fw-bold"><i class="fas fa-sort-numeric-up me-2"></i> Cantidades por Ítem</h5> {# Intuitive icon and title #}
+    </div>
+
+    <div class="card-body p-3"> {# Adjusted padding #}
         <div class="table-responsive">
-            <table class="table tabla_actividades m-0 text-center">
-                <thead>
-                    <tr style="font-size: 13px;">
-                        <th>Ítem</th>
-                        <th>Cantidad Cobro</th>
-                        <th>Restricción</th>
-                        <th>Acciones</th>
+            <table class="table table-sm table-hover align-middle m-0 text-center"> {# Removed inline style, added align-middle #}
+                <thead class="bg-info text-white"> {# Consistent header color #}
+                    <tr>
+                        <th scope="col" class="text-nowrap" style="font-size: 13px;"><i class="fas fa-box me-1"></i> Ítem</th> {# Icon and clearer name #}
+                        <th scope="col" class="text-nowrap" style="font-size: 13px;"><i class="fas fa-calculator me-1"></i> Cantidad Cobro</th> {# Icon and clearer name #}
+                        <th scope="col" class="text-nowrap" style="font-size: 13px;"><i class="fas fa-ban me-1"></i> Restricción</th> {# Icon and clearer name #}
+                        <th scope="col" class="text-nowrap" style="font-size: 13px;"><i class="fas fa-cogs me-1"></i> Acciones</th> {# Icon and clearer name #}
                     </tr>
                 </thead>
                 <tbody>
                     {% for cantidad in cantidades_items %}
                     <tr style="font-size: 11px;">
                         <td>
-                            <a href="#" class="text-decoration-none text-primary" data-bs-toggle="modal"
+                            <a href="#" class="text-decoration-none text-primary fw-semibold" data-bs-toggle="modal"
                                 data-bs-target="#editarCantidadModal{{ cantidad.id }}" title="Pulse para editar">
                                 {{ cantidad.item }}
                             </a>
@@ -26,50 +29,53 @@
                         <td class="px-2">{{ cantidad.cantidad_cobro }}</td>
                         <td class="px-2">{{ cantidad.get_tipo_restriccion_display }}</td> 
                         <td class="px-2">
-                            <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" 
-                                title="Eliminar cantidad item" data-id="{{ cantidad.id }}"
-                                onclick="eliminarCantidadItem(this)">
-                                <i class="fa-solid fa-trash-can fa-sm p-1"></i> 
+                            {# Changed to a button-like anchor for consistent styling #}
+                            <a href="#" class="btn btn-danger btn-sm eliminar-cantidad-item" data-bs-toggle="tooltip" 
+                                title="Eliminar cantidad ítem" data-id="{{ cantidad.id }}">
+                                <i class="fas fa-trash-can fa-sm"></i> {# Using Font Awesome 6 trash can #}
                             </a>
                         </td>
                     </tr>
-                   
+                    {# Assuming form_editar_cantidad_item.html is included here if needed for the modal #}
+                    {# {% include 'forms/form_editar_cantidad_item.html' with cantidad=cantidad %} #}
                     {% empty %}
                     <tr>
-                        <td colspan="4" class="text-muted">No hay cantidades registradas.</td>
+                        <td colspan="4" class="text-muted py-3 text-center">No hay cantidades registradas.</td> {# Colspan based on 4 columns #}
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+    </div>
 
-        <div class="card-footer p-0 d-flex list-masivo-actividad-contrato">
-            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'crear_nueva_cantidad_item' %}"
-                title="Crear nuevo ítem">
-                <i class="fa fa-plus m-0 icon-masivo-crear"></i>
-            </a>
-        </div>
+    <div class="card-footer p-2 d-flex justify-content-center bg-light rounded-bottom-3"> {# Consistent footer styling #}
+        <a class="btn btn-primary btn-sm" href="{% url 'crear_nueva_cantidad_item' %}" title="Crear nuevo ítem de cantidad">
+            <i class="fas fa-plus me-1"></i> Nuevo Ítem de Cantidad
+        </a>
     </div>
 </div>
 
-
+{# The JavaScript for handling AJAX deletion with SweetAlert2 #}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll('.btn-eliminar-cantidad').forEach(button => {
+        document.querySelectorAll('.eliminar-cantidad-item').forEach(button => { // Changed class to be more specific
             button.addEventListener('click', function (e) {
                 e.preventDefault();
                 let cantidadId = this.getAttribute('data-id');
-                
+                let itemName = this.closest('tr').querySelector('td a').textContent.trim(); // Get item name for better confirmation
+
                 Swal.fire({
                     title: "¿Estás seguro?",
-                    text: "Esta acción no se puede deshacer",
+                    text: `¿Deseas eliminar la cantidad para el ítem "${itemName}"? Esta acción no se puede deshacer.`,
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonText: "Sí, eliminar",
-                    cancelButtonText: "Cancelar"
+                    cancelButtonText: "Cancelar",
+                    confirmButtonColor: '#d33', // Red color for delete confirmation
+                    cancelButtonColor: '#3085d6'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        fetch(`/eliminar-cantidad-item/${cantidadId}/`, {
+                        fetch(`/eliminar-cantidad-item/${cantidadId}/`, { // Ensure this URL is correct
                             method: 'POST',
                             headers: {
                                 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
@@ -81,11 +87,12 @@
                                 Swal.fire("Eliminado", "El ítem ha sido eliminado correctamente", "success")
                                     .then(() => location.reload());
                             } else {
-                                Swal.fire("Error", data.error || "No se pudo eliminar", "error");
+                                Swal.fire("Error", data.error || "No se pudo eliminar el ítem", "error");
                             }
                         })
                         .catch(error => {
-                            Swal.fire("Error", "Hubo un problema al eliminar", "error");
+                            console.error('Error:', error);
+                            Swal.fire("Error", "Hubo un problema al eliminar el ítem", "error");
                         });
                     }
                 });
@@ -93,5 +100,3 @@
         });
     });
 </script>
-
-

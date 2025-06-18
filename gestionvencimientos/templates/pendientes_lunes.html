@@ -1,128 +1,111 @@
-{% extends 'index.html' %} {% load static %} {% block head %} {% endblock head %} 
+{% extends 'index.html' %} 
+{% load static %} 
+
+{% block title %}
+  Pedidos Pendientes por Día
+{% endblock %}
+
 {% block content %}
-<div style="display: flex; justify-content: center" class="header-menu">
-  <ul class="nav text-light">
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'pendientes_last_week' 10 %}" style="color:#9479f5; font-weight:bold"; onmouseout='this.style.color="#9479f5;";'
-        ><i class="fas fa-arrow-circle-left"></i> Anterior</a
-      >
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" id="id_url_1" href="{% url 'pendientes' 1 %}"
-        >Lunes</a
-      >
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" id="id_url_2" href="{% url 'pendientes' 2 %}"
-        >Martes</a
-      >
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" id="id_url_3" href="{% url 'pendientes' 3 %}"
-        >Miercoles</a
-      >
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" id="id_url_4" href="{% url 'pendientes' 4 %}"
-        >Jueves</a
-      >
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" id="id_url_5" href="{% url 'pendientes' 5 %}"
-        >Viernes</a
-      >
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'pendientes_next_week' 10 %}" style="color:#9479f5; font-weight:bold"; onmouseout='this.style.color="#9479f5;";'
-        >Siguiente <i class="fas fa-arrow-circle-right"></i></a
-      >
-    </li>
-  </ul>
-  <div class="div-oculto" id="div_id-oculto">
-    <input type="hidden" id="id-oculto" value="{{ id_dia }}" />
+<div class="container py-1">
+  {# Navegación Semanal y Diaria #}
+  <div class="d-flex justify-content-center mb-3">
+    <ul class="nav nav-pills bg-light rounded-pill p-1 shadow-sm">
+      <li class="nav-item">
+        <a class="nav-link {% if id_dia == 1 %}active{% endif %}" id="id_url_1" href="{% url 'pendientes' 1 %}">
+          <i class="fas fa-calendar-day me-1"></i> Lunes
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if id_dia == 2 %}active{% endif %}" id="id_url_2" href="{% url 'pendientes' 2 %}">
+          <i class="fas fa-calendar-day me-1"></i> Martes
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if id_dia == 3 %}active{% endif %}" id="id_url_3" href="{% url 'pendientes' 3 %}">
+          <i class="fas fa-calendar-day me-1"></i> Miércoles
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if id_dia == 4 %}active{% endif %}" id="id_url_4" href="{% url 'pendientes' 4 %}">
+          <i class="fas fa-calendar-day me-1"></i> Jueves
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if id_dia == 5 %}active{% endif %}" id="id_url_5" href="{% url 'pendientes' 5 %}">
+          <i class="fas fa-calendar-day me-1"></i> Viernes
+        </a>
+      </li>
+    </ul>
+    <div class="d-none" id="div_id-oculto">
+      <input type="hidden" id="id-oculto" value="{{ id_dia }}" />
+    </div>
+  </div>
+
+  {# Tabla de Pendientes Diarios #}
+  <div class="card shadow-lg border-0 rounded-3">    
+    <div class="card-body p-3">
+      <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered align-middle" id="table_id" style="width: 100%;">
+          <thead class="bg-info text-white">
+            <tr class="text-center">
+              <th scope="col" class="text-nowrap"><i class="fas fa-tag me-1"></i> Pedido</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-clock me-1"></i> Hora Vencimiento</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-user-circle me-1"></i> Encargado</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-map-marker-alt me-1"></i> Instalación</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-clipboard-check me-1"></i> Actividad</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-map me-1"></i> Municipio</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in aneses %}
+            {% if a.fecha_vence_epm != "0" %} {# Assuming "0" is a string in your data, filtering for valid entries #}
+            <tr class="text-center">
+              <th class="py-1">{{ a.Pedido }}</th>
+              <td class="py-1">{{ a.fecha_vencimiento }}</td> 
+              <td class="py-1">{{ a.encargado }}</td>
+              <td class="py-1">{{ a.Instalación }}</td>
+              <td class="py-1">{{ a.Actividad }}</td>
+              <td class="py-1">{{ a.Area_Trabajo }}</td> {# Assuming Area_Trabajo is equivalent to Municipio #}
+            </tr>
+            {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
+{% endblock content %} 
 
-<div class="table-id card mt-1" style="width: 90%; margin: auto">
-  <div class="card-body">
-    <table
-      class="table table-sm table-hover"
-      class="display nowrap"
-      id="table_id"
-    >
-      <thead class="p-0">
-        <tr class="text-center m-0 p-0" style="background-color: #8ee7fa">
-          <th scope="col" class="p-0">Pedido</th>
-          <th scope="col" class="p-0">Hora</th>
-          <th scope="col" class="p-0">Encargado</th>
-          <th scope="col" class="p-0">Instalación</th>
-          <th scope="col" class="p-0">Actividad</th>
-          <th scope="col" class="p-0">Municipio</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for a in aneses %}
-
-        <tr class="text-start m-0 pb-0">
-          <th class="m-0 pb-0 text-center">{{ a.Pedido }}</th>
-          <td class="m-0 pb-0 text-center">{{ a.fecha_vencimiento }}</td>
-          <td class="m-0 pb-0">{{ a.encargado }}</td>
-          <td class="m-0 pb-0 text-center">{{ a.Instalación }}</td>
-          <td class="m-0 pb-0 text-center">{{ a.Actividad }}</td>
-          <td class="m-0 pb-0 ">{{ a.Area_Trabajo }}</td>
-        </tr>
-
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</div>
-{% endblock content %} {% block js %}
-
+{% block js %}
 <script src="{% static 'js/js_pendientes.js' %}"></script>
-
 <script>
-
+  // Original script logic (if any specific to this page)
   fecha = document.getElementById('fecha')
   window.onload = function () {
       console.log(fecha);
-    }
-
+  }
 </script>
 
 <script>
   $(document).ready(function () {
     $("#table_id").DataTable({
       order: [[1, "asc"]],
-
       dom: "Bfrtilp",
       lengthMenu: [
-            [ 15, 30, 50, -1 ],
-            [ '15', '30', '50', 'Todos' ]
-        ],
-        
+          [ 15, 30, 50, -1 ],
+          [ '15 filas', '30 filas', '50 filas', 'Todos' ]
+      ],
       buttons: [
-      {
-        text: 'Week',
-        action: function ( e, dt, node, config ) {
-          window.location.href ="/week/"+1
-        }
-    },
-        {
-          extend: "csvHtml5",
-          title:'',
-          exportOptions: {
-            columns: [ 0, 1, 2, 3, 4,5 ]
-          },
-        },
-        "print",   
         {
           extend: "excelHtml5",
-          title:'',
+          text: '<i class="fas fa-file-excel me-1"></i> Exportar a Excel',
+          title:'Pedidos Pendientes Diarios', // Clearer, more specific title
           exportOptions: {
-            columns: [ 0, 1, 2, 3, 4,5 ]
+            columns: [ 0, 1, 2, 3, 4, 5 ]
           },
-        },    
+        },
+      
       ],
     });
   });

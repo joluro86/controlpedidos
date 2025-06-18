@@ -1,43 +1,48 @@
-<div class="d-flex admin_actividades">
-    <div class="card shadow-sm actividades_contrato" style="width: 300px;">
-        <div class="title_contrato">
-            <h6 class="text-center m-2">Legalización</h6>
-        </div>
+{# This template is likely included within a larger page, e.g., in a main 'admin_actividades' page #}
+{# It does NOT extend index.html directly, but its parent page should. #}
 
+<div class="card shadow-lg border-0 rounded-3 h-100"> {# Added h-100 for consistent height if in a flex container #}
+    <div class="card-header bg-primary text-white text-center py-2 rounded-top-3">
+        <h6 class="mb-0 fw-bold"><i class="fas fa-gavel me-2"></i> Legalización de Actividades</h6> {# Intuitive icon and title #}
+    </div>
+
+    <div class="card-body p-3"> {# Adjusted padding #}
         <div class="table-responsive">
-            <table class="table tabla_actividades m-0 text-center">
-                <thead>
-                    <tr style="font-size: 13px;">
-                        <th>Nombre</th>
+            <table class="table table-sm table-hover align-middle m-0 text-center"> {# Removed inline style, added align-middle #}
+                <thead class="bg-info text-white"> {# Consistent header color #}
+                    <tr>
+                        <th scope="col" class="text-nowrap" style="font-size: 13px;"><i class="fas fa-file-signature me-1"></i> Nombre de Actividad</th> {# Icon and clearer name #}
                     </tr>
                 </thead>
                 <tbody>
                     {% for actividad in actividades_legalizacion %}
                     <tr>
                         <td style="font-size: 11px;">
-                            <a href="#" class="text-decoration-none text-primary" data-bs-toggle="modal"
+                            <a href="#" class="text-decoration-none text-primary fw-semibold" data-bs-toggle="modal"
                                 data-bs-target="#editarActividadLegalizacionModal{{ actividad.id }}" title="Pulse para editar">
                                 {{ actividad.nombre }}
                             </a>
                         </td>
                     </tr>
-                    <!-- Modal de edición dentro de la fila correspondiente -->
+                    {# Assuming 'forms/form_editar_actividad_legalizacion.html' contains the modal definition #}
                     {% include 'forms/form_editar_actividad_legalizacion.html' %}
                     {% empty %}
                     <tr>
-                        <td colspan="4" class="text-muted">No hay actividades registradas.</td>
+                        <td colspan="1" class="text-muted py-3">No hay actividades de legalización registradas.</td> {# Colspan 1 as there's only one column #}
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-        <div class="card-footer d-flex list-masivo-actividad-contrato px-3 py-1">
-            <a class="btn tabla_actividades btn-sm" href="{% url 'nueva_actividad_legalizacion_form' %}" title="Crear nueva actividad de legalización">
-                <i class="fa fa-plus m-0 icon-masivo-crear"></i> <!-- Icono de Font Awesome -->
-            </a>            
-        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-center py-2 bg-light rounded-bottom-3"> {# Consistent footer styling #}
+        <a class="btn btn-primary btn-sm" href="{% url 'nueva_actividad_legalizacion_form' %}" title="Crear nueva actividad de legalización">
+            <i class="fas fa-plus me-1"></i> Nueva Actividad
+        </a>
     </div>
 </div>
+
+{# The JavaScript for handling modal updates with Fetch and SweetAlert2 #}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll('.btn-guardar-actividad-legalizacion').forEach(button => {

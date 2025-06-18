@@ -133,6 +133,7 @@
                   <td class="text-center">
                     <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de Relación de Ítem de Regla">
                       <a href="{% url 'editar_relacion_item_regla' pk=regla.id %}" class="btn btn-warning me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i></a>
+                      {# SweetAlert2 for this button #}
                       <a href="#" class="btn btn-danger eliminar-regla" data-url="{% url 'eliminar_relacion_item_regla' pk=regla.id %}" data-nombre="{{ regla.objeto.nombre }}" title="Eliminar"><i class="fas fa-trash"></i></a>
                     </div>
                   </td>
@@ -180,7 +181,8 @@
                   <td class="text-center">
                     <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de Incompatibilidad">
                       <a href="{% url 'editar_relacion_incompatibilidad' pk=regla.id %}" class="btn btn-warning me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i></a>
-                      <a href="#" class="btn btn-danger eliminar-regla" data-url="{% url 'eliminar_relacion_incompatibilidad' pk=regla.id %}" data-nombre="{{ regla.objeto.nombre }}" title="Eliminar"><i class="fas fa-trash"></i></a>
+                      {# SweetAlert2 for this button #}
+                      <a href="#" class="btn btn-danger eliminar-regla" data-url="{% url 'eliminar_relacion_incompatibilidad' pk=regla.id %}" data-nombre="{{ regla.objeto.nombre }} (Incomp.)" title="Eliminar"><i class="fas fa-trash"></i></a>
                     </div>
                   </td>
                 </tr>
@@ -247,7 +249,8 @@
                   <td class="text-center">
                     <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de Carácter Final">
                       <a href="{% url 'editar_relacion_caracter' pk=regla.id %}" class="btn btn-warning me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i></a>
-                      <a href="#" class="btn btn-danger eliminar-regla" data-url="{% url 'eliminar_relacion_caracter' pk=regla.id %}" data-nombre="{{ regla.objeto.nombre }}" title="Eliminar"><i class="fas fa-trash"></i></a>
+                      {# SweetAlert2 for this button #}
+                      <a href="#" class="btn btn-danger eliminar-regla" data-url="{% url 'eliminar_relacion_caracter' pk=regla.id %}" data-nombre="{{ regla.objeto.nombre }} (Carácter: {{ regla.caracter }})" title="Eliminar"><i class="fas fa-trash"></i></a>
                     </div>
                   </td>
                 </tr>
@@ -294,7 +297,8 @@
                   <td class="text-center">
                     <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de Límite de Cantidad">
                       <a href="{% url 'editar_relacion_cantidad' pk=regla.id %}" class="btn btn-warning me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i></a>
-                      <a href="#" class="btn btn-danger eliminar-regla" data-url="{% url 'eliminar_relacion_cantidad' pk=regla.id %}" data-nombre="{{ regla.items|default:'este límite de cantidad' }}" title="Eliminar"><i class="fas fa-trash"></i></a>
+                      {# SweetAlert2 for this button #}
+                      <a href="#" class="btn btn-danger eliminar-regla" data-url="{% url 'eliminar_relacion_cantidad' pk=regla.id %}" data-nombre="Límite de Cantidad ({{ regla.items|default:'Todos' }})" title="Eliminar"><i class="fas fa-trash"></i></a>
                     </div>
                   </td>
                 </tr>
@@ -335,6 +339,7 @@
                   <td class="text-center">
                     <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de Ítem de Regla">
                       <a href="{% url 'editar_item_regla' pk=item.id %}" class="btn btn-warning me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i></a>
+                      {# SweetAlert2 for this button #}
                       <a href="#" class="btn btn-danger eliminar-regla" data-url="{% url 'eliminar_item_regla' pk=item.id %}" data-nombre="{{ item.nombre }}" title="Eliminar"><i class="fas fa-trash"></i></a>
                     </div>
                   </td>
@@ -362,6 +367,7 @@
 
   {# Script para inicializar Tooltips de Bootstrap y SweetAlert2 #}
   {% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> {# Moved SweetAlert2 script to the top of extra_js #}
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         // Inicializar Tooltips
@@ -370,7 +376,7 @@
           return new bootstrap.Tooltip(tooltipTriggerEl)
         })
 
-        // Lógica para SweetAlert2 en botones de eliminar
+        // Lógica para SweetAlert2 en TODOS los botones de eliminar
         document.querySelectorAll('.eliminar-regla').forEach(function (btn) {
           btn.addEventListener('click', function (e) {
             e.preventDefault();
@@ -397,6 +403,5 @@
         });
       });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   {% endblock %}
 {% endblock %}

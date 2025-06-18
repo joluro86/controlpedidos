@@ -3,48 +3,70 @@
 {% block title %}Crear/Editar Ítem de Regla{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-center">
-    <div class="card shadow-lg border-0 w-100" style="max-width: 500px; background-color: #ffffff; border-radius: 0.75rem;">
-        <div class="card-header text-white text-center py-3" style="background-color: #0d6efd; border-radius: 0.75rem 0.75rem 0 0;">
-            <h4 class="mb-0 fw-bold">
+<div class="d-flex justify-content-center py-4">
+    <div class="card shadow-lg border-0" style="max-width: 400px; background-color: #ffffff; border-radius: 0.75rem;">
+        <div class="card-header text-white text-center py-2" style="background-color: #0d6efd; border-radius: 0.75rem 0.75rem 0 0;">
+            <h5 class="mb-0 fw-bold">
                 <i class="bi bi-gear-fill me-2"></i>
                 {% if is_editing %}Editar Ítem de Regla{% else %}Crear Nuevo Ítem de Regla{% endif %}
-            </h4>
+            </h5>
         </div>
-        <div class="card-body p-4">
+        <div class="card-body p-3">
             <form method="post" novalidate>
                 {% csrf_token %}
 
-                <div class="mb-3">
-                    <label for="{{ form.nombre.id_for_label }}" class="form-label fw-semibold">Nombre del Ítem:</label>
-                    {{ form.nombre }}
+                <div class="mb-2">
+                    <label for="{{ form.nombre.id_for_label }}" class="form-label fw-semibold mb-0 small">Nombre del Ítem:</label>
+                    <input type="text"
+                           name="{{ form.nombre.name }}"
+                           id="{{ form.nombre.id_for_label }}"
+                           class="form-control form-control-sm {% if form.nombre.errors %}is-invalid{% endif %}"
+                           value="{{ form.nombre.value|default_if_none:'' }}"
+                           {% if form.nombre.field.max_length %}maxlength="{{ form.nombre.field.max_length }}"{% endif %}
+                           {% if form.nombre.field.required %}required{% endif %}
+                           {% if form.nombre.help_text %}aria-describedby="{{ form.nombre.id_for_label }}_help_text"{% endif %}
+                    >
                     {% if form.nombre.help_text %}
-                        <div class="form-text text-muted">{{ form.nombre.help_text }}</div>
+                        <div id="{{ form.nombre.id_for_label }}_help_text" class="form-text text-muted mt-0"><small>{{ form.nombre.help_text }}</small></div>
                     {% endif %}
                     {% for error in form.nombre.errors %}
                         <div class="text-danger mt-1"><small>{{ error }}</small></div>
                     {% endfor %}
                 </div>
 
-                <div class="mb-3">
-                    <label for="{{ form.tipo.id_for_label }}" class="form-label fw-semibold">Tipo:</label>
-                    {{ form.tipo }}
+                <div class="mb-2">
+                    <label for="{{ form.tipo.id_for_label }}" class="form-label fw-semibold mb-0 small">Tipo:</label>
+                    <select name="{{ form.tipo.name }}"
+                            id="{{ form.tipo.id_for_label }}"
+                            class="form-select form-select-sm {% if form.tipo.errors %}is-invalid{% endif %}"
+                            {% if form.tipo.field.required %}required{% endif %}
+                            {% if form.tipo.help_text %}aria-describedby="{{ form.tipo.id_for_label }}_help_text"{% endif %}
+                    >
+                        {% for value, label in form.tipo.field.choices %}
+                            <option value="{{ value }}" {% if form.tipo.value == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
                     {% if form.tipo.help_text %}
-                        <div class="form-text text-muted">{{ form.tipo.help_text }}</div>
+                        <div id="{{ form.tipo.id_for_label }}_help_text" class="form-text text-muted mt-0"><small>{{ form.tipo.help_text }}</small></div>
                     {% endif %}
                     {% for error in form.tipo.errors %}
                         <div class="text-danger mt-1"><small>{{ error }}</small></div>
                     {% endfor %}
                 </div>
 
-                <hr class="my-4">
+                <hr class="my-3">
 
-                <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="bi bi-save me-2"></i>Guardar Ítem
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    {% if not is_editing %}
+                    <button type="submit" name="save_and_add_another" class="btn btn-success btn-sm me-1">
+                        <i class="bi bi-plus-circle me-1"></i>Guardar y Crear Otro
                     </button>
-                    <a href="{% url 'listado_todas_las_relaciones' %}" class="btn btn-outline-secondary btn-lg">
-                        <i class="bi bi-x-circle me-2"></i>Cancelar
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary btn-sm me-1">
+                        <i class="bi bi-save me-1"></i>Guardar Ítem
+                    </button>
+                    <a href="{% url 'listado_todas_las_relaciones' %}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-x-circle me-1"></i>Cancelar
                     </a>
                 </div>
             </form>

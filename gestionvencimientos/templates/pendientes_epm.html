@@ -1,117 +1,104 @@
-{% extends 'index.html' %} {% load static %} {% block content %}
+{% extends 'index.html' %} 
+{% load static %} 
 
-<div style="display: flex; justify-content: center" class="header-menu">
-  <ul class="nav text-light">
+{% block title %}
+  Programación de Pendientes
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  {# Navegación por Días de la Semana #}
+  <div class="d-flex justify-content-center mb-3"> {# Added margin-bottom #}
+    <ul class="nav nav-pills bg-light rounded-pill p-1 shadow-sm"> {# Modern pill-style navigation #}
+      <li class="nav-item">
+        <a class="nav-link {% if id_dia == 10 %}active{% endif %}" id="id_url_10" href="{% url 'pendientes_next_week' 10 %}">
+          <i class="fas fa-calendar-day me-1"></i> Lunes
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if id_dia == 20 %}active{% endif %}" id="id_url_20" href="{% url 'pendientes_next_week' 20 %}">
+          <i class="fas fa-calendar-day me-1"></i> Martes
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if id_dia == 30 %}active{% endif %}" id="id_url_30" href="{% url 'pendientes_next_week' 30 %}">
+          <i class="fas fa-calendar-day me-1"></i> Miércoles
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if id_dia == 40 %}active{% endif %}" id="id_url_40" href="{% url 'pendientes_next_week' 40 %}">
+          <i class="fas fa-calendar-day me-1"></i> Jueves
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if id_dia == 50 %}active{% endif %}" id="id_url_50" href="{% url 'pendientes_next_week' 50 %}">
+          <i class="fas fa-calendar-day me-1"></i> Viernes
+        </a>
+      </li>
+    </ul>
+    {# Hidden input for JS, placed outside nav for clarity #}
+    <div class="d-none" id="div_id-oculto"> {# Using d-none for hidden #}
+      <input type="hidden" id="id-oculto" value="{{ id_dia }}" /> {# type="hidden" is more semantic #}
+    </div>
+  </div>
+
+  {# Tabla de Pendientes #}
+  <div class="card shadow-lg border-0 rounded-3"> {# Consistent card styling #}
     
-    <li class="nav-item">
-      <a
-        class="nav-link"
-        id="id_url_10"
-        href="{% url 'pendientes_next_week' 10 %}"
-        >Lunes</a
-      >
-    </li>
-    <li class="nav-item">
-      <a
-        class="nav-link"
-        id="id_url_20"
-        href="{% url 'pendientes_next_week' 20 %}"
-        >Martes</a
-      >
-    </li>
-    <li class="nav-item">
-      <a
-        class="nav-link"
-        id="id_url_30"
-        href="{% url 'pendientes_next_week' 30 %}"
-        >Miercoles</a
-      >
-    </li>
-    <li class="nav-item">
-      <a
-        class="nav-link"
-        id="id_url_40"
-        href="{% url 'pendientes_next_week' 40 %}"
-        >Jueves</a
-      >
-    </li>
-    <li class="nav-item">
-      <a
-        class="nav-link"
-        id="id_url_50"
-        href="{% url 'pendientes_next_week' 50 %}"
-        >Viernes</a
-      >
-    </li>
-  </ul>
-  <div class="div-oculto" id="div_id-oculto">
-    <input type="text" id="id-oculto" value="{{ id_dia }}" />
+    <div class="card-body p-3">
+      <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered align-middle" id="table_id" style="width: 100%;">
+          <thead class="bg-info text-white"> {# Consistent header color #}
+            <tr class="text-center">
+              <th scope="col" class="text-nowrap"><i class="fas fa-hashtag me-1"></i> Pedido</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-calendar-check me-1"></i> Fecha Contrato</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-calendar-check me-1"></i> Fecha EPM</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-user-tie me-1"></i> Encargado</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-map-marker-alt me-1"></i> Instalación</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-tasks me-1"></i> Actividad</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-city me-1"></i> Municipio</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in aneses %}
+            {% if a.fecha_vence_epm != "0" %} {# Assuming "0" is a string in your data #}
+            <tr class="text-center">
+              <th class="m-0 py-1">{{ a.Pedido }}</th> {# Reduced padding, py-1 #}
+              <td class="m-0 py-1">{{ a.fecha_vencimiento }}</td>
+              <td class="m-0 py-1">{{ a.fecha_vence_epm }}</td>
+              <td class="m-0 py-1">{{ a.encargado }}</td>
+              <td class="m-0 py-1">{{ a.Instalación }}</td>
+              <td class="m-0 py-1">{{ a.Actividad }}</td>
+              <td class="m-0 py-1">{{ a.Area_Trabajo }}</td> {# Assuming Area_Trabajo is equivalent to Municipio #}
+            </tr>
+            {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
-<div class="table-id card mt-1" style="width: 90%; margin: auto">
-  <div class="card-body">
-    <table
-      class="table table-sm table-hover"
-      class="display nowrap"
-      id="table_id"
-    >
-      <thead class="p-0">
-        <tr class="text-center p-0" style="background-color: #8ee7fa">
-          <th scope="col">Pedido</th>
-          <th>Fecha contrato</th>
-          <th>Fecha epm</th>
-          <th scope="col">Encargado</th>
-          <th scope="col">Instalación</th>
-          <th scope="col">Actividad</th>
-          <th scope="col">Municipio</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for a in aneses %}
-        {% if a.fecha_vence_epm != "0" %}
-        <tr class="text-center tr">
-          <th class="m-0 pb-0">{{ a.Pedido }}</th>
-          <td class="m-0 pb-0">{{ a.fecha_vencimiento }}</td>  
-          <td class="m-0 pb-0">{{ a.fecha_vence_epm }}</td>  
-          <td class="m-0 pb-0">{{ a.encargado }}</td>
-          <td class="m-0 pb-0">{{ a.Instalación }}</td>
-          <td class="m-0 pb-0">{{ a.Actividad }}</td>
-          <td class="m-0 pb-0">{{ a.Area_Trabajo }}</td>
+{% endblock content %} 
 
-        </tr>
-        {% endif %}
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</div>
-{% endblock content %} {% block js %}
-
+{% block js %}
 <script src="{% static 'js/js_pendientes.js' %}"></script>
 <script>
   $(document).ready(function () {
     $("#table_id").DataTable({
       order: [[1, "asc"]],
       dom: "Bfrtilp",
-
       lengthMenu: [
         [15, 30, 50, -1],
         ["15 filas", "30 filas", "50 filas", "Todos"],
       ],
-
       buttons: [
         {
-          text: "Week",
-          action: function (e, dt, node, config) {
-            window.location.href = "/week/" + 2;
-          },
-        },
-
-        {
           extend: "excelHtml5",
-          title:'',
+          text: '<i class="fas fa-file-excel me-1"></i> Excel', // Icon for Excel
+          title: 'Pedidos Pendientes EPM', // Clearer title
           exportOptions: {
-            columns: [0, 1, 2, 3, 4,5,6],
+            columns: [0, 1, 2, 3, 4, 5, 6],
           },
         },
       ],

@@ -1,91 +1,127 @@
 {% extends 'index.html' %}
 {% load static %}
 
+{% block title %}
+  Panel de Administración
+{% endblock %}
+
 {% block content %}
-<div class="card mt-3 container container-admin py-0 py-4 px-4">
-    <div class="row">
-        <div class="col-3">
-            {% if messages %}
-            {% for message in messages %}
-            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show"
-                role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            {% endfor %}
-            {% endif %}
+<div class="container py-1">
+  <div class="card shadow-lg border-0 rounded-3">
+    <div class="card-header bg-primary text-white py-1 rounded-top-1">
+      <h6 class="mb-0 fw-bold text-center"><i class="fas fa-cogs me-2"></i> Panel de Administración</h6>
+    </div>
+    <div class="card-body p-4">
+      <div class="row g-4"> {# Use g-4 for consistent gutter spacing #}
+        {# Sidebar Navigation (List Group) #}
+        <div class="col-lg-3 col-md-4"> {# Responsive column sizing #}
+            {# Messages are already handled in base index.html, no need to duplicate here #}
 
-            <div class="">
-                <div class="list-group" id="list-tab" role="tablist">
-                    <h6>Control Ans</h6>
-                    <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list"
-                        href="#list-home" role="tab" aria-controls="home">Actividades</a>
-                    <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list"
-                        href="#list-profile" role="tab" aria-controls="profile">Encargados</a>
-
-                    <h6 class="mb-2 mt-3 ">Revisión Acta</h6>
-                    <a class="list-group-item list-group-item-action" id="list-materiales-permitidos-list"
-                        data-toggle="list" href="#list-materiales-permitidos" role="tab" aria-controls="home">
-                        Materiales permitidos
-                    </a>
-
-                    <a class="list-group-item list-group-item-action" id="list-variables-list" data-toggle="list"
-                        href="#list-variables" role="tab" aria-controls="variables">Variables contrato</a>
-                    <a class="list-group-item list-group-item-action" id="list-actividades-legalizacion-list"
-                        data-toggle="list" href="#list-actividades-legalizacion" role="tab"
-                        aria-controls="actividades-legalizacion">Actividades legalización</a>
-                    <a class="list-group-item list-group-item-action" id="list-guias-list" data-toggle="list"
-                        href="#list-guias" role="tab" aria-controls="guias">Equivalencia de materiales</a>
-                    <a class="list-group-item list-group-item-action" id="list-cantidades-list" data-toggle="list"
-                        href="#list-cantidades" role="tab" aria-controls="cantidades">Cantidades Items</a>
+            <div class="list-group list-group-flush border rounded-3 shadow-sm"> {# Added flush, border, rounded, shadow #}
+                <div class="list-group-item bg-light fw-bold text-primary py-2">
+                    <i class="fas fa-sliders-h me-2"></i> Control General
                 </div>
+                <a class="list-group-item list-group-item-action {% if not request.GET.tab or request.GET.tab == 'actividades' %}active{% endif %}"
+                   id="list-home-list" data-bs-toggle="list" href="#list-actividades" role="tab" aria-controls="list-actividades">
+                   <i class="fas fa-running me-2"></i> Actividades
+                </a>
+                <a class="list-group-item list-group-item-action {% if request.GET.tab == 'encargados' %}active{% endif %}"
+                   id="list-profile-list" data-bs-toggle="list" href="#list-encargados" role="tab" aria-controls="list-encargados">
+                   <i class="fas fa-user-friends me-2"></i> Encargados
+                </a>
+
+                <div class="list-group-item bg-light fw-bold text-primary py-2 mt-3"> {# Added mt-3 for spacing #}
+                    <i class="fas fa-file-invoice me-2"></i> Revisión de Actas
+                </div>
+                <a class="list-group-item list-group-item-action {% if request.GET.tab == 'materiales' %}active{% endif %}"
+                   id="list-materiales-permitidos-list" data-bs-toggle="list" href="#list-materiales-permitidos" role="tab" aria-controls="list-materiales-permitidos">
+                   <i class="fas fa-box-open me-2"></i> Materiales Permitidos
+                </a>
+                <a class="list-group-item list-group-item-action {% if request.GET.tab == 'variables' %}active{% endif %}"
+                   id="list-variables-list" data-bs-toggle="list" href="#list-variables" role="tab" aria-controls="list-variables">
+                   <i class="fas fa-cogs me-2"></i> Variables de Contrato
+                </a>
+                <a class="list-group-item list-group-item-action {% if request.GET.tab == 'legalizacion' %}active{% endif %}"
+                   id="list-actividades-legalizacion-list" data-bs-toggle="list" href="#list-actividades-legalizacion" role="tab" aria-controls="list-actividades-legalizacion">
+                   <i class="fas fa-gavel me-2"></i> Actividades de Legalización
+                </a>
+                <a class="list-group-item list-group-item-action {% if request.GET.tab == 'equivalencia' %}active{% endif %}"
+                   id="list-guias-list" data-bs-toggle="list" href="#list-guias" role="tab" aria-controls="list-guias">
+                   <i class="fas fa-exchange-alt me-2"></i> Equivalencia de Materiales
+                </a>
             </div>
         </div>
-        <div class="col-8 my-4">
+        
+        {# Tab Content Area #}
+        <div class="col-lg-9 col-md-8"> {# Responsive column sizing #}
             <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
-                    <div class="d-flex align-items-start gap-4 mx-4" id="list-home" role="tabpanel"
-                        aria-labelledby="list-home-list">
-                        {% include 'actividades_list.html' %}
-                        {% include 'actividades_list_epm.html' %}
+                <div class="tab-pane fade {% if not request.GET.tab or request.GET.tab == 'actividades' %}show active{% endif %}"
+                     id="list-actividades" role="tabpanel" aria-labelledby="list-home-list">
+                    <div class="d-flex flex-wrap gap-4"> {# flex-wrap to allow cards to wrap, gap for spacing #}
+                        {% include 'actividades_list.html' %} {# Assume this is 'dias_ans_contrato_card.html' or similar #}
+                        {% include 'actividades_list_epm.html' %} {# Assume this is 'dias_ans_epm_card.html' or similar #}
                     </div>
                 </div>
-                <div class="tab-pane fade gap-4 mx-4" id="list-profile" role="tabpanel"
-                    aria-labelledby="list-profile-list">
-                    {% include 'encargados_list.html' %}
+                <div class="tab-pane fade {% if request.GET.tab == 'encargados' %}show active{% endif %}"
+                     id="list-encargados" role="tabpanel" aria-labelledby="list-profile-list">
+                    <div class="d-flex flex-wrap gap-4">
+                        {% include 'encargados_list.html' %}
+                    </div>
                 </div>
-                <div class="tab-pane fade gap-4 mx-4" id="list-materiales-permitidos" role="tabpanel"
-                    aria-labelledby="list-materiales-permitidos-list">
-                    {% include 'materiales_permitidos_list.html' %}
+                <div class="tab-pane fade {% if request.GET.tab == 'materiales' %}show active{% endif %}"
+                     id="list-materiales-permitidos" role="tabpanel" aria-labelledby="list-materiales-permitidos-list">
+                    <div class="d-flex flex-wrap gap-4">
+                        {% include 'materiales_permitidos_list.html' %}
+                    </div>
                 </div>
-                <div class="tab-pane fade gap-4 mx-4" id="list-variables" role="tabpanel"
-                    aria-labelledby="list-variables-list">
-                    {% include 'variables_contrato.html' %}
+                <div class="tab-pane fade {% if request.GET.tab == 'variables' %}show active{% endif %}"
+                     id="list-variables" role="tabpanel" aria-labelledby="list-variables-list">
+                    <div class="d-flex flex-wrap gap-4">
+                        {% include 'variables_contrato.html' %}
+                    </div>
                 </div>
-                <div class="tab-pane fade gap-4 mx-4" id="list-actividades-legalizacion" role="tabpanel"
-                    aria-labelledby="list-actividades-legalizacion-list">
-                    {% include 'actividades_legalizacion.html' %}
+                <div class="tab-pane fade {% if request.GET.tab == 'legalizacion' %}show active{% endif %}"
+                     id="list-actividades-legalizacion" role="tabpanel" aria-labelledby="list-actividades-legalizacion-list">
+                    <div class="d-flex flex-wrap gap-4">
+                        {% include 'actividades_legalizacion.html' %} {# Assume this is 'legalizacion_actividades_card.html' or similar #}
+                    </div>
                 </div>
-                <div class="tab-pane fade gap-4 mx-4" id="list-guias" role="tabpanel" aria-labelledby="list-guias-list">
-                    {% include 'guia_list.html' %}
-                </div>
-                <div class="tab-pane fade gap-4 mx-4" id="list-cantidades" role="tabpanel" aria-labelledby="list-cantidades-list">
-                    {% include 'lista_cantidad_items.html' %}
+                <div class="tab-pane fade {% if request.GET.tab == 'equivalencia' %}show active{% endif %}"
+                     id="list-guias" role="tabpanel" aria-labelledby="list-guias-list">
+                    <div class="d-flex flex-wrap gap-4">
+                        {% include 'guia_list.html' %}
+                    </div>
                 </div>
             </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
-<!-- jQuery script to handle tab navigation -->
+{% endblock content %}
+
+{% block js %}
+{{ block.super }} {# This will include any JS from the parent index.html's js block #}
 <script>
     $(document).ready(function () {
-        $('#list-tab a').on('click', function (e) {
-            e.preventDefault();
-            $(this).tab('show');
-        });
+        // Bootstrap 5 requires data-bs-toggle instead of data-toggle for tabs
+        // The default JS behavior for list-group tabs (nav-link active) should work automatically
+        // with data-bs-toggle.
+        // However, if you want to allow direct linking to a tab via URL (e.g., /admin?tab=encargados),
+        // you'll need additional JS logic.
+
+        // Get tab from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const activeTabId = urlParams.get('tab');
+
+        if (activeTabId) {
+            const tabButton = document.getElementById(`list-${activeTabId}-list`);
+            if (tabButton) {
+                const tab = new bootstrap.Tab(tabButton);
+                tab.show();
+            }
+        }
     });
 </script>
-
-
-{% endblock content %}
+{% endblock js %}

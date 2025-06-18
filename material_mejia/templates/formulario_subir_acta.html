@@ -1,19 +1,33 @@
 {% extends 'index.html' %}
+{% load static %}
+
+{% block title %}
+  Subir Acta
+{% endblock %}
+
 {% block content %}
-<div class="table-id card mt-4" style="max-width: 450px; margin: auto; background-color: blue">
-  <div class="card-body text-white">
-    <h4 class="m-0 text-center">Subir Acta</h4>
-    <form method="post" enctype="multipart/form-data" action="{% url 'subir_material_acta' %}">
+<div class="container py-4 d-flex justify-content-center">
+  <div class="card shadow-lg border-0 rounded-3" style="max-width: 400px;"> {# Adjusted max-width for compactness #}
+    <div class="card-header bg-primary text-white text-center py-3 rounded-top-3"> {# Consistent header styling #}
+      <h5 class="mb-0 fw-bold"><i class="fas fa-file-upload me-2"></i> Subir Archivo de Acta</h5> {# Smaller heading, intuitive icon #}
+    </div>
+    <div class="card-body p-4"> {# Consistent padding #}
+      <form method="post" enctype="multipart/form-data" action="{% url 'subir_material_acta' %}">
         {% csrf_token %}
-        <div class="form-group mt-3">
-            <input type="file" id="file" name="file" class="form-control">
+        <div class="mb-3">
+          <label for="file" class="form-label fw-semibold mb-2">Seleccionar archivo de Acta:</label> {# Clearer label #}
+          <input type="file" id="file" name="file" class="form-control form-control-sm" accept=".xls,.xlsx,.csv" required> {# Smaller input, common file types, required #}
+          <div class="form-text text-muted mt-2">
+            <small><i class="fas fa-info-circle me-1"></i> Formatos permitidos: .xls, .xlsx, .csv</small> {# Help text with icon #}
+          </div>
         </div>
-        <div class="d-flex justify-content-center mt-3">
-            <input type="submit" class="btn btn-light" value="Subir archivo">
+        <div class="d-grid mt-4">
+          <button type="submit" class="btn btn-primary btn-sm"> {# Primary color, smaller button #}
+            <i class="fas fa-upload me-2"></i> Cargar Acta
+          </button>
         </div>
-    </form>
+      </form>
+    </div>
   </div>
 </div>
 {% endblock %}
-
-

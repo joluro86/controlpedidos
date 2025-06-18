@@ -1,77 +1,80 @@
-{% extends 'admin.html' %}
+{% extends 'index.html' %} {# Corrected base template extension #}
 {% load static %}
+
+{% block title %}
+  Nuevo Material
+{% endblock %}
+
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center">
-    <div class="card shadow-sm actividades_contrato" style="min-width: 450px;">
-        <div class="card-header bg-light border-bottom">
-            <h5 class="card-title text-center">Nuevo Material</h5>
+<div class="container py-4 d-flex justify-content-center">
+    <div class="card shadow-lg border-0 rounded-3" style="max-width: 450px;"> {# Keep max-width for compact form #}
+        <div class="card-header bg-primary text-white text-center py-3 rounded-top-3"> {# Consistent header styling #}
+            <h5 class="mb-0 fw-bold"><i class="fas fa-plus-circle me-2"></i> Crear Nuevo Material</h5> {# Intuitive icon and title #}
         </div>
-        <div class="card-body">
+        <div class="card-body p-4"> {# Consistent padding #}
             <form id="formNuevoMaterial" method="post">
                 {% csrf_token %}
-                <div class="mb-2 input-group-sm">
-                    <label class="form-label m-1">Descripción</label>
-                    <input type="text" class="form-control m-0 nombre_encargado" name="material" autofocus required>
+                <div class="form-floating mb-4"> {# Modern form-floating for labels, mb-4 for space before buttons #}
+                    <input type="text" class="form-control" id="id_material" name="material" placeholder="Descripción del Material" autofocus required>
+                    <label for="id_material"><i class="fas fa-box me-2"></i> Descripción del Material</label>
                 </div>
-                <div class="d-flex justify-content-between">
-                    <div class="text-start boton-guardar mt-2">
-                        <button type="submit" class="btn btn-success btn-guardar" data-id="{{ material.id }}">
-                            Guardar
-                        </button>
-                    </div>
-                    <div class="text-end mt-2">
-                        <a class="btn tabla_actividades btn-sm p-0 mx-3 color_primary" href="{% url 'index_admin' %}">
-                            <i class="fa fa-arrow-left m-0"><span class="mx-2 fw-bold">Regresar</span></i>
-                            <!-- Icono de Font Awesome -->
-                        </a>
-                    </div>
-
+                
+                <div class="d-flex justify-content-between mt-4"> {# Use justify-content-between for button spacing #}
+                    <button type="submit" class="btn btn-primary btn-sm"> {# Primary color, smaller button #}
+                        <i class="fas fa-save me-2"></i> Guardar
+                    </button>
+                    <a class="btn btn-outline-secondary btn-sm" href="{% url 'index_admin' %}?tab=materiales"> {# Outline secondary, smaller button, link back to specific tab #}
+                        <i class="fas fa-arrow-left me-2"></i> Regresar
+                    </a>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 <script>
     document.getElementById("formNuevoMaterial").addEventListener("submit", function (event) {
         event.preventDefault(); // Evita la recarga
-
+    
         let formData = new FormData(this);
-
-        fetch("{% url 'nueva_material_form' %}", {
+    
+        fetch("{% url 'nueva_material_form' %}", { // Ensure this URL is correct
             method: "POST",
             body: formData,
             headers: {
-                "X-CSRFToken": "{{ csrf_token }}"
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value // Use querySelector for CSRF
             }
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    Swal.fire({
-                        title: "¡Éxito!",
-                        text: data.message,
-                        icon: "success",
-                        confirmButtonText: "OK"
-                    }).then(() => {
-                        location.reload(); // Recargar la página para ver los cambios
-                    });
-                } else {
-                    Swal.fire({
-                        title: "Error",
-                        text: data.message,
-                        icon: "error",
-                        confirmButtonText: "Cerrar"
-                    });
-                }
-            })
-            .catch(error => {
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    title: "¡Éxito!",
+                    text: data.message, // Use data.message directly
+                    icon: "success",
+                    confirmButtonText: "OK"
+                }).then(() => {
+                    // Redirect to the admin panel, specifically opening the 'materiales' tab
+                    window.location.href = "{% url 'index_admin' %}?tab=materiales"; 
+                });
+            } else {
                 Swal.fire({
                     title: "Error",
-                    text: "No fue posible guardar la información. Revisar si material ya existe.",
+                    text: data.message || "Por favor, verifica los datos del formulario.", // More generic error message if data.message is empty
                     icon: "error",
                     confirmButtonText: "Cerrar"
                 });
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                title: "Error",
+                text: "Hubo un problema al procesar la solicitud.", // More generic error for fetch failures
+                icon: "error",
+                confirmButtonText: "Cerrar"
             });
+            console.error('Error:', error);
+        });
     });
 </script>
 

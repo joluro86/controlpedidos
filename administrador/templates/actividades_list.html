@@ -1,24 +1,27 @@
-<div class="d-flex justify-content-center align-items-center admin_actividades">
-    <div class="card shadow-sm actividades_contrato" style="max-width: 500px;">
-        <div class="title_contrato">
-            <h6 class="text-center m-2">Días Ans Contrato</h6>
-        </div>
+{# This template is likely included within a larger page, e.g., in a main 'admin_actividades' page #}
+{# It does NOT extend index.html directly, but its parent page should. #}
 
+<div class="card shadow-lg border-0 rounded-3 h-100"> {# Added h-100 for consistent height if in a flex container #}
+    <div class="card-header bg-primary text-white text-center py-2 rounded-top-3">
+        <h6 class="mb-0 fw-bold"><i class="fas fa-calendar-check me-2"></i> Días ANS Contrato</h6> {# Intuitive icon and title #}
+    </div>
+
+    <div class="card-body p-3"> {# Adjusted padding #}
         <div class="table-responsive">
-            <table class="table tabla_actividades m-0 text-center">
-                <thead>
-                    <tr style="font-size: 13px;">
-                        <th>Actividad</th>
-                        <th>Urbano</th>
-                        <th>Rural</th>
-                        <th>Encargado</th>
+            <table class="table table-sm table-hover align-middle m-0 text-center"> {# Removed inline style, added align-middle #}
+                <thead class="bg-info text-white"> {# Consistent header color #}
+                    <tr>
+                        <th scope="col" class="text-nowrap" style="font-size: 13px;">Actividad</th> {# Icon and clearer name #}
+                        <th scope="col" class="text-nowrap" style="font-size: 13px;">Urbano</th> {# Icon and clearer name #}
+                        <th scope="col" class="text-nowrap" style="font-size: 13px;">Rural</th> {# Icon and clearer name #}
+                        <th scope="col" class="text-nowrap" style="font-size: 13px;">Encargado</th> {# Icon and clearer name #}
                     </tr>
                 </thead>
                 <tbody>
                     {% for actividad in actividades_contrato %}
                     <tr>
                         <td style="font-size: 11px;">
-                            <a href="#" class="text-decoration-none text-primary" data-bs-toggle="modal"
+                            <a href="#" class="text-decoration-none text-primary fw-semibold" data-bs-toggle="modal"
                                 data-bs-target="#editarActividadModal{{ actividad.id }}" title="Pulse para editar">
                                 {{ actividad.nombre }}
                             </a>
@@ -27,26 +30,28 @@
                         <td>{{ actividad.dias_rural }}</td>
                         <td class="px-2" style="font-size: 11px;">{{ actividad.encargado }}</td>
                     </tr>
-                    <!-- Modal de edición dentro de la fila correspondiente -->
+                    {# Assuming 'forms/form_editar_actividad.html' contains the modal definition #}
                     {% include 'forms/form_editar_actividad.html' with encargados=encargados %}
                     {% empty %}
                     <tr>
-                        <td colspan="4" class="text-muted">No hay actividades registradas.</td>
+                        <td colspan="4" class="text-muted py-3">No hay actividades registradas.</td> {# Colspan based on 4 columns #}
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-        <div class="card-footer p-0 d-flex list-masivo-actividad-contrato">
-            <a class="btn tabla_actividades btn-sm p-0 mx-3" href="{% url 'subir_masivo_actividad_contrato' %}" title="Carga masiva actividades del contrato">
-                <i class="fas fa-cloud-upload-alt icon-masivo-crear"></i> <!-- Subida en la nube -->
-            </a>
-            <a class="btn tabla_actividades btn-sm p-0" href="{% url 'nueva_actividad_form' %}" title="Crear nueva actividad del contrato">
-                <i class="fa fa-plus m-0 icon-masivo-crear"></i> <!-- Icono de Font Awesome -->
-            </a>            
-        </div>
+    </div>
+    <div class="card-footer p-2 d-flex justify-content-between bg-light rounded-bottom-3"> {# Consistent footer styling, justify-content-between #}
+        <a class="btn btn-outline-primary btn-sm me-2" href="{% url 'subir_masivo_actividad_contrato' %}" title="Carga masiva actividades del contrato">
+            <i class="fas fa-cloud-upload-alt me-1"></i> Carga Masiva
+        </a>
+        <a class="btn btn-primary btn-sm" href="{% url 'nueva_actividad_form' %}" title="Crear nueva actividad del contrato">
+            <i class="fas fa-plus me-1"></i> Nueva Actividad
+        </a>
     </div>
 </div>
+
+{# The JavaScript for handling modal updates with Fetch and SweetAlert2 #}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll('.btn-guardar').forEach(button => {

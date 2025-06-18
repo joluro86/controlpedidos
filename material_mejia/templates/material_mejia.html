@@ -1,38 +1,51 @@
 {% extends 'index.html' %}
 {% load static %}
 {% load humanize %}
+
+{% block title %}
+  Material de Pedidos (Mejía)
+{% endblock %}
+
 {% block content %}
-<div class="table-id card mt-4" style="width: 100%; margin: auto">
-  <div class="card-body">
-    <h6 class="m-0 text-center">Material Mejía</h6>
-    <table class="table" id="table_id" style="width: 100%; margin: auto">
-      <thead>
-        <tr class="text-center" style="background-color: #8ee7fa; font-size: 0.8em;">
-          <th scope="col">Pedido</th>
-          <th>Actividad</th>
-          <th>Instalador</th>
-          <th>Código</th>
-          <th>Guía</th>
-          <th>Cantidad</th>
-          <th>Fecha</th>
-          <th>Acta</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for pedido in pedidos %}
-        <tr class="text-center tr">
-          <th scope="row">{{ pedido.pedido }}</th>
-          <td>{{ pedido.actividad }}</td>
-          <td>{{ pedido.instalador }}</td>
-          <td>{{ pedido.guia }}</td>
-          <td>{{ pedido.codigo }}</td>          
-          <td>{{ pedido.cantidad|floatformat:2 }}</td>
-          <td>{{ pedido.fecha|date:"d/m/Y" }}</td>
-          <td>{{ pedido.acta }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+<div class="container py-4">
+  <div class="card shadow-lg border-0 rounded-3">
+    <div class="card-header bg-primary text-white text-center py-3 rounded-top-3">
+      <h4 class="mb-0 fw-bold"><i class="fas fa-boxes me-2"></i> Material por Pedido (Mejía)</h4>
+      <p class="mb-0 mt-1 fs-6">Detalles de materiales asociados a pedidos.</p>
+    </div>
+    
+    <div class="card-body p-3">
+      <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered align-middle" id="table_id" style="width: 100%;">
+          <thead class="bg-info text-white">
+            <tr class="text-center">
+              <th scope="col" class="text-nowrap"><i class="fas fa-receipt me-1"></i> Pedido</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-tasks me-1"></i> Actividad</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-user-hard-hat me-1"></i> Instalador</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-barcode me-1"></i> Código Material</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-clipboard-list me-1"></i> Guía</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-box me-1"></i> Cantidad</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-calendar-alt me-1"></i> Fecha</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-file-alt me-1"></i> Acta</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pedido in pedidos %}
+            <tr class="text-center">
+              <th scope="row">{{ pedido.pedido }}</th>
+              <td>{{ pedido.actividad }}</td>
+              <td>{{ pedido.instalador }}</td>
+              <td>{{ pedido.codigo }}</td>
+              <td>{{ pedido.guia }}</td> 
+              <td>{{ pedido.cantidad|floatformat:2 }}</td>
+              <td>{{ pedido.fecha|date:"d/m/Y" }}</td>
+              <td>{{ pedido.acta }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock content %}
@@ -43,18 +56,19 @@
 <script>
   $(document).ready(function () {
     $("#table_id").DataTable({
-      order: [[5, "asc"]],
+      order: [[5, "asc"]], // Order by Quantity by default as per original code
       dom: "Bfrtilp",
       lengthMenu: [
         [15, 30, 50, -1],
-        ['15', '30', '50', 'Todos']
+        ['15 filas', '30 filas', '50 filas', 'Todos']
       ],
       buttons: [
         {
           extend: "excelHtml5",
-          title: '',
+          text: '<i class="fas fa-file-excel me-1"></i> Excel',
+          title: 'Material Pedidos Mejía', // Clearer, more specific title
           exportOptions: {
-            columns: [0, 1, 2, 3, 4, 5, 6],
+            columns: [0, 1, 2, 3, 4, 5, 6, 7], // Adjusted columns based on updated headers
             format: {
               body: function (data, row, column, node) {
                 data = $('<p>' + data + '</p>').text();
@@ -65,9 +79,10 @@
         },
         {
           extend: "copyHtml5",
-          title: '',
+          text: '<i class="fas fa-copy me-1"></i> Copiar',
+          title: 'Material Pedidos Mejía',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4, 5, 6],
+            columns: [0, 1, 2, 3, 4, 5, 6, 7], // Adjusted columns
             format: {
               body: function (data, row, column, node) {
                 data = $('<p>' + data + '</p>').text();
@@ -76,9 +91,41 @@
             }
           },
         },
+        {
+          extend: "csvHtml5",
+          text: '<i class="fas fa-file-csv me-1"></i> CSV',
+          title: 'Material Pedidos Mejía',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5, 6, 7], // Adjusted columns
+            format: {
+              body: function (data, row, column, node) {
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+            }
+          },
+        },
+        {
+          extend: "pdfHtml5",
+          text: '<i class="fas fa-file-pdf me-1"></i> PDF',
+          title: 'Material Pedidos Mejía',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5, 6, 7], // Adjusted columns
+            format: {
+              body: function (data, row, column, node) {
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+            }
+          },
+        },
+        {
+          extend: "print",
+          text: '<i class="fas fa-print me-1"></i> Imprimir',
+          title: 'Material Pedidos Mejía',
+        },
       ],
     });
   });
 </script>
 {% endblock js %}
-

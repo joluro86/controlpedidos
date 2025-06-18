@@ -1,104 +1,61 @@
-{% extends 'index.html' %}
+{% extends 'index.html' %} {# Corrected base template extension #}
 {% load static %}
-{% block content %}
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-header text-center bg-success text-white">
-          <h4 class="mb-0">Agregar Variable Contrato</h4>
-        </div>
-        <div class="card-body">
-          <!-- Agrega un id al formulario para seleccionarlo desde JS -->
-          <form id="form-editar-variable-{{ variable.id }}" method="POST" class="d-flex flex-column gap-3">
-            {% csrf_token %}
-            
-            <!-- Campo para la región -->
-            <div class="mb-3">
-              <label for="{{ form.region.id_for_label }}" class="form-label fw-bold">Región</label>
-              {{ form.region }}
-              {% if form.region.errors %}
-                <div class="text-danger">
-                  {% for error in form.region.errors %}
-                    <small>{{ error }}</small>
-                  {% endfor %}
-                </div>
-              {% endif %}
-            </div>
-            
-            <!-- Campo para el contrato -->
-            <div class="mb-3">
-              <label for="{{ form.contrato.id_for_label }}" class="form-label fw-bold">Contrato</label>
-              {{ form.contrato }}
-              {% if form.contrato.errors %}
-                <div class="text-danger">
-                  {% for error in form.contrato.errors %}
-                    <small>{{ error }}</small>
-                  {% endfor %}
-                </div>
-              {% endif %}
-            </div>
-            
-            <!-- Botones de acción -->
-            <div class="d-flex justify-content-between my-4">
-              <button type="submit" class="btn btn-success">
-                <i class="fa fa-upload"></i> Actualizar
-              </button>
-              <a href="{% url 'index_admin' %}" class="btn btn-secondary">
-                <i class="fa fa-arrow-left"></i> Regresar
-              </a>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+
+{% block title %}
+  {% if form.instance.pk %}Editar Equivalencia{% else %}Nueva Equivalencia{% endif %}
 {% endblock %}
 
-<!-- Incluye SweetAlert2 (asegúrate de tenerlo instalado o referenciado) -->
-<script>
-document.getElementById("formVariableContrato").addEventListener("submit", function (event) {
-    event.preventDefault(); // Evita la recarga del formulario
+{% block content %}
+<div class="container py-4 d-flex justify-content-center">
+    <div class="card shadow-lg border-0 rounded-3" style="max-width: 450px;"> {# Keep max-width for compact form #}
+        <div class="card-header bg-primary text-white text-center py-3 rounded-top-3"> {# Consistent header styling #}
+            <h5 class="mb-0 fw-bold">
+                {% if form.instance.pk %}
+                    <i class="fas fa-edit me-2"></i> Editar Equivalencia
+                {% else %}
+                    <i class="fas fa-plus-circle me-2"></i> Crear Nueva Equivalencia
+                {% endif %}
+            </h5>
+        </div>
+        <div class="card-body p-4"> {# Consistent padding #}
+            <form method="post">
+                {% csrf_token %}
+                
+                {# Django's form.field rendering without add_class filter #}
+                {# Nombre Perseo #}
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="{{ form.nombre_perseo.id_for_label }}" 
+                           name="{{ form.nombre_perseo.name }}" 
+                           placeholder="Nombre Perseo" 
+                           value="{{ form.nombre_perseo.value|default_if_none:'' }}" required>
+                    <label for="{{ form.nombre_perseo.id_for_label }}"><i class="fas fa-meteor me-2"></i> {{ form.nombre_perseo.label }}</label>
+                    {% if form.nombre_perseo.errors %}
+                        <div class="text-danger mt-1"><small>{{ form.nombre_perseo.errors }}</small></div>
+                    {% endif %}
+                </div>
 
-    let formData = new FormData(this);
+                {# Nombre Fénix #}
+                <div class="form-floating mb-4"> {# mb-4 for more space before buttons #}
+                    <input type="text" class="form-control" id="{{ form.nombre_fenix.id_for_label }}" 
+                           name="{{ form.nombre_fenix.name }}" 
+                           placeholder="Nombre Fénix" 
+                           value="{{ form.nombre_fenix.value|default_if_none:'' }}" required>
+                    <label for="{{ form.nombre_fenix.id_for_label }}"><i class="fas fa-fire me-2"></i> {{ form.nombre_fenix.label }}</label>
+                    {% if form.nombre_fenix.errors %}
+                        <div class="text-danger mt-1"><small>{{ form.nombre_fenix.errors }}</small></div>
+                    {% endif %}
+                </div>
 
-    fetch("{% url 'agregar_variable_contrato' %}", {
-        method: "POST",
-        body: formData,
-        headers: {
-            "X-CSRFToken": "{{ csrf_token }}"
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            Swal.fire({
-                title: "¡Éxito!",
-                text: data.message,
-                icon: "success",
-                confirmButtonText: "OK"
-            }).then(() => {
-                // Opcional: redirigir o recargar la página
-                location.reload();
-            });
-        } else {
-            Swal.fire({
-                title: "Error",
-                text: data.message,
-                icon: "error",
-                confirmButtonText: "Cerrar"
-            });
-        }
-    })
-    .catch(error => {
-        Swal.fire({
-            title: "Error",
-            text: "No fue posible guardar la información. Verifica si la variable ya existe.",
-            icon: "error",
-            confirmButtonText: "Cerrar"
-        });
-    });
-});
-</script>
-
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-primary btn-sm"> {# Primary color, smaller button #}
+                        <i class="fas fa-save me-2"></i> {% if form.instance.pk %}Actualizar{% else %}Guardar{% endif %}
+                    </button>
+                    <a class="btn btn-outline-secondary btn-sm" href="{% url 'index_admin' %}?tab=equivalencia"> {# Outline secondary, smaller button, link back to specific tab #}
+                        <i class="fas fa-arrow-left me-2"></i> Regresar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

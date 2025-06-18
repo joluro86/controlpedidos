@@ -1,37 +1,50 @@
 {% extends 'index.html' %}
 {% load static %}
+
+{% block title %}
+  Novedades de Material vs Actas
+{% endblock %}
+
 {% block content %}
-<div class="table-id card mt-4" style="width: 100%; margin: auto">
-  <div class="card-body">
-    <h6 class="m-0 text-center">Novedades Material Mejia vs Actas</h6>
-    <table class="table" id="table_id" style="width: 100%; margin: auto">
-      <thead>
-        <tr class="text-center" style="background-color: #8ee7fa; font-size: 0.8em;">
-          <th scope="col">Pedido</th>
-          <th>Actividad</th>
-          <th>Código</th>
-          <th>Suma Pedido</th>
-          <th>Suma Acta</th>
-          <th>Diferencia</th>
-          <th>Instalador</th>
-          <th>Observación</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for comparacion in comparaciones %}
-        <tr class="text-center tr">
-          <th scope="row">{{ comparacion.pedido }}</th>
-          <td>{{ comparacion.actividad }}</td>
-          <td>{{ comparacion.codigo }}</td>
-          <td>{{ comparacion.suma_material_pedido|floatformat:2 }}</td>
-          <td>{{ comparacion.suma_material_acta|floatformat:2 }}</td>
-          <td>{{ comparacion.diferencia|floatformat:2 }}</td>
-          <td>{{ comparacion.instalador }}</td>
-          <td>{{ comparacion.observacion }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+<div class="container py-4">
+  <div class="card shadow-lg border-0 rounded-3">
+    <div class="card-header bg-primary text-white text-center py-3 rounded-top-3">
+      <h4 class="mb-0 fw-bold"><i class="fas fa-exclamation-circle me-2"></i> Novedades de Material</h4>
+      <p class="mb-0 mt-1 fs-6">Comparativa entre Pedidos y Actas</p>
+    </div>
+    
+    <div class="card-body p-3">
+      <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered align-middle" id="table_id" style="width: 100%;">
+          <thead class="bg-info text-white">
+            <tr class="text-center">
+              <th scope="col" class="text-nowrap"><i class="fas fa-receipt me-1"></i> Pedido</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-tasks me-1"></i> Actividad</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-barcode me-1"></i> Código</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-boxes me-1"></i> Cant. Pedido</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-file-alt me-1"></i> Cant. Acta</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-balance-scale-right me-1"></i> Diferencia</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-user-hard-hat me-1"></i> Instalador</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-comment-dots me-1"></i> Observación</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for comparacion in comparaciones %}
+            <tr class="text-center">
+              <th scope="row">{{ comparacion.pedido }}</th>
+              <td>{{ comparacion.actividad }}</td>
+              <td>{{ comparacion.codigo }}</td>
+              <td>{{ comparacion.suma_material_pedido|floatformat:2 }}</td>
+              <td>{{ comparacion.suma_material_acta|floatformat:2 }}</td>
+              <td>{{ comparacion.diferencia|floatformat:2 }}</td>
+              <td>{{ comparacion.instalador }}</td>
+              <td class="text-start">{{ comparacion.observacion }}</td> {# Left align observation for readability #}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock content %}
@@ -46,16 +59,18 @@
       dom: "Bfrtilp",
       lengthMenu: [
         [15, 30, 50, -1],
-        ['15', '30', '50', 'Todos']
+        ['15 filas', '30 filas', '50 filas', 'Todos']
       ],
       buttons: [
         {
           extend: "excelHtml5",
-          title: '',
+          text: '<i class="fas fa-file-excel me-1"></i> Excel',
+          title: 'Novedades Material',
           exportOptions: {
             columns: [0, 1, 2, 3, 4, 5, 6, 7],
             format: {
               body: function (data, row, column, node) {
+                // Ensure numeric data is exported correctly
                 data = $('<p>' + data + '</p>').text();
                 return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
               }
@@ -64,20 +79,56 @@
         },
         {
           extend: "copyHtml5",
-          title: '',
+          text: '<i class="fas fa-copy me-1"></i> Copiar',
+          title: 'Novedades Material',
           exportOptions: {
             columns: [0, 1, 2, 3, 4, 5, 6, 7],
             format: {
               body: function (data, row, column, node) {
+                // Ensure numeric data is copied correctly
                 data = $('<p>' + data + '</p>').text();
                 return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
               }
             }
           },
         },
+        {
+          extend: "csvHtml5",
+          text: '<i class="fas fa-file-csv me-1"></i> CSV',
+          title: 'Novedades Material',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5, 6, 7],
+            format: {
+              body: function (data, row, column, node) {
+                // Ensure numeric data is copied correctly
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+            }
+          },
+        },
+        {
+          extend: "pdfHtml5",
+          text: '<i class="fas fa-file-pdf me-1"></i> PDF',
+          title: 'Novedades Material',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5, 6, 7],
+            format: {
+              body: function (data, row, column, node) {
+                // Ensure numeric data is copied correctly
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+            }
+          },
+        },
+        {
+          extend: "print",
+          text: '<i class="fas fa-print me-1"></i> Imprimir',
+          title: 'Novedades Material',
+        },
       ],
     });
   });
 </script>
 {% endblock js %}
-

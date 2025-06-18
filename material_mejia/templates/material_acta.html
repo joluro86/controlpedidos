@@ -1,29 +1,43 @@
 {% extends 'index.html' %}
 {% load static %}
+
+{% block title %}
+  Material de Acta
+{% endblock %}
+
 {% block content %}
-<div class="table-id card mt-4" style="width: 100%; margin: auto">
-  <div class="card-body">
-    <h6 class="m-0 text-center">Material Acta</h6>
-    <table class="table" id="table_id" style="width: 100%; margin: auto">
-      <thead>
-        <tr class="text-center" style="background-color: #8ee7fa; font-size: 0.8em;">
-          <th scope="col">Pedido</th>
-          <th>Actividad</th>
-          <th>Código</th>
-          <th>Cantidad</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for acta in actas %}
-        <tr class="text-center tr">
-          <th scope="row">{{ acta.pedido }}</th>
-          <td>{{ acta.actividad }}</td>
-          <td>{{ acta.codigo }}</td>
-          <td>{{ acta.cantidad|floatformat:2 }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+<div class="container py-4">
+  <div class="card shadow-lg border-0 rounded-3">
+    <div class="card-header bg-primary text-white text-center py-3 rounded-top-3">
+      <h4 class="mb-0 fw-bold"><i class="fas fa-file-invoice me-2"></i> Detalles de Material por Acta</h4>
+      {# Optional: Add a dynamic subtitle if context allows #}
+      {# <p class="mb-0 mt-1 fs-6">Acta No: <span class="fw-bold">{{ acta_numero }}</span></p> #}
+    </div>
+    
+    <div class="card-body p-3">
+      <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered align-middle" id="table_id" style="width: 100%;">
+          <thead class="bg-info text-white">
+            <tr class="text-center">
+              <th scope="col" class="text-nowrap"><i class="fas fa-receipt me-1"></i> Pedido</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-tasks me-1"></i> Actividad</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-barcode me-1"></i> Código Material</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-cubes me-1"></i> Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for acta in actas %}
+            <tr class="text-center">
+              <th scope="row">{{ acta.pedido }}</th>
+              <td>{{ acta.actividad }}</td>
+              <td>{{ acta.codigo }}</td>
+              <td>{{ acta.cantidad|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock content %}
@@ -38,12 +52,13 @@
       dom: "Bfrtilp",
       lengthMenu: [
         [15, 30, 50, -1],
-        ['15', '30', '50', 'Todos']
+        ['15 filas', '30 filas', '50 filas', 'Todos']
       ],
       buttons: [
         {
           extend: "excelHtml5",
-          title: '',
+          text: '<i class="fas fa-file-excel me-1"></i> Excel',
+          title: 'Material de Acta',
           exportOptions: {
             columns: [0, 1, 2, 3],
             format: {
@@ -56,7 +71,8 @@
         },
         {
           extend: "copyHtml5",
-          title: '',
+          text: '<i class="fas fa-copy me-1"></i> Copiar',
+          title: 'Material de Acta',
           exportOptions: {
             columns: [0, 1, 2, 3],
             format: {
@@ -67,9 +83,41 @@
             }
           },
         },
+        {
+          extend: "csvHtml5",
+          text: '<i class="fas fa-file-csv me-1"></i> CSV',
+          title: 'Material de Acta',
+          exportOptions: {
+            columns: [0, 1, 2, 3],
+            format: {
+              body: function (data, row, column, node) {
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+            }
+          },
+        },
+        {
+          extend: "pdfHtml5",
+          text: '<i class="fas fa-file-pdf me-1"></i> PDF',
+          title: 'Material de Acta',
+          exportOptions: {
+            columns: [0, 1, 2, 3],
+            format: {
+              body: function (data, row, column, node) {
+                data = $('<p>' + data + '</p>').text();
+                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+              }
+            }
+          },
+        },
+        {
+          extend: "print",
+          text: '<i class="fas fa-print me-1"></i> Imprimir',
+          title: 'Material de Acta',
+        },
       ],
     });
   });
 </script>
 {% endblock js %}
-

@@ -1,61 +1,66 @@
-{% extends 'admin.html' %}
+{% extends 'index.html' %} {# Corrected base template extension #}
 {% load static %}
+
+{% block title %}
+  Nuevo Encargado
+{% endblock %}
+
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center">
-    <div class="card shadow-sm actividades_contrato" style="min-width: 400px;">
-        <div class="card-header bg-light border-bottom">
-            <h5 class="card-title text-center">Nuevo Encargado</h5>
+<div class="container py-4 d-flex justify-content-center">
+    <div class="card shadow-lg border-0 rounded-3" style="max-width: 400px;"> {# Keep max-width for compact form #}
+        <div class="card-header bg-primary text-white text-center py-3 rounded-top-3"> {# Consistent header styling #}
+            <h5 class="mb-0 fw-bold"><i class="fas fa-user-plus me-2"></i> Crear Nuevo Encargado</h5> {# Intuitive icon and title #}
         </div>
-        <div class="card-body">
+        <div class="card-body p-4"> {# Consistent padding #}
             <form id="encargadoForm" method="post">
                 {% csrf_token %}
-                <div class="mb-2 input-group-sm">
-                    <label class="form-label m-1">Nombre</label>
-                    <input type="text" class="form-control m-0 nombre_encargado" name="nombre" required>
+                <div class="form-floating mb-4"> {# Modern form-floating for labels, mb-4 for space before buttons #}
+                    <input type="text" class="form-control" id="id_nombre" name="nombre" placeholder="Nombre del Encargado" required>
+                    <label for="id_nombre"><i class="fas fa-signature me-2"></i> Nombre del Encargado</label>
                 </div>
-                <div class="d-flex justify-content-between">
-                    <div class="text-start boton-guardar mt-2">
-                        <button type="submit" class="btn btn-success btn-guardar_encargado" data-id-epm="{{ encargado.id }}">
-                            Guardar
-                        </button>
-                    </div>
-                    <div class="text-end mt-2">
-                        <a class="btn tabla_actividades btn-sm p-0 mx-3 color_primary" href="{% url 'index_admin' %}">
-                            <i class="fa fa-arrow-left m-0"><span class="mx-2 fw-bold">Regresar</span></i>
-                            <!-- Icono de Font Awesome -->
-                        </a>
-                    </div>
-
+                
+                <div class="d-flex justify-content-between mt-4"> {# Use justify-content-between for button spacing #}
+                    <button type="submit" class="btn btn-primary btn-sm"> {# Primary color, smaller button #}
+                        <i class="fas fa-save me-2"></i> Guardar
+                    </button>
+                    <a class="btn btn-outline-secondary btn-sm" href="{% url 'index_admin' %}?tab=encargados"> {# Outline secondary, smaller button, link back to specific tab #}
+                        <i class="fas fa-arrow-left me-2"></i> Regresar
+                    </a>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 <script>
     document.getElementById('encargadoForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Evitar recarga de la página
     
         let formData = new FormData(this);
     
-        fetch("{% url 'nueva_encargado_form' %}", {
+        fetch(this.action, { // Use this.action to get the form's action URL
             method: 'POST',
-            body: formData
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value // Ensure CSRF token is sent
+            }
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 Swal.fire({
                     title: "¡Éxito!",
-                    text: "La actividad fue creada exitosamente.",
+                    text: "El encargado fue creado exitosamente.",
                     icon: "success",
                     confirmButtonText: "OK"
                 }).then(() => {
-                    window.location.href = "{% url 'index_admin' %}";  // Redirigir después de crear
+                    // Redirect back to the admin panel, specifically opening the 'encargados' tab
+                    window.location.href = "{% url 'index_admin' %}?tab=encargados";
                 });
             } else {
                 Swal.fire({
                     title: "Error",
-                    text: data.error,
+                    text: data.error || "Por favor, verifica los datos del formulario.", // More generic error message
                     icon: "error",
                     confirmButtonText: "Entendido"
                 });
@@ -72,4 +77,5 @@
         });
     });
 </script>
+
 {% endblock content %}

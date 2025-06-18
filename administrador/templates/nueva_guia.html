@@ -1,58 +1,61 @@
-{% extends 'admin.html' %}
+{% extends 'index.html' %} {# Corrected base template extension #}
 {% load static %}
 
+{% block title %}
+  {% if form.instance.pk %}Editar Equivalencia{% else %}Nueva Equivalencia{% endif %}
+{% endblock %}
+
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center mt-4">
-    <div class="card shadow-sm actividades_contrato" style="width: 400px;">
-        <div class="card-header text-center">
-            <h5>{% if form.instance.pk %}Editar Guía{% else %}Nueva Equivalencia{% endif %}</h5>
+<div class="container py-4 d-flex justify-content-center">
+    <div class="card shadow-lg border-0 rounded-3" style="max-width: 450px;"> {# Keep max-width for compact form #}
+        <div class="card-header bg-primary text-white text-center py-3 rounded-top-3"> {# Consistent header styling #}
+            <h5 class="mb-0 fw-bold">
+                {% if form.instance.pk %}
+                    <i class="fas fa-edit me-2"></i> Editar Equivalencia
+                {% else %}
+                    <i class="fas fa-plus-circle me-2"></i> Crear Nueva Equivalencia
+                {% endif %}
+            </h5>
         </div>
-        <div class="card-body">
+        <div class="card-body p-4"> {# Consistent padding #}
             <form method="post">
                 {% csrf_token %}
                 
-                <!-- Mostrar mensajes de error -->
-                {% if form.errors %}
-                    <div class="alert alert-danger">
-                        <strong>Corrige los siguientes errores:</strong>
-                        <ul>
-                            {% for field, errors in form.errors.items %}
-                                {% for error in errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-                
-                <!-- Formulario con estilos -->
-                <div class="mb-3">
-                    {{ form.nombre_perseo.label_tag }}
-                    {{ form.nombre_perseo }}
-                </div>
-                <div class="mb-3">
-                    {{ form.nombre_fenix.label_tag }}
-                    {{ form.nombre_fenix }}
+                {# Django's form.field rendering without add_class filter #}
+                {# Nombre Perseo #}
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="{{ form.nombre_perseo.id_for_label }}" 
+                           name="{{ form.nombre_perseo.name }}" 
+                           placeholder="Nombre Perseo" 
+                           value="{{ form.nombre_perseo.value|default_if_none:'' }}" required>
+                    <label for="{{ form.nombre_perseo.id_for_label }}"><i class="fas fa-meteor me-2"></i> {{ form.nombre_perseo.label }}</label>
+                    {% if form.nombre_perseo.errors %}
+                        <div class="text-danger mt-1"><small>{{ form.nombre_perseo.errors }}</small></div>
+                    {% endif %}
                 </div>
 
-                <div class="d-flex justify-content-between">
-                    <div class="text-start boton-guardar mt-2">
-                        <button type="submit" class="btn btn-success btn-guardar_encargado" data-id-epm="{{ encargado.id }}">
-                            {% if form.instance.pk %}Actualizar{% else %}Guardar{% endif %}
-                        </button>
-                    </div>
-                    <div class="text-end mt-2">
-                        <a class="btn tabla_actividades btn-sm p-0 mx-3 color_primary" href="{% url 'index_admin' %}">
-                            <i class="fa fa-arrow-left m-0"><span class="mx-2 fw-bold">Regresar</span></i>
-                            <!-- Icono de Font Awesome -->
-                        </a>
-                    </div>
-
+                {# Nombre Fénix #}
+                <div class="form-floating mb-4"> {# mb-4 for more space before buttons #}
+                    <input type="text" class="form-control" id="{{ form.nombre_fenix.id_for_label }}" 
+                           name="{{ form.nombre_fenix.name }}" 
+                           placeholder="Nombre Fénix" 
+                           value="{{ form.nombre_fenix.value|default_if_none:'' }}" required>
+                    <label for="{{ form.nombre_fenix.id_for_label }}"><i class="fas fa-fire me-2"></i> {{ form.nombre_fenix.label }}</label>
+                    {% if form.nombre_fenix.errors %}
+                        <div class="text-danger mt-1"><small>{{ form.nombre_fenix.errors }}</small></div>
+                    {% endif %}
                 </div>
 
-                
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-primary btn-sm"> {# Primary color, smaller button #}
+                        <i class="fas fa-save me-2"></i> {% if form.instance.pk %}Actualizar{% else %}Guardar{% endif %}
+                    </button>
+                    <a class="btn btn-outline-secondary btn-sm" href="{% url 'index_admin' %}?tab=equivalencia"> {# Outline secondary, smaller button, link back to specific tab #}
+                        <i class="fas fa-arrow-left me-2"></i> Regresar
+                    </a>
+                </div>
             </form>
         </div>
     </div>
 </div>
-{% endblock %}
+{% endblock content %}

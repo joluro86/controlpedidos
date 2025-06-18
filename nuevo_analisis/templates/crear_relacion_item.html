@@ -6,15 +6,14 @@
 
 {% block content %}
   <div class="d-flex justify-content-center">
-    {# Centra el contenido en la pantalla #}
-    <div class="card shadow-lg border-0 w-100" style="max-width: 500px; background-color: #ffffff; border-radius: 0.75rem;">
+    <div class="card shadow-lg border-0 w-100" style="max-width: 800px; background-color: #ffffff; border-radius: 0.75rem;"> {# Increased max-width for 3 columns #}
       <div class="card-header text-white text-center py-2" style="background-color: #0d6efd; border-radius: 0.75rem 0.75rem 0 0;">
         <h5 class="mb-0 fw-bold">
           <i class="bi bi-link-45deg me-2"></i>
           {% if form.instance.pk %}
-            Editar Relación
+            Editar Relación entre Items
           {% else %}
-            Nueva Relación
+            Nueva Relación entre Items
           {% endif %}
         </h5>
       </div>
@@ -22,20 +21,16 @@
         <form method="post" novalidate>
           {% csrf_token %}
           <div class="row">
-            {# Columna 1 #}
-            <div class="col-md-6">
+            {# Columna 1: Objeto Principal y Cantidad Condicional #}
+            <div class="col-lg-4 col-md-6 col-sm-12">
               <div class="mb-2">
                 <label for="{{ form.objeto.id_for_label }}" class="form-label fw-semibold mb-0">Objeto:</label>
                 {{ form.objeto }}
                 {% for error in form.objeto.errors %}
-                  <div class="text-danger mt-1">
-                    <small>{{ error }}</small>
-                  </div>
+                  <div class="text-danger mt-1"><small>{{ error }}</small></div>
                 {% endfor %}
                 {% if form.objeto.help_text %}
-                  <div class="form-text text-muted mt-0">
-                    <small>{{ form.objeto.help_text }}</small>
-                  </div>
+                  <div class="form-text text-muted mt-0"><small>{{ form.objeto.help_text }}</small></div>
                 {% endif %}
               </div>
 
@@ -43,92 +38,71 @@
                 {{ form.requiere_cantidad }}
                 <label class="form-check-label fw-semibold" for="{{ form.requiere_cantidad.id_for_label }}">Req. Cantidad</label>
                 {% for error in form.requiere_cantidad.errors %}
-                  <div class="text-danger mt-1">
-                    <small>{{ error }}</small>
-                  </div>
+                  <div class="text-danger mt-1"><small>{{ error }}</small></div>
                 {% endfor %}
                 {% if form.requiere_cantidad.help_text %}
-                  <div class="form-text text-muted mt-0">
-                    <small>{{ form.requiere_cantidad.help_text }}</small>
-                  </div>
+                  <div class="form-text text-muted mt-0"><small>{{ form.requiere_cantidad.help_text }}</small></div>
                 {% endif %}
               </div>
 
-              {# Campo condicional para cantidad_condicion - ¡Asegúrate de que este div tenga el ID! #}
               <div id="cantidad-condicion-group" class="mb-2">
                 <label for="{{ form.cantidad_condicion.id_for_label }}" class="form-label fw-semibold mb-0">Cant. Condición:</label>
                 {{ form.cantidad_condicion }}
                 {% for error in form.cantidad_condicion.errors %}
-                  <div class="text-danger mt-1">
-                    <small>{{ error }}</small>
-                  </div>
+                  <div class="text-danger mt-1"><small>{{ error }}</small></div>
                 {% endfor %}
                 {% if form.cantidad_condicion.help_text %}
-                  <div class="form-text text-muted mt-0">
-                    <small>{{ form.cantidad_condicion.help_text }}</small>
-                  </div>
-                {% endif %}
-              </div>
-
-              <div class="mb-2">
-                <label for="{{ form.factor.id_for_label }}" class="form-label fw-semibold mb-0">Factor:</label>
-                {{ form.factor }}
-                {% for error in form.factor.errors %}
-                  <div class="text-danger mt-1">
-                    <small>{{ error }}</small>
-                  </div>
-                {% endfor %}
-                {% if form.factor.help_text %}
-                  <div class="form-text text-muted mt-0">
-                    <small>{{ form.factor.help_text }}</small>
-                  </div>
-                {% endif %}
-              </div>
-              <div class="mb-2 mt-3 mt-md-0">
-                <label for="{{ form.tipo_item_busqueda.id_for_label }}" class="form-label fw-semibold mb-0">Tipo Ítem:</label>
-                {{ form.tipo_item_busqueda }}
-                {% for error in form.tipo_item_busqueda.errors %}
-                  <div class="text-danger mt-1">
-                    <small>{{ error }}</small>
-                  </div>
-                {% endfor %}
-                {% if form.tipo_item_busqueda.help_text %}
-                  <div class="form-text text-muted mt-0">
-                    <small>{{ form.tipo_item_busqueda.help_text }}</small>
-                  </div>
-                {% endif %}
-              </div>
-              <div class="mb-2 mt-3 mt-md-0">
-                <label for="{{ form.Item_busqueda.id_for_label }}" class="form-label fw-semibold mb-0">Ítem Búsqueda:</label>
-                {{ form.item_busqueda }}
-                {% for error in form.item_busqueda.errors %}
-                  <div class="text-danger mt-1">
-                    <small>{{ error }}</small>
-                  </div>
-                {% endfor %}
-                {% if form.item_busqueda.help_text %}
-                  <div class="form-text text-muted mt-0">
-                    <small>{{ form.item_busqueda.help_text }}</small>
-                  </div>
+                  <div class="form-text text-muted mt-0"><small>{{ form.cantidad_condicion.help_text }}</small></div>
                 {% endif %}
               </div>
             </div>
 
-            {# Columna 2 #}
-            <div class="col-md-6">
-              {# Campo condicional para conjuncion - ¡Asegúrate de que este div tenga el ID! #}
+            {# Columna 2: Factor, Tipo Ítem, Ítem Búsqueda #}
+            <div class="col-lg-4 col-md-6 col-sm-12">
+              <div class="mb-2">
+                <label for="{{ form.factor.id_for_label }}" class="form-label fw-semibold mb-0">Factor:</label>
+                {{ form.factor }}
+                {% for error in form.factor.errors %}
+                  <div class="text-danger mt-1"><small>{{ error }}</small></div>
+                {% endfor %}
+                {% if form.factor.help_text %}
+                  <div class="form-text text-muted mt-0"><small>{{ form.factor.help_text }}</small></div>
+                {% endif %}
+              </div>
+
+              <div class="mb-2">
+                <label for="{{ form.tipo_item_busqueda.id_for_label }}" class="form-label fw-semibold mb-0">Tipo Ítem Búsqueda:</label>
+                {{ form.tipo_item_busqueda }}
+                {% for error in form.tipo_item_busqueda.errors %}
+                  <div class="text-danger mt-1"><small>{{ error }}</small></div>
+                {% endfor %}
+                {% if form.tipo_item_busqueda.help_text %}
+                  <div class="form-text text-muted mt-0"><small>{{ form.tipo_item_busqueda.help_text }}</small></div>
+                {% endif %}
+              </div>
+
+              <div class="mb-2">
+                <label for="{{ form.item_busqueda.id_for_label }}" class="form-label fw-semibold mb-0">Ítem(s) de Búsqueda:</label>
+                {{ form.item_busqueda }}
+                {% for error in form.item_busqueda.errors %}
+                  <div class="text-danger mt-1"><small>{{ error }}</small></div>
+                {% endfor %}
+                {% if form.item_busqueda.help_text %}
+                  <div class="form-text text-muted mt-0"><small>{{ form.item_busqueda.help_text }}</small></div>
+                {% endif %}
+              </div>
+            </div>
+
+            {# Columna 3: Condición Lógica, Comparador, Cantidad Requerida, Verificar Cantidad #}
+            <div class="col-lg-4 col-md-12 col-sm-12"> {# md-12 to push this column to new row on medium screens #}
               <div id="conjuncion-group" class="mb-2">
                 <label for="{{ form.conjuncion.id_for_label }}" class="form-label fw-semibold mb-0">Cond. Lógica:</label>
                 {{ form.conjuncion }}
                 {% for error in form.conjuncion.errors %}
-                  <div class="text-danger mt-1">
-                    <small>{{ error }}</small>
-                  </div>
+                  <div class="text-danger mt-1"><small>{{ error }}</small></div>
                 {% endfor %}
                 {% if form.conjuncion.help_text %}
-                  <div class="form-text text-muted mt-0">
-                    <small>{{ form.conjuncion.help_text }}</small>
-                  </div>
+                  <div class="form-text text-muted mt-0"><small>{{ form.conjuncion.help_text }}</small></div>
                 {% endif %}
               </div>
 
@@ -136,14 +110,10 @@
                 <label for="{{ form.comparador.id_for_label }}" class="form-label fw-semibold mb-0">Comparador:</label>
                 {{ form.comparador }}
                 {% for error in form.comparador.errors %}
-                  <div class="text-danger mt-1">
-                    <small>{{ error }}</small>
-                  </div>
+                  <div class="text-danger mt-1"><small>{{ error }}</small></div>
                 {% endfor %}
                 {% if form.comparador.help_text %}
-                  <div class="form-text text-muted mt-0">
-                    <small>{{ form.comparador.help_text }}</small>
-                  </div>
+                  <div class="form-text text-muted mt-0"><small>{{ form.comparador.help_text }}</small></div>
                 {% endif %}
               </div>
 
@@ -151,28 +121,22 @@
                 <label for="{{ form.cantidad.id_for_label }}" class="form-label fw-semibold mb-0">Cantidad:</label>
                 {{ form.cantidad }}
                 {% for error in form.cantidad.errors %}
-                  <div class="text-danger mt-1">
-                    <small>{{ error }}</small>
-                  </div>
+                  <div class="text-danger mt-1"><small>{{ error }}</small></div>
                 {% endfor %}
                 {% if form.cantidad.help_text %}
-                  <div class="form-text text-muted mt-0">
-                    <small>{{ form.cantidad.help_text }}</small>
-                  </div>
+                  <div class="form-text text-muted mt-0"><small>{{ form.cantidad.help_text }}</small></div>
                 {% endif %}
               </div>
-              <div id="verificar-todos-group" class="mb-2">
+
+              <div id="verificar-todos-group" class="mb-2 form-check">
                 {{ form.verificar_cantidad_items }}
                 <label class="form-check-label fw-semibold" for="{{ form.verificar_cantidad_items.id_for_label }}">
                   {{ form.verificar_cantidad_items.label }}
                 </label>
                 {% for error in form.verificar_cantidad_items.errors %}
-                  <div class="text-danger mt-1">
-                    <small>{{ error }}</small>
-                  </div>
+                  <div class="text-danger mt-1"><small>{{ error }}</small></div>
                 {% endfor %}
               </div>
-
             </div>
           </div>
 
@@ -192,52 +156,38 @@
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         // --- Control de 'cantidad_condicion' basado en 'requiere_cantidad' ---
-        const requiereCantidadCheckbox = document.getElementById('id_requiere_cantidad')
-        const cantidadCondicionGroup = document.getElementById('cantidad-condicion-group')
+        const requiereCantidadCheckbox = document.getElementById('id_requiere_cantidad');
+        const cantidadCondicionGroup = document.getElementById('cantidad-condicion-group');
       
         function toggleCantidadCondicion() {
           if (requiereCantidadCheckbox.checked) {
-            cantidadCondicionGroup.style.display = 'block'
+            cantidadCondicionGroup.style.display = 'block';
           } else {
-            cantidadCondicionGroup.style.display = 'none'
+            cantidadCondicionGroup.style.display = 'none';
           }
         }
       
-        requiereCantidadCheckbox.addEventListener('change', toggleCantidadCondicion)
-        toggleCantidadCondicion() // Establecer el estado inicial al cargar la página
+        requiereCantidadCheckbox.addEventListener('change', toggleCantidadCondicion);
+        toggleCantidadCondicion(); // Establecer el estado inicial al cargar la página
       
-        // --- Control de 'conjuncion' basado en 'factor' ---
-        const factorSelect = document.getElementById('id_factor') // ID del select 'factor'
-        const conjuncionGroup = document.getElementById('conjuncion-group') // ID del div de 'conjuncion'
-      
-        function toggleConjuncion() {
-          // Si el valor seleccionado de 'factor' es 'multiple'
+        // --- Control de 'conjuncion' y 'verificar_cantidad_items' basado en 'factor' ---
+        const factorSelect = document.getElementById('id_factor');
+        const conjuncionGroup = document.getElementById('conjuncion-group');
+        const verificarTodosGroup = document.getElementById('verificar-todos-group');
+
+        function toggleFactorDependentFields() {
           if (factorSelect.value === 'multiple') {
-            conjuncionGroup.style.display = 'block'
+            conjuncionGroup.style.display = 'block';
+            verificarTodosGroup.style.display = 'block';
           } else {
-            conjuncionGroup.style.display = 'none'
+            conjuncionGroup.style.display = 'none';
+            verificarTodosGroup.style.display = 'none';
           }
         }
-        const verificarTodosGroup = document.getElementById('verificar-todos-group')
 
-function toggleVerificarTodos() {
-  if (factorSelect.value === 'multiple') {
-    verificarTodosGroup.style.display = 'block'
-  } else {
-    verificarTodosGroup.style.display = 'none'
-  }
-}
-
-factorSelect.addEventListener('change', () => {
-  toggleConjuncion()
-  toggleVerificarTodos()
-})
-
-toggleVerificarTodos() // Establecer visibilidad inicial
-
-        factorSelect.addEventListener('change', toggleConjuncion)
-        toggleConjuncion() // Establecer el estado inicial al cargar la página
-      })
+        factorSelect.addEventListener('change', toggleFactorDependentFields);
+        toggleFactorDependentFields(); // Establecer visibilidad inicial
+      });
     </script>
   {% endblock %}
 {% endblock %}

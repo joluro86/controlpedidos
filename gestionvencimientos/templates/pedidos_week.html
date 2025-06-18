@@ -1,92 +1,107 @@
-{% extends 'index.html' %} {% load static %} {% block content %}
-<div class="table-id card mt-4" style="width: 100%; margin: auto">
-  <div class="card-body">
-    <h6 class="m-0 text-center">Pedidos de {{ lunes }} a {{ viernes }}</h6>
-    <table class="table" id="table_id" style="width: 100%; margin: auto">
-      <thead>
-        <tr
-          class="text-center"
-          style="background-color: #9479f5;"
-        >
-          <th scope="col">Pedido</th>
-          <th>Hora venci</th>
-          <th scope="col">Dias ANS</th>
-          <th scope="col">Cliente ID</th>
-          <th scope="col">Nombre Cliente</th>
-          <th scope="col">Celular</th>
-          <th scope="col">Instalación</th>
-          <th scope="col">Area trabajo</th>
-          <th scope="col">Coordenada x</th>
-          <th scope="col">Coordenada y</th>
-          <th scope="col">Actividad</th>
-          <th scope="col">Observación</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for a in aneses %}
+{% extends 'index.html' %} 
 
-        <tr class="text-center tr">
-          <th scope="row">{{ a.Pedido }}</th>
-          <td>{{ a.fecha_vencimiento }}</td>
-          <td>{{ a.Días_ANS }}</td>
-          <td>{{ a.ClienteID }}</td>
-          <td>{{ a.Nombre_Cliente }}</td>
-          <td>{{ a.Celular_Contacto }}</td>
-          <td>{{ a.Instalación }}</td>
-          <td>{{ a.Area_Trabajo }}</td>
-          <td>{{ a.Coordenadax }}</td>
-          <td>{{ a.Coordenaday }}</td>
-          <td>{{ a.Actividad }}</td>  
-          <td><textarea name="" id="" class="p-1" cols="20" rows="5">{{ a.Observación_Solicitud }}</textarea></td>
-        </tr>
+{% block title %}
+  Pendientes de ANS
+{% endblock %}
 
-        {% endfor %}
-      </tbody>
-    </table>
+{% block content %}
+<div class="container py-4">
+  <div class="card shadow-lg border-0 rounded-3">
+    <div class="card-header bg-primary text-white text-center py-3 rounded-top-3">
+      <h4 class="mb-0 fw-bold"><i class="fas fa-hourglass-start me-2"></i> Pedidos Pendientes de ANS</h4>
+      <p class="mb-0 mt-1 fs-6">Del <span class="fw-bold">{{ lunes }}</span> al <span class="fw-bold">{{ viernes }}</span></p>
+    </div>
+    <div class="card-body p-3">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped table-bordered align-middle" id="table_id" style="width: 100%;">
+          <thead class="bg-info text-white"> {# Changed header color to match a secondary theme #}
+            <tr class="text-center">
+              <th scope="col" class="text-nowrap"><i class="fas fa-barcode me-1"></i> Pedido</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-hourglass-end me-1"></i> Vencimiento</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-calendar-day me-1"></i> Días ANS</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-id-card me-1"></i> ID Cliente</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-user me-1"></i> Cliente</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-phone me-1"></i> Celular</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-building me-1"></i> Instalación</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-map-marked-alt me-1"></i> Área Trabajo</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-map-pin me-1"></i> Coord. X</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-map-pin me-1"></i> Coord. Y</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-running me-1"></i> Actividad</th>
+              <th scope="col" class="text-nowrap"><i class="fas fa-comment-dots me-1"></i> Observación</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in aneses %}
+            <tr class="text-center">
+              <th scope="row">{{ a.Pedido }}</th>
+              <td>{{ a.fecha_vencimiento }}</td>
+              <td>{{ a.Días_ANS }}</td>
+              <td>{{ a.ClienteID }}</td>
+              <td class="text-start">{{ a.Nombre_Cliente }}</td> {# Align client name to start #}
+              <td>{{ a.Celular_Contacto }}</td>
+              <td>{{ a.Instalación }}</td>
+              <td>{{ a.Area_Trabajo }}</td>
+              <td>{{ a.Coordenadax }}</td>
+              <td>{{ a.Coordenaday }}</td>
+              <td class="text-start">{{ a.Actividad }}</td> {# Align activity to start #}
+              <td>
+                <textarea class="form-control form-control-sm" rows="3" readonly>{{ a.Observación_Solicitud }}</textarea> {# Smaller, readonly textarea #}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
-{% endblock content %} {% block js %}
+{% endblock content %} 
 
+{% block js %}
 <script src="{% static 'js/js_pendientes.js' %}"></script>
-
 <script>
   $(document).ready(function () {
     $("#table_id").DataTable({
       order: [[1, "asc"]],
-
       dom: "Bfrtilp",
-
       lengthMenu: [
-            [ 15, 30, 50, -1 ],
-            [ '15', '30', '50', 'Todos' ]
-        ],
-        
+          [ 15, 30, 50, -1 ],
+          [ '15', '30', '50', 'Todos' ]
+      ],
       buttons: [
         {
           extend: "copyHtml5",
-          title:'',
+          text: '<i class="fas fa-copy"></i> Copiar', // Icon and text for copy
+          title: 'Pedidos Pendientes ANS', // Add a default title for export
           exportOptions: {
             columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
           },
         },
         {
           extend: "csvHtml5",
-          title:'',
+          text: '<i class="fas fa-file-csv"></i> CSV', // Icon and text for CSV
+          title: 'Pedidos Pendientes ANS',
           exportOptions: {
             columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
           },
         },
         {
           extend: "pdfHtml5",
-          title:'',
+          text: '<i class="fas fa-file-pdf"></i> PDF', // Icon and text for PDF
+          title: 'Pedidos Pendientes ANS',
           exportOptions: {
             columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
           },
         },
-        "print",   
+        {
+          extend: "print",
+          text: '<i class="fas fa-print"></i> Imprimir', // Icon and text for Print
+          title: 'Pedidos Pendientes ANS',
+        }, 
         {
           extend: "excelHtml5",
-          title:'',
+          text: '<i class="fas fa-file-excel"></i> Excel', // Icon and text for Excel
+          title: 'Pedidos Pendientes ANS',
           exportOptions: {
             columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
           },

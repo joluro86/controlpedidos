@@ -33,332 +33,370 @@
       </div>
     </div>
 
-    {# Sección para RelacionItemRegla #}
-    <h5 class="text-secondary mt-4 mb-3"><i class="bi bi-share-fill me-2"></i>Relación entre Ítems</h5>
-    <div class="table-responsive-lg mb-4">
-      <table class="table table-hover table-striped table-bordered align-middle rounded overflow-hidden">
-        <thead class="bg-primary text-white texto_encabezado">
-          <tr>
-            <th scope="col" class="text-center">#</th>
-            <th scope="col">Objeto</th>
-            <th scope="col">Tipo</th>
-            <th scope="col">¿Requiere Cant.?</th>
-            <th scope="col">Cant. Condición</th>
-            <th scope="col">Factor</th>
-            <th scope="col">Ítem(s)</th>
-            <th scope="col">Tipo Ítem</th>
-            <th scope="col">Condición</th>
-            <th scope="col">Comparador</th>
-            <th scope="col">Cant. Requerida</th>
-            <th scope="col">Verificar Cant.</th>
-            <th scope="col" class="text-center">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for regla in relaciones_item_regla %}
-            {# Asumiendo 'relaciones_item_regla' es pasado desde la vista #}
-            <tr>
-              <td class="text-center">{{ forloop.counter }}</td>
-              <td class="text-start ps-2">{{ regla.objeto.nombre }}</td>
-              <td class="text-start ps-2">
-                <span class="badge bg-info text-dark me-1">{{ regla.objeto.get_tipo_display }}</span>
-              </td>
-              <td class="text-start ps-2">
-                {% if regla.requiere_cantidad %}
-                  <i class="fas fa-check-circle text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Sí"></i>
-                {% else %}
-                  <i class="fas fa-times-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="No"></i>
-                {% endif %}
-              </td>
-              <td class="text-start ps-2">
-                {% if regla.requiere_cantidad %}
-                  <span class="badge bg-secondary">{{ regla.cantidad_condicion }}</span>
-                {% else %}
-                  <span class="text-muted fst-italic">N/A</span>
-                {% endif %}
-              </td>
-              <td class="text-start ps-2">
-                <span class="badge bg-dark">{{ regla.get_factor_display }}</span>
-              </td>
-              <td class="text-start ps-2">{{ regla.item_busqueda }}</td>
-              <td class="text-start ps-2">
-                <span class="badge bg-warning text-dark">{{ regla.get_tipo_item_busqueda_display }}</span>
-              </td>
-              <td class="text-start ps-2">
-                <span class="badge bg-secondary">{{ regla.get_conjuncion_display }}</span>
-              </td>
-              <td class="text-start ps-2">
-                <span class="badge bg-info">{{ regla.get_comparador_display }}</span>
-              </td>
-              <td class="text-start ps-2">{{ regla.cantidad }}</td>
-              <td class="text-start ps-2">
-                {% if regla.verificar_cantidad_items %}
-                  <i class="fas fa-check-circle text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Sí"></i>
-                {% else %}
-                  <i class="fas fa-times-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="No"></i>
-                {% endif %}
-              </td>
-              <td class="text-center">
-                <div class="btn-group" role="group" aria-label="Acciones de Relación de Ítem de Regla">
-                  <a href="{% url 'editar_relacion_item_regla' pk=regla.id %}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i></a>
-                  <a href="#" class="btn btn-danger btn-sm eliminar-regla" data-url="{% url 'eliminar_relacion_item_regla' pk=regla.id %}" data-nombre="{{ regla.objeto.nombre }}" title="Eliminar"><i class="fas fa-trash"></i></a>
-                </div>
-              </td>
-            </tr>
-          {% empty %}
-            <tr>
-              <td colspan="12" class="text-center py-4 text-muted fst-italic">
-                <i class="bi bi-info-circle me-2"></i>No hay reglas de relación entre ítems.
-                <a href="{% url 'crear_relacion_item' %}" class="btn btn-link p-0 ms-2">¿Crear una nueva?</a>
-              </td>
-            </tr>
-          {% endfor %}
-          <form id="form-eliminar" method="POST" style="display: none;">
-            {% csrf_token %}
-          </form>
-        </tbody>
-      </table>
-    </div>
+    {# Navigation Tabs #}
+    <ul class="nav nav-tabs mb-4" id="ruleTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="relacion-items-tab" data-bs-toggle="tab" data-bs-target="#relacion-items" type="button" role="tab" aria-controls="relacion-items" aria-selected="true">
+          <i class="bi bi-share-fill me-1"></i> Relación entre Ítems
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="incompatibilidad-tab" data-bs-toggle="tab" data-bs-target="#incompatibilidad" type="button" role="tab" aria-controls="incompatibilidad" aria-selected="false">
+          <i class="bi bi-x-octagon-fill me-1"></i> Incompatibilidad
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="caracter-final-tab" data-bs-toggle="tab" data-bs-target="#caracter-final" type="button" role="tab" aria-controls="caracter-final" aria-selected="false">
+          <i class="bi bi-type-strikethrough me-1"></i> Carácter Final
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="limite-cantidad-tab" data-bs-toggle="tab" data-bs-target="#limite-cantidad" type="button" role="tab" aria-controls="limite-cantidad" aria-selected="false">
+          <i class="bi bi-calculator-fill me-1"></i> Límite de Cantidad
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="definicion-items-tab" data-bs-toggle="tab" data-bs-target="#definicion-items" type="button" role="tab" aria-controls="definicion-items" aria-selected="false">
+          <i class="bi bi-box-seam me-1"></i> Definición de Ítems
+        </button>
+      </li>
+    </ul>
 
-    {# Sección para RelacionIncompatibilidad #}
-    <h5 class="text-secondary mt-5 mb-3"><i class="bi bi-x-octagon-fill me-2"></i>Reglas de Incompatibilidad</h5>
-    <div class="table-responsive mb-4">
-      <table class="table table-hover table-striped table-bordered align-middle rounded overflow-hidden">
-        <thead class="bg-primary text-white texto_encabezado">
-          <tr>
-            <th scope="col" class="text-center">#</th>
-            <th scope="col">Objeto</th>
-            <th scope="col">Tipo</th>
-            <th scope="col">Ítem(s) de Incompatibilidad</th>
-            <th scope="col">Tipo Ítem Incompatibilidad</th>
-            <th scope="col" class="text-center">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for regla in relaciones_incompatibilidad %}
-            {# Asumiendo 'relaciones_incompatibilidad' es pasado desde la vista #}
-            <tr>
-              <td class="text-center">{{ forloop.counter }}</td>
-              <td class="text-start ps-2">{{ regla.objeto.nombre }}</td>
-              <td class="text-start ps-2">
-                <span class="badge bg-info text-dark me-1">{{ regla.objeto.get_tipo_display }}</span>
-              </td>
-              <td class="text-start ps-2">{{ regla.item_incompatibilidad }}</td>
-              <td class="text-start ps-2">
-                <span class="badge bg-warning text-dark">{{ regla.get_tipo_item_incompatibilidad_display }}</span>
-              </td>
-              <td class="text-center">
-                <div class="btn-group" role="group" aria-label="Acciones de Incompatibilidad">
-                  <a href="{% url 'editar_relacion_incompatibilidad' pk=regla.id %}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i></a>
-                  <a href="{% url 'eliminar_relacion_incompatibilidad' pk=regla.id %}" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar"><i class="fas fa-trash"></i></a>
-                </div>
-              </td>
-            </tr>
-          {% empty %}
-            <tr>
-              <td colspan="5" class="text-center py-4 text-muted fst-italic">
-                <i class="bi bi-info-circle me-2"></i>No hay reglas de incompatibilidad.
-                <a href="{% url 'crear_relacion_incompatibilidad' %}" class="btn btn-link p-0 ms-2">¿Crear una nueva?</a>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+    {# Tab Content #}
+    <div class="tab-content" id="ruleTabContent">
 
-    {# Sección para RelacionUltimoCaracter #}
-    <h5 class="text-secondary mt-5 mb-3"><i class="bi bi-type-strikethrough me-2"></i>Reglas de Carácter Final</h5>
-    <div class="table-responsive mb-4">
-      <table class="table table-hover table-striped table-bordered align-middle rounded overflow-hidden">
-        <thead class="bg-primary text-white texto_encabezado">
-          <tr>
-            <th scope="col" class="text-center">#</th>
-            <th scope="col">Objeto</th>
-            <th scope="col">Tipo</th>
-            <th scope="col">Carácter</th>
-            <th scope="col">Aplica</th>
-            <th scope="col">Ítems Carácter</th>
-            <th scope="col">Tipo Ítem</th>
-            <th scope="col">Todos los Registros</th>
-            <th scope="col" class="text-center">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for regla in relaciones_caracter %}
-            {# Asumiendo 'relaciones_caracter' es pasado desde la vista #}
-            <tr>
-              <td class="text-center">{{ forloop.counter }}</td>
-              <td>
-                <span class="badge bg-info text-dark me-1">{{ regla.objeto.get_tipo_display }}</span>
-              </td>
-              <td>{{ regla.objeto.nombre }}</td>
-              <td class="text-start ps-2">
-                <span class="badge bg-secondary">{{ regla.caracter }}</span>
-              </td>
-              <td class="text-start ps-2">
-                {% if regla.aplica %}
-                  <i class="fas fa-check-circle text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Sí"></i>
-                {% else %}
-                  <i class="fas fa-times-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="No"></i>
-                {% endif %}
-              </td>
-              <td class="text-start ps-2">{{ regla.item_caracter|default:'N/A' }}</td>
-              <td class="text-start ps-2">
-                <span class="badge bg-warning text-dark">{{ regla.get_tipo_item_display }}</span>
-              </td>
-              <td class="text-start ps-2">
-                {% if regla.todos_los_registros %}
-                  <i class="fas fa-check-circle text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Sí"></i>
-                {% else %}
-                  <i class="fas fa-times-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="No"></i>
-                {% endif %}
-              </td>
-              <td class="text-center">
-                <div class="btn-group" role="group" aria-label="Acciones de Carácter Final">
-                  <a href="{% url 'editar_relacion_caracter' pk=regla.id %}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i></a>
-                  <a href="{% url 'eliminar_relacion_caracter' pk=regla.id %}" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar"><i class="fas fa-trash"></i></a>
-                </div>
-              </td>
-            </tr>
-          {% empty %}
-            <tr>
-              <td colspan="8" class="text-center py-4 text-muted fst-italic">
-                <i class="bi bi-info-circle me-2"></i>No hay reglas de carácter final.
-                <a href="{% url 'crear_relacion_caracter' %}" class="btn btn-link p-0 ms-2">¿Crear una nueva?</a>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+      {# Tab Pane for RelacionItemRegla #}
+      <div class="tab-pane fade show active" id="relacion-items" role="tabpanel" aria-labelledby="relacion-items-tab">
+        <h5 class="text-secondary mt-2 mb-3 d-none"><i class="bi bi-share-fill me-2"></i>Relación entre Ítems</h5> {# Hidden, as tab title is enough #}
+        <div class="table-responsive-lg mb-4">
+          <table class="table table-hover table-striped table-bordered align-middle rounded overflow-hidden">
+            <thead class="bg-primary text-white texto_encabezado">
+              <tr>
+                <th scope="col" class="text-center">#</th>
+                <th scope="col">Objeto</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">¿Requiere Cant.?</th>
+                <th scope="col">Cant. Condición</th>
+                <th scope="col">Factor</th>
+                <th scope="col">Ítem(s)</th>
+                <th scope="col">Tipo Ítem</th>
+                <th scope="col">Condición</th>
+                <th scope="col">Comparador</th>
+                <th scope="col">Cant. Requerida</th>
+                <th scope="col">Verificar Cant.</th>
+                <th scope="col" class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for regla in relaciones_item_regla %}
+                <tr>
+                  <td class="text-center">{{ forloop.counter }}</td>
+                  <td class="text-start ps-2">{{ regla.objeto.nombre }}</td>
+                  <td class="text-start ps-2">
+                    <span class="badge bg-info text-dark me-1">{{ regla.objeto.get_tipo_display }}</span>
+                  </td>
+                  <td class="text-center">
+                    {% if regla.requiere_cantidad %}
+                      <i class="fas fa-check-circle text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Sí"></i>
+                    {% else %}
+                      <i class="fas fa-times-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="No"></i>
+                    {% endif %}
+                  </td>
+                  <td class="text-center">
+                    {% if regla.requiere_cantidad %}
+                      <span class="badge bg-secondary">{{ regla.cantidad_condicion }}</span>
+                    {% else %}
+                      <span class="text-muted fst-italic">N/A</span>
+                    {% endif %}
+                  </td>
+                  <td class="text-start ps-2">
+                    <span class="badge bg-dark">{{ regla.get_factor_display }}</span>
+                  </td>
+                  <td class="text-start ps-2">{{ regla.item_busqueda }}</td>
+                  <td class="text-start ps-2">
+                    <span class="badge bg-warning text-dark">{{ regla.get_tipo_item_busqueda_display }}</span>
+                  </td>
+                  <td class="text-start ps-2">
+                    <span class="badge bg-secondary">{{ regla.get_conjuncion_display }}</span>
+                  </td>
+                  <td class="text-start ps-2">
+                    <span class="badge bg-info">{{ regla.get_comparador_display }}</span>
+                  </td>
+                  <td class="text-start ps-2">{{ regla.cantidad }}</td>
+                  <td class="text-center">
+                    {% if regla.verificar_cantidad_items %}
+                      <i class="fas fa-check-circle text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Sí"></i>
+                    {% else %}
+                      <i class="fas fa-times-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="No"></i>
+                    {% endif %}
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de Relación de Ítem de Regla">
+                      <a href="{% url 'editar_relacion_item_regla' pk=regla.id %}" class="btn btn-warning me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i></a>
+                      <a href="#" class="btn btn-danger eliminar-regla" data-url="{% url 'eliminar_relacion_item_regla' pk=regla.id %}" data-nombre="{{ regla.objeto.nombre }}" title="Eliminar"><i class="fas fa-trash"></i></a>
+                    </div>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="13" class="text-center py-4 text-muted fst-italic">
+                    <i class="bi bi-info-circle me-2"></i>No hay reglas de relación entre ítems.
+                    <a href="{% url 'crear_relacion_item' %}" class="btn btn-link p-0 ms-2">¿Crear una nueva?</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-    {# Sección para RelacionLimiteItem #}
-    <h5 class="text-secondary mt-5 mb-3"><i class="bi bi-calculator-fill me-2"></i>Reglas de Límite de Cantidad</h5>
-    <div class="table-responsive mb-4">
-      <table class="table table-hover table-striped table-bordered align-middle rounded overflow-hidden">
-        <thead class="bg-primary text-white texto_encabezado">
-          <tr>
-            <th scope="col" class="text-center">#</th>
-            <th scope="col">Tipo Ítem</th>
-            <th scope="col">Ítem(s)</th>
-            <th scope="col">Comparador</th>
-            <th scope="col">Cantidad</th>
-            <th scope="col" class="text-center">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for regla in relaciones_cantidad %}
-            {# Asumiendo 'relaciones_cantidad' es pasado desde la vista #}
-            <tr>
-              <td class="text-center">{{ forloop.counter }}</td>
-              <td class="text-start ps-2">
-                <span class="badge bg-warning text-dark">{{ regla.get_tipo_item_display }}</span>
-              </td>
-              <td class="text-start ps-2">{{ regla.items|default:'Todos' }}</td>
-              <td class="text-start ps-2">
-                <span class="badge bg-info">{{ regla.get_comparador_display }}</span>
-              </td>
-              <td>{{ regla.cantidad }}</td>
-              <td class="text-center">
-                <div class="btn-group" role="group" aria-label="Acciones de Límite de Cantidad">
-                  <a href="{% url 'editar_relacion_cantidad' pk=regla.id %}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i></a>
-                  <a href="{% url 'eliminar_relacion_cantidad' pk=regla.id %}" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar"><i class="fas fa-trash"></i></a>
-                </div>
-              </td>
-            </tr>
-          {% empty %}
-            <tr>
-              <td colspan="6" class="text-center py-4 text-muted fst-italic">
-                <i class="bi bi-info-circle me-2"></i>No hay reglas de límite de cantidad.
-                <a href="{% url 'crear_relacion_cantidad' %}" class="btn btn-link p-0 ms-2">¿Crear una nueva?</a>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+      {# Tab Pane for RelacionIncompatibilidad #}
+      <div class="tab-pane fade" id="incompatibilidad" role="tabpanel" aria-labelledby="incompatibilidad-tab">
+        <h5 class="text-secondary mt-2 mb-3 d-none"><i class="bi bi-x-octagon-fill me-2"></i>Reglas de Incompatibilidad</h5>
+        <div class="table-responsive mb-4">
+          <table class="table table-hover table-striped table-bordered align-middle rounded overflow-hidden">
+            <thead class="bg-primary text-white texto_encabezado">
+              <tr>
+                <th scope="col" class="text-center">#</th>
+                <th scope="col">Objeto</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Ítem(s) de Incompatibilidad</th>
+                <th scope="col">Tipo Ítem Incompatibilidad</th>
+                <th scope="col" class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for regla in relaciones_incompatibilidad %}
+                <tr>
+                  <td class="text-center">{{ forloop.counter }}</td>
+                  <td class="text-start ps-2">{{ regla.objeto.nombre }}</td>
+                  <td class="text-start ps-2">
+                    <span class="badge bg-info text-dark me-1">{{ regla.objeto.get_tipo_display }}</span>
+                  </td>
+                  <td class="text-start ps-2">{{ regla.item_incompatibilidad }}</td>
+                  <td class="text-start ps-2">
+                    <span class="badge bg-warning text-dark">{{ regla.get_tipo_item_incompatibilidad_display }}</span>
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de Incompatibilidad">
+                      <a href="{% url 'editar_relacion_incompatibilidad' pk=regla.id %}" class="btn btn-warning me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i></a>
+                      <a href="#" class="btn btn-danger eliminar-regla" data-url="{% url 'eliminar_relacion_incompatibilidad' pk=regla.id %}" data-nombre="{{ regla.objeto.nombre }}" title="Eliminar"><i class="fas fa-trash"></i></a>
+                    </div>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="6" class="text-center py-4 text-muted fst-italic">
+                    <i class="bi bi-info-circle me-2"></i>No hay reglas de incompatibilidad.
+                    <a href="{% url 'crear_relacion_incompatibilidad' %}" class="btn btn-link p-0 ms-2">¿Crear una nueva?</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-    {# Sección para ItemRegla #}
-    <h5 class="text-secondary mt-5 mb-3"><i class="bi bi-box-seam me-2"></i>Definición de Ítems</h5>
-    <div class="table-responsive mb-4" style="width: 600px;">
-      <table class="table table-hover table-striped table-bordered align-middle rounded overflow-hidden">
-        <thead class="bg-primary text-white texto_encabezado">
-          <tr>
-            <th scope="col" class="text-center">#</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Tipo</th>
-            <th scope="col" class="text-center">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in item_reglas %}
-            {# Asumiendo que 'item_reglas' es pasado desde la vista #}
-            <tr>
-              <td class="text-center">{{ forloop.counter }}</td>
-              <td class="text-start ps-2">{{ item.nombre }}</td>
-              <td class="text-start ps-2">
-                <span class="badge bg-info text-dark">{{ item.get_tipo_display }}</span>
-              </td>
-              <td class="text-center">
-                <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de Ítem de Regla">
-                  {# Added btn-group-sm here #}
-                  <a href="{% url 'editar_item_regla' pk=item.id %}" class="btn btn-warning me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i></a> {# Removed btn-sm and added me-1 #}
-                  <a href="{% url 'eliminar_item_regla' pk=item.id %}" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar"><i class="fas fa-trash"></i></a> {# Removed btn-sm #}
-                </div>
-              </td>
-            </tr>
-          {% empty %}
-            <tr>
-              <td colspan="4" class="text-center py-4 text-muted fst-italic">
-                <i class="bi bi-info-circle me-2"></i>No hay ítems de regla definidos.
-                <a href="{% url 'crear_item_regla' %}" class="btn btn-link p-0 ms-2">¿Crear uno nuevo?</a>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+      {# Tab Pane for RelacionUltimoCaracter #}
+      <div class="tab-pane fade" id="caracter-final" role="tabpanel" aria-labelledby="caracter-final-tab">
+        <h5 class="text-secondary mt-2 mb-3 d-none"><i class="bi bi-type-strikethrough me-2"></i>Reglas de Carácter Final</h5>
+        <div class="table-responsive mb-4">
+          <table class="table table-hover table-striped table-bordered align-middle rounded overflow-hidden">
+            <thead class="bg-primary text-white texto_encabezado">
+              <tr>
+                <th scope="col" class="text-center">#</th>
+                <th scope="col">Objeto</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Carácter</th>
+                <th scope="col">Aplica</th>
+                <th scope="col">Ítems Carácter</th>
+                <th scope="col">Tipo Ítem</th>
+                <th scope="col">Todos los Registros</th>
+                <th scope="col" class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for regla in relaciones_caracter %}
+                <tr>
+                  <td class="text-center">{{ forloop.counter }}</td>
+                  <td class="text-start ps-2">{{ regla.objeto.nombre }}</td>
+                  <td class="text-start ps-2">
+                    <span class="badge bg-info text-dark me-1">{{ regla.objeto.get_tipo_display }}</span>
+                  </td>
+                  <td class="text-start ps-2">
+                    <span class="badge bg-secondary">{{ regla.caracter }}</span>
+                  </td>
+                  <td class="text-center">
+                    {% if regla.aplica %}
+                      <i class="fas fa-check-circle text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Sí"></i>
+                    {% else %}
+                      <i class="fas fa-times-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="No"></i>
+                    {% endif %}
+                  </td>
+                  <td class="text-start ps-2">{{ regla.item_caracter|default:'N/A' }}</td>
+                  <td class="text-start ps-2">
+                    <span class="badge bg-warning text-dark">{{ regla.get_tipo_item_display }}</span>
+                  </td>
+                  <td class="text-center">
+                    {% if regla.todos_los_registros %}
+                      <i class="fas fa-check-circle text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Sí"></i>
+                    {% else %}
+                      <i class="fas fa-times-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="No"></i>
+                    {% endif %}
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de Carácter Final">
+                      <a href="{% url 'editar_relacion_caracter' pk=regla.id %}" class="btn btn-warning me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i></a>
+                      <a href="#" class="btn btn-danger eliminar-regla" data-url="{% url 'eliminar_relacion_caracter' pk=regla.id %}" data-nombre="{{ regla.objeto.nombre }}" title="Eliminar"><i class="fas fa-trash"></i></a>
+                    </div>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="9" class="text-center py-4 text-muted fst-italic">
+                    <i class="bi bi-info-circle me-2"></i>No hay reglas de carácter final.
+                    <a href="{% url 'crear_relacion_caracter' %}" class="btn btn-link p-0 ms-2">¿Crear una nueva?</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {# Tab Pane for RelacionLimiteItem #}
+      <div class="tab-pane fade" id="limite-cantidad" role="tabpanel" aria-labelledby="limite-cantidad-tab">
+        <h5 class="text-secondary mt-2 mb-3 d-none"><i class="bi bi-calculator-fill me-2"></i>Reglas de Límite de Cantidad</h5>
+        <div class="table-responsive mb-4">
+          <table class="table table-hover table-striped table-bordered align-middle rounded overflow-hidden">
+            <thead class="bg-primary text-white texto_encabezado">
+              <tr>
+                <th scope="col" class="text-center">#</th>
+                <th scope="col">Tipo Ítem</th>
+                <th scope="col">Ítem(s)</th>
+                <th scope="col">Comparador</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col" class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for regla in relaciones_cantidad %}
+                <tr>
+                  <td class="text-center">{{ forloop.counter }}</td>
+                  <td class="text-start ps-2">
+                    <span class="badge bg-warning text-dark">{{ regla.get_tipo_item_display }}</span>
+                  </td>
+                  <td class="text-start ps-2">{{ regla.items|default:'Todos' }}</td>
+                  <td class="text-start ps-2">
+                    <span class="badge bg-info">{{ regla.get_comparador_display }}</span>
+                  </td>
+                  <td class="text-start ps-2">{{ regla.cantidad }}</td>
+                  <td class="text-center">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de Límite de Cantidad">
+                      <a href="{% url 'editar_relacion_cantidad' pk=regla.id %}" class="btn btn-warning me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i></a>
+                      <a href="#" class="btn btn-danger eliminar-regla" data-url="{% url 'eliminar_relacion_cantidad' pk=regla.id %}" data-nombre="{{ regla.items|default:'este límite de cantidad' }}" title="Eliminar"><i class="fas fa-trash"></i></a>
+                    </div>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="6" class="text-center py-4 text-muted fst-italic">
+                    <i class="bi bi-info-circle me-2"></i>No hay reglas de límite de cantidad.
+                    <a href="{% url 'crear_relacion_cantidad' %}" class="btn btn-link p-0 ms-2">¿Crear una nueva?</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {# Tab Pane for ItemRegla #}
+      <div class="tab-pane fade" id="definicion-items" role="tabpanel" aria-labelledby="definicion-items-tab">
+        <h5 class="text-secondary mt-2 mb-3 d-none"><i class="bi bi-box-seam me-2"></i>Definición de Ítems</h5>
+        <div class="table-responsive mb-4" style="width: 600px;">
+          <table class="table table-hover table-striped table-bordered align-middle rounded overflow-hidden">
+            <thead class="bg-primary text-white texto_encabezado">
+              <tr>
+                <th scope="col" class="text-center">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Tipo</th>
+                <th scope="col" class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in item_reglas %}
+                <tr>
+                  <td class="text-center">{{ forloop.counter }}</td>
+                  <td class="text-start ps-2">{{ item.nombre }}</td>
+                  <td class="text-start ps-2">
+                    <span class="badge bg-info text-dark">{{ item.get_tipo_display }}</span>
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de Ítem de Regla">
+                      <a href="{% url 'editar_item_regla' pk=item.id %}" class="btn btn-warning me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pencil-alt"></i></a>
+                      <a href="#" class="btn btn-danger eliminar-regla" data-url="{% url 'eliminar_item_regla' pk=item.id %}" data-nombre="{{ item.nombre }}" title="Eliminar"><i class="fas fa-trash"></i></a>
+                    </div>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="4" class="text-center py-4 text-muted fst-italic">
+                    <i class="bi bi-info-circle me-2"></i>No hay ítems de regla definidos.
+                    <a href="{% url 'crear_item_regla' %}" class="btn btn-link p-0 ms-2">¿Crear uno nuevo?</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div> {# End tab-content #}
+
+    {# Formulario de eliminación oculto para SweetAlert2 POST #}
+    <form id="form-eliminar" method="POST" style="display: none;">
+      {% csrf_token %}
+    </form>
   </div>
 
-  {# Script para inicializar Tooltips de Bootstrap #}
+  {# Script para inicializar Tooltips de Bootstrap y SweetAlert2 #}
   {% block extra_js %}
     <script>
       document.addEventListener('DOMContentLoaded', function () {
+        // Inicializar Tooltips
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
           return new bootstrap.Tooltip(tooltipTriggerEl)
         })
-      })
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.eliminar-regla').forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
+
+        // Lógica para SweetAlert2 en botones de eliminar
+        document.querySelectorAll('.eliminar-regla').forEach(function (btn) {
+          btn.addEventListener('click', function (e) {
             e.preventDefault();
             const url = this.dataset.url;
-            const nombre = this.dataset.nombre || 'este registro';
+            const nombre = this.dataset.nombre || 'este registro'; // Fallback if data-nombre is not set
 
             Swal.fire({
-                title: '¿Estás seguro?',
-                text: `¿Deseas eliminar "${nombre}"? Esta acción no se puede deshacer.`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar'
+              title: '¿Estás seguro?',
+              text: `¿Deseas eliminar "${nombre}"? Esta acción no se puede deshacer.`,
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Sí, eliminar',
+              cancelButtonText: 'Cancelar'
             }).then((result) => {
-                if (result.isConfirmed) {
-                    const form = document.getElementById('form-eliminar');
-                    form.setAttribute('action', url);
-                    form.submit();
-                }
+              if (result.isConfirmed) {
+                const form = document.getElementById('form-eliminar');
+                form.setAttribute('action', url);
+                form.submit();
+              }
             });
+          });
         });
-    });
-});
-</script>
-
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   {% endblock %}
 {% endblock %}

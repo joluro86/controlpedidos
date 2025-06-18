@@ -35,6 +35,6 @@ urlpatterns = [
     path('cantidades/nueva/', views.crear_relacion_cantidad, name='crear_relacion_cantidad'),
     path('cantidades/editar/<int:pk>/', views.editar_relacion_cantidad, name='editar_relacion_cantidad'),
     path('cantidades/eliminar/<int:pk>/', views.eliminar_relacion_cantidad, name='eliminar_relacion_cantidad'),
-
+    path('relaciones/todas/', views.listado_general_reglas, name='listado_todas_las_relaciones'),
 ]
 

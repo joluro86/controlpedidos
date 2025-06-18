@@ -62,77 +62,37 @@
         <a class="nav-link" href="{% url 'index_admin' %}">Ajustes</a>
       </li>
       <li class="nav-item dropdown">
-  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
-    aria-expanded="true">Revisión Acta</a>
-  <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-    <li>
-      <a class="dropdown-item" href="{% url 'subir_acta_revision' %}">Importar Acta revisión</a>
-    </li>
-    <!--
-    <li>
-      <a class="dropdown-item" href="#" onclick="analisis_revision_acta()">Nuevo análisis Acta</a>
-    </li>
-    -->
-   
-    <li>
-      <a class="dropdown-item" href="#" onclick="limpiar_acta_analisis()">Reiniciar Acta Análisis</a>
-    </li>
-    <li><hr class="dropdown-divider"></li>
-     <li>            
-      <a class="dropdown-item" href="#" onclick="calculo_novedades()">Cálculo Novedades Acta</a>
-    </li>
-    <li>
-      <a class="dropdown-item" href="#" onclick="limpiar_novedades_acta()">Reiniciar Novedades</a>
-    </li>
-    <li class="nav-item" id="pendi_index">
-      <a class="dropdown-item" id="pendi_a" href="{% url 'novedades_acta' %}">Novedades</a>
-    </li>
-    <li><hr class="dropdown-divider"></li>
-<li>
-  <a class="dropdown-item" href="{% url 'crear_relacion_incompatibilidad' %}">➕ Crear relación de incompatibilidad</a>
-</li>
-<li>
-  <a class="dropdown-item" href="{% url 'lista_relaciones_incompatibilidad' %}">📋 Listado de incompatibilidades</a>
-</li>
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+  aria-expanded="true">
+  🧾 Revisión Acta
+</a>
+<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 
-    <li><hr class="dropdown-divider"></li>
+  <!-- Subida y reinicio -->
+  <li><a class="dropdown-item" href="{% url 'subir_acta_revision' %}">📥 Importar Acta revisión</a></li>
+  <li><a class="dropdown-item" href="#" onclick="limpiar_acta_analisis()">🧹 Reiniciar Acta Análisis</a></li>
+  <li><hr class="dropdown-divider"></li>
 
-    <li>
-      <a class="dropdown-item" href="{% url 'crear_item_regla' %}">➕ Crear ítem</a>
-    </li>
-    <li>
-      <a class="dropdown-item" href="{% url 'listado_items_regla' %}">📋 Listado de ítems</a>
-    </li>
-    <li><hr class="dropdown-divider"></li>
+  <!-- Análisis -->
+  <li><a class="dropdown-item" href="{% url 'analisis_reglas' %}">📋 Análisis de reglas</a></li>
+  <li><hr class="dropdown-divider"></li>
 
-<li>
-  <a class="dropdown-item" href="{% url 'crear_relacion_cantidad' %}">➕ Crear relación de cantidad</a>
-</li>
-<li>
-  <a class="dropdown-item" href="{% url 'lista_relaciones_cantidad' %}">📊 Listado de relaciones de cantidad</a>
-</li>
+  <!-- Novedades -->
+  <li><a class="dropdown-item" href="#" onclick="calculo_novedades()">⚙️ Cálculo Novedades Acta</a></li>
+  <li><a class="dropdown-item" href="#" onclick="limpiar_novedades_acta()">🧹 Reiniciar Novedades</a></li>
+  <li><a class="dropdown-item" href="{% url 'novedades_acta' %}">🚨 Ver Novedades</a></li>
+  <li><hr class="dropdown-divider"></li>
 
-    <li><hr class="dropdown-divider"></li>
-    <li>
-      <a class="dropdown-item" href="{% url 'crear_relacion_item' %}">➕ Crear regla actividad/suministro</a>
-    </li>
-    <li>
-      <a class="dropdown-item" href="{% url 'listado_relaciones' %}">📋 Listado de reglas</a>
-    </li>
-    <li><hr class="dropdown-divider"></li>
-<li>
-  <a class="dropdown-item" href="{% url 'crear_relacion_caracter' %}">➕ Crear relación carácter</a>
-</li>
-<li>
-  <a class="dropdown-item" href="{% url 'lista_relaciones_caracter' %}">📋 Listado relaciones carácter</a>
-</li>
+  <!-- Reglas -->
+  <li><a class="dropdown-item" href="{% url 'listado_todas_las_relaciones' %}">📑 Listado general de reglas</a></li>
+  <li class="dropdown-submenu px-3 text-muted small">Crear reglas:</li>
+  <li><a class="dropdown-item" href="{% url 'crear_item_regla' %}">➕ Crear Ítem de Regla</a></li>
+  <li><a class="dropdown-item" href="{% url 'crear_relacion_item' %}">➕ Crear Regla Actividad/Suministro</a></li>
+  <li><a class="dropdown-item" href="{% url 'crear_relacion_incompatibilidad' %}">➕ Crear Regla Incompatibilidad</a></li>
+  <li><a class="dropdown-item" href="{% url 'crear_relacion_caracter' %}">➕ Crear Regla por Carácter Final</a></li>
+  <li><a class="dropdown-item" href="{% url 'crear_relacion_cantidad' %}">➕ Crear Regla de Cantidad</a></li>
+</ul>
 
-    <li><hr class="dropdown-divider"></li>
-    <li>
-      <a class="dropdown-item" href="{% url 'analisis_reglas' %}">📋 Analisis reglas</a>
-    </li>
-  </ul>
-</li>
 
 
       <li class="nav-item dropdown">

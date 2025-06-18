@@ -26,7 +26,7 @@ def crear_editar_item_regla(request, pk=None):
         if form.is_valid():
             form.save()
             # Redirigir a la lista de ítems o a una página de éxito
-            return redirect('listado_items_regla') # Asume que tienes una URL llamada 'lista_item_regla'
+            return redirect('listado_todas_las_relaciones') # Asume que tienes una URL llamada 'lista_item_regla'
     else:
         form = ItemReglaForm(instance=item) # Crea el formulario vacío o precargado
 
@@ -42,16 +42,12 @@ def eliminar_item_regla(request, pk):
     """
     item = get_object_or_404(ItemRegla, pk=pk)
     item.delete()
-    return redirect('listado_items_regla')
+    return redirect('listado_todas_las_relaciones')
     
 # --- Vistas para RelacionItemRegla ---
 
 def lista_relacion_item_regla(request):
-    """
-    Vista para listar todas las RelacionItemRegla.
-    """
-    relaciones = RelacionItemRegla.objects.all()
-    
+    relaciones = RelacionItemRegla.objects.all()    
     return render(request, 'listado_relaciones.html', {'relaciones': relaciones})
 
 def crear_editar_relacion_item_regla(request, pk=None):
@@ -67,7 +63,7 @@ def crear_editar_relacion_item_regla(request, pk=None):
         if form.is_valid():
             form.save()
             # Redirigir a la lista de relaciones o a una página de éxito
-            return redirect('listado_relaciones') # Asume que tienes una URL llamada 'lista_relacion_item_regla'
+            return redirect('listado_todas_las_relaciones') # Asume que tienes una URL llamada 'lista_relacion_item_regla'
     else:
         form = RelacionItemReglaForm(instance=relacion)
 
@@ -78,13 +74,11 @@ def crear_editar_relacion_item_regla(request, pk=None):
     return render(request, 'crear_relacion_item.html', context)
 
 def eliminar_relacion_item_regla(request, pk):
-    """
-    Vista para eliminar una RelacionItemRegla.
-    """
-    relacion = get_object_or_404(RelacionItemRegla, pk=pk)
-    relacion.delete()
-    return redirect('listado_relaciones')
-    
+    if request.method == 'POST':
+        relacion = get_object_or_404(RelacionItemRegla, pk=pk)
+        relacion.delete()
+    return redirect('listado_todas_las_relaciones')
+
 # --- Vistas para RelacionIncompatible ---
 def lista_relaciones_incompatibilidad(request):
     relaciones = RelacionIncompatibilidad.objects.all()
@@ -95,7 +89,7 @@ def crear_relacion_incompatibilidad(request):
         form = RelacionIncompatibilidadForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('lista_relaciones_incompatibilidad')
+            return redirect('listado_todas_las_relaciones')
     else:
         form = RelacionIncompatibilidadForm()
     return render(request, 'relaciones_incompatibilidad/formulario.html', {'form': form, 'titulo': 'Crear relación'})
@@ -106,7 +100,7 @@ def editar_relacion_incompatibilidad(request, pk):
         form = RelacionIncompatibilidadForm(request.POST, instance=relacion)
         if form.is_valid():
             form.save()
-            return redirect('lista_relaciones_incompatibilidad')
+            return redirect('listado_todas_las_relaciones')
     else:
         form = RelacionIncompatibilidadForm(instance=relacion)
     return render(request, 'relaciones_incompatibilidad/formulario.html', {'form': form, 'titulo': 'Editar relación'})
@@ -115,7 +109,7 @@ def eliminar_relacion_incompatibilidad(request, pk):
     relacion = get_object_or_404(RelacionIncompatibilidad, pk=pk)
     if request.method == 'POST':
         relacion.delete()
-        return redirect('lista_relaciones_incompatibilidad')
+        return redirect('listado_todas_las_relaciones')
     return render(request, 'relaciones_incompatibilidad/confirmar_eliminacion.html', {'relacion': relacion})
 
 # --- Vistas para RelacionCaracter ---
@@ -129,7 +123,7 @@ def crear_relacion_caracter(request):
         form = RelacionUltimoCaracterForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('lista_relaciones_caracter')
+            return redirect('listado_todas_las_relaciones')
     else:
         form = RelacionUltimoCaracterForm()
     return render(request, 'relacion_caracter/formulario.html', {'form': form})
@@ -140,7 +134,7 @@ def editar_relacion_caracter(request, pk):
         form = RelacionUltimoCaracterForm(request.POST, instance=relacion)
         if form.is_valid():
             form.save()
-            return redirect('lista_relaciones_caracter')
+            return redirect('listado_todas_las_relaciones')
     else:
         form = RelacionUltimoCaracterForm(instance=relacion)
     return render(request, 'relacion_caracter/formulario.html', {'form': form})
@@ -149,7 +143,7 @@ def eliminar_relacion_caracter(request, pk):
     relacion = get_object_or_404(RelacionUltimoCaracter, pk=pk)
     if request.method == 'POST':
         relacion.delete()
-        return redirect('lista_relaciones_caracter')
+        return redirect('listado_todas_las_relaciones')
     return render(request, 'relacion_caracter/confirmar_eliminacion.html', {'relacion': relacion})
 
 
@@ -166,7 +160,7 @@ def crear_relacion_cantidad(request):
         form = RelacionLimiteItemForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('lista_relaciones_cantidad')
+            return redirect('listado_todas_las_relaciones')
     else:
         form = RelacionLimiteItemForm()
     return render(request, 'relacion_cantidad/relacion_limite_form.html', {'form': form})
@@ -177,7 +171,7 @@ def editar_relacion_cantidad(request, pk):
         form = RelacionLimiteItemForm(request.POST, instance=relacion)
         if form.is_valid():
             form.save()
-            return redirect('lista_relaciones_cantidad')
+            return redirect('listado_todas_las_relaciones')
     else:
         form = RelacionLimiteItemForm(instance=relacion)
     return render(request, 'relacion_cantidad/relacion_limite_form.html', {'form': form, 'editar': True})
@@ -186,5 +180,22 @@ def eliminar_relacion_cantidad(request, pk):
     relacion = get_object_or_404(RelacionLimiteItem, pk=pk)
     if request.method == 'POST':
         relacion.delete()
-        return redirect('lista_relaciones_cantidad')
+        return redirect('listado_todas_las_relaciones')
     return render(request, 'relacion_cantidad/confirmar_eliminacion.html', {'objeto': relacion})
+
+def listado_general_reglas(request):
+    from .models import (
+        RelacionItemRegla,
+        RelacionIncompatibilidad,
+        RelacionUltimoCaracter,
+        RelacionLimiteItem,
+    )
+
+    contexto = {
+        'item_reglas': ItemRegla.objects.all().order_by('nombre'),
+        'relaciones_item_regla': RelacionItemRegla.objects.all().order_by('objeto__nombre'),
+        'relaciones_incompatibilidad': RelacionIncompatibilidad.objects.all(),
+        'relaciones_caracter': RelacionUltimoCaracter.objects.all(),
+        'relaciones_cantidad': RelacionLimiteItem.objects.all().order_by('items'),  # cantidad
+    }
+    return render(request, 'listado_general.html', contexto)

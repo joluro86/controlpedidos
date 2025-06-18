@@ -13,7 +13,7 @@ def analisis_reglas(request):
 
     verificar_paginacion()
     
-    """
+    
     busqueda_pedidos_factor_unico_sin_cantidad_requerida()
     busqueda_pedidos_factor_unico_con_cantidad_requerida()
 
@@ -27,7 +27,7 @@ def analisis_reglas(request):
     analisis_reglas_limite_cantidad()
     
     verificar_registros_duplicadas()
-    """
+    
 
     return redirect('novedades_acta')
 

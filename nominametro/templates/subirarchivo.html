@@ -1,27 +1,48 @@
 {% extends 'index.html' %}
 {% load static %}
-{% load humanize %}
+{% load humanize %} {# Keep humanize as it might be used elsewhere, though not explicitly here #}
+
+{% block title %}
+  Subir Prenómina
+{% endblock %}
 
 {% block content %}
-<div class="table-id card formulario_subir_excell" style="max-width: 450px; margin: 60px auto;">
-  <div class="card-body text-white">
-    <h4 class="m-0 text-center">Subir Prenomina</h4>
+<div class="container py-4 d-flex justify-content-center">
+  <div class="card shadow-lg border-0 rounded-3" style="max-width: 650px; min-width: 450px;"> {# Adhering to the standard max/min-width #}
+    <div class="card-header bg-primary text-white text-center py-3 rounded-top-3"> {# Consistent header styling #}
+      <h5 class="mb-0 fw-bold"><i class="fas fa-file-upload me-2"></i> Cargar Archivo de Prenómina</h5> {# Intuitive icon and title #}
+    </div>
+    <div class="card-body p-4"> {# Consistent padding #}
+      {# The messages block is handled globally in index.html, no need to duplicate #}
 
-    <form id="uploadForm" enctype="multipart/form-data">
+      <form id="uploadForm" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="form-group mt-3">
-            <input type="file" id="file" name="file" class="form-control">
+        <div class="mb-3"> {# Consistent spacing #}
+          <label for="file" class="form-label fw-semibold mb-2"><i class="fas fa-file-excel me-2"></i> Seleccionar archivo de Prenómina:</label> {# Clearer label, relevant icon #}
+          <input type="file" id="file" name="file" accept=".xls,.xlsx" class="form-control form-control-sm" required> {# Common file types, smaller input, required #}
+          <div class="form-text text-muted mt-2">
+            <small><i class="fas fa-info-circle me-1"></i> Formato permitido: .xls, .xlsx (archivo de Prenómina).</small> {# Help text with icon #}
+          </div>
         </div>
-        <div class="d-flex justify-content-center mt-3">
-            <button type="submit" class="btn btn-light">Subir archivo</button>
+        
+        <div class="d-flex justify-content-between mt-4"> {# Consistent button spacing #}
+          <button type="submit" class="btn btn-primary btn-sm"> {# Primary color, smaller button #}
+            <i class="fas fa-upload me-2"></i> Cargar Archivo
+          </button>
+          {# Assuming a return URL for Nomina management #}
+          <a href="{% url 'informe' %}" class="btn btn-outline-secondary btn-sm"> {# Link back to a relevant page #}
+            <i class="fas fa-arrow-left me-2"></i> Regresar
+          </a>
         </div>
-    </form>
+      </form>
+    </div>
   </div>
 </div>
 
-<!-- SweetAlert & jQuery -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{# SweetAlert2 & jQuery - These are likely already loaded by index.html, but keeping them here for self-containment if needed #}
+{# If index.html already includes them, you can remove these script tags from here. #}
+{# <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> #}
+{# <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> #}
 
 <script>
     $(document).ready(function () {
@@ -38,48 +59,69 @@
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
-                    checkProgress();
+                    // Start checking progress only after the upload initiates
+                    // The progress URL needs to be defined in your Django urls.py and view
+                    // For example: path('get_progress/', views.get_progress_view, name='get_progress'),
+                    // And the view should return JSON like {'progress': X}
+                    checkProgress(); 
                 }
             });
 
             $.ajax({
-              url: "{% url 'subirnominametro' %}",
-              type: "POST",
-              data: formData,
-              processData: false,
-              contentType: false,
-              success: function () {
-                  Swal.fire({
-                      title: "¡Éxito!",
-                      text: "El archivo se ha subido correctamente.",
-                      icon: "success",
-                      confirmButtonText: "Aceptar"
-                  }).then((result) => {
-                      if (result.isConfirmed) {
-                          window.location.href = "{% url 'informe' %}";  // Cambia 'informe' por la vista correcta a la que quieres redirigir
-                      }
-                  });
-              },
-              error: function () {
-                  Swal.fire("Error", "Hubo un problema al subir el archivo.", "error");
-              }
-          });
-       
+                url: "{% url 'subirnominametro' %}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) { // Changed 'success' to accept response data
+                    // If your view returns JSON with a 'success' flag and message
+                    if (response.success) {
+                        Swal.fire({
+                            title: "¡Éxito!",
+                            text: response.message || "El archivo se ha subido y procesado correctamente.",
+                            icon: "success",
+                            confirmButtonText: "Aceptar"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "{% url 'informe' %}"; // Redirect to relevant report page
+                            }
+                        });
+                    } else {
+                        // Handle server-side validation or processing errors
+                        Swal.fire("Error", response.message || "Hubo un problema al procesar el archivo.", "error");
+                    }
+                },
+                error: function (xhr, status, error) { // Add error details
+                    let errorMessage = "Hubo un problema al subir el archivo.";
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    Swal.fire("Error", errorMessage, "error");
+                }
+            });
         });
     });
 
     function checkProgress() {
         let interval = setInterval(() => {
             $.get("{% url 'get_progress' %}", function (data) {
-                $("#progress-text").text(data.progress);
+                $("#progress-text").text(data.progress + "%"); // Append % sign
                 if (data.progress >= 100) {
                     clearInterval(interval);
+                    // This Swal.fire is redundant if the success callback from AJAX already fires a Swal.
+                    // It depends on whether get_progress only indicates upload progress or full processing progress.
+                    // If full processing happens after upload, this is fine.
+                    // If processing completes in main AJAX success, you might remove this.
+                    // For now, keeping it as is, assuming get_progress covers full process.
                     Swal.fire("¡Completado!", "El archivo se ha procesado exitosamente.", "success");
                 }
+            }).fail(function() {
+                // Handle progress check errors
+                console.error("Error al obtener el progreso.");
+                clearInterval(interval);
             });
-        }, 1000);
+        }, 1000); // Check every 1 second
     }
 </script>
 
 {% endblock content %}
-

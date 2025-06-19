@@ -1,31 +1,38 @@
 {% extends 'index.html' %} 
 {% load static %} 
-{% load humanize %} 
+{% load humanize %} {# Keep humanize as it might be used elsewhere, though not explicitly here #}
 
 {% block title %}
-  Subir Archivo de Extracción
+  Subir Extracción ANS
 {% endblock %}
 
 {% block content %}
-<div class="container py-4 d-flex justify-content-center"> {# Added container, py-4, and flexbox for centering #}
-  <div class="card shadow-lg border-0 rounded-3" style="max-width: 400px;"> {# Adjusted max-width for more compactness #}
+<div class="container py-4 d-flex justify-content-center">
+  <div class="card shadow-lg border-0 rounded-3" style="max-width: 650px; min-width: 450px;"> {# Adhering to the standard max/min-width #}
     <div class="card-header bg-primary text-white text-center py-3 rounded-top-3"> {# Consistent header styling #}
-      <h5 class="mb-0 fw-bold"><i class="fas fa-cloud-upload-alt me-2"></i> Subir Extracción ANS</h5> {# Smaller heading, intuitive icon #}
+      <h5 class="mb-0 fw-bold"><i class="fas fa-cloud-upload-alt me-2"></i> Subir Extracción ANS</h5> {# Intuitive icon and title #}
     </div>
-    <div class="card-body p-4"> {# Adjusted padding for a balanced look #}
+    <div class="card-body p-4"> {# Consistent padding #}
+      {# The messages block is handled globally in index.html, no need to duplicate #}
+
       <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="mb-3"> {# Bootstrap 5's mb-3 for spacing #}
-          <label for="file" class="form-label fw-semibold mb-2">Seleccionar archivo Excel:</label> {# Clearer label #}
-          <input type="file" id="file" name="file" class="form-control form-control-sm" accept=".xls,.xlsx" required> {# Smaller input, accepted file types, required #}
+        <div class="mb-3"> {# Consistent spacing #}
+          <label for="file" class="form-label fw-semibold mb-2"><i class="fas fa-file-excel me-2"></i> Seleccionar archivo:</label> {# Clearer label, relevant icon #}
+          <input type="file" id="file" name="file" accept=".xls,.xlsx" class="form-control form-control-sm" required> {# Common file types, smaller input, required #}
           <div class="form-text text-muted mt-2">
-            <small><i class="fas fa-info-circle me-1"></i> Formato permitido: .xls, .xlsx</small> {# Help text with icon #}
+            <small><i class="fas fa-info-circle me-1"></i> Formato permitido: .xls, .xlsx.</small> {# Help text with icon #}
           </div>
         </div>
-        <div class="d-grid mt-4"> {# d-grid for full-width button, mt-4 for more space #}
+        
+        <div class="d-flex justify-content-between mt-4"> {# Consistent button spacing #}
           <button type="submit" class="btn btn-primary btn-sm"> {# Primary color, smaller button #}
-            <i class="fas fa-upload me-2"></i> Subir Archivo
+            <i class="fas fa-upload me-2"></i> Cargar Archivo
           </button>
+          {# Assuming a return URL for ANS management #}
+          <a href="{% url 'menu_pendientes' %}" class="btn btn-outline-secondary btn-sm"> {# Link back to a relevant page, e.g., menu_pendientes #}
+            <i class="fas fa-arrow-left me-2"></i> Regresar
+          </a>
         </div>
       </form>
     </div>

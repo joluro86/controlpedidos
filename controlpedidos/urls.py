@@ -40,16 +40,12 @@ urlpatterns = [
     path('programar/', include('programacion.urls')),
     path('comparativo/', include('perseovsfenix.urls')),
     path('material_oficiales/', include('material_oficiales.urls')),
-    path('ped-bonficiaciones/', include('bonificaciones.urls')),
 
     path('inventariobd/', gestionar_acta_perseo_inventario, name="gestionar_acta_perseo_inventario"), 
     path('oficial/', calculo_inventario_por_oficial, name="calculo_inventario_por_oficial"),
     path('oficial_reiniciar/', reiniciar_bd_oficiales, name="reiniciar_bd_oficiales"),
 
     path('nomina/', include('nominametro.urls')),
-    
-    path('produccion/', include('produccion.urls')),
-    path('material_mejia/', include('material_mejia.urls')),
 
     path('registrar-acta/', registrar_acta, name='registrar_acta'),
     path('administrador/', include('administrador.urls')),

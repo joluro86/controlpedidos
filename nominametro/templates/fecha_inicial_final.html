@@ -1,33 +1,54 @@
-{% extends 'index.html' %} {% load static %}{% load humanize %} {% block content %}
-<div class="table-id card formulario_subir_excell text-white" style="max-width: 400px; margin: 50px auto">
-  <div class="card-body">
+{% extends 'index.html' %} 
+{% load static %} 
+{% load humanize %} {# Keep humanize as it might be used elsewhere, though not explicitly here #}
 
-    <form id="uploadForm" action="{% url 'gestionar_prenomina' %}" method="post" enctype="multipart/form-data">
+{% block title %}
+  Gestionar Prenómina por Fechas
+{% endblock %}
+
+{% block content %}
+<div class="container py-4 d-flex justify-content-center">
+  <div class="card shadow-lg border-0 rounded-3" style="max-width: 450px;"> {# Adhering to the standard max-width for forms #}
+    <div class="card-header bg-primary text-white text-center py-3 rounded-top-3"> {# Consistent header styling #}
+      <h5 class="mb-0 fw-bold"><i class="fas fa-calendar-days me-2"></i> Gestionar Prenómina por Fechas</h5> {# Intuitive icon and title #}
+    </div>
+    <div class="card-body p-4"> {# Consistent padding #}
+      {# The messages block is handled globally in index.html, no need to duplicate #}
+
+      <form id="uploadForm" action="{% url 'gestionar_prenomina' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <h5 class="text-center">Selecciona el rango de fechas</h5>
-        <div class="form-group mt-3">
-            <label for="file" class="mb-2 text-center">Fecha Inicial</label>
-            <input type="date" id="fecha_inicial" name="fecha_inicial" class="form-control bg-white text-secondary">
+        <h6 class="text-center fw-semibold mb-4 text-secondary">Selecciona el rango de fechas para la gestión:</h6> {# Clearer, styled instruction #}
+
+        <div class="form-floating mb-3"> {# Modern form-floating for labels #}
+          <input type="date" id="fecha_inicial" name="fecha_inicial" class="form-control" placeholder="Fecha Inicial" required>
+          <label for="fecha_inicial"><i class="fas fa-calendar-day me-2"></i> Fecha Inicial</label>
         </div>
-        <div class="form-group mt-3">
-          <label for="file" class="mb-2 text-center">Fecha Final</label>
-            <input type="date" id="fecha_final" name="fecha_final" class="form-control bg-white text-secondary">
+        <div class="form-floating mb-4"> {# mb-4 for more space before buttons #}
+          <input type="date" id="fecha_final" name="fecha_final" class="form-control" placeholder="Fecha Final" required>
+          <label for="fecha_final"><i class="fas fa-calendar-day me-2"></i> Fecha Final</label>
         </div>
-        <div class="d-flex justify-content-center mt-3">
-            <input type="submit" class="btn btn-light btn-long" value="Gestionar">
+        
+        <div class="d-flex justify-content-between mt-4"> {# Consistent button spacing #}
+          <button type="submit" class="btn btn-primary btn-sm"> {# Primary color, smaller button #}
+            <i class="fas fa-cogs me-2"></i> Gestionar
+          </button>
+          {# Assuming a return URL for Nomina management, possibly 'informe' #}
+          <a href="{% url 'informe' %}" class="btn btn-outline-secondary btn-sm"> {# Link back to a relevant page #}
+            <i class="fas fa-arrow-left me-2"></i> Regresar
+          </a>
         </div>
-    </form>   
-    
+      </form>
+    </div>
   </div>
 </div>
 
-<!-- SweetAlert & jQuery -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{# SweetAlert2 & jQuery - These are likely already loaded by index.html, but keeping them here for self-containment if needed #}
+{# <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> #}
+{# <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> #}
 
 <script>
     $(document).ready(function () {
-        $("#uploadForm").submit(function (event) {
+        $("#uploadForm").submit(function (event) { // Renamed from uploadForm to align with form ID
             event.preventDefault(); // Evita el envío tradicional del formulario
             
             let formData = new FormData();
@@ -37,54 +58,68 @@
             formData.append("fecha_inicial", $("#fecha_inicial").val());
             formData.append("fecha_final", $("#fecha_final").val());
 
-
             Swal.fire({
                 title: "Gestionando nómina...",
-                html: "<span id='progress-text'>0%</span>",
+                html: "<div class='text-center'><b>Progreso:</b> <span id='progress-text'>0%</span></div>", // Added div for styling
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
+                    // checkProgress() URL needs to be defined and implemented in Django
                     checkProgress();
                 }
             });
 
             $.ajax({
-              url: "{% url 'gestionar_prenomina' %}",
+              url: $(this).attr('action'), // Use form's action attribute
               type: "POST",
               data: formData,
               processData: false,
               contentType: false,
-              success: function () {
-                  Swal.fire({
-                      title: "Muy bien!",
-                      text: "La nómina se ha gestionado correctamente.",
-                      icon: "success",
-                      confirmButtonText: "Aceptar"
-                  }).then((result) => {
-                      if (result.isConfirmed) {
-                          window.location.href = "{% url 'informe' %}";  // Cambia 'informe' por la vista correcta a la que quieres redirigir
-                      }
-                  });
+              success: function (response) {
+                  if (response.success) {
+                      Swal.fire({
+                          title: "¡Muy bien!",
+                          text: response.message || "La nómina se ha gestionado correctamente.",
+                          icon: "success",
+                          confirmButtonText: "Aceptar"
+                      }).then((result) => {
+                          if (result.isConfirmed) {
+                              window.location.href = "{% url 'informe' %}"; // Redirect to relevant report page
+                          }
+                      });
+                  } else {
+                      Swal.fire("Error", response.error || "Hubo un problema al gestionar la nómina.", "error");
+                  }
               },
-              error: function () {
-                  Swal.fire("Error", "Hubo un problema al gestionar la nómina.", "error");
+              error: function (xhr, status, error) {
+                  let errorMessage = "Hubo un problema al gestionar la nómina.";
+                  if (xhr.responseJSON && xhr.responseJSON.error) { // Check for 'error' key in JSON response
+                      errorMessage = xhr.responseJSON.error;
+                  } else if (xhr.responseText) {
+                      errorMessage = xhr.responseText; // Fallback to raw response text
+                  }
+                  Swal.fire("Error", errorMessage, "error");
               }
-          });
-       
+            });
         });
     });
 
     function checkProgress() {
         let interval = setInterval(() => {
-            $.get("{% url 'get_progress' %}", function (data) {
-                $("#progress-text").text(data.progress);
+            $.get("{% url 'get_progress' %}", function (data) { // Make sure 'get_progress' URL is defined in Django
+                $("#progress-text").text(data.progress + "%"); // Append % sign
                 if (data.progress >= 100) {
                     clearInterval(interval);
+                    // This Swal.fire is usually handled by the AJAX success callback for final confirmation.
+                    // Keep it if 'get_progress' signals final completion even before the main AJAX call resolves.
                     Swal.fire("¡Completado!", "La nómina se ha procesado exitosamente.", "success");
                 }
+            }).fail(function() {
+                console.error("Error al obtener el progreso.");
+                clearInterval(interval);
             });
-        }, 1000);
+        }, 1000); // Check every 1 second
     }
 </script>
 
-{% endblock content %} 
+{% endblock content %}

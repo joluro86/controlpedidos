@@ -146,26 +146,6 @@
         </ul>
       </li>
 
-      {# Bonificaciones #}
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="bonificacionesDropdown" role="button" data-bs-toggle="dropdown"
-          aria-expanded="true">
-          <i class="fas fa-gift me-2"></i> Bonificaciones
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="bonificacionesDropdown">
-          <li class="dropdown-header text-primary fw-bold">Carga y Gestión</li>
-          <li><a class="dropdown-item" href="/admin/bonificaciones/perseo/import/" target="_blank"><i class="fas fa-file-upload me-2"></i> Subir Perseo</a></li>
-          <li><a class="dropdown-item" href="/admin/bonificaciones/fenix/import/" target="_blank"><i class="fas fa-file-upload me-2"></i> Subir Fénix</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#" onclick="gestionar_bd_bonificacion()"><i class="fas fa-database me-2"></i> Administrar Datos</a></li>
-          <li><a class="dropdown-item" href="{% url 'producido_rango_fechas' %}"><i class="fas fa-chart-line me-2"></i> Cálculo Bonificación</a></li>
-          <li><a class="dropdown-item" href="{% url 'producido_diario' %}"><i class="fas fa-calendar-day me-2"></i> Producido Diario</a></li>
-          <li><a class="dropdown-item" href="{% url 'bonificaciones' %}"><i class="fas fa-money-bill-wave me-2"></i> Ver Bonificaciones</a></li>
-          <li><a class="dropdown-item" href="#" onclick="reiniciar_bd_bonificacion()"><i class="fas fa-eraser me-2"></i> Reiniciar BD</a></li>
-          <li><a class="dropdown-item" href="#" onclick="reiniciar_bonificaciones()"><i class="fas fa-redo-alt me-2"></i> Reiniciar Cálculos</a></li>
-        </ul>
-      </li>
-
       {# Gestión de Sellos #}
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="sellosDropdown" role="button" data-bs-toggle="dropdown"

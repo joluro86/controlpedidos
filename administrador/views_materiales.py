@@ -3,12 +3,13 @@ from django.shortcuts import render, redirect
 from openpyxl import load_workbook
 from analisis_acta.models import Materiales
 from administrador.query.actividades.actividades_contrato import crear_nuevo_material, eliminar_material, actualizar_material
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def materiales_permitidos_list(request):
-    context={
-        'materiales_permitidos': Materiales.objects.all()
+    context = {
+        'materiales_permitidos': Materiales.objects.all().order_by('material')
     }
-    return render(request, "materiales_permitidos_list.html", context)
+    return render(request, 'materiales_permitidos_list.html', context)
 
 def nuevo_material(request):
     if request.method == 'POST':

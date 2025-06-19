@@ -1,180 +1,97 @@
-{# This template is likely included within a larger page, e.g., in a main 'admin_actividades' page #}
-{# It does NOT extend index.html directly, but its parent page should. #}
+<div class="card shadow-lg border-1 rounded-3 h-100" style="max-width: 800px; min-width: 600px;">
+  <div class="card-header bg-primary text-white text-center py-3 rounded-top-3">
+    <h6 class="mb-0 fw-bold"><i class="fas fa-boxes me-2"></i> Materiales del Contrato</h6>
+  </div>
 
-<div class="card shadow-lg border-0 rounded-3 h-100" style="max-width: 650px; min-width: 450px;"> {# Adjusted max-width, added h-100 #}
-    <div class="card-header bg-primary text-white text-center py-2 rounded-top-3">
-        <h6 class="mb-0 fw-bold"><i class="fas fa-boxes me-2"></i> Materiales del Contrato</h6> {# Intuitive icon and title #}
-    </div>
+  <div class="card-body p-3">
+    <table class="table table-sm table-hover table-bordered align-middle w-100" id="table_id">
+      <thead class="bg-info text-white text-center">
+        <tr>
+          <th class="text-nowrap" style="font-size: 13px;">
+            <i class="fas fa-file-lines me-1"></i> Descripción
+          </th>
+          <th class="text-nowrap" style="font-size: 13px;">
+            <i class="fas fa-cogs me-1"></i> Acciones
+          </th>
+        </tr>
+      </thead>
+      <tbody id="tablaMateriales">
+        {% for material in materiales_permitidos %}
+          <tr style="font-size: 13px;">
+            <td class="text-start" title="Material: {{ material.material }}">{{ material.material }}</td>
+            <td class="d-flex justify-content-center align-items-center gap-2">
+              <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editarMaterialModal{{ material.id }}" title="Editar material"><i class="fas fa-pencil-alt"></i></a>
+              <a href="#" class="btn btn-danger btn-sm eliminar-material-contrato" data-bs-toggle="tooltip" title="Eliminar material" data-id="{{ material.id }}" data-nombre="{{ material.material }}"><i class="fas fa-trash-can"></i></a>
+            </td>
+          </tr>
+          {% include 'forms/form_editar_material_contrato.html' %}
+        {% empty %}
+          <tr>
+            <td colspan="2" class="text-muted py-3 text-center">No hay materiales registrados.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
-    <div class="card-body p-3"> {# Adjusted padding #}
-        {# Search Input Field #}
-        <div class="mb-3"> {# Margin bottom for spacing #}
-            <label for="buscarMaterial" class="form-label visually-hidden">Buscar Material:</label> {# Visually hidden label for accessibility #}
-            <div class="input-group input-group-sm"> {# Input group for icon #}
-                <span class="input-group-text"><i class="fas fa-search"></i></span> {# Search icon #}
-                <input type="text" id="buscarMaterial" class="form-control" placeholder="Buscar material..." title="Buscar un material en la lista">
-            </div>
-        </div>
-
-        <div class="table-responsive">
-            <table class="table table-sm table-hover align-middle m-0 text-center"> {# Removed inline style #}
-                <thead class="bg-info text-white"> {# Consistent header color #}
-                    <tr>
-                        <th scope="col" class="text-nowrap" style="font-size: 13px;"><i class="fas fa-file-lines me-1"></i> Descripción</th> {# Icon and clearer name #}
-                        <th scope="col" class="text-nowrap" style="font-size: 13px;"><i class="fas fa-cogs me-1"></i> Acciones</th> {# Icon and clearer name #}
-                    </tr>
-                </thead>
-                <tbody id="tablaMateriales">
-                    {% for material in materiales_permitidos %}
-                    <tr style="font-size: 13px;"> {# Keep font size for rows #}
-                        <td class="material-nombre text-start" title="Material: {{ material.material }}">{{ material.material }}</td> {# text-start for readability #}
-                        <td class="d-flex justify-content-center align-items-center gap-2"> {# Added gap for spacing #}
-                            {# Botón Editar #}
-                            <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#editarMaterialModal{{material.id}}" title="Editar material">
-                                    <i class="fas fa-pencil-alt"></i> {# Standard pencil icon #}
-                            </a> 
-                            {# Botón Eliminar #}
-                            <a href="#" class="btn btn-danger btn-sm eliminar-material-contrato" data-bs-toggle="tooltip" title="Eliminar material" data-id="{{ material.id }}" data-nombre="{{ material.material }}"> {# Added data-nombre #}
-                                <i class="fas fa-trash-can"></i> {# Standard trash can icon #}
-                            </a>
-                        </td>
-                    </tr>
-                    {# Modal de edición dentro de la fila correspondiente #}
-                    {% include 'forms/form_editar_material_contrato.html' %}
-                    {% empty %}
-                    <tr>
-                        <td colspan="2" class="text-muted py-3 text-center">No hay materiales registrados.</td> {# Colspan adjusted to 2 #}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-    
-    <div class="card-footer p-2 d-flex justify-content-between bg-light rounded-bottom-3"> {# Consistent footer styling #}
-        {# Botón para subir materiales masivamente #}
-        <a class="btn btn-outline-primary btn-sm me-2" href="{% url 'subir_masivo_materiales' %}" data-bs-toggle="tooltip" title="Subir materiales masivamente">
-            <i class="fas fa-cloud-arrow-up me-1"></i> Carga Masiva
-        </a>
-        {# Botón para agregar nuevo material #}
-        <a class="btn btn-primary btn-sm" href="{% url 'nueva_material_form' %}" data-bs-toggle="tooltip" title="Agregar nuevo material">
-            <i class="fas fa-plus me-1"></i> Nuevo Material
-        </a>
-    </div>
+  <div class="card-footer p-2 d-flex justify-content-between bg-light rounded-bottom-3">
+    <a class="btn btn-outline-primary btn-sm me-2" href="{% url 'subir_masivo_materiales' %}" title="Subir materiales masivamente"><i class="fas fa-cloud-arrow-up me-1"></i> Carga Masiva</a>
+    <a class="btn btn-primary btn-sm" href="{% url 'nueva_material_form' %}" title="Agregar nuevo material"><i class="fas fa-plus me-1"></i> Nuevo Material</a>
+  </div>
 </div>
 
-{# Script para buscar dinámicamente #}
 <script>
-    document.getElementById("buscarMaterial").addEventListener("keyup", function () {
-        let filtro = this.value.toLowerCase();
-        let filas = document.querySelectorAll("#tablaMateriales tr");
-
-        filas.forEach(fila => {
-            let materialCell = fila.querySelector(".material-nombre");
-            if (materialCell) { // Ensure the element exists
-                let material = materialCell.textContent.toLowerCase();
-                fila.style.display = material.includes(filtro) ? "" : "none";
-            }
-        });
-    });
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Script para guardar/editar materiales
-        document.querySelectorAll('.btn-guardar-material').forEach(button => {
-            button.addEventListener('click', function (e) {
-                e.preventDefault();
-                let materialId = this.getAttribute('data-id');
-                let form = document.querySelector(`#form-editar-material-${materialId}`);
-                let formData = new FormData(form);
-
-                let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-                fetch(`/administrador/editar-material/${materialId}/`, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRFToken': csrfToken
-                    }
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Cerrar el modal antes de mostrar la alerta
-                            let modalElement = document.querySelector(`#editarMaterialModal${materialId}`);
-                            let modalInstance = bootstrap.Modal.getInstance(modalElement);
-                            modalInstance.hide();
-
-                            Swal.fire({
-                                title: 'Éxito',
-                                text: 'Material actualizado correctamente',
-                                icon: 'success',
-                                confirmButtonText: 'OK'
-                            }).then(() => {
-                                location.reload(); // Recargar la página para reflejar los cambios
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Error',
-                                text: data.error || 'Hubo un problema al actualizar.',
-                                icon: 'error',
-                                confirmButtonText: 'Cerrar'
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        Swal.fire({
-                            title: 'Error',
-                            text: 'No se pudo actualizar...',
-                            icon: 'error',
-                            confirmButtonText: 'Cerrar'
-                        });
-                    });
-            });
-        });
-
-        // Script para eliminar materiales con SweetAlert2
-        document.querySelectorAll('.eliminar-material-contrato').forEach(button => { // Specific class for delete
-            button.addEventListener('click', function (e) {
-                e.preventDefault();
-                let materialId = this.getAttribute('data-id');
-                let materialNombre = this.getAttribute('data-nombre') || 'este material'; // Get name for confirmation
-
-                Swal.fire({
-                    title: "¿Estás seguro?",
-                    text: `¿Deseas eliminar el material "${materialNombre}"? Esta acción no se puede deshacer.`,
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Sí, eliminar",
-                    cancelButtonText: "Cancelar",
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        fetch(`/administrador/eliminar-material/${materialId}/`, { // Ensure correct URL
-                            method: 'POST',
-                            headers: {
-                                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                Swal.fire("Eliminado", "El material ha sido eliminado correctamente", "success")
-                                    .then(() => location.reload());
-                            } else {
-                                Swal.fire("Error", data.error || "No se pudo eliminar el material", "error");
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            Swal.fire("Error", "Hubo un problema al eliminar el material", "error");
-                        });
-                    }
-                });
-            });
-        });
-    });
+  $(document).ready(function () {
+    $('#table_id').DataTable({
+      autoWidth: false,
+      order: [[0, 'asc']],
+      paging: true,
+      pageLength: 10,
+      lengthChange: true,
+      info: true,
+      dom: '<"d-flex flex-wrap align-items-center gap-2 mb-2"lBf>rt<"d-flex justify-content-between mt-2"ip>',
+  
+      language: {
+        sProcessing: 'Procesando...',
+        sLengthMenu: 'Mostrar _MENU_ registros',
+        sZeroRecords: 'No se encontraron resultados',
+        sEmptyTable: 'Ningún dato disponible en esta tabla',
+        sInfo: 'Mostrando _START_ a _END_ de _TOTAL_ registros',
+        sInfoEmpty: 'Mostrando 0 a 0 de 0 registros',
+        sInfoFiltered: '(filtrado de _MAX_ registros totales)',
+        sSearch: 'Buscar:',
+        oPaginate: {
+          sFirst: 'Primero',
+          sLast: 'Último',
+          sNext: 'Siguiente',
+          sPrevious: 'Anterior'
+        },
+        buttons: {
+          excel: 'Excel'
+        }
+      },
+      buttons: [
+        {
+          extend: 'excelHtml5',
+          text: '<i class="fas fa-file-excel me-1"></i> Exportar a Excel',
+          title: 'Materiales del Contrato',
+          exportOptions: {
+            columns: [0]
+          }
+        }
+      ]
+    })
+    // Estilos para botón Excel
+    $('.dt-button').addClass('btn btn-sm btn-outline-primary')
+  
+    // Estilos para input de búsqueda y su contenedor
+    $('.dataTables_filter input')
+      .addClass('form-control form-control-s') // Bootstrap style + separación
+      .attr('placeholder', 'Buscar...')
+  
+    $('.dataTables_filter') // El contenedor del label + input
+      .addClass('d-flex align-items-center m-2')
+      .find('label')
+      .addClass('mb-0 fw-semibold me-2') // Evita que esté flotando y pone estilo al texto
+  })
 </script>

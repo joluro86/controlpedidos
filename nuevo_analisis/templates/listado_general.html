@@ -29,6 +29,9 @@
           <li>
             <a class="dropdown-item" href="{% url 'crear_relacion_cantidad' %}">Regla Límite Cantidad</a>
           </li>
+          <li class="nav-item ms-auto">
+            <a class="dropdown-item" href="{% url 'crear_item_regla' %}"><i class="bi bi-plus-circle-fill me-1"></i>Crear Ítem</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -36,35 +39,24 @@
     {# Navigation Tabs #}
     <ul class="nav nav-tabs mb-4" id="ruleTabs" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="relacion-items-tab" data-bs-toggle="tab" data-bs-target="#relacion-items" type="button" role="tab" aria-controls="relacion-items" aria-selected="true">
-          <i class="bi bi-share-fill me-1"></i> Relación entre Ítems
-        </button>
+        <button class="nav-link active" id="relacion-items-tab" data-bs-toggle="tab" data-bs-target="#relacion-items" type="button" role="tab" aria-controls="relacion-items" aria-selected="true"><i class="bi bi-share-fill me-1"></i> Relación entre Ítems</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="incompatibilidad-tab" data-bs-toggle="tab" data-bs-target="#incompatibilidad" type="button" role="tab" aria-controls="incompatibilidad" aria-selected="false">
-          <i class="bi bi-x-octagon-fill me-1"></i> Incompatibilidad
-        </button>
+        <button class="nav-link" id="incompatibilidad-tab" data-bs-toggle="tab" data-bs-target="#incompatibilidad" type="button" role="tab" aria-controls="incompatibilidad" aria-selected="false"><i class="bi bi-x-octagon-fill me-1"></i> Incompatibilidad</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="caracter-final-tab" data-bs-toggle="tab" data-bs-target="#caracter-final" type="button" role="tab" aria-controls="caracter-final" aria-selected="false">
-          <i class="bi bi-type-strikethrough me-1"></i> Carácter Final
-        </button>
+        <button class="nav-link" id="caracter-final-tab" data-bs-toggle="tab" data-bs-target="#caracter-final" type="button" role="tab" aria-controls="caracter-final" aria-selected="false"><i class="bi bi-type-strikethrough me-1"></i> Carácter Final</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="limite-cantidad-tab" data-bs-toggle="tab" data-bs-target="#limite-cantidad" type="button" role="tab" aria-controls="limite-cantidad" aria-selected="false">
-          <i class="bi bi-calculator-fill me-1"></i> Límite de Cantidad
-        </button>
+        <button class="nav-link" id="limite-cantidad-tab" data-bs-toggle="tab" data-bs-target="#limite-cantidad" type="button" role="tab" aria-controls="limite-cantidad" aria-selected="false"><i class="bi bi-calculator-fill me-1"></i> Límite de Cantidad</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="definicion-items-tab" data-bs-toggle="tab" data-bs-target="#definicion-items" type="button" role="tab" aria-controls="definicion-items" aria-selected="false">
-          <i class="bi bi-box-seam me-1"></i> Definición de Ítems
-        </button>
+        <button class="nav-link" id="definicion-items-tab" data-bs-toggle="tab" data-bs-target="#definicion-items" type="button" role="tab" aria-controls="definicion-items" aria-selected="false"><i class="bi bi-box-seam me-1"></i> Definición de Ítems</button>
       </li>
     </ul>
 
     {# Tab Content #}
     <div class="tab-content" id="ruleTabContent">
-
       {# Tab Pane for RelacionItemRegla #}
       <div class="tab-pane fade show active" id="relacion-items" role="tabpanel" aria-labelledby="relacion-items-tab">
         <h5 class="text-secondary mt-2 mb-3 d-none"><i class="bi bi-share-fill me-2"></i>Relación entre Ítems</h5> {# Hidden, as tab title is enough #}
@@ -356,7 +348,6 @@
           </table>
         </div>
       </div>
-
     </div> {# End tab-content #}
 
     {# Formulario de eliminación oculto para SweetAlert2 POST #}
@@ -375,14 +366,14 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
           return new bootstrap.Tooltip(tooltipTriggerEl)
         })
-
+      
         // Lógica para SweetAlert2 en TODOS los botones de eliminar
         document.querySelectorAll('.eliminar-regla').forEach(function (btn) {
           btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const url = this.dataset.url;
-            const nombre = this.dataset.nombre || 'este registro'; // Fallback if data-nombre is not set
-
+            e.preventDefault()
+            const url = this.dataset.url
+            const nombre = this.dataset.nombre || 'este registro' // Fallback if data-nombre is not set
+      
             Swal.fire({
               title: '¿Estás seguro?',
               text: `¿Deseas eliminar "${nombre}"? Esta acción no se puede deshacer.`,
@@ -394,14 +385,14 @@
               cancelButtonText: 'Cancelar'
             }).then((result) => {
               if (result.isConfirmed) {
-                const form = document.getElementById('form-eliminar');
-                form.setAttribute('action', url);
-                form.submit();
+                const form = document.getElementById('form-eliminar')
+                form.setAttribute('action', url)
+                form.submit()
               }
-            });
-          });
-        });
-      });
+            })
+          })
+        })
+      })
     </script>
   {% endblock %}
 {% endblock %}

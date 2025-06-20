@@ -12,7 +12,7 @@ def busqueda_pedidos_factor_multiple_sin_cantidad_requerida():
         reglas= RelacionItemRegla.objects.filter(requiere_cantidad=False, factor="multiple")
         
         if reglas.exists():           
-            for regla in reglas:              
+            for regla in reglas:    
                 campo_busqueda=regla.objeto.tipo
                 filtro = {campo_busqueda: regla.objeto.nombre}
                 pedidos_a_evaluar_regla = Acta.objects.filter(**filtro).values('pedido').distinct()
@@ -30,7 +30,9 @@ def evaluar_pedidos_regla_factor_multiple_sin_cantidad_requerida(regla, pedidos_
 
         resultado = evaluar_item_por_separado(regla, pedido, elementos, regla.tipo_item_busqueda)
         if regla.conjuncion=="todos":
+            
             if any(not item['item_res'] for item in resultado):
+                print("entre")
                 novedad= crear_texto_novedad(regla) 
                 pedi = Acta.objects.filter(pedido=pedido.get('pedido')).first()
                 crear_novedad(pedi, novedad)
@@ -48,16 +50,17 @@ def evaluar_item_por_separado(regla, pedido, elementos, campo_busqueda):
     for item in elementos:
         if regla.verificar_cantidad_items:
             filtro = {'pedido':pedido.get('pedido'), campo_busqueda:item}
-            if Acta.objects.filter(**filtro).exists():
-                verficacion=  cumplimiento_verificar_cantidad_todos_los_items(regla, pedido, campo_busqueda, item)
-                
-                resultado.append(
+            if pedido.get('pedido')=="23426998":
+                print(Acta.objects.filter(**filtro).exists())
+            
+            verficacion=  cumplimiento_verificar_cantidad_todos_los_items(regla, pedido, campo_busqueda, item)
+            resultado.append(
                 {
                     'id':cont,
                     'item_res': verficacion
                 }
                 ) 
-        else:                       
+        else:                    
             resultado.append(
                 {
                     'id':cont,
@@ -71,7 +74,8 @@ def cumplimiento_verificar_cantidad_todos_los_items(regla, pedido,campo_busqueda
     
     if regla.comparador=="igual_a":
         filtro = {'pedido':pedido.get('pedido'), campo_busqueda:item_busqueda, 'cantidad':regla.cantidad}
-        
+        if pedido.get('pedido')=="23426998":
+            print(Acta.objects.filter(**filtro).exists())
         if Acta.objects.filter(**filtro).exists():
             return True
         

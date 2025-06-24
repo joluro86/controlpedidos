@@ -36,5 +36,14 @@ urlpatterns = [
     path('cantidades/editar/<int:pk>/', views.editar_relacion_cantidad, name='editar_relacion_cantidad'),
     path('cantidades/eliminar/<int:pk>/', views.eliminar_relacion_cantidad, name='eliminar_relacion_cantidad'),
     path('relaciones/todas/', views.listado_general_reglas, name='listado_todas_las_relaciones'),
+
+    # Carga masiva de datos
+    path('items/carga/', views.carga_masiva_item_regla, name='carga_masiva_item_regla'),
+    path('relaciones/carga/', views.carga_masiva_relacion_item, name='carga_masiva_relacion_item'),
+    path('incompatibilidades/carga/', views.carga_masiva_incompatibilidad, name='carga_masiva_incompatibilidad'),
+    path('caracteres/carga/', views.carga_masiva_caracter, name='carga_masiva_caracter'),
+    path('cantidades/carga/', views.carga_masiva_cantidad, name='carga_masiva_cantidad'),
+    path('plantilla/<str:modelo>/', views.descargar_plantilla_modelo, name='descargar_plantilla'),
+
 ]
 
